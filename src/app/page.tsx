@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Search, Menu, User, Upload, ChevronDown, Heart, Download, Eye } from "lucide-react";
+import { Search, Menu, Upload, ChevronDown, Heart, Download, Eye } from "lucide-react";
 
 export default function Home() {
   const categories = [

@@ -1,0 +1,15 @@
+name = "365coloringpages"
+compatibility_date = "2023-05-18"
+
+[build]
+command = "npm run build"
+cwd = ""
+watchPaths = ["src/**/*"]
+
+[build.environment]
+NODE_VERSION = "18"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
