@@ -51,3 +51,20 @@ body {
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
+
+/* Hero区域动画效果 */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 背景图片平滑过渡 */
+.hero-bg-transition {
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
