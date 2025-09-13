@@ -1,6 +1,7 @@
 'use client';
 
-import SimpleColoringCard from './SimpleColoringCard';
+import Link from 'next/link';
+import PopularColoringCard from './PopularColoringCard';
 
 export default function PopularSection() {
   // 模拟数据 - 10张图片，2行显示
@@ -58,17 +59,17 @@ export default function PopularSection() {
   ];
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#f8f8f4' }}>
+    <section className="py-16" style={{ backgroundColor: '#fcfcf8' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 标题 */}
         <div className="flex items-center justify-between mb-12">
         <h2 className="text-4xl font-bold text-gray-900 mb-2">Popular</h2>
-          <button className="text-gray-600 hover:text-orange-500 text-sm font-medium transition-colors flex items-center">
+          <Link href="/popular" className="text-gray-600 hover:text-orange-500 text-sm font-medium transition-colors flex items-center">
             More
             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-          </button>
+          </Link>
         </div>
 
         {/* 白色卡片容器 */}
@@ -76,8 +77,9 @@ export default function PopularSection() {
           {/* 卡片网格 - 2行5列 */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {coloringPages.map((page) => (
-              <SimpleColoringCard
+              <PopularColoringCard
                 key={page.id}
+                id={page.id}
                 title={page.title}
                 category={page.category}
               />

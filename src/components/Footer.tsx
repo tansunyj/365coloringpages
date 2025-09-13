@@ -1,19 +1,20 @@
 'use client';
 
 import { Palette, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="text-gray-800" style={{ backgroundColor: '#fefdfb' }}>
+    <footer className="text-gray-800" style={{ backgroundColor: '#f4f4f0' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* 主要内容区域 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
           {/* 网站简介 */}
           <div className="lg:col-span-1">
-            <div className="flex items-center mb-4">
+            <Link href="/" className="flex items-center mb-4 hover:opacity-80 transition-opacity">
               <Palette className="h-8 w-8 text-yellow-400" />
               <span className="ml-2 text-xl font-bold">Coloring Pages</span>
-            </div>
+            </Link>
             <p className="text-gray-600 mb-6 leading-relaxed">
               Unleash your creativity with thousands of beautiful, free coloring pages. Perfect for kids and adults alike.
             </p>
@@ -35,8 +36,8 @@ export default function Footer() {
 
           {/* 发现 */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Discover</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-black mb-8 text-gray-900">Discover</h3>
+            <ul className="space-y-5">
               <li>
                 <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
                   Popular Pages
@@ -67,8 +68,8 @@ export default function Footer() {
 
           {/* 社区 */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Community</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-black mb-8 text-gray-900">Community</h3>
+            <ul className="space-y-5">
               <li>
                 <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
                   Submit Your Art
@@ -99,8 +100,8 @@ export default function Footer() {
 
           {/* 支持 */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Support</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-black mb-8 text-gray-900">Support</h3>
+            <ul className="space-y-5">
               <li>
                 <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
                   Help Center

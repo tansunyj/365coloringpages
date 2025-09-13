@@ -190,10 +190,10 @@ export default function Hero() {
                 <button
                   key={keyword}
                   onClick={() => handleTagClick(keyword)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 border ${textShadowClass} ${
+                  className={`px-3 py-1 rounded-full text-sm font-bold transition-all duration-200 hover:scale-105 border ${textShadowClass} ${
                     isDarkBackground 
-                      ? 'bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-white/30 hover:border-white/50'
-                      : 'bg-gray-800/80 backdrop-blur-sm hover:bg-gray-800/90 text-white border-gray-700/50 hover:border-gray-600'
+                      ? 'bg-white/30 backdrop-blur-sm hover:bg-white/40 text-white border-white/50 hover:border-white/70'
+                      : 'bg-gray-900/90 backdrop-blur-sm hover:bg-gray-900 text-white border-gray-800/70 hover:border-gray-700'
                   }`}
                   style={{
                     animationDelay: `${index * 0.1}s`,
@@ -232,10 +232,10 @@ export default function Hero() {
                 <button
                   key={tag}
                   onClick={() => handleTagClick(tag)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl border ${textShadowClass} ${
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl border ${textShadowClass} ${
                     isDarkBackground
-                      ? 'bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 hover:border-white/50'
-                      : 'bg-gray-800/70 backdrop-blur-sm hover:bg-gray-800/80 text-white border-gray-700/50 hover:border-gray-600'
+                      ? 'bg-white/25 backdrop-blur-sm hover:bg-white/35 text-white border-white/50 hover:border-white/70'
+                      : 'bg-gray-900/85 backdrop-blur-sm hover:bg-gray-900 text-white border-gray-800/70 hover:border-gray-700'
                   }`}
                   style={{
                     animationDelay: `${index * 0.1 + 0.3}s`,

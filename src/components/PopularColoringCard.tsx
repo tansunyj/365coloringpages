@@ -5,21 +5,21 @@ import { Heart, Download } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface SimpleColoringCardProps {
+interface PopularColoringCardProps {
   title: string;
   category: string;
   likes?: number;
   downloads?: number;
-  id?: number; // 添加ID属性
+  id?: number;
 }
 
-export default function SimpleColoringCard({ 
+export default function PopularColoringCard({ 
   title, 
   category, 
   likes = Math.floor(Math.random() * 100) + 10,
   downloads = Math.floor(Math.random() * 500) + 50,
-  id = Math.floor(Math.random() * 100) + 1 // 添加默认ID
-}: SimpleColoringCardProps) {
+  id = Math.floor(Math.random() * 100) + 1
+}: PopularColoringCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
   const router = useRouter();
@@ -36,8 +36,8 @@ export default function SimpleColoringCard({
   };
 
   const handleCardClick = () => {
-    // 导航到简化的详细页面
-    router.push(`/categories/${id}`);
+    // 导航到Popular详情页面，而不是分类详情页面
+    router.push(`/popular/${id}`);
   };
 
   return (
@@ -104,4 +104,4 @@ export default function SimpleColoringCard({
       </div>
     </div>
   );
-}
+} 

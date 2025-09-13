@@ -1,28 +1,28 @@
 'use client';
 
 import Image from 'next/image';
-import { Heart, Download } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Heart, Download } from 'lucide-react';
 
-interface SimpleColoringCardProps {
+interface FirstColoringListCardProps {
+  id: number;
   title: string;
   category: string;
   likes?: number;
   downloads?: number;
-  id?: number; // 添加ID属性
 }
 
-export default function SimpleColoringCard({ 
+export default function FirstColoringListCard({ 
+  id, 
   title, 
-  category, 
+  category,
   likes = Math.floor(Math.random() * 100) + 10,
-  downloads = Math.floor(Math.random() * 500) + 50,
-  id = Math.floor(Math.random() * 100) + 1 // 添加默认ID
-}: SimpleColoringCardProps) {
+  downloads = Math.floor(Math.random() * 500) + 50
+}: FirstColoringListCardProps) {
+  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(likes);
-  const router = useRouter();
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -36,8 +36,8 @@ export default function SimpleColoringCard({
   };
 
   const handleCardClick = () => {
-    // 导航到简化的详细页面
-    router.push(`/categories/${id}`);
+    // 跳转到专用的 First Coloring Book 详情页面
+    router.push(`/first-coloring-book/${id}`);
   };
 
   return (
@@ -56,7 +56,7 @@ export default function SimpleColoringCard({
         />
         
         {/* 在图片上方添加彩色点缀 */}
-        <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-pink-400 to-purple-500 text-white text-xs font-bold rounded-full opacity-90">
+        <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-blue-400 to-green-500 text-white text-xs font-bold rounded-full opacity-90">
           {category}
         </div>
         
@@ -74,12 +74,12 @@ export default function SimpleColoringCard({
           </button>
           <button
             onClick={handleDownload}
-            className="p-2 bg-white/90 text-gray-600 rounded-full backdrop-blur-sm hover:bg-white hover:text-blue-500 transition-all duration-200 hover:scale-110"
+            className="p-2 bg-white/90 text-gray-600 rounded-full backdrop-blur-sm hover:bg-white hover:text-green-500 transition-all duration-200 hover:scale-110"
           >
             <Download className="h-4 w-4" />
           </button>
         </div>
-        
+
         {/* 增强的悬浮叠加层 - 显示标题和统计信息 */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
           <div className="w-full p-4 text-white">
@@ -96,7 +96,7 @@ export default function SimpleColoringCard({
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">
-                Free
+                Easy
               </span>
             </div>
           </div>
@@ -104,4 +104,4 @@ export default function SimpleColoringCard({
       </div>
     </div>
   );
-}
+} 

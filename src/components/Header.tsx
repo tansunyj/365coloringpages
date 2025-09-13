@@ -3,6 +3,7 @@
 import { Palette, Globe, User } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Header() {
   // 模拟用户登录状态
@@ -35,24 +36,24 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
             <Palette className="h-8 w-8 text-yellow-400" />
             <span className="ml-2 text-xl font-bold text-gray-900">
               Coloring Pages
             </span>
-          </div>
+          </Link>
 
           {/* 导航菜单 */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-gray-900 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
+            <Link href="/" className="text-gray-900 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
               Home
-            </a>
-            <a href="#" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
+            </Link>
+            <Link href="/categories" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
               Categories
-            </a>
-            <a href="#" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
+            </Link>
+            <Link href="/ai-generator" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
               AI Generator
-            </a>
+            </Link>
             <a href="#" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
               Blog
             </a>
