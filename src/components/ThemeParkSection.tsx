@@ -19,10 +19,10 @@ export default function ThemeParkSection() {
   ];
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#f4f4f0' }}>
+    <section className="py-8" style={{ backgroundColor: '#f4f4f0' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 标题和More按钮 */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-4xl font-bold text-gray-900 mb-2">Theme Park Adventures</h2>
           </div>
@@ -38,7 +38,7 @@ export default function ThemeParkSection() {
         </div>
 
         {/* 白色卡片容器 */}
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           {/* 卡片网格 - 2行5列 */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {themeParkData.map((page) => (

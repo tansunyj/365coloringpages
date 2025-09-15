@@ -146,7 +146,7 @@ export default function Hero() {
   return (
     <section className="relative overflow-hidden" style={{ backgroundColor: '#fcfcf8' }}>
       {/* 全屏背景轮播图 */}
-      <div className="relative h-[500px] md:h-[600px]">
+      <div className="relative h-[400px] md:h-[450px]">
         {/* 背景图片轮播 */}
         <div className="absolute inset-0">
           {holidayThemes.map((theme, index) => (
