@@ -16,12 +16,13 @@ interface SimpleThemeParkCardProps {
 export default function SimpleThemeParkCard({ 
   title, 
   park, 
-  likes = Math.floor(Math.random() * 100) + 10,
-  downloads = Math.floor(Math.random() * 500) + 50,
+  likes,
+  downloads,
   id
 }: SimpleThemeParkCardProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likeCount, setLikeCount] = useState(likes || 50);
+  const [downloadCount, setDownloadCount] = useState(downloads || 250);
   const router = useRouter();
 
   const handleLike = (e: React.MouseEvent) => {
@@ -93,7 +94,7 @@ export default function SimpleThemeParkCard({
                 </span>
                 <span className="flex items-center gap-1">
                   <Download className="h-3 w-3" />
-                  {downloads}
+                                      {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

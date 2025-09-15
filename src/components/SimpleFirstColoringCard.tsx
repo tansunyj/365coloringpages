@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart, Download } from 'lucide-react';
 
@@ -17,7 +17,13 @@ export default function SimpleFirstColoringCard({
 }: SimpleFirstColoringCardProps) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(Math.floor(Math.random() * 100) + 10);
+  const [likeCount, setLikeCount] = useState(0);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    setLikeCount(Math.floor(Math.random() * 100) + 10);
+    setIsInitialized(true);
+  }, []);
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();

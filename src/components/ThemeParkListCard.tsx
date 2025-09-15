@@ -16,12 +16,13 @@ interface ThemeParkListCardProps {
 export default function ThemeParkListCard({ 
   title, 
   park, 
-  likes = Math.floor(Math.random() * 100) + 10,
-  downloads = Math.floor(Math.random() * 500) + 50,
+  likes,
+  downloads,
   id
 }: ThemeParkListCardProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likeCount, setLikeCount] = useState(likes || 50);
+  const [downloadCount, setDownloadCount] = useState(downloads || 250);
   const router = useRouter();
 
   const handleLike = (e: React.MouseEvent) => {
@@ -35,9 +36,14 @@ export default function ThemeParkListCard({
     console.log('Downloading:', title);
   };
 
+  // 将park名称转换为URL友好的slug
+  const getParkSlug = (parkName: string) => {
+    return parkName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  };
+
   const handleCardClick = () => {
-    // 跳转到简化的主题公园详情页面
-    router.push(`/theme-park/${id}`);
+    const parkSlug = getParkSlug(park);
+    router.push(`/theme-park/${parkSlug}/${id}`);
   };
 
   return (
@@ -92,7 +98,7 @@ export default function ThemeParkListCard({
                 </span>
                 <span className="flex items-center gap-1">
                   <Download className="h-3 w-3" />
-                  {downloads}
+                  {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

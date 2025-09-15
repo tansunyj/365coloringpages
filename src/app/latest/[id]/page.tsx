@@ -24,8 +24,8 @@ export default async function LatestDetailPage({ params }: PageProps) {
   const resolvedParams = await params;
   return (
     <UnifiedColoringDetail 
-      pageId={resolvedParams.id} 
-      source="latest" 
+      id={resolvedParams.id} 
+      type="latest" 
     />
   );
 } 

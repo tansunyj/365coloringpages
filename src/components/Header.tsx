@@ -18,8 +18,8 @@ export default function Header() {
     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face'
   ];
   
-  // 随机选择一个头像（实际项目中这应该来自用户数据）
-  const currentUserAvatar = userAvatars[Math.floor(Math.random() * userAvatars.length)];
+  // 使用固定头像避免水合错误（实际项目中这应该来自用户数据）
+  const currentUserAvatar = userAvatars[0];
   
   const handleAuthClick = () => {
     if (isLoggedIn) {

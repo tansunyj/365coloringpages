@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -9,9 +9,10 @@ import Header from './Header';
 import Footer from './Footer';
 
 interface UnifiedColoringDetailProps {
-  pageId: string;
-  source: 'popular' | 'latest' | 'first-coloring-book' | 'theme-park' | 'categories';
-  category?: string; // 用于主题公园和分类页面
+  id: string;
+  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-park' | 'categories';
+  category?: string;
+  park?: string;
 }
 
 interface ColoringPageDetail {
@@ -28,10 +29,10 @@ interface ColoringPageDetail {
   isLiked: boolean;
 }
 
-export default function UnifiedColoringDetail({ pageId, source, category }: UnifiedColoringDetailProps) {
+export default function UnifiedColoringDetail({ id, type, category, park }: UnifiedColoringDetailProps) {
   // 根据来源生成对应的数据
   const generatePageData = () => {
-    switch (source) {
+    switch (type) {
       case 'popular':
         return generatePopularData();
       case 'latest':
@@ -49,101 +50,93 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
 
   const generatePopularData = () => {
     const popularTitles = [
-      'Cute Cat Face', 'Majestic Lion', 'Wolf Portrait', 'Eagle Soaring', 'Playful Puppy',
-      'Wise Owl', 'Graceful Swan', 'Jumping Rabbit', 'Proud Horse', 'Colorful Parrot',
-      'Swimming Fish', 'Dancing Bear', 'Sleeping Fox', 'Flying Butterfly', 'Curious Monkey', 'Gentle Deer'
+      'Magical Unicorn Adventure', 'Dragon Kingdom Castle', 'Underwater Mermaid Palace',
+      'Enchanted Forest Animals', 'Space Explorer Mission', 'Princess Butterfly Garden'
     ];
-    const categories = ['Animals', 'Nature', 'Fantasy', 'Abstract'];
-    const titleIndex = (parseInt(pageId) - 1) % popularTitles.length;
-    const categoryIndex = Math.floor(titleIndex / 4) % categories.length;
-    const title = popularTitles[titleIndex] || `Popular Page ${pageId}`;
-    const subCategory = categories[categoryIndex] || 'Animals';
-    
+    const pageId = parseInt(id) || 1;
+    const index = (pageId - 1) % popularTitles.length;
+    const selectedTitle = popularTitles[index] || 'Popular Coloring Page';
     return {
-      title,
-      description: `This ${title.toLowerCase()} coloring page is one of our most popular designs. Perfect for all ages and skill levels!`,
-      categories: ['Popular', subCategory, 'Trending', 'Community Favorite'],
-      author: 'Popular Artist',
-      themeColor: 'pink'
+      title: selectedTitle,
+      description: `A beautiful and intricate coloring page featuring ${selectedTitle.toLowerCase()}. Perfect for both kids and adults who love detailed artwork.`,
+      author: 'ColoringMaster',
+      categories: ['Fantasy', 'Adventure', 'Popular']
     };
   };
 
   const generateLatestData = () => {
     const latestTitles = [
-      'Modern Art Fusion', 'Digital Mandala', 'Geometric Dreams', 'Flowing Patterns', 'Color Burst',
-      'Zen Circles', 'Psychedelic Waves', 'Sacred Symbols', 'Tribal Art', 'Mosaic Magic',
-      'Optical Wonder', 'Art Deco Revival', 'Swirling Colors', 'Minimalist Beauty', 'Complex Geometry', 'Floral Abstraction'
+      'Modern Art Patterns', 'Geometric Mandala', 'Contemporary Flowers',
+      'Abstract Waves', 'Urban Cityscape', 'Minimalist Nature'
     ];
-    const categories = ['Abstract', 'Technology', 'Architecture', 'Seasonal'];
-    const titleIndex = (parseInt(pageId) - 1) % latestTitles.length;
-    const categoryIndex = Math.floor(titleIndex / 4) % categories.length;
-    const title = latestTitles[titleIndex] || `Latest Upload ${pageId}`;
-    const subCategory = categories[categoryIndex] || 'Abstract';
-    
+    const pageId = parseInt(id) || 1;
+    const index = (pageId - 1) % latestTitles.length;
+    const selectedTitle = latestTitles[index] || 'Latest Coloring Page';
     return {
-      title,
-      description: `A fresh new ${title.toLowerCase()} coloring page recently added to our collection. Perfect for exploring new artistic styles!`,
-      categories: ['Latest', subCategory, 'New', 'Fresh'],
-      author: 'Creative Team',
-      themeColor: 'green'
+      title: selectedTitle,
+      description: `Our newest addition: ${selectedTitle.toLowerCase()}. Fresh designs with modern artistic flair.`,
+      author: 'ArtistPro',
+      categories: ['Modern', 'Latest', 'Trending']
     };
   };
 
   const generateFirstColoringBookData = () => {
-    const firstColoringBookTitles = [
-      'Simple Circle', 'Big Square', 'Happy Triangle', 'Cute Heart', 'Bright Star',
-      'Happy Sun', 'Smiling Moon', 'Little Cat', 'Big Apple', 'Red Heart',
-      'Smiling Face', 'Balloon', 'Simple Flower', 'Yellow Banana', 'Green Tree'
+    const firstBookTitles = [
+      'Simple Circle Fun', 'Happy Square', 'Friendly Triangle',
+      'Big Heart Shape', 'Smiling Sun', 'Little Flower'
     ];
-    const categories = ['Basic Shapes', 'Nature', 'Animals', 'Fruits', 'Emotions'];
-    const titleIndex = (parseInt(pageId) - 1) % firstColoringBookTitles.length;
-    const categoryIndex = Math.floor(titleIndex / 3) % categories.length;
-    const title = firstColoringBookTitles[titleIndex] || `First Coloring ${pageId}`;
-    const subCategory = categories[categoryIndex] || 'Basic Shapes';
-    
+    const pageId = parseInt(id) || 1;
+    const index = (pageId - 1) % firstBookTitles.length;
+    const selectedTitle = firstBookTitles[index] || 'Simple Coloring Page';
+    const categoryName = category ? decodeURIComponent(category).replace(/-/g, ' ') : 'Basic Shapes';
     return {
-      title,
-      description: `A simple and fun ${title.toLowerCase()} coloring page perfect for beginners and young artists. Great for learning and creativity!`,
-      categories: ['First Coloring Book', subCategory, 'Beginner', 'Educational'],
-      author: 'Kids Art Team',
-      themeColor: 'blue'
+      title: selectedTitle,
+      description: `Perfect for beginners! This simple ${selectedTitle.toLowerCase()} design is ideal for young artists just starting their coloring journey.`,
+      author: 'BeginnerFriend',
+      categories: [categoryName, 'Beginner', 'Simple']
     };
   };
 
   const generateThemeParkData = () => {
     const themeParkTitles = [
-      'Mickey Mouse Castle', 'Roller Coaster Fun', 'Ferris Wheel', 'Carousel Horse', 'Magic Wand',
-      'Princess Crown', 'Pirate Ship', 'Space Mountain', 'Haunted House', 'Fireworks Show'
+      'Roller Coaster Adventure', 'Ferris Wheel Fun', 'Carousel Horses',
+      'Cotton Candy Stand', 'Magic Castle', 'Bumper Cars'
     ];
-    const titleIndex = (parseInt(pageId) - 1) % themeParkTitles.length;
-    const title = themeParkTitles[titleIndex] || `Theme Park ${pageId}`;
-    
+    const pageId = parseInt(id) || 1;
+    const index = (pageId - 1) % themeParkTitles.length;
+    const selectedTitle = themeParkTitles[index] || 'Theme Park Adventure';
+    const parkName = park ? decodeURIComponent(park).replace(/-/g, ' ') : 'Theme Park';
     return {
-      title,
-      description: `Experience the magic with this ${title.toLowerCase()} coloring page inspired by the world's most exciting theme parks!`,
-      categories: ['Theme Park', category || 'Disney World', 'Adventure', 'Magic'],
-      author: 'Theme Park Artists',
-      themeColor: 'purple'
+      title: selectedTitle,
+      description: `Experience the excitement of ${parkName} with this thrilling ${selectedTitle.toLowerCase()} coloring page!`,
+      author: 'ParkArtist',
+      categories: [parkName, 'Theme Park', 'Adventure']
     };
   };
 
   const generateCategoryData = () => {
+    const categoryTitles = [
+      'Nature Scene', 'Animal Portrait', 'Floral Design',
+      'Vehicle Adventure', 'Food Fun', 'Holiday Special'
+    ];
+    const pageId = parseInt(id) || 1;
+    const index = (pageId - 1) % categoryTitles.length;
+    const categoryName = category || 'General';
+    const selectedTitle = categoryTitles[index] || 'Coloring Page';
     return {
-      title: `${category || 'Category'} Coloring Page ${pageId}`,
-      description: `A beautiful ${category?.toLowerCase() || 'category'} coloring page perfect for creative expression and relaxation.`,
-      categories: [category || 'General', 'Creative', 'Art', 'Fun'],
-      author: 'Category Artist',
-      themeColor: 'gray'
+      title: selectedTitle,
+      description: `A wonderful ${selectedTitle.toLowerCase()} from our ${categoryName} collection.`,
+      author: 'CategoryExpert',
+      categories: [categoryName, 'Collection', 'Featured']
     };
   };
 
   const generateDefaultData = () => {
     return {
-      title: `Coloring Page ${pageId}`,
-      description: 'A beautiful coloring page perfect for creative expression and relaxation.',
-      categories: ['General', 'Creative', 'Art', 'Fun'],
+      title: `Coloring Page ${id}`,
+      description: 'A beautiful coloring page perfect for all ages.',
       author: 'Artist',
-      themeColor: 'gray'
+      categories: ['General', 'Fun']
     };
   };
 
@@ -151,16 +144,16 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
 
   // 模拟涂色页面数据
   const coloringPageData: ColoringPageDetail = {
-    id: pageId,
+    id: id,
     title: pageData.title,
     description: pageData.description,
     author: pageData.author,
-    dimensions: '2480 x 3508px',
-    format: 'PNG',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo',
+    dimensions: '8.5" x 11"',
+    format: 'PDF',
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo",
     categories: pageData.categories,
-    likes: Math.floor(Math.random() * 500) + 100,
-    downloads: Math.floor(Math.random() * 2000) + 500,
+    likes: 300,
+    downloads: 1250,
     isLiked: false
   };
 
@@ -169,72 +162,70 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
   const router = useRouter();
 
   // 生成面包屑导航
-  const generateBreadcrumbs = () => {
-    switch (source) {
+  const getBreadcrumbPath = () => {
+    switch (type) {
       case 'popular':
-        return (
-          <>
-            <Link href="/popular" className="hover:text-yellow-600 transition-colors">Popular</Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">{coloringPageData.title}</span>
-          </>
-        );
+        return [
+          { name: 'Home', href: '/' },
+          { name: 'Popular', href: '/popular' },
+          { name: coloringPageData.title, href: '#' }
+        ];
       case 'latest':
-        return (
-          <>
-            <Link href="/latest" className="hover:text-yellow-600 transition-colors">Latest Uploads</Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">{coloringPageData.title}</span>
-          </>
-        );
+        return [
+          { name: 'Home', href: '/' },
+          { name: 'Latest', href: '/latest' },
+          { name: coloringPageData.title, href: '#' }
+        ];
       case 'first-coloring-book':
-        return (
-          <>
-            <Link href="/first-coloring-book" className="hover:text-yellow-600 transition-colors">My First Coloring Book</Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">{coloringPageData.title}</span>
-          </>
-        );
+        const categoryDisplay = category ? decodeURIComponent(category).replace(/-/g, ' ') : 'All';
+        return [
+          { name: 'Home', href: '/' },
+          { name: 'My First Coloring Book', href: '/first-coloring-book' },
+          { name: categoryDisplay, href: `/first-coloring-book/${category || ''}` },
+          { name: coloringPageData.title, href: '#' }
+        ];
       case 'theme-park':
-        return (
-          <>
-            <Link href="/theme-park" className="hover:text-yellow-600 transition-colors">Theme Park Adventures</Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">{category}</span>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">{coloringPageData.title}</span>
-          </>
-        );
+        const parkDisplay = park ? decodeURIComponent(park).replace(/-/g, ' ') : 'All Parks';
+        return [
+          { name: 'Home', href: '/' },
+          { name: 'Theme Park Adventures', href: '/theme-park' },
+          { name: parkDisplay, href: `/theme-park/${park || ''}` },
+          { name: coloringPageData.title, href: '#' }
+        ];
       case 'categories':
-        return (
-          <>
-            <Link href="/categories" className="hover:text-yellow-600 transition-colors">Categories</Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">{coloringPageData.title}</span>
-          </>
-        );
+        return [
+          { name: 'Home', href: '/' },
+          { name: 'Categories', href: '/categories' },
+          { name: category || 'General', href: '/categories' },
+          { name: coloringPageData.title, href: '#' }
+        ];
       default:
-        return <span className="text-gray-900 font-medium">{coloringPageData.title}</span>;
+        return [
+          { name: 'Home', href: '/' },
+          { name: coloringPageData.title, href: '#' }
+        ];
     }
   };
 
+  const breadcrumbPath = getBreadcrumbPath();
+
   // 获取主题颜色
   const getThemeColor = () => {
-    switch (pageData.themeColor) {
-      case 'pink': return 'bg-pink-500 hover:bg-pink-600';
-      case 'green': return 'bg-green-500 hover:bg-green-600';
-      case 'blue': return 'bg-blue-500 hover:bg-blue-600';
-      case 'purple': return 'bg-purple-500 hover:bg-purple-600';
+    switch (type) {
+      case 'popular': return 'bg-pink-500 hover:bg-pink-600';
+      case 'latest': return 'bg-green-500 hover:bg-green-600';
+      case 'first-coloring-book': return 'bg-blue-500 hover:bg-blue-600';
+      case 'theme-park': return 'bg-purple-500 hover:bg-purple-600';
       default: return 'bg-gray-500 hover:bg-gray-600';
     }
   };
 
   const getTagColor = () => {
-    switch (pageData.themeColor) {
-      case 'pink': return 'bg-pink-100 text-pink-800';
-      case 'green': return 'bg-green-100 text-green-800';
-      case 'blue': return 'bg-blue-100 text-blue-800';
-      case 'purple': return 'bg-purple-100 text-purple-800';
+    switch (type) {
+      case 'popular': return 'bg-pink-100 text-pink-800';
+      case 'latest': return 'bg-green-100 text-green-800';
+      case 'first-coloring-book': return 'bg-blue-100 text-blue-800';
+      case 'theme-park': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -254,14 +245,25 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
 
   const handleDownload = () => {
     console.log('Downloading:', coloringPageData.title);
+    // 这里可以添加实际的下载逻辑
   };
 
   const handlePrint = () => {
-    console.log('Printing:', coloringPageData.title);
+    window.print();
   };
 
   const handleShare = () => {
-    console.log('Sharing:', coloringPageData.title);
+    if (navigator.share) {
+      navigator.share({
+        title: coloringPageData.title,
+        text: coloringPageData.description,
+        url: window.location.href,
+      });
+    } else {
+      // 备用方案：复制到剪贴板
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
   };
 
   return (
@@ -271,11 +273,17 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 面包屑导航 */}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
-          <Link href="/" className="hover:text-yellow-600 transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="h-4 w-4" />
-          {generateBreadcrumbs()}
+          {breadcrumbPath.map((item, index) => (
+            <React.Fragment key={item.name}>
+              {index > 0 && <ChevronRight className="h-4 w-4" />}
+              <Link
+                href={item.href}
+                className="hover:text-yellow-600 transition-colors"
+              >
+                {item.name}
+              </Link>
+            </React.Fragment>
+          ))}
         </nav>
 
         {/* 主要内容区域 */}
@@ -379,7 +387,7 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Source:</span>
-                  <span className="font-medium text-gray-900 capitalize">{source.replace('-', ' ')}</span>
+                  <span className="font-medium text-gray-900 capitalize">{type.replace('-', ' ')}</span>
                 </div>
               </div>
             </div>
@@ -418,7 +426,7 @@ export default function UnifiedColoringDetail({ pageId, source, category }: Unif
                 key={page.id}
                 onClick={() => {
                   // 根据当前页面来源动态导航
-                  switch (source) {
+                  switch (type) {
                     case 'popular':
                       router.push(`/popular/${page.id}`);
                       break;

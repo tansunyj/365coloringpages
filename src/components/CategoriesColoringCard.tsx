@@ -39,9 +39,14 @@ export default function CategoriesColoringCard({ page }: CategoriesColoringCardP
     console.log('Downloading:', page.title);
   };
 
+  // 将category名称转换为URL友好的slug
+  const getCategorySlug = (categoryName: string) => {
+    return categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  };
+
   const handleClick = () => {
-    // 导航到简化的分类详情页面
-    router.push(`/categories/${page.id}`);
+    const categorySlug = getCategorySlug(page.category);
+    router.push(`/categories/${categorySlug}/${page.id}`);
   };
 
   return (

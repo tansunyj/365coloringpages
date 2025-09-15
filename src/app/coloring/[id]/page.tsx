@@ -25,8 +25,8 @@ export default async function ColoringDetailPage({ params }: PageProps) {
   const resolvedParams = await params;
   return (
     <UnifiedColoringDetail 
-      pageId={resolvedParams.id} 
-      source="categories"
+      id={resolvedParams.id} 
+      type="categories"
       category="General"
     />
   );

@@ -16,12 +16,13 @@ interface SimpleColoringCardProps {
 export default function SimpleColoringCard({ 
   title, 
   category, 
-  likes = Math.floor(Math.random() * 100) + 10,
-  downloads = Math.floor(Math.random() * 500) + 50,
-  id = Math.floor(Math.random() * 100) + 1 // 添加默认ID
+  likes,
+  downloads,
+  id
 }: SimpleColoringCardProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likeCount, setLikeCount] = useState(likes || 50);
+  const [downloadCount, setDownloadCount] = useState(downloads || 250);
   const router = useRouter();
 
   const handleLike = (e: React.MouseEvent) => {
@@ -92,7 +93,7 @@ export default function SimpleColoringCard({
                 </span>
                 <span className="flex items-center gap-1">
                   <Download className="h-3 w-3" />
-                  {downloads}
+                                      {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

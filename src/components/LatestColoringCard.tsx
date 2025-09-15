@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Heart, Download } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface LatestColoringCardProps {
@@ -16,12 +16,23 @@ interface LatestColoringCardProps {
 export default function LatestColoringCard({ 
   title, 
   category, 
-  likes = Math.floor(Math.random() * 100) + 10,
-  downloads = Math.floor(Math.random() * 500) + 50,
-  id = Math.floor(Math.random() * 100) + 1
+  likes,
+  downloads,
+  id
 }: LatestColoringCardProps) {
+  // 使用useEffect来设置随机数，避免水合错误
+  const [likeCount, setLikeCount] = useState(0);
+  const [downloadCount, setDownloadCount] = useState(0);
+  const [pageId, setPageId] = useState(1);
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    setLikeCount(likes || Math.floor(Math.random() * 100) + 10);
+    setDownloadCount(downloads || Math.floor(Math.random() * 500) + 50);
+    setPageId(id || Math.floor(Math.random() * 100) + 1);
+    setIsInitialized(true);
+  }, [likes, downloads, id]);
   const router = useRouter();
 
   const handleLike = (e: React.MouseEvent) => {
@@ -37,7 +48,7 @@ export default function LatestColoringCard({
 
   const handleCardClick = () => {
     // 导航到专用的 Latest 详情页面
-    router.push(`/latest/${id}`);
+    router.push(`/latest/${pageId}`);
   };
 
   return (
@@ -92,7 +103,7 @@ export default function LatestColoringCard({
                 </span>
                 <span className="flex items-center gap-1">
                   <Download className="h-3 w-3" />
-                  {downloads}
+                                      {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

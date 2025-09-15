@@ -17,12 +17,13 @@ export default function FirstColoringListCard({
   id, 
   title, 
   category,
-  likes = Math.floor(Math.random() * 100) + 10,
-  downloads = Math.floor(Math.random() * 500) + 50
+  likes,
+  downloads
 }: FirstColoringListCardProps) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likeCount, setLikeCount] = useState(likes || 50);
+  const [downloadCount, setDownloadCount] = useState(downloads || 250);
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -35,9 +36,14 @@ export default function FirstColoringListCard({
     console.log('Downloading:', title);
   };
 
+  // 将category名称转换为URL友好的slug
+  const getCategorySlug = (categoryName: string) => {
+    return categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  };
+
   const handleCardClick = () => {
-    // 跳转到专用的 First Coloring Book 详情页面
-    router.push(`/first-coloring-book/${id}`);
+    const categorySlug = getCategorySlug(category);
+    router.push(`/first-coloring-book/${categorySlug}/${id}`);
   };
 
   return (
@@ -92,7 +98,7 @@ export default function FirstColoringListCard({
                 </span>
                 <span className="flex items-center gap-1">
                   <Download className="h-3 w-3" />
-                  {downloads}
+                                      {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

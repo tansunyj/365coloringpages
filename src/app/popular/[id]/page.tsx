@@ -24,8 +24,8 @@ export default async function PopularDetailPage({ params }: PageProps) {
   const resolvedParams = await params;
   return (
     <UnifiedColoringDetail 
-      pageId={resolvedParams.id} 
-      source="popular" 
+      id={resolvedParams.id} 
+      type="popular" 
     />
   );
 } 
