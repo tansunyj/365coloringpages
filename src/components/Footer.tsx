@@ -1,130 +1,135 @@
 'use client';
 
-import { Palette, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Footer() {
   return (
     <footer className="text-gray-800" style={{ backgroundColor: '#f4f4f0' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* 主要内容区域 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+                {/* 主要内容区域 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
           {/* 网站简介 */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center mb-4 hover:opacity-80 transition-opacity">
+          <div className="lg:col-span-1 relative pr-8">
+            <Link href="/" className="flex items-center mb-5 hover:opacity-80 transition-opacity">
               <Palette className="h-8 w-8 text-yellow-400" />
               <span className="ml-2 text-xl font-bold">Coloring Pages</span>
             </Link>
-            <p className="text-gray-600 mb-6 leading-relaxed">
+            <p className="text-gray-600 mb-6 leading-relaxed text-sm">
               Unleash your creativity with thousands of beautiful, free coloring pages. Perfect for kids and adults alike.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors">
-                <Facebook className="h-5 w-5" />
+              <a href="mailto:591124281yj@gmail.com" className="text-gray-500 hover:text-orange-500 transition-colors" title="Email us">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
               </a>
-              <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors">
-                <Twitter className="h-5 w-5" />
+              <a href="https://x.com/yangjerry666" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors" title="Follow us on X">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                </svg>
               </a>
-              <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-500 hover:text-orange-500 transition-colors">
-                <Youtube className="h-5 w-5" />
+              <a href="https://t.me/yangjerry666" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-orange-500 transition-colors" title="Contact us on Telegram">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
               </a>
             </div>
+            {/* 竖线分割 - 更显眼的颜色 */}
+            <div className="hidden lg:block absolute top-0 right-0 w-px h-full bg-gray-300"></div>
           </div>
 
           {/* 发现 */}
-          <div>
-            <h3 className="text-lg font-black mb-8 text-gray-900">Discover</h3>
-            <ul className="space-y-5">
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Popular Pages
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  New Releases
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Categories
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Collections
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  AI Generator
-                </a>
-              </li>
-            </ul>
+          <div className="relative pr-8">
+            <h3 className="text-lg font-black mb-5 text-gray-900">Discover</h3>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+              <Link href="/popular" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Popular Pages
+              </Link>
+              <Link href="/latest" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Latest Uploads
+              </Link>
+              <Link href="/categories" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Categories
+              </Link>
+              <Link href="/theme-park" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Theme Park Adventures
+              </Link>
+              <Link href="/first-coloring-book" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                My First Coloring Book
+              </Link>
+              <Link href="/ai-generator" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                AI Generator
+              </Link>
+            </div>
+            {/* 竖线分割 - 更显眼的颜色 */}
+            <div className="hidden lg:block absolute top-0 right-0 w-px h-full bg-gray-300"></div>
           </div>
 
-          {/* 社区 */}
-          <div>
-            <h3 className="text-lg font-black mb-8 text-gray-900">Community</h3>
-            <ul className="space-y-5">
+          {/* 关于我们 */}
+          <div className="relative pr-8">
+            <h3 className="text-lg font-black mb-5 text-gray-900">About</h3>
+            <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Submit Your Art
+                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Artist Spotlights
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Contests
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Forum
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Newsletter
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* 支持 */}
-          <div>
-            <h3 className="text-lg font-black mb-8 text-gray-900">Support</h3>
-            <ul className="space-y-5">
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors">
-                  Copyright
+                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Help Center
+                </a>
+              </li>
+            </ul>
+            {/* 竖线分割 - 更显眼的颜色 */}
+            <div className="hidden lg:block absolute top-0 right-0 w-px h-full bg-gray-300"></div>
+          </div>
+
+          {/* 友情链接 */}
+          <div>
+            <h3 className="text-lg font-black mb-5 text-gray-900">Friendly Links</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="https://coloringpages.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Coloring Pages
+                </a>
+              </li>
+              <li>
+                <a href="https://printablecoloringpages.net" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Printable Coloring
+                </a>
+              </li>
+              <li>
+                <a href="https://kidsprintables.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Kids Printables
+                </a>
+              </li>
+              <li>
+                <a href="https://arttherapycoloring.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Art Therapy
+                </a>
+              </li>
+              <li>
+                <a href="https://creativekids.org" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Creative Kids
                 </a>
               </li>
             </ul>

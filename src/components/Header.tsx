@@ -1,6 +1,6 @@
 'use client';
 
-import { Palette, Globe, User } from 'lucide-react';
+import { Palette, Globe, User, Heart, Download, Settings } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ export default function Header() {
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [currentUserAvatar, setCurrentUserAvatar] = useState('');
   const router = useRouter();
   const userMenuRef = useRef<HTMLDivElement>(null);
   
@@ -25,9 +26,38 @@ export default function Header() {
     'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face'
   ];
-  
-  // 使用固定头像避免水合错误（实际项目中这应该来自用户数据）
-  const currentUserAvatar = userAvatars[0];
+
+  // 监听来自个人资料页面的用户状态更新
+  useEffect(() => {
+    const handleUserLogin = (event: CustomEvent) => {
+      setIsLoggedIn(event.detail.isLoggedIn);
+      setCurrentUserAvatar(event.detail.userAvatar);
+    };
+
+    const handleUserLogout = () => {
+      setIsLoggedIn(false);
+      setCurrentUserAvatar('');
+    };
+
+    const handleAvatarUpdate = (event: CustomEvent) => {
+      setCurrentUserAvatar(event.detail.userAvatar);
+    };
+
+    // 添加事件监听器
+    window.addEventListener('userLogin', handleUserLogin as EventListener);
+    window.addEventListener('userLogout', handleUserLogout);
+    window.addEventListener('userAvatarUpdate', handleAvatarUpdate as EventListener);
+
+    return () => {
+      // 清理事件监听器
+      window.removeEventListener('userLogin', handleUserLogin as EventListener);
+      window.removeEventListener('userLogout', handleUserLogout);
+      window.removeEventListener('userAvatarUpdate', handleAvatarUpdate as EventListener);
+    };
+  }, []);
+
+  // 使用默认头像作为后备
+  const displayAvatar = currentUserAvatar || userAvatars[0];
   
   const handleAuthClick = () => {
     if (isLoggedIn) {
@@ -43,6 +73,7 @@ export default function Header() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setIsUserMenuOpen(false);
+    setCurrentUserAvatar('');
     console.log('用户已登出');
   };
 
@@ -50,15 +81,19 @@ export default function Header() {
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
     setIsLoginDialogOpen(false);
+    setCurrentUserAvatar(userAvatars[0]); // 设置默认头像
+    console.log('登录成功');
   };
 
   // 处理注册成功
   const handleSignupSuccess = () => {
     setIsLoggedIn(true);
     setIsSignupDialogOpen(false);
+    setCurrentUserAvatar(userAvatars[0]); // 设置默认头像
+    console.log('注册成功');
   };
 
-  // 点击外部区域关闭用户菜单
+  // 点击外部关闭用户菜单
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
@@ -74,6 +109,7 @@ export default function Header() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isUserMenuOpen]);
+
   return (
     <header className="shadow-sm sticky top-0 z-50" style={{ backgroundColor: '#fcfcf8' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,10 +144,10 @@ export default function Header() {
               <Globe className="h-4 w-4 mr-1" />
               <span>EN</span>
             </div>
-            
+
             {/* 用户头像 */}
             <div className="relative" ref={userMenuRef}>
-              <button 
+              <button
                 onClick={handleAuthClick}
                 className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 hover:scale-105"
               >
@@ -119,7 +155,7 @@ export default function Header() {
                   // 已登录：显示用户头像
                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400 hover:border-yellow-500 transition-colors">
                     <Image
-                      src={currentUserAvatar}
+                      src={displayAvatar}
                       alt="User Avatar"
                       width={40}
                       height={40}
@@ -138,36 +174,48 @@ export default function Header() {
               {/* 用户菜单下拉框 */}
               {isLoggedIn && isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-900">用户账户</p>
-                    <p className="text-sm text-gray-500">user@example.com</p>
-                  </div>
                   <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
-                      console.log('个人资料');
+                      router.push('/profile');
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="w-full flex items-start gap-3 px-4 py-2 border-b border-gray-100 hover:bg-gray-50 transition-colors"
                   >
-                    个人资料
+                    <User className="h-4 w-4 mt-0.5 text-gray-500" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">用户账户</p>
+                      <p className="text-sm text-gray-500">user@example.com</p>
+                    </div>
                   </button>
                   <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
                       console.log('我的收藏');
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
+                    <Heart className="h-4 w-4" />
                     我的收藏
                   </button>
                   <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
-                      console.log('设置');
+                      console.log('我的下载');
                     }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
-                    设置
+                    <Download className="h-4 w-4" />
+                    我的下载
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      router.push('/profile');
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <Settings className="h-4 w-4" />
+                    账户设置
                   </button>
                   <hr className="my-1" />
                   <button
@@ -191,10 +239,10 @@ export default function Header() {
           </div>
         </div>
       </div>
-      
+
       {/* 登录对话框 */}
-      <LoginDialog 
-        isOpen={isLoginDialogOpen} 
+      <LoginDialog
+        isOpen={isLoginDialogOpen}
         onClose={() => setIsLoginDialogOpen(false)}
         onSwitchToSignup={() => {
           setIsLoginDialogOpen(false);
@@ -202,10 +250,10 @@ export default function Header() {
         }}
         onLoginSuccess={handleLoginSuccess}
       />
-      
+
       {/* 注册对话框 */}
-      <SignupDialog 
-        isOpen={isSignupDialogOpen} 
+      <SignupDialog
+        isOpen={isSignupDialogOpen}
         onClose={() => setIsSignupDialogOpen(false)}
         onSwitchToLogin={() => {
           setIsSignupDialogOpen(false);
