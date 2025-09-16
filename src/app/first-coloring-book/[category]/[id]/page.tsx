@@ -2,10 +2,10 @@ import { Suspense } from 'react';
 import UnifiedColoringDetail from '../../../../components/UnifiedColoringDetail';
 
 interface FirstColoringBookDetailPageProps {
-  params: {
+  params: Promise<{
     category: string;
     id: string;
-  };
+  }>;
 }
 
 // 生成静态参数
@@ -23,13 +23,15 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default function FirstColoringBookDetailPage({ params }: FirstColoringBookDetailPageProps) {
+export default async function FirstColoringBookDetailPage({ params }: FirstColoringBookDetailPageProps) {
+  const { id, category } = await params;
+  
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <UnifiedColoringDetail 
-        id={params.id} 
+        id={id} 
         type="first-coloring-book"
-        category={params.category}
+        category={category}
       />
     </Suspense>
   );

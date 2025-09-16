@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "首页",
+    "categories": "分类",
+    "aiGenerator": "AI生成器",
+    "blog": "博客"
+  },
+  "hero": {
+    "title": "释放你的创造力",
+    "subtitle": "查找、打印和下载涂色页面。或使用AI创建您自己的涂色页。",
+    "searchPlaceholder": "搜索夏日海滩或其他主题..."
+  },
+  "sections": {
+    "popular": "热门",
+    "themeParks": "主题公园冒险",
+    "firstColoring": "我的第一本涂色书",
+    "latestUploads": "最新上传",
+    "more": "更多"
+  },
+  "footer": {
+    "tagline": "通过数千张美丽的免费涂色页面释放您的创造力。适合儿童和成人。",
+    "discover": "发现",
+    "about": "关于",
+    "friendlyLinks": "友情链接",
+    "popularPages": "热门页面",
+    "latestUploads": "最新上传",
+    "categories": "分类",
+    "themePark": "主题公园冒险",
+    "firstColoringBook": "我的第一本涂色书",
+    "aiGenerator": "AI生成器",
+    "aboutUs": "关于我们",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "coloringPages": "涂色页面",
+    "printableColoring": "可打印涂色",
+    "kidsPrintables": "儿童打印",
+    "artTherapy": "艺术疗法",
+    "creativeKids": "创意儿童",
+    "copyright": "© 2024 365涂色页面。保留所有权利。",
+    "madeWith": "用❤️为世界各地的创意头脑制作"
+  },
+  "blog": {
+    "title": "我们的博客",
+    "subtitle": "探索创意世界，发现涂色技巧，了解艺术的治疗益处。",
+    "featuredArticle": "特色文章",
+    "latestArticles": "最新文章",
+    "readMore": "阅读更多",
+    "backToBlog": "返回博客",
+    "stayUpdated": "保持更新",
+    "subscribeText": "订阅我们的通讯，获取最新文章、涂色技巧和创意灵感。",
+    "emailPlaceholder": "输入您的邮箱",
+    "subscribe": "订阅"
+  },
+  "auth": {
+    "login": "登录",
+    "signup": "注册",
+    "logout": "退出登录",
+    "profile": "个人资料",
+    "accountSettings": "账户设置",
+    "myDownloads": "我的下载"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭"
+  }
+} 

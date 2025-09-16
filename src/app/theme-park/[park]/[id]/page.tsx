@@ -2,10 +2,10 @@ import { Suspense } from 'react';
 import UnifiedColoringDetail from '../../../../components/UnifiedColoringDetail';
 
 interface ThemeParkDetailPageProps {
-  params: {
+  params: Promise<{
     park: string;
     id: string;
-  };
+  }>;
 }
 
 // 生成静态参数
@@ -23,13 +23,15 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default function ThemeParkDetailPage({ params }: ThemeParkDetailPageProps) {
+export default async function ThemeParkDetailPage({ params }: ThemeParkDetailPageProps) {
+  const { id, park } = await params;
+  
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <UnifiedColoringDetail 
-        id={params.id} 
+        id={id} 
         type="theme-park"
-        park={params.park}
+        park={park}
       />
     </Suspense>
   );

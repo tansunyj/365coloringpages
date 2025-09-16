@@ -1,22 +1,30 @@
 'use client';
 
-import { Palette, Globe, User, Heart, Download, Settings } from 'lucide-react';
+import { Palette, User, Heart, Download, Settings, ChevronDown } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import LoginDialog from './LoginDialog';
 import SignupDialog from './SignupDialog';
+import { languageNames, locales, type Locale } from '@/i18n/config';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Header() {
+  // 国际化
+  const { locale: currentLocale, changeLanguage: switchLanguage } = useTranslation();
+  
   // 模拟用户登录状态
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [currentUserAvatar, setCurrentUserAvatar] = useState('');
   const router = useRouter();
+  const pathname = usePathname();
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
   
   // 预设的用户头像
   const userAvatars = [
@@ -93,22 +101,31 @@ export default function Header() {
     console.log('注册成功');
   };
 
-  // 点击外部关闭用户菜单
+  // 语言切换函数
+  const handleLanguageChange = (locale: Locale) => {
+    switchLanguage(locale);
+    setIsLanguageMenuOpen(false);
+  };
+
+  // 点击外部关闭菜单
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
       }
+      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target as Node)) {
+        setIsLanguageMenuOpen(false);
+      }
     };
 
-    if (isUserMenuOpen) {
+    if (isUserMenuOpen || isLanguageMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isUserMenuOpen]);
+  }, [isUserMenuOpen, isLanguageMenuOpen]);
 
   return (
     <header className="shadow-sm sticky top-0 z-50" style={{ backgroundColor: '#fcfcf8' }}>
@@ -133,16 +150,59 @@ export default function Header() {
             <Link href="/ai-generator" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
               AI Generator
             </Link>
-            <a href="#" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
+            <Link href="/blog" className="text-gray-700 hover:text-yellow-600 px-3 py-2 text-sm font-medium transition-colors">
               Blog
-            </a>
+            </Link>
           </nav>
 
           {/* 右侧按钮 */}
           <div className="hidden md:flex items-center space-x-4">
-            <div className="flex items-center text-gray-600 text-sm">
-              <Globe className="h-4 w-4 mr-1" />
-              <span>EN</span>
+            {/* 语言选择器 */}
+            <div className="relative" ref={languageMenuRef}>
+              <button
+                onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+                className="flex items-center text-gray-600 text-sm hover:text-gray-900 transition-colors"
+              >
+                <Image
+                  src={languageNames[currentLocale].flagPath}
+                  alt={`${languageNames[currentLocale].nativeName} flag`}
+                  width={16}
+                  height={12}
+                  className="mr-2 rounded-sm"
+                />
+                <span>{languageNames[currentLocale].nativeName}</span>
+                <ChevronDown className="h-3 w-3 ml-1" />
+              </button>
+
+              {/* 语言下拉菜单 */}
+              {isLanguageMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  {locales.map((locale) => (
+                    <button
+                      key={locale}
+                      onClick={() => handleLanguageChange(locale)}
+                      className={`w-full flex items-center px-4 py-3 text-sm hover:bg-gray-50 transition-colors ${
+                        currentLocale === locale ? 'bg-orange-50 text-orange-600' : 'text-gray-700'
+                      }`}
+                    >
+                      <Image
+                        src={languageNames[locale].flagPath}
+                        alt={`${languageNames[locale].nativeName} flag`}
+                        width={24}
+                        height={18}
+                        className="mr-3 rounded-sm flex-shrink-0"
+                      />
+                      <div className="flex flex-col items-start flex-grow">
+                        <span className="font-medium">{languageNames[locale].nativeName}</span>
+                        <span className="text-xs text-gray-500">{languageNames[locale].name}</span>
+                      </div>
+                      {currentLocale === locale && (
+                        <span className="ml-auto text-orange-600 text-lg">✓</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* 用户头像 */}

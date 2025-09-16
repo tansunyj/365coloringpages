@@ -3,6 +3,8 @@
 import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { getActiveBannerGroup, getDefaultBannerGroup, type BannerGroup, type BannerImage } from '@/lib/bannerService';
 import SimpleColoringCard from './SimpleColoringCard';
 
 // ThemeSection相关类型定义
@@ -57,73 +59,92 @@ export function ThemeSection({ section }: ThemeSectionProps) {
   );
 }
 
-// Hero组件
+// 热门关键词接口
+interface HotKeyword {
+  keyword: string;
+  clickCount: number;
+}
 
+// Hero组件
 export default function Hero() {
-  const categories = ['Animals', 'Fantasy', 'Nature', 'Holidays'];
-  
-  // 节假日专题数据 - 更多主题用于跑马灯效果
-  const holidayThemes = [
-    {
-      id: 1,
-      title: 'Christmas Coloring Pages',
-      subtitle: 'Magical holiday designs for festive fun',
-      tags: ['Christmas', 'Santa', 'Reindeer', 'Christmas Tree'],
-      image: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1200&h=600&fit=crop',
-      keywords: ['Christmas magic', 'Holiday spirit', 'Winter wonderland'],
-      isDark: true // 深色背景
-    },
-    {
-      id: 2,
-      title: 'Halloween Spooky Collection',
-      subtitle: 'Spooky and fun designs for Halloween',
-      tags: ['Halloween', 'Pumpkin', 'Ghost', 'Witch'],
-      image: 'https://images.unsplash.com/photo-1509557965043-36ce8a4540b1?w=1200&h=600&fit=crop',
-      keywords: ['Spooky fun', 'Halloween magic', 'Trick or treat'],
-      isDark: true // 深色背景
-    },
-    {
-      id: 3,
-      title: 'Easter Spring Celebration',
-      subtitle: 'Beautiful spring and Easter themes',
-      tags: ['Easter', 'Bunny', 'Eggs', 'Spring'],
-      image: 'https://images.unsplash.com/photo-1553531580-33306b7223d7?w=1200&h=600&fit=crop',
-      keywords: ['Spring blooms', 'Easter joy', 'Fresh beginnings'],
-      isDark: false // 浅色背景
-    },
-    {
-      id: 4,
-      title: 'Summer Beach Fun',
-      subtitle: 'Sunny beach and ocean adventures',
-      tags: ['Beach', 'Ocean', 'Sun', 'Vacation'],
-      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=600&fit=crop',
-      keywords: ['Summer vibes', 'Beach fun', 'Ocean dreams'],
-      isDark: false // 浅色背景
-    },
-    {
-      id: 5,
-      title: 'Magical Unicorns',
-      subtitle: 'Enchanting unicorn coloring adventures',
-      tags: ['Unicorn', 'Magic', 'Rainbow', 'Fantasy'],
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=600&fit=crop',
-      keywords: ['Magical dreams', 'Unicorn magic', 'Rainbow colors'],
-      isDark: true // 深色背景
-    }
-  ];
-  
+  const [bannerGroup, setBannerGroup] = useState<BannerGroup>(getDefaultBannerGroup());
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [hotKeywords, setHotKeywords] = useState<HotKeyword[]>([]);
+  const [keywordsLoading, setKeywordsLoading] = useState(true);
   
-  // 连续跑马灯轮播 - 3秒切换一次
+  // 默认分类标签（作为fallback）
+  const defaultCategories = ['Animals', 'Fantasy', 'Nature', 'Holidays'];
+
+  // 加载banner组数据
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % holidayThemes.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [holidayThemes.length]);
+    const loadBannerGroup = async () => {
+      try {
+        const activeBannerGroup = await getActiveBannerGroup();
+        if (activeBannerGroup) {
+          setBannerGroup(activeBannerGroup);
+        }
+      } catch (error) {
+        console.error('Error loading banner group:', error);
+        // Keep default banner group on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBannerGroup();
+  }, []);
+
+  // 加载热门关键词
+  useEffect(() => {
+    const loadHotKeywords = async () => {
+      try {
+        const response = await fetch('/api/keywords');
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+          setHotKeywords(data.data);
+        }
+      } catch (error) {
+        console.error('Error loading hot keywords:', error);
+        // 使用默认关键词作为fallback
+        const fallbackKeywords = ['Animals', 'Fantasy', 'Nature', 'Holidays'];
+        setHotKeywords(fallbackKeywords.map(cat => ({ keyword: cat, clickCount: 0 })));
+      } finally {
+        setKeywordsLoading(false);
+      }
+    };
+
+    loadHotKeywords();
+  }, []);
+
+  // 自动轮播效果
+  useEffect(() => {
+    if (bannerGroup.images.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % bannerGroup.images.length);
+      }, bannerGroup.autoPlayInterval);
+      
+      return () => clearInterval(timer);
+    }
+  }, [bannerGroup.images.length, bannerGroup.autoPlayInterval]);
   
-  const handleTagClick = (tag: string) => {
+  const handleTagClick = async (tag: string) => {
     setSearchQuery(tag);
+    
+    // 记录关键词点击
+    try {
+      await fetch('/api/keywords', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ keyword: tag }),
+      });
+    } catch (error) {
+      console.error('Error recording keyword click:', error);
+    }
   };
   
   const handleSearch = () => {
@@ -133,38 +154,55 @@ export default function Hero() {
       // 例如：router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  // 获取当前显示的图片
+  const currentImage = bannerGroup.images[currentSlide] || bannerGroup.images[0];
   
-  const currentTheme = holidayThemes[currentSlide];
-  const isDarkBackground = currentTheme.isDark;
+  // 根据图片判断是否为深色背景（简单实现）
+  const isDarkBackground = true; // 默认使用深色遮罩以确保文字可读性
   
   // 根据背景亮度动态设置样式类名
   const textColorClass = isDarkBackground ? 'text-white' : 'text-gray-900';
   const textShadowClass = isDarkBackground ? 'drop-shadow-lg' : 'drop-shadow-sm';
   const subtitleColorClass = isDarkBackground ? 'text-white/90' : 'text-gray-700';
-  const overlayClass = isDarkBackground ? 'bg-black/30' : 'bg-white/20';
+  const overlayClass = isDarkBackground ? 'bg-black/40' : 'bg-white/20';
 
-  return (
+  // 获取当前显示的关键词
+  const getCurrentKeywords = () => {
+    if (keywordsLoading) {
+      return defaultCategories.slice(0, 6); // 显示默认类别作为加载中的placeholder
+    }
+    
+    if (hotKeywords.length > 0) {
+      return hotKeywords.slice(0, 6).map(item => item.keyword); // 最多显示6个关键词
+    }
+    
+    // fallback到默认分类
+    return defaultCategories.slice(0, 6);
+  };
+
+  const bannerContent = (
     <section className="relative overflow-hidden" style={{ backgroundColor: '#fcfcf8' }}>
-      {/* 全屏背景轮播图 */}
+      {/* Banner轮播背景 */}
       <div className="relative h-[400px] md:h-[450px]">
         {/* 背景图片轮播 */}
         <div className="absolute inset-0">
-          {holidayThemes.map((theme, index) => (
+          {bannerGroup.images.map((image, index) => (
             <div
-              key={theme.id}
+              key={image.id}
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
               <Image
-                src={theme.image}
-                alt={theme.title}
+                src={image.imageUrl}
+                alt={image.title}
                 fill
                 className="object-cover"
                 unoptimized
                 priority={index === 0}
               />
-              {/* 半透明遮罩 */}
+              {/* 半透明遮罩确保文字可读性 */}
               <div className={`absolute inset-0 ${overlayClass}`}></div>
             </div>
           ))}
@@ -172,21 +210,21 @@ export default function Hero() {
         
         {/* 悬浮的内容层 */}
         <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8">
-          {/* 主标题 */}
+          {/* 主标题 - 使用当前图片标题或默认标题 */}
           <h1 className={`text-4xl md:text-6xl font-bold mb-4 ${textColorClass} ${textShadowClass} leading-tight`}>
-            Unleash Your Creativity
+            {currentImage.title || 'Unleash Your Creativity'}
           </h1>
           
-          {/* 副标题 */}
+          {/* 副标题 - 使用当前图片副标题或描述 */}
           <p className={`text-lg md:text-xl mb-8 ${subtitleColorClass} max-w-2xl mx-auto font-medium ${textShadowClass}`}>
-            Find, print, and download coloring pages. Or create your own with AI.
+            {currentImage.subtitle || currentImage.description || 'Find, print, and download coloring pages. Or create your own with AI.'}
           </p>
 
           {/* 搜索框容器 - 统一宽度和左对齐 */}
           <div className="max-w-2xl mx-auto w-full mb-8">
-            {/* 动态节假日标签 - 搜索框上方，左对齐 */}
+            {/* 动态关键词标签 - 搜索框上方，左对齐 */}
             <div className="flex flex-wrap gap-2 mb-6">
-              {currentTheme.keywords.map((keyword, index) => (
+              {getCurrentKeywords().map((keyword, index) => (
                 <button
                   key={keyword}
                   onClick={() => handleTagClick(keyword)}
@@ -214,7 +252,7 @@ export default function Hero() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={`Search for ${currentTheme.title.toLowerCase()} or other themes...`}
+                placeholder={`Search for ${currentImage.title.toLowerCase()} or other themes...`}
                 className="w-full pl-12 pr-14 py-4 bg-white/95 backdrop-blur-sm text-gray-900 rounded-2xl text-lg placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/50 shadow-2xl border border-white/20 focus:bg-white transition-all duration-300"
               />
               <button
@@ -226,12 +264,12 @@ export default function Hero() {
               </button>
             </form>
 
-            {/* 动态分类标签 - 搜索框下方，左对齐 */}
+            {/* 分类标签 - 搜索框下方，左对齐 */}
             <div className="flex flex-wrap gap-3">
-              {currentTheme.tags.map((tag, index) => (
+              {defaultCategories.map((category, index) => (
                 <button
-                  key={tag}
-                  onClick={() => handleTagClick(tag)}
+                  key={category}
+                  onClick={() => handleTagClick(category)}
                   className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl border ${textShadowClass} ${
                     isDarkBackground
                       ? 'bg-white/25 backdrop-blur-sm hover:bg-white/35 text-white border-white/50 hover:border-white/70'
@@ -242,28 +280,41 @@ export default function Hero() {
                     animation: 'fadeInUp 0.6s ease-out forwards'
                   }}
                 >
-                  {tag}
+                  {category}
                 </button>
               ))}
             </div>
           </div>
-          
-          {/* 轮播指示器 */}
-          <div className="flex space-x-2 mt-8">
-            {holidayThemes.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentSlide 
-                    ? 'bg-white scale-125' 
-                    : 'bg-white/50 hover:bg-white/75'
-                }`}
-              />
-            ))}
-          </div>
+
+          {/* 轮播指示器 - 只有多张图片时显示 */}
+          {bannerGroup.images.length > 1 && (
+            <div className="flex space-x-2 mt-8">
+              {bannerGroup.images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide 
+                      ? 'bg-white scale-125' 
+                      : 'bg-white/50 hover:bg-white/75'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
+
+  // 如果当前图片有点击链接，包装成Link组件
+  if (currentImage.clickUrl) {
+    return (
+      <Link href={currentImage.clickUrl} className="block">
+        {bannerContent}
+      </Link>
+    );
+  }
+
+  return bannerContent;
 }

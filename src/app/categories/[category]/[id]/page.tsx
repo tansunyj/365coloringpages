@@ -2,10 +2,10 @@ import { Suspense } from 'react';
 import UnifiedColoringDetail from '../../../../components/UnifiedColoringDetail';
 
 interface CategoryDetailPageProps {
-  params: {
+  params: Promise<{
     category: string;
     id: string;
-  };
+  }>;
 }
 
 // 生成静态参数
@@ -23,13 +23,15 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default function CategoryDetailPage({ params }: CategoryDetailPageProps) {
+export default async function CategoryDetailPage({ params }: CategoryDetailPageProps) {
+  const { id, category } = await params;
+  
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <UnifiedColoringDetail 
-        id={params.id} 
+        id={id} 
         type="categories"
-        category={params.category}
+        category={category}
       />
     </Suspense>
   );

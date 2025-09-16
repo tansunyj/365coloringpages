@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "ホーム",
+    "categories": "カテゴリー",
+    "aiGenerator": "AI生成器",
+    "blog": "ブログ"
+  },
+  "hero": {
+    "title": "創造性を解き放つ",
+    "subtitle": "塗り絵ページを見つけて、印刷し、ダウンロードしてください。またはAIで独自のページを作成してください。",
+    "searchPlaceholder": "夏のビーチや他のテーマを検索..."
+  },
+  "sections": {
+    "popular": "人気",
+    "themeParks": "テーマパークの冒険",
+    "firstColoring": "私の最初の塗り絵本",
+    "latestUploads": "最新アップロード",
+    "more": "もっと"
+  },
+  "footer": {
+    "tagline": "何千もの美しい無料塗り絵ページで創造性を解き放ちましょう。子供と大人に最適です。",
+    "discover": "発見",
+    "about": "について",
+    "friendlyLinks": "友好的なリンク",
+    "popularPages": "人気ページ",
+    "latestUploads": "最新アップロード",
+    "categories": "カテゴリー",
+    "themePark": "テーマパークの冒険",
+    "firstColoringBook": "私の最初の塗り絵本",
+    "aiGenerator": "AI生成器",
+    "aboutUs": "私たちについて",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfService": "利用規約",
+    "coloringPages": "塗り絵ページ",
+    "printableColoring": "印刷可能な塗り絵",
+    "kidsPrintables": "子供用印刷物",
+    "artTherapy": "アートセラピー",
+    "creativeKids": "創造的な子供たち",
+    "copyright": "© 2024 365塗り絵ページ。全著作権所有。",
+    "madeWith": "世界中の創造的な心のために❤️で作られました"
+  },
+  "blog": {
+    "title": "私たちのブログ",
+    "subtitle": "創造性の世界を探求し、塗り絵技術を発見し、芸術の治療効果について学びましょう。",
+    "featuredArticle": "特集記事",
+    "latestArticles": "最新記事",
+    "readMore": "続きを読む",
+    "backToBlog": "ブログに戻る",
+    "stayUpdated": "最新情報を入手",
+    "subscribeText": "ニュースレターに登録して、最新記事、塗り絵のコツ、創造的なインスピレーションを受け取りましょう。",
+    "emailPlaceholder": "メールアドレスを入力",
+    "subscribe": "購読"
+  },
+  "auth": {
+    "login": "ログイン",
+    "signup": "サインアップ",
+    "logout": "ログアウト",
+    "profile": "プロフィール",
+    "accountSettings": "アカウント設定",
+    "myDownloads": "私のダウンロード"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "close": "閉じる"
+  }
+} 

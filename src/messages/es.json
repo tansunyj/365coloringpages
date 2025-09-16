@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "categories": "Categorías",
+    "aiGenerator": "Generador IA",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Libera Tu Creatividad",
+    "subtitle": "Encuentra, imprime y descarga páginas para colorear. O crea las tuyas con IA.",
+    "searchPlaceholder": "Buscar playa de verano u otros temas..."
+  },
+  "sections": {
+    "popular": "Popular",
+    "themeParks": "Aventuras de Parques Temáticos",
+    "firstColoring": "Mi Primer Libro para Colorear",
+    "latestUploads": "Últimas Subidas",
+    "more": "Más"
+  },
+  "footer": {
+    "tagline": "Libera tu creatividad con miles de hermosas páginas para colorear gratuitas. Perfecto para niños y adultos.",
+    "discover": "Descubrir",
+    "about": "Acerca de",
+    "friendlyLinks": "Enlaces Amigos",
+    "popularPages": "Páginas Populares",
+    "latestUploads": "Últimas Subidas",
+    "categories": "Categorías",
+    "themePark": "Aventuras de Parques Temáticos",
+    "firstColoringBook": "Mi Primer Libro para Colorear",
+    "aiGenerator": "Generador IA",
+    "aboutUs": "Acerca de Nosotros",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "coloringPages": "Páginas para Colorear",
+    "printableColoring": "Colorear Imprimible",
+    "kidsPrintables": "Imprimibles para Niños",
+    "artTherapy": "Arte Terapia",
+    "creativeKids": "Niños Creativos",
+    "copyright": "© 2024 365 Páginas para Colorear. Todos los derechos reservados.",
+    "madeWith": "Hecho con ❤️ para mentes creativas en todas partes"
+  },
+  "blog": {
+    "title": "Nuestro Blog",
+    "subtitle": "Explora el mundo de la creatividad, descubre técnicas de colorear y aprende sobre los beneficios terapéuticos del arte.",
+    "featuredArticle": "Artículo Destacado",
+    "latestArticles": "Últimos Artículos",
+    "readMore": "Leer Más",
+    "backToBlog": "Volver al Blog",
+    "stayUpdated": "Manténgase Actualizado",
+    "subscribeText": "Suscríbete a nuestro boletín para recibir los últimos artículos, consejos de colorear e inspiración creativa.",
+    "emailPlaceholder": "Ingresa tu email",
+    "subscribe": "Suscribirse"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "profile": "Perfil",
+    "accountSettings": "Configuración de Cuenta",
+    "myDownloads": "Mis Descargas"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar"
+  }
+} 

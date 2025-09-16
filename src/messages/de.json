@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "categories": "Kategorien",
+    "aiGenerator": "KI-Generator",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Entfesseln Sie Ihre Kreativität",
+    "subtitle": "Finden, drucken und laden Sie Malvorlagen herunter. Oder erstellen Sie Ihre eigenen mit KI.",
+    "searchPlaceholder": "Suchen Sie nach Sommerstrand oder anderen Themen..."
+  },
+  "sections": {
+    "popular": "Beliebt",
+    "themeParks": "Themenpark-Abenteuer",
+    "firstColoring": "Mein Erstes Malbuch",
+    "latestUploads": "Neueste Uploads",
+    "more": "Mehr"
+  },
+  "footer": {
+    "tagline": "Entfesseln Sie Ihre Kreativität mit Tausenden von schönen, kostenlosen Malvorlagen. Perfekt für Kinder und Erwachsene.",
+    "discover": "Entdecken",
+    "about": "Über Uns",
+    "friendlyLinks": "Freundliche Links",
+    "popularPages": "Beliebte Seiten",
+    "latestUploads": "Neueste Uploads",
+    "categories": "Kategorien",
+    "themePark": "Themenpark-Abenteuer",
+    "firstColoringBook": "Mein Erstes Malbuch",
+    "aiGenerator": "KI-Generator",
+    "aboutUs": "Über Uns",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "termsOfService": "Nutzungsbedingungen",
+    "coloringPages": "Malvorlagen",
+    "printableColoring": "Druckbare Malvorlagen",
+    "kidsPrintables": "Kinder-Druckvorlagen",
+    "artTherapy": "Kunsttherapie",
+    "creativeKids": "Kreative Kinder",
+    "copyright": "© 2024 365 Malvorlagen. Alle Rechte vorbehalten.",
+    "madeWith": "Mit ❤️ für kreative Köpfe überall gemacht"
+  },
+  "blog": {
+    "title": "Unser Blog",
+    "subtitle": "Entdecken Sie die Welt der Kreativität, lernen Sie Maltechniken und erfahren Sie mehr über die therapeutischen Vorteile der Kunst.",
+    "featuredArticle": "Hauptartikel",
+    "latestArticles": "Neueste Artikel",
+    "readMore": "Weiterlesen",
+    "backToBlog": "Zurück zum Blog",
+    "stayUpdated": "Bleiben Sie auf dem Laufenden",
+    "subscribeText": "Abonnieren Sie unseren Newsletter, um die neuesten Artikel, Maltipps und kreative Inspiration zu erhalten.",
+    "emailPlaceholder": "E-Mail eingeben",
+    "subscribe": "Abonnieren"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "signup": "Registrieren",
+    "logout": "Abmelden",
+    "profile": "Profil",
+    "accountSettings": "Kontoeinstellungen",
+    "myDownloads": "Meine Downloads"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen"
+  }
+} 

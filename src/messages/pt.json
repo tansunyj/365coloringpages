@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Início",
+    "categories": "Categorias",
+    "aiGenerator": "Gerador de IA",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Liberte Sua Criatividade",
+    "subtitle": "Encontre, imprima e baixe páginas para colorir. Ou crie as suas próprias com IA.",
+    "searchPlaceholder": "Procure por praia de verão ou outros temas..."
+  },
+  "sections": {
+    "popular": "Popular",
+    "themeParks": "Aventuras em Parques Temáticos",
+    "firstColoring": "Meu Primeiro Livro de Colorir",
+    "latestUploads": "Últimos Uploads",
+    "more": "Mais"
+  },
+  "footer": {
+    "tagline": "Liberte sua criatividade com milhares de belas páginas para colorir gratuitas. Perfeito para crianças e adultos.",
+    "discover": "Descobrir",
+    "about": "Sobre",
+    "friendlyLinks": "Links Amigáveis",
+    "popularPages": "Páginas Populares",
+    "latestUploads": "Últimos Uploads",
+    "categories": "Categorias",
+    "themePark": "Aventuras em Parques Temáticos",
+    "firstColoringBook": "Meu Primeiro Livro de Colorir",
+    "aiGenerator": "Gerador de IA",
+    "aboutUs": "Sobre Nós",
+    "privacyPolicy": "Política de Privacidade",
+    "termsOfService": "Termos de Serviço",
+    "coloringPages": "Páginas para Colorir",
+    "printableColoring": "Colorir Imprimível",
+    "kidsPrintables": "Imprimíveis para Crianças",
+    "artTherapy": "Arte Terapia",
+    "creativeKids": "Crianças Criativas",
+    "copyright": "© 2024 365 Páginas para Colorir. Todos os direitos reservados.",
+    "madeWith": "Feito com ❤️ para mentes criativas em todos os lugares"
+  },
+  "blog": {
+    "title": "Nosso Blog",
+    "subtitle": "Explore o mundo da criatividade, descubra técnicas de colorir e aprenda sobre os benefícios terapêuticos da arte.",
+    "featuredArticle": "Artigo em Destaque",
+    "latestArticles": "Últimos Artigos",
+    "readMore": "Leia Mais",
+    "backToBlog": "Voltar ao Blog",
+    "stayUpdated": "Mantenha-se Atualizado",
+    "subscribeText": "Inscreva-se em nossa newsletter para receber os últimos artigos, dicas de colorir e inspiração criativa.",
+    "emailPlaceholder": "Digite seu email",
+    "subscribe": "Inscrever-se"
+  },
+  "auth": {
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "logout": "Sair",
+    "profile": "Perfil",
+    "accountSettings": "Configurações da Conta",
+    "myDownloads": "Meus Downloads"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar"
+  }
+} 

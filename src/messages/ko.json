@@ -1,0 +1,38 @@
+{
+  "navigation": {
+    "home": "홈",
+    "categories": "카테고리",
+    "aiGenerator": "AI 생성기",
+    "blog": "블로그"
+  },
+  "hero": {
+    "title": "당신의 창의성을 발휘하세요",
+    "subtitle": "컬러링 페이지를 찾고, 인쇄하고, 다운로드하세요. 또는 AI로 나만의 페이지를 만드세요.",
+    "searchPlaceholder": "여름 해변이나 다른 테마를 검색하세요..."
+  },
+  "sections": {
+    "popular": "인기",
+    "themeParks": "테마파크 모험",
+    "firstColoring": "나의 첫 번째 컬러링북",
+    "latestUploads": "최신 업로드",
+    "more": "더보기"
+  },
+  "auth": {
+    "login": "로그인",
+    "signup": "회원가입",
+    "logout": "로그아웃",
+    "profile": "프로필",
+    "accountSettings": "계정 설정",
+    "myDownloads": "내 다운로드"
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집",
+    "close": "닫기"
+  }
+} 

@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Trang chủ",
+    "categories": "Danh mục",
+    "aiGenerator": "Trình tạo AI",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Giải Phóng Sự Sáng Tạo Của Bạn",
+    "subtitle": "Tìm, in và tải xuống các trang tô màu. Hoặc tạo trang của riêng bạn với AI.",
+    "searchPlaceholder": "Tìm kiếm bãi biển mùa hè hoặc các chủ đề khác..."
+  },
+  "sections": {
+    "popular": "Phổ biến",
+    "themeParks": "Cuộc Phiêu Lưu Công Viên Chủ Đề",
+    "firstColoring": "Cuốn Sách Tô Màu Đầu Tiên Của Tôi",
+    "latestUploads": "Tải lên mới nhất",
+    "more": "Thêm"
+  },
+  "footer": {
+    "tagline": "Giải phóng sự sáng tạo của bạn với hàng nghìn trang tô màu đẹp và miễn phí. Hoàn hảo cho trẻ em và người lớn.",
+    "discover": "Khám phá",
+    "about": "Giới thiệu",
+    "friendlyLinks": "Liên kết thân thiện",
+    "popularPages": "Trang phổ biến",
+    "latestUploads": "Tải lên mới nhất",
+    "categories": "Danh mục",
+    "themePark": "Cuộc Phiêu Lưu Công Viên Chủ Đề",
+    "firstColoringBook": "Cuốn Sách Tô Màu Đầu Tiên Của Tôi",
+    "aiGenerator": "Trình tạo AI",
+    "aboutUs": "Về chúng tôi",
+    "privacyPolicy": "Chính sách bảo mật",
+    "termsOfService": "Điều khoản dịch vụ",
+    "coloringPages": "Trang tô màu",
+    "printableColoring": "Tô màu có thể in",
+    "kidsPrintables": "In ấn cho trẻ em",
+    "artTherapy": "Liệu pháp nghệ thuật",
+    "creativeKids": "Trẻ em sáng tạo",
+    "copyright": "© 2024 365 Trang Tô Màu. Tất cả quyền được bảo lưu.",
+    "madeWith": "Được tạo ra với ❤️ cho những tâm hồn sáng tạo ở khắp mọi nơi"
+  },
+  "blog": {
+    "title": "Blog Của Chúng Tôi",
+    "subtitle": "Khám phá thế giới sáng tạo, khám phá các kỹ thuật tô màu và tìm hiểu về lợi ích trị liệu của nghệ thuật.",
+    "featuredArticle": "Bài viết nổi bật",
+    "latestArticles": "Bài viết mới nhất",
+    "readMore": "Đọc thêm",
+    "backToBlog": "Quay lại Blog",
+    "stayUpdated": "Luôn cập nhật",
+    "subscribeText": "Đăng ký nhận bản tin của chúng tôi để nhận các bài viết mới nhất, mẹo tô màu và cảm hứng sáng tạo.",
+    "emailPlaceholder": "Nhập email của bạn",
+    "subscribe": "Đăng ký"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "signup": "Đăng ký",
+    "logout": "Đăng xuất",
+    "profile": "Hồ sơ",
+    "accountSettings": "Cài đặt tài khoản",
+    "myDownloads": "Tải xuống của tôi"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "close": "Đóng"
+  }
+} 

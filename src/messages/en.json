@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Home",
+    "categories": "Categories",
+    "aiGenerator": "AI Generator",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Unleash Your Creativity",
+    "subtitle": "Find, print, and download coloring pages. Or create your own with AI.",
+    "searchPlaceholder": "Search for summer beach fun or other themes..."
+  },
+  "sections": {
+    "popular": "Popular",
+    "themeParks": "Theme Park Adventures",
+    "firstColoring": "My First Coloring Book",
+    "latestUploads": "Latest Uploads",
+    "more": "More"
+  },
+  "footer": {
+    "tagline": "Unleash your creativity with thousands of beautiful, free coloring pages. Perfect for kids and adults alike.",
+    "discover": "Discover",
+    "about": "About",
+    "friendlyLinks": "Friendly Links",
+    "popularPages": "Popular Pages",
+    "latestUploads": "Latest Uploads",
+    "categories": "Categories",
+    "themePark": "Theme Park Adventures",
+    "firstColoringBook": "My First Coloring Book",
+    "aiGenerator": "AI Generator",
+    "aboutUs": "About Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "coloringPages": "Coloring Pages",
+    "printableColoring": "Printable Coloring",
+    "kidsPrintables": "Kids Printables",
+    "artTherapy": "Art Therapy",
+    "creativeKids": "Creative Kids",
+    "copyright": "© 2024 365 Coloring Pages. All rights reserved.",
+    "madeWith": "Made with ❤️ for creative minds everywhere"
+  },
+  "blog": {
+    "title": "Our Blog",
+    "subtitle": "Explore the world of creativity, discover coloring techniques, and learn about the therapeutic benefits of art.",
+    "featuredArticle": "Featured Article",
+    "latestArticles": "Latest Articles",
+    "readMore": "Read More",
+    "backToBlog": "Back to Blog",
+    "stayUpdated": "Stay Updated",
+    "subscribeText": "Subscribe to our newsletter to get the latest articles, coloring tips, and creative inspiration delivered to your inbox.",
+    "emailPlaceholder": "Enter your email",
+    "subscribe": "Subscribe"
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "profile": "Profile",
+    "accountSettings": "Account Settings",
+    "myDownloads": "My Downloads"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  }
+} 

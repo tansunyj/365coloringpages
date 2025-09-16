@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "categories": "Catégories",
+    "aiGenerator": "Générateur IA",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "Libérez Votre Créativité",
+    "subtitle": "Trouvez, imprimez et téléchargez des pages à colorier. Ou créez les vôtres avec l'IA.",
+    "searchPlaceholder": "Rechercher plage d'été ou autres thèmes..."
+  },
+  "sections": {
+    "popular": "Populaire",
+    "themeParks": "Aventures Parcs à Thème",
+    "firstColoring": "Mon Premier Livre de Coloriage",
+    "latestUploads": "Derniers Téléchargements",
+    "more": "Plus"
+  },
+  "footer": {
+    "tagline": "Libérez votre créativité avec des milliers de belles pages de coloriage gratuites. Parfait pour les enfants et les adultes.",
+    "discover": "Découvrir",
+    "about": "À Propos",
+    "friendlyLinks": "Liens Amis",
+    "popularPages": "Pages Populaires",
+    "latestUploads": "Derniers Téléchargements",
+    "categories": "Catégories",
+    "themePark": "Aventures Parcs à Thème",
+    "firstColoringBook": "Mon Premier Livre de Coloriage",
+    "aiGenerator": "Générateur IA",
+    "aboutUs": "À Propos de Nous",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfService": "Conditions de Service",
+    "coloringPages": "Pages de Coloriage",
+    "printableColoring": "Coloriage Imprimable",
+    "kidsPrintables": "Imprimables pour Enfants",
+    "artTherapy": "Art-Thérapie",
+    "creativeKids": "Enfants Créatifs",
+    "copyright": "© 2024 365 Pages de Coloriage. Tous droits réservés.",
+    "madeWith": "Fait avec ❤️ pour les esprits créatifs partout"
+  },
+  "blog": {
+    "title": "Notre Blog",
+    "subtitle": "Explorez le monde de la créativité, découvrez les techniques de coloriage et apprenez les bienfaits thérapeutiques de l'art.",
+    "featuredArticle": "Article en Vedette",
+    "latestArticles": "Derniers Articles",
+    "readMore": "Lire Plus",
+    "backToBlog": "Retour au Blog",
+    "stayUpdated": "Restez Informé",
+    "subscribeText": "Abonnez-vous à notre newsletter pour recevoir les derniers articles, conseils de coloriage et inspiration créative.",
+    "emailPlaceholder": "Entrez votre email",
+    "subscribe": "S'abonner"
+  },
+  "auth": {
+    "login": "Connexion",
+    "signup": "Inscription",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "accountSettings": "Paramètres du Compte",
+    "myDownloads": "Mes Téléchargements"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer"
+  }
+} 

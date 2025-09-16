@@ -74,29 +74,19 @@ export default function Footer() {
             <h3 className="text-lg font-black mb-5 text-gray-900">About</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                <Link href="/about" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                <Link href="/privacy-policy" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                <Link href="/terms-of-service" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                   Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Help Center
-                </a>
+                </Link>
               </li>
             </ul>
             {/* 竖线分割 - 更显眼的颜色 */}
