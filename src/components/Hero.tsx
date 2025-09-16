@@ -2,6 +2,7 @@
 
 import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getActiveBannerGroup, getDefaultBannerGroup, type BannerGroup, type BannerImage } from '@/lib/bannerService';
@@ -67,6 +68,7 @@ interface HotKeyword {
 
 // Hero组件
 export default function Hero() {
+  const router = useRouter();
   const [bannerGroup, setBannerGroup] = useState<BannerGroup>(getDefaultBannerGroup());
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -131,8 +133,6 @@ export default function Hero() {
   }, [bannerGroup.images.length, bannerGroup.autoPlayInterval]);
   
   const handleTagClick = async (tag: string) => {
-    setSearchQuery(tag);
-    
     // 记录关键词点击
     try {
       await fetch('/api/keywords', {
@@ -145,13 +145,15 @@ export default function Hero() {
     } catch (error) {
       console.error('Error recording keyword click:', error);
     }
+    
+    // 直接跳转到搜索结果页面
+    router.push(`/search?q=${encodeURIComponent(tag)}`);
   };
   
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      // 这里可以添加实际的搜索逻辑，例如跳转到搜索结果页面
-      console.log('Searching for:', searchQuery);
-      // 例如：router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      // 跳转到搜索结果页面
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -210,17 +212,21 @@ export default function Hero() {
         
         {/* 悬浮的内容层 */}
         <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8">
-          {/* 主标题 - 使用当前图片标题或默认标题 */}
-          <h1 className={`text-4xl md:text-6xl font-bold mb-4 ${textColorClass} ${textShadowClass} leading-tight`}>
-            {currentImage.title || 'Unleash Your Creativity'}
-          </h1>
-          
-          {/* 副标题 - 使用当前图片副标题或描述 */}
-          <p className={`text-lg md:text-xl mb-8 ${subtitleColorClass} max-w-2xl mx-auto font-medium ${textShadowClass}`}>
-            {currentImage.subtitle || currentImage.description || 'Find, print, and download coloring pages. Or create your own with AI.'}
-          </p>
+          {/* 标题和副标题区域 - 可点击（如果有clickUrl） */}
+          <div className={`${currentImage.clickUrl ? 'cursor-pointer' : ''}`}
+               onClick={currentImage.clickUrl ? () => window.open(currentImage.clickUrl, '_self') : undefined}>
+            {/* 主标题 - 使用当前图片标题或默认标题 */}
+            <h1 className={`text-4xl md:text-6xl font-bold mb-4 ${textColorClass} ${textShadowClass} leading-tight`}>
+              {currentImage.title || 'Unleash Your Creativity'}
+            </h1>
+            
+            {/* 副标题 - 使用当前图片副标题或描述 */}
+            <p className={`text-lg md:text-xl mb-8 ${subtitleColorClass} max-w-2xl mx-auto font-medium ${textShadowClass}`}>
+              {currentImage.subtitle || currentImage.description || 'Find, print, and download coloring pages. Or create your own with AI.'}
+            </p>
+          </div>
 
-          {/* 搜索框容器 - 统一宽度和左对齐 */}
+          {/* 搜索框容器 - 统一宽度和左对齐，独立区域不受Link影响 */}
           <div className="max-w-2xl mx-auto w-full mb-8">
             {/* 动态关键词标签 - 搜索框上方，左对齐 */}
             <div className="flex flex-wrap gap-2 mb-6">
@@ -254,11 +260,16 @@ export default function Hero() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search for ${currentImage.title.toLowerCase()} or other themes...`}
                 className="w-full pl-12 pr-14 py-4 bg-white/95 backdrop-blur-sm text-gray-900 rounded-2xl text-lg placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-white/50 shadow-2xl border border-white/20 focus:bg-white transition-all duration-300"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch();
+                  }
+                }}
               />
               <button
                 type="submit"
                 className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                onClick={handleSearch}
               >
                 <Search className="h-5 w-5" />
               </button>
@@ -307,14 +318,6 @@ export default function Hero() {
     </section>
   );
 
-  // 如果当前图片有点击链接，包装成Link组件
-  if (currentImage.clickUrl) {
-    return (
-      <Link href={currentImage.clickUrl} className="block">
-        {bannerContent}
-      </Link>
-    );
-  }
-
+  // 直接返回banner内容，不使用Link包装整个区域
   return bannerContent;
 }
