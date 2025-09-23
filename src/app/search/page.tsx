@@ -7,23 +7,28 @@ import Image from 'next/image';
 import { Search, Filter, SortAsc, Download, Heart, Eye } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useTranslation } from '@/hooks/useTranslation';
 
-// 涂色页面数据接口
+// 涂色页面数据接口 - 根据实际API响应调整
 interface ColoringPage {
   id: number;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string;
   thumbnailUrl: string;
-  category: string;
-  categorySlug: string;
-  tags: string[];
+  category?: string;
+  categorySlug?: string;
+  categoryName?: string | null;
+  categoryColor?: string | null;
+  tags?: string[];
   difficulty: 'easy' | 'medium' | 'hard';
   downloads: number;
   likes: number;
   views: number;
-  createdAt: string;
-  updatedAt: string;
+  ageRange?: string;
+  resultType?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // 搜索结果响应接口
@@ -39,17 +44,42 @@ interface SearchResponse {
   query: string;
 }
 
+// 实际API响应数据接口
+interface ActualApiSearchData {
+  coloringPages?: ColoringPage[];
+  pages?: ColoringPage[];
+  categories?: unknown[];
+  totalResults?: number;
+  searchTime?: number;
+}
+
+// 分类接口
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+}
+
 export default function SearchPage() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
-  const query = searchParams.get('q') || '';
+  const [isClient, setIsClient] = useState(false);
+  
+  // 只在客户端获取搜索参数，避免hydration mismatch
+  const query = isClient ? (searchParams.get('q') || '') : '';
+  const category = isClient ? (searchParams.get('category') || '') : '';
+  const page = isClient ? parseInt(searchParams.get('page') || '1', 10) : 1;
   
   const [pages, setPages] = useState<ColoringPage[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(query);
+  const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'relevance' | 'newest' | 'popular' | 'downloads'>('relevance');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [error, setError] = useState('');
@@ -57,9 +87,49 @@ export default function SearchPage() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  // 客户端检测
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // 加载分类列表
+  const loadCategories = useCallback(async () => {
+    try {
+      setIsLoadingCategories(true);
+      const { api } = await import('../../lib/apiClient');
+      const response = await api.categories.list();
+      
+      if (response.success && response.data) {
+        setCategories(Array.isArray(response.data) ? response.data : []);
+      }
+    } catch (error) {
+      console.error('Failed to load categories:', error);
+    } finally {
+      setIsLoadingCategories(false);
+    }
+  }, []);
+
+  // 初始化：加载分类和执行搜索
+  useEffect(() => {
+    if (isClient) {
+      setSearchQuery(query);
+      setCategoryFilter(category || 'all');
+      setCurrentPage(page);
+      
+      // 加载分类列表
+      loadCategories();
+      
+      // 执行搜索
+      if (query || category) {
+        searchPages(query || '', page);
+      }
+    }
+  }, [isClient, query, category, page, loadCategories]);
+
   // 搜索函数
   const searchPages = useCallback(async (searchQuery: string, page: number = 1, isLoadMore = false) => {
-    if (!searchQuery.trim()) return;
+    // 如果既没有搜索词又没有分类过滤，则不执行搜索
+    if (!searchQuery.trim() && categoryFilter === 'all') return;
 
     try {
       if (isLoadMore) {
@@ -77,8 +147,58 @@ export default function SearchPage() {
         limit: '12'
       });
 
-      const response = await fetch(`/api/search?${params}`);
-      const data: SearchResponse = await response.json();
+      const { api } = await import('../../lib/apiClient');
+      const response = await api.search({
+        q: searchQuery || '', // 确保总是有值，即使是空字符串
+        page: page,
+        limit: 12,
+        sort: sortBy,
+        category: categoryFilter !== 'all' ? categoryFilter : '',
+      });
+      
+      console.log('API响应:', response);
+      
+      // 验证API响应结构
+      if (!response || typeof response !== 'object') {
+        throw new Error(t('search.searchFailed'));
+      }
+      
+      if (!response.data || typeof response.data !== 'object') {
+        throw new Error(t('search.searchFailed'));
+      }
+      
+      // 检查实际的API响应结构
+      const responseData = response.data as ActualApiSearchData;
+      
+      // API返回的是coloringPages，不是pages
+      let pagesArray: ColoringPage[] = [];
+      
+      if (Array.isArray(responseData.coloringPages)) {
+        pagesArray = responseData.coloringPages;
+      } else if (Array.isArray(responseData.pages)) {
+        pagesArray = responseData.pages;
+      } else {
+        console.error('API响应数据格式错误:', responseData);
+        throw new Error(t('search.searchFailed'));
+      }
+      
+      // 计算分页信息
+      const totalResults = responseData.totalResults || pagesArray.length;
+      const limit = 12;
+      const calculatedTotalPages = Math.ceil(totalResults / limit);
+      const calculatedHasNextPage = page < calculatedTotalPages;
+      
+      const data: SearchResponse = {
+        success: response.success,
+        data: {
+          pages: pagesArray,
+          totalCount: totalResults,
+          currentPage: page,
+          totalPages: calculatedTotalPages,
+          hasNextPage: calculatedHasNextPage,
+        },
+        query: query
+      };
 
       if (data.success) {
         if (isLoadMore) {
@@ -94,34 +214,23 @@ export default function SearchPage() {
         // 确保成功时清除错误状态
         setError('');
       } else {
-        // 只有在真正的API错误时才设置错误状态
-        if (response.status >= 500) {
-          setError('搜索失败，请重试');
-        } else {
-          // 其他情况（如参数错误等）仍然显示空结果，不设置错误
-          setPages([]);
-          setTotalCount(0);
-          setHasNextPage(false);
-          setCurrentPage(1);
-          setError(''); // 确保清除错误状态
-        }
+        // API响应失败时的处理
+        setError(t('search.searchFailed'));
+        setPages([]);
+        setTotalCount(0);
+        setHasNextPage(false);
+        setCurrentPage(1);
       }
     } catch (error) {
       console.error('搜索错误:', error);
-      setError('网络错误，请检查网络连接');
+      setError(t('search.networkError'));
     } finally {
       setIsLoading(false);
       setIsLoadingMore(false);
     }
-  }, [sortBy, categoryFilter]);
+  }, [sortBy, categoryFilter, t]);
 
-  // 初始搜索
-  useEffect(() => {
-    if (query) {
-      setSearchQuery(query);
-      searchPages(query, 1, false);
-    }
-  }, [query, searchPages]);
+
 
   // 加载更多数据
   const loadMore = useCallback(() => {
@@ -194,14 +303,14 @@ export default function SearchPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索涂色页面..."
+                placeholder={t('search.searchPlaceholder')}
                 className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-lg"
               />
               <button
                 type="submit"
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors"
               >
-                搜索
+                {t('search.searchButton')}
               </button>
             </div>
           </form>
@@ -211,10 +320,10 @@ export default function SearchPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="text-gray-600">
                 {isLoading ? (
-                  <span>搜索中...</span>
+                  <span>{t('search.searching')}</span>
                 ) : (
                   <span>
-                                         为 &ldquo;<strong className="text-gray-900">{query}</strong>&rdquo; 找到 <strong>{totalCount}</strong> 个结果
+                    {t('search.resultsFor').replace('{count}', totalCount.toString()).replace('{query}', query)}
                   </span>
                 )}
               </div>
@@ -228,22 +337,14 @@ export default function SearchPage() {
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
                     className="border border-gray-300 rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    disabled={isLoadingCategories}
                   >
-                    <option value="all">所有分类</option>
-                    <option value="动物">动物</option>
-                    <option value="童话">童话</option>
-                    <option value="幻想">幻想</option>
-                    <option value="交通工具">交通工具</option>
-                    <option value="自然">自然</option>
-                    <option value="史前动物">史前动物</option>
-                    <option value="太空">太空</option>
-                    <option value="海洋">海洋</option>
-                    <option value="节日">节日</option>
-                    <option value="超级英雄">超级英雄</option>
-                    <option value="食物">食物</option>
-                    <option value="魔法">魔法</option>
-                    <option value="农场">农场</option>
-                    <option value="庆祝">庆祝</option>
+                    <option value="all">{t('search.allCategories')}</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.slug}>
+                        {cat.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -255,10 +356,10 @@ export default function SearchPage() {
                     onChange={(e) => setSortBy(e.target.value as 'relevance' | 'newest' | 'popular' | 'downloads')}
                     className="border border-gray-300 rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
-                    <option value="relevance">相关性</option>
-                    <option value="newest">最新</option>
-                    <option value="popular">最受欢迎</option>
-                    <option value="downloads">下载量</option>
+                    <option value="relevance">{t('search.relevance')}</option>
+                    <option value="newest">{t('search.newest')}</option>
+                    <option value="popular">{t('search.popular')}</option>
+                    <option value="downloads">{t('search.downloads')}</option>
                   </select>
                 </div>
               </div>
@@ -276,21 +377,38 @@ export default function SearchPage() {
               onClick={() => searchPages(searchQuery, 1, false)}
               className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors"
             >
-              重试
+              {t('search.retry')}
             </button>
           </div>
         ) : isLoading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">搜索中...</p>
+            <p className="text-gray-600">{t('search.searching')}</p>
           </div>
-        ) : pages.length > 0 ? (
+        ) : pages && pages.length > 0 ? (
           <>
             {/* 搜索结果网格 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {pages.map((page) => (
-                <SearchResultCard key={page.id} page={page} searchQuery={query} />
-              ))}
+              {pages.map((page) => {
+                // 构建当前搜索参数，保持与原URL相同的参数
+                const currentSearchParams = new URLSearchParams();
+                if (query) currentSearchParams.set('q', query);
+                currentSearchParams.set('page', currentPage.toString());
+                currentSearchParams.set('limit', '12');
+                // 始终包含 sort 参数，即使是空字符串
+                currentSearchParams.set('sort', sortBy === 'relevance' ? '' : sortBy);
+                // 始终包含 category 参数，即使是空字符串
+                currentSearchParams.set('category', categoryFilter === 'all' ? '' : categoryFilter);
+                
+                return (
+                  <SearchResultCard 
+                    key={page.id} 
+                    page={page} 
+                    searchQuery={query}
+                    searchParams={currentSearchParams}
+                  />
+                );
+              })}
             </div>
 
             {/* 加载更多触发器 */}
@@ -298,11 +416,11 @@ export default function SearchPage() {
               {isLoadingMore && (
                 <div className="py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto mb-2"></div>
-                  <p className="text-gray-600">加载更多...</p>
+                  <p className="text-gray-600">{t('search.loadingMore')}</p>
                 </div>
               )}
               {!hasNextPage && pages.length > 0 && (
-                <p className="text-gray-500 py-8">已显示全部结果</p>
+                <p className="text-gray-500 py-8">{t('search.allResultsShown')}</p>
               )}
             </div>
           </>
@@ -310,29 +428,29 @@ export default function SearchPage() {
           <div className="text-center py-12">
             <div className="text-gray-500 mb-4">
               <Search className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">未找到相关结果</h3>
-              <p>试试其他关键词，或浏览我们的分类页面</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('search.noResults')}</h3>
+              <p>{t('search.noResultsDescription')}</p>
             </div>
             <div className="flex justify-center gap-4 mt-6">
               <Link
                 href="/categories"
                 className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors"
               >
-                浏览分类
+                {t('search.browseCategories')}
               </Link>
               <Link
                 href="/"
                 className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
               >
-                返回首页
+                {t('search.backToHome')}
               </Link>
             </div>
           </div>
         ) : !query && (
           <div className="text-center py-12">
             <Search className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">开始搜索</h3>
-            <p className="text-gray-500">输入关键词查找你喜欢的涂色页面</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('search.startSearching')}</h3>
+            <p className="text-gray-500">{t('search.startSearchingDescription')}</p>
           </div>
         )}
         </div>
@@ -345,8 +463,34 @@ export default function SearchPage() {
 }
 
 // 搜索结果卡片组件
-function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQuery: string }) {
+function SearchResultCard({ page, searchQuery, searchParams }: { page: ColoringPage; searchQuery: string; searchParams: URLSearchParams }) {
+  const { t } = useTranslation();
   const [isLiked, setIsLiked] = useState(false);
+
+  // 生成分类slug的辅助函数
+  const getCategorySlug = (categoryName: string) => {
+    if (!categoryName) return 'default';
+    
+    // 中文到英文的映射
+    const categoryMap: Record<string, string> = {
+      '动物': 'animals',
+      '童话': 'fairy-tale',
+      '幻想': 'fantasy',
+      '交通工具': 'vehicles',
+      '自然': 'nature',
+      '史前动物': 'prehistoric',
+      '太空': 'space',
+      '海洋': 'ocean',
+      '节日': 'holidays',
+      '超级英雄': 'superhero',
+      '食物': 'food',
+      '魔法': 'magic',
+      '农场': 'farm',
+      '庆祝': 'celebration'
+    };
+    
+    return categoryMap[categoryName] || categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'default';
+  };
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -357,7 +501,7 @@ function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQue
   const handleDownload = (e: React.MouseEvent) => {
     e.preventDefault();
     // 这里可以调用下载API
-    console.log('下载:', page.title);
+    console.log(t('search.download') + ':', page.title);
   };
 
   const getCategoryColor = (category: string) => {
@@ -371,13 +515,24 @@ function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQue
       'bg-red-100 text-red-800',
       'bg-orange-100 text-orange-800'
     ];
+    // 添加安全检查，防止category为undefined或null
+    if (!category || typeof category !== 'string') {
+      return colors[0]; // 返回默认颜色
+    }
     const index = category.length % colors.length;
     return colors[index];
   };
 
+  // 构建搜索详情页URL，使用查询参数方式
+  const buildSearchDetailUrl = () => {
+    const detailParams = new URLSearchParams(searchParams);
+    detailParams.set('id', page.id.toString());
+    return `/search/detail?${detailParams.toString()}`;
+  };
+
   return (
     <Link
-      href={`/categories/${page.categorySlug}/${page.id}?from=search&q=${encodeURIComponent(searchQuery)}`}
+      href={buildSearchDetailUrl()}
       className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
     >
       {/* 图片 */}
@@ -391,8 +546,8 @@ function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQue
         
         {/* 分类标签 */}
         <div className="absolute top-2 left-2">
-          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(page.category)}`}>
-            {page.category}
+          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(page.category || page.categoryName || t('search.defaultCategory'))}`}>
+            {page.category || page.categoryName || t('search.defaultCategory')}
           </span>
         </div>
 
@@ -429,7 +584,7 @@ function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQue
 
         {/* 标签 */}
         <div className="flex flex-wrap gap-1 mb-3">
-          {page.tags.slice(0, 3).map((tag, index) => (
+          {page.tags && Array.isArray(page.tags) && page.tags.slice(0, 3).map((tag, index) => (
             <span
               key={index}
               className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
@@ -437,7 +592,7 @@ function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQue
               {tag}
             </span>
           ))}
-          {page.tags.length > 3 && (
+          {page.tags && Array.isArray(page.tags) && page.tags.length > 3 && (
             <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
               +{page.tags.length - 3}
             </span>
@@ -460,7 +615,7 @@ function SearchResultCard({ page, searchQuery }: { page: ColoringPage; searchQue
               {page.likes}
             </span>
           </div>
-          <span className="text-orange-600 font-medium">{page.category}</span>
+          <span className="text-orange-600 font-medium">{page.category || page.categoryName || t('search.defaultCategory')}</span>
         </div>
       </div>
     </Link>

@@ -67,7 +67,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       { name: '主题公园', href: '/admin/content/theme-parks', icon: Palette },
       { name: '第一本涂色书', href: '/admin/content/first-coloring', icon: BookOpen },
       { name: 'Banner设置', href: '/admin/content/banners', icon: ImageIcon },
-      { name: '热门关键词', href: '/admin/content/keywords', icon: Tag },
+      { name: '热门关键词', href: '/admin/content/keywords', icon: Flag },
     ]},
     { name: '图片管理', href: '/admin/images', icon: ImageIcon },
     { name: '用户管理', href: '/admin/users', icon: Users },

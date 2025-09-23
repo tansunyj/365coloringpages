@@ -323,8 +323,8 @@ function searchColoringPages(
   const paginatedPages = filteredPages.slice(startIndex, endIndex);
 
   return {
-    pages: paginatedPages,
-    totalCount,
+    coloringPages: paginatedPages,
+    totalResults: totalCount,
     currentPage: page,
     totalPages,
     hasNextPage: page < totalPages

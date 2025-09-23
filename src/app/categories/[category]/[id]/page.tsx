@@ -10,7 +10,11 @@ interface CategoryDetailPageProps {
 
 // 生成静态参数
 export async function generateStaticParams() {
-  const categories = ['animals', 'nature', 'fantasy', 'vehicles', 'food', 'holidays', 'patterns', 'flowers', 'characters', 'general'];
+  const categories = [
+    'animals', 'fairy-tale', 'fantasy', 'vehicles', 'nature', 
+    'prehistoric', 'space', 'ocean', 'holidays', 'superhero', 
+    'food', 'magic', 'farm', 'celebration', 'default'
+  ];
   const ids = Array.from({ length: 100 }, (_, i) => (i + 1).toString());
   
   const params = [];

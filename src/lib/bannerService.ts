@@ -1,5 +1,19 @@
 // Banner service for managing homepage banner carousel data
 
+// API response types
+interface ApiBannerImage {
+  id?: number;
+  imageUrl?: string;
+  image_url?: string;
+  url?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  clickUrl?: string;
+  click_url?: string;
+  order?: number;
+}
+
 export interface BannerImage {
   id: number;
   imageUrl: string;
@@ -116,12 +130,67 @@ const mockBannerGroups: BannerGroup[] = [
 
 // Get the currently active banner group
 export const getActiveBannerGroup = async (): Promise<BannerGroup | null> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 100));
-  
-  // Return the active banner group
-  const activeBannerGroup = mockBannerGroups.find(group => group.isActive);
-  return activeBannerGroup || null;
+  try {
+    // 调用后端API获取banners数据
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+    const response = await fetch(`${apiBaseUrl}/api/banners`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // 添加错误处理和超时
+      signal: AbortSignal.timeout(5000), // 5秒超时
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // 检查返回数据格式并转换为我们的BannerGroup格式
+    if (data && data.success && data.data) {
+      const apiData = data.data;
+      
+      // 转换API数据为BannerGroup格式
+      const bannerGroup: BannerGroup = {
+        id: apiData.id || 1,
+        name: apiData.name || 'API Banner Group',
+        description: apiData.description || '来自后端API的轮播组',
+        isActive: apiData.isActive !== false, // 默认为true
+        autoPlayInterval: apiData.autoPlayInterval || 3000,
+        createdAt: apiData.createdAt || new Date().toISOString().split('T')[0],
+        updatedAt: apiData.updatedAt || new Date().toISOString().split('T')[0],
+        createdBy: apiData.createdBy || 'API',
+        images: Array.isArray(apiData.images) ? apiData.images.map((img: ApiBannerImage, index: number) => ({
+          id: img.id || index,
+          imageUrl: img.imageUrl || img.image_url || img.url,
+          title: img.title || `Banner ${index + 1}`,
+          subtitle: img.subtitle || '',
+          description: img.description || '',
+          clickUrl: img.clickUrl || img.click_url || '',
+          order: img.order || index + 1
+        })) : []
+      };
+
+      // 确保至少有一张图片
+      if (bannerGroup.images.length === 0) {
+        console.warn('API returned no banner images, using fallback');
+        return null;
+      }
+
+      console.log('Successfully loaded banner data from API:', bannerGroup);
+      return bannerGroup;
+    } else {
+      console.warn('API response format is invalid:', data);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching banners from API:', error);
+    
+    // API调用失败时，返回null让Hero组件使用默认数据
+    return null;
+  }
 };
 
 // Get all banner groups

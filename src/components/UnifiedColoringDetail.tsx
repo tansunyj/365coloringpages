@@ -10,9 +10,16 @@ import Footer from './Footer';
 
 interface UnifiedColoringDetailProps {
   id: string;
-  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-park' | 'categories';
+  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-park' | 'categories' | 'search';
   category?: string;
   park?: string;
+  searchParams?: {
+    q?: string;
+    page?: string;
+    limit?: string;
+    sort?: string;
+    category?: string;
+  };
 }
 
 interface ColoringPageDetail {
@@ -29,7 +36,7 @@ interface ColoringPageDetail {
   isLiked: boolean;
 }
 
-export default function UnifiedColoringDetail({ id, type, category, park }: UnifiedColoringDetailProps) {
+export default function UnifiedColoringDetail({ id, type, category, park, searchParams }: UnifiedColoringDetailProps) {
   // 根据来源生成对应的数据
   const generatePageData = () => {
     switch (type) {
@@ -43,6 +50,8 @@ export default function UnifiedColoringDetail({ id, type, category, park }: Unif
         return generateThemeParkData();
       case 'categories':
         return generateCategoryData();
+      case 'search':
+        return generateSearchData();
       default:
         return generateDefaultData();
     }
@@ -131,6 +140,23 @@ export default function UnifiedColoringDetail({ id, type, category, park }: Unif
     };
   };
 
+  const generateSearchData = () => {
+    const searchTitles = [
+      'Cute Puppy Coloring Page', 'Adorable Dog Portrait', 'Playful Pet Scene',
+      'Happy Animal Friend', 'Lovely Pet Drawing', 'Sweet Dog Illustration'
+    ];
+    const pageId = parseInt(id) || 1;
+    const index = (pageId - 1) % searchTitles.length;
+    const selectedTitle = searchTitles[index] || 'Search Result Coloring Page';
+    const searchQuery = searchParams?.q || '';
+    return {
+      title: selectedTitle,
+      description: `Found in search for "${searchQuery}": ${selectedTitle.toLowerCase()}. A perfect match for your coloring needs!`,
+      author: 'SearchArtist',
+      categories: ['Search Result', 'Featured', 'Match']
+    };
+  };
+
   const generateDefaultData = () => {
     return {
       title: `Coloring Page ${id}`,
@@ -199,6 +225,22 @@ export default function UnifiedColoringDetail({ id, type, category, park }: Unif
           { name: category || 'General', href: '/categories' },
           { name: coloringPageData.title, href: '#' }
         ];
+      case 'search':
+        const searchQuery = searchParams?.q || '';
+        // 构建搜索URL，只包含必要的参数
+        const params = new URLSearchParams();
+        if (searchParams?.q) params.set('q', searchParams.q);
+        if (searchParams?.page && searchParams.page !== '1') params.set('page', searchParams.page);
+        if (searchParams?.limit && searchParams.limit !== '12') params.set('limit', searchParams.limit);
+        if (searchParams?.sort) params.set('sort', searchParams.sort);
+        if (searchParams?.category) params.set('category', searchParams.category);
+        const searchUrl = `/search?${params.toString()}`;
+        return [
+          { name: 'Home', href: '/' },
+          { name: 'Search Results', href: searchUrl },
+          { name: searchQuery ? `"${searchQuery}"` : 'Results', href: searchUrl },
+          { name: coloringPageData.title, href: '#' }
+        ];
       default:
         return [
           { name: 'Home', href: '/' },
@@ -216,6 +258,7 @@ export default function UnifiedColoringDetail({ id, type, category, park }: Unif
       case 'latest': return 'bg-green-500 hover:bg-green-600';
       case 'first-coloring-book': return 'bg-blue-500 hover:bg-blue-600';
       case 'theme-park': return 'bg-purple-500 hover:bg-purple-600';
+      case 'search': return 'bg-orange-500 hover:bg-orange-600';
       default: return 'bg-gray-500 hover:bg-gray-600';
     }
   };
@@ -226,6 +269,7 @@ export default function UnifiedColoringDetail({ id, type, category, park }: Unif
       case 'latest': return 'bg-green-100 text-green-800';
       case 'first-coloring-book': return 'bg-blue-100 text-blue-800';
       case 'theme-park': return 'bg-purple-100 text-purple-800';
+      case 'search': return 'bg-orange-100 text-orange-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };

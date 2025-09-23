@@ -19,17 +19,10 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const { api } = await import('../../../lib/apiClient');
+      const data = await api.admin.auth.login({ email, password });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (data.success) {
         // 设置管理员登录状态
         localStorage.setItem('adminToken', data.token);
         localStorage.setItem('adminUser', JSON.stringify(data.user));
