@@ -265,14 +265,14 @@ export default function Hero() {
   // 自动轮播效果
   useEffect(() => {
     // 只在客户端启动轮播，避免hydration mismatch
-    if (isClient && bannerGroup.images.length > 1) {
+    if (isClient && bannerGroup?.images && bannerGroup.images.length > 1) {
       const timer = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % bannerGroup.images.length);
       }, bannerGroup.autoPlayInterval);
       
       return () => clearInterval(timer);
     }
-  }, [isClient, bannerGroup.images.length, bannerGroup.autoPlayInterval]);
+  }, [isClient, bannerGroup?.images?.length, bannerGroup?.autoPlayInterval]);
   
   const handleCategoryClick = async (categorySlug: string) => {
     // 跳转到搜索结果页面，使用分类过滤
@@ -321,7 +321,7 @@ export default function Hero() {
   };
 
   // 获取当前显示的图片
-  const currentImage = bannerGroup.images[currentSlide] || bannerGroup.images[0];
+  const currentImage = bannerGroup?.images?.[currentSlide] || bannerGroup?.images?.[0];
   
   // 根据图片判断是否为深色背景（简单实现）
   const isDarkBackground = true; // 默认使用深色遮罩以确保文字可读性
@@ -468,7 +468,7 @@ export default function Hero() {
           </div>
 
           {/* 轮播指示器 - 只有多张图片时显示 */}
-          {bannerGroup.images.length > 1 && (
+          {bannerGroup?.images && bannerGroup.images.length > 1 && (
             <div className="flex space-x-2 mt-8">
               {bannerGroup.images.map((_, index) => (
                 <button

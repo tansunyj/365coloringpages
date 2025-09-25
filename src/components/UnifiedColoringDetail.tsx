@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Download, Printer, Heart, Share2, ChevronRight } from 'lucide-react';
+import { Download, Printer, Heart, Share2 } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
+import UnifiedBreadcrumb from './UnifiedBreadcrumb';
 
 interface UnifiedColoringDetailProps {
   id: string;
-  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-park' | 'categories' | 'search';
+  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
   category?: string;
   park?: string;
   searchParams?: {
@@ -46,7 +47,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
         return generateLatestData();
       case 'first-coloring-book':
         return generateFirstColoringBookData();
-      case 'theme-park':
+      case 'theme-parks':
         return generateThemeParkData();
       case 'categories':
         return generateCategoryData();
@@ -191,11 +192,22 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   const getBreadcrumbPath = () => {
     switch (type) {
       case 'popular':
-        return [
-          { name: 'Home', href: '/' },
-          { name: 'Popular', href: '/popular' },
-          { name: coloringPageData.title, href: '#' }
-        ];
+        if (category) {
+          const categoryDisplay = category === 'all' ? 'All Categories' : 
+            category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+          return [
+            { name: 'Home', href: '/' },
+            { name: 'Popular', href: '/popular' },
+            { name: categoryDisplay, href: `/popular/${category}` },
+            { name: coloringPageData.title, href: '#' }
+          ];
+        } else {
+          return [
+            { name: 'Home', href: '/' },
+            { name: 'Popular', href: '/popular' },
+            { name: coloringPageData.title, href: '#' }
+          ];
+        }
       case 'latest':
         return [
           { name: 'Home', href: '/' },
@@ -210,21 +222,52 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
           { name: categoryDisplay, href: `/first-coloring-book/${category || ''}` },
           { name: coloringPageData.title, href: '#' }
         ];
-      case 'theme-park':
+      case 'theme-parks':
         const parkDisplay = park ? decodeURIComponent(park).replace(/-/g, ' ') : 'All Parks';
         return [
           { name: 'Home', href: '/' },
-          { name: 'Theme Park Adventures', href: '/theme-park' },
-          { name: parkDisplay, href: `/theme-park/${park || ''}` },
+          { name: 'Theme Parks', href: '/theme-parks' },
+          { name: parkDisplay, href: `/theme-parks/${park || ''}` },
           { name: coloringPageData.title, href: '#' }
         ];
       case 'categories':
-        return [
-          { name: 'Home', href: '/' },
-          { name: 'Categories', href: '/categories' },
-          { name: category || 'General', href: '/categories' },
-          { name: coloringPageData.title, href: '#' }
-        ];
+        if (category) {
+          const categoryDisplay = category === 'all' ? 'All Categories' : 
+            category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+          
+          // 中文分类名称映射
+          const categoryNameMap: Record<string, string> = {
+            'animals': '动物',
+            'fairy-tale': '童话',
+            'fantasy': '幻想',
+            'vehicles': '交通工具',
+            'nature': '自然',
+            'prehistoric': '史前动物',
+            'space': '太空',
+            'ocean': '海洋',
+            'holidays': '节日',
+            'superhero': '超级英雄',
+            'food': '食物',
+            'magic': '魔法',
+            'farm': '农场',
+            'celebration': '庆祝'
+          };
+          
+          const displayName = categoryNameMap[category] || categoryDisplay;
+          
+          return [
+            { name: 'Home', href: '/' },
+            { name: 'Categories', href: '/categories' },
+            { name: displayName, href: `/categories/${category}` },
+            { name: coloringPageData.title, href: '#' }
+          ];
+        } else {
+          return [
+            { name: 'Home', href: '/' },
+            { name: 'Categories', href: '/categories' },
+            { name: coloringPageData.title, href: '#' }
+          ];
+        }
       case 'search':
         const searchQuery = searchParams?.q || '';
         // 构建搜索URL，只包含必要的参数
@@ -257,8 +300,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
       case 'popular': return 'bg-pink-500 hover:bg-pink-600';
       case 'latest': return 'bg-green-500 hover:bg-green-600';
       case 'first-coloring-book': return 'bg-blue-500 hover:bg-blue-600';
-      case 'theme-park': return 'bg-purple-500 hover:bg-purple-600';
-      case 'search': return 'bg-orange-500 hover:bg-orange-600';
+      case 'theme-parks': return 'bg-purple-500 hover:bg-purple-600';
+      case 'categories': return 'bg-orange-500 hover:bg-orange-600';
+      case 'search': return 'bg-indigo-500 hover:bg-indigo-600';
       default: return 'bg-gray-500 hover:bg-gray-600';
     }
   };
@@ -268,19 +312,27 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
       case 'popular': return 'bg-pink-100 text-pink-800';
       case 'latest': return 'bg-green-100 text-green-800';
       case 'first-coloring-book': return 'bg-blue-100 text-blue-800';
-      case 'theme-park': return 'bg-purple-100 text-purple-800';
-      case 'search': return 'bg-orange-100 text-orange-800';
+      case 'theme-parks': return 'bg-purple-100 text-purple-800';
+      case 'categories': return 'bg-orange-100 text-orange-800';
+      case 'search': return 'bg-indigo-100 text-indigo-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  // 相关推荐数据
-  const relatedPages = [
-    { id: 1, title: 'Related Page 1', category: 'Similar' },
-    { id: 2, title: 'Related Page 2', category: 'Similar' },
-    { id: 3, title: 'Related Page 3', category: 'Similar' },
-    { id: 4, title: 'Related Page 4', category: 'Similar' }
-  ];
+  // 相关推荐数据 - 根据当前页面ID生成唯一的相关页面ID
+  // 使用更大的偏移量避免与真实数据ID冲突
+  const generateRelatedPages = () => {
+    const baseId = parseInt(id) || 1;
+    const offset = 10000; // 使用10000作为偏移量，避免与真实数据冲突
+    return [
+      { id: baseId + offset + 1, title: 'Related Page 1', category: 'Similar' },
+      { id: baseId + offset + 2, title: 'Related Page 2', category: 'Similar' },
+      { id: baseId + offset + 3, title: 'Related Page 3', category: 'Similar' },
+      { id: baseId + offset + 4, title: 'Related Page 4', category: 'Similar' }
+    ];
+  };
+  
+  const relatedPages = generateRelatedPages();
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -316,19 +368,13 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 面包屑导航 */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
-          {breadcrumbPath.map((item, index) => (
-            <React.Fragment key={item.name}>
-              {index > 0 && <ChevronRight className="h-4 w-4" />}
-              <Link
-                href={item.href}
-                className="hover:text-yellow-600 transition-colors"
-              >
-                {item.name}
-              </Link>
-            </React.Fragment>
-          ))}
-        </nav>
+        <UnifiedBreadcrumb
+          type={type}
+          category={category}
+          park={park}
+          itemTitle={coloringPageData.title}
+          searchParams={searchParams}
+        />
 
         {/* 主要内容区域 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -400,7 +446,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
               <div className="flex flex-wrap gap-2 mb-6">
                 {coloringPageData.categories.map((cat, index) => (
                   <span
-                    key={index}
+                    key={`${cat}-${index}`}
                     className={`px-3 py-1 rounded-full text-sm font-medium ${getTagColor()}`}
                   >
                     {cat}
@@ -480,7 +526,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
                     case 'first-coloring-book':
                       router.push(`/first-coloring-book/${page.id}`);
                       break;
-                    case 'theme-park':
+                    case 'theme-parks':
                       router.push(`/theme-park/${page.id}`);
                       break;
                     case 'categories':

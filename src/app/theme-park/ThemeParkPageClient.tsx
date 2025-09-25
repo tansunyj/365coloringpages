@@ -11,13 +11,13 @@ import ThemeParkListCard from '../../components/ThemeParkListCard';
 export default function ThemeParkPageClient() {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedParks, setSelectedParks] = useState<string[]>(['All']);
+  const [selectedParks, setSelectedParks] = useState<string[]>([]);
   const [displayedItems, setDisplayedItems] = useState(24); // 初始显示数量
   const [isLoading, setIsLoading] = useState(false);
 
   // 主题公园列表
   const themeParks = [
-    'All', 'Disney World', 'Universal Studios', 'Six Flags', 
+    'Disney World', 'Universal Studios', 'Six Flags', 
     'Cedar Point', 'Knott\'s Berry Farm', 'Busch Gardens', 
     'SeaWorld', 'Legoland', 'Adventure Island'
   ];

@@ -11,6 +11,8 @@ interface PopularColoringCardProps {
   likes?: number;
   downloads?: number;
   id?: number;
+  thumbnailUrl?: string;
+  categorySlug?: string;
 }
 
 export default function PopularColoringCard({ 
@@ -18,7 +20,9 @@ export default function PopularColoringCard({
   category, 
   likes,
   downloads,
-  id
+  id,
+  thumbnailUrl,
+  categorySlug
 }: PopularColoringCardProps) {
   // 使用useEffect来设置随机数，避免水合错误
   const [likeCount, setLikeCount] = useState(0);
@@ -28,9 +32,9 @@ export default function PopularColoringCard({
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    setLikeCount(likes || Math.floor(Math.random() * 100) + 10);
-    setDownloadCount(downloads || Math.floor(Math.random() * 500) + 50);
-    setPageId(id || Math.floor(Math.random() * 100) + 1);
+    setLikeCount(likes !== undefined ? likes : Math.floor(Math.random() * 100) + 10);
+    setDownloadCount(downloads !== undefined ? downloads : Math.floor(Math.random() * 500) + 50);
+    setPageId(id !== undefined ? id : Math.floor(Math.random() * 100) + 1);
     setIsInitialized(true);
   }, [likes, downloads, id]);
   const router = useRouter();
@@ -47,8 +51,9 @@ export default function PopularColoringCard({
   };
 
   const handleCardClick = () => {
-    // 导航到Popular详情页面，而不是分类详情页面
-    router.push(`/popular/${pageId}`);
+    // 导航到Popular分类详情页面
+    const slug = categorySlug || 'animals'; // 默认分类
+    router.push(`/popular/${slug}/${pageId}`);
   };
 
   return (
@@ -59,7 +64,7 @@ export default function PopularColoringCard({
       {/* 图片区域 - 1:1 比例 (正方形) */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"
+          src={thumbnailUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"}
           alt={title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"

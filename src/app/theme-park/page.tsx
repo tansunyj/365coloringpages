@@ -1,10 +1,6 @@
-import { Suspense } from 'react';
-import ThemeParkPageClient from './ThemeParkPageClient';
+import { redirect } from 'next/navigation';
 
 export default function ThemeParkPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ThemeParkPageClient />
-    </Suspense>
-  );
+  // 重定向到新的主题公园列表页面
+  redirect('/theme-parks');
 } 

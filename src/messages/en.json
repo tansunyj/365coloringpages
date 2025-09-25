@@ -60,10 +60,14 @@
     "myDownloads": "My Downloads"
   },
   "search": {
+    "title": "Search Coloring Pages",
+    "subtitle": "Discover Your Perfect Coloring Experience",
+    "description": "Browse thousands of beautiful coloring pages, from simple designs for kids to intricate patterns for adults.",
     "searchPlaceholder": "Search for coloring pages...",
     "searchButton": "Search",
     "searching": "Searching...",
     "resultsFor": "Found {count} results for \"{query}\"",
+    "resultsFound": "Found {count} results",
     "noResults": "No results found",
     "noResultsDescription": "Try different keywords, or browse our category pages",
     "browseCategories": "Browse Categories",
@@ -77,11 +81,12 @@
     "searchFailed": "Search failed, please try again",
     "allCategories": "All Categories",
     "sortBy": "Sort by",
-    "relevance": "Sort",
+    "relevance": "Relevance",
     "newest": "Newest",
     "popular": "Most Popular",
     "downloads": "Most Downloaded",
-    "defaultCategory": "Default Category",
+    "likes": "Most Liked",
+    "defaultCategory": "Other",
     "download": "Download"
   },
   "common": {

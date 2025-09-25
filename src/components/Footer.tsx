@@ -55,7 +55,7 @@ export default function Footer() {
               <Link href="/categories" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                 Categories
               </Link>
-              <Link href="/theme-park" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                              <Link href="/theme-parks" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                 Theme Park Adventures
               </Link>
               <Link href="/first-coloring-book" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
