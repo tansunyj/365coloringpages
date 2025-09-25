@@ -49,7 +49,7 @@ export default function SimpleColoringCard({
       {/* 图片区域 - 1:1 比例 (正方形) */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"
+          src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=400&fit=crop"
           alt={title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -91,10 +91,7 @@ export default function SimpleColoringCard({
                   <Heart className="h-3 w-3" />
                   {likeCount}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Download className="h-3 w-3" />
-                                      {downloadCount}
-                </span>
+
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">
                 Free

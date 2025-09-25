@@ -70,6 +70,7 @@ export const API_ENDPOINTS = {
     // 涂色书接口
     COLORING_BOOKS: {
       LIST: `${API_BASE_URL}/api/coloring-books`,
+      PAGES: `${API_BASE_URL}/api/coloring-books/pages`,
       DETAIL: (slug: string) => `${API_BASE_URL}/api/coloring-books/${slug}`,
     },
     

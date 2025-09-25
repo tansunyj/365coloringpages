@@ -59,7 +59,7 @@ export default function FirstColoringBookSection() {
         setIsLoading(true);
         setError(null);
         
-        const response = await api.coloringBooks.list() as ColoringBooksResponse;
+        const response = await api.coloringBooks.list({ limit: 10 }) as ColoringBooksResponse;
         
         if (response.success && response.data && response.data.books && Array.isArray(response.data.books)) {
           // 过滤出激活的涂色书，按显示顺序排序，只显示前10个

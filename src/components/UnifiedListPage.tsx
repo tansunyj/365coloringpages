@@ -153,17 +153,17 @@ class ApiClientUtil {
         return await apiClient.get<ApiResponse>('http://localhost:3001/api/theme-parks', themeParksParams) as ApiResponse;
         
       case 'first-coloring-book':
-        // 统一调用涂色书列表API，通过book参数筛选
+        // 调用新的涂色书页面API，通过book参数筛选
         const { apiClient: coloringBooksApiClient } = await import('../lib/apiClient');
         const coloringBooksParams = {
           q: params.q || '',
           page: params.page,
           limit: params.limit,
-          sort: params.sort || '',
+          sort: params.sort || 'popular',
           book: (params.category && params.category !== 'all' && params.category !== '') ? params.category : ''  // 使用book参数筛选涂色书，选择"所有"时为空
         };
-        console.log('📚 Coloring Books API Call:', 'http://localhost:3001/api/coloring-books', coloringBooksParams);
-        return await coloringBooksApiClient.get<ApiResponse>('http://localhost:3001/api/coloring-books', coloringBooksParams) as ApiResponse;
+        console.log('📚 Coloring Books Pages API Call:', 'http://localhost:3001/api/coloring-books/pages', coloringBooksParams);
+        return await coloringBooksApiClient.get<ApiResponse>('http://localhost:3001/api/coloring-books/pages', coloringBooksParams) as ApiResponse;
         
       case 'latest':
         // 调用最新上传涂色页面接口
@@ -490,6 +490,10 @@ export default function UnifiedListPage({
               isLiked: false,
               isFavorited: false
             }));
+          } else if (type === 'first-coloring-book' && 'pages' in response.data && Array.isArray(response.data.pages)) {
+            // 处理涂色书页面API格式 - 数据已经是标准格式，直接使用
+            console.log('🔄 Processing coloring book pages from new API:', response.data.pages);
+            pageItems = response.data.pages;
           } else {
             pageItems = response.data.pages || response.data.items || [];
           }

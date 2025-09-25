@@ -9,8 +9,26 @@ interface Category {
   color?: string;
 }
 
-// 模拟分类数据（实际项目中应该从数据库获取）
-const mockCategories: Category[] = [
+// TODO: 替换为真实的数据库查询
+async function getCategoriesFromDatabase(): Promise<Category[]> {
+  try {
+    // 这里应该是真实的数据库查询
+    // 例如: const categories = await db.categories.findMany({
+    //   where: { isActive: true },
+    //   orderBy: { displayOrder: 'asc' }
+    // });
+    
+    // 暂时返回空数组，需要连接到真实数据库
+    console.warn('⚠️ Categories API: 请连接到真实数据库以获取分类数据');
+    return [];
+  } catch (error) {
+    console.error('❌ 获取分类数据失败:', error);
+    return [];
+  }
+}
+
+// 临时保留的示例数据（仅用于开发测试）
+const exampleCategories: Category[] = [
   {
     id: 1,
     name: 'Animals',
@@ -117,9 +135,13 @@ export async function GET(request: NextRequest) {
     // 模拟网络延迟
     await new Promise(resolve => setTimeout(resolve, 200));
 
+    // 从数据库获取数据，如果获取失败则使用示例数据
+    const categories = await getCategoriesFromDatabase();
+    const finalCategories = categories.length > 0 ? categories : exampleCategories;
+
     return NextResponse.json({
       success: true,
-      data: mockCategories,
+      data: finalCategories,
       message: '分类列表获取成功'
     });
 

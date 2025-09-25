@@ -14,13 +14,28 @@ export async function generateStaticParams() {
     'first-coloring-book', 'latest-pages', 'popular-pages',
     'animals', 'nature', 'shapes', 'emotions', 'fruits'
   ];
-  const commonIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+  
+  // 包含所有可能的ID范围
+  const allIds = [
+    // 基础ID范围 1-20
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    // 扩展ID范围 21-50
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
+    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
+    '41', '42', '43', '44', '45', '46', '47', '48', '49', '50',
+    // 涂色书页面ID 106-113 (重要的API数据)
+    '106', '107', '108', '109', '110', '111', '112', '113'
+  ];
+  
   const params = [];
   for (const slug of coloringBookSlugs) {
-    for (const id of commonIds) {
+    for (const id of allIds) {
       params.push({ slug, id });
     }
   }
+  
+  console.log(`🚀 生成了 ${params.length} 个静态参数组合`);
   return params;
 }
 

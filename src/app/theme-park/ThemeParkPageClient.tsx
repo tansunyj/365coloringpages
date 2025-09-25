@@ -14,6 +14,7 @@ export default function ThemeParkPageClient() {
   const [selectedParks, setSelectedParks] = useState<string[]>([]);
   const [displayedItems, setDisplayedItems] = useState(24); // 初始显示数量
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // 主题公园列表
   const themeParks = [
@@ -49,96 +50,70 @@ export default function ThemeParkPageClient() {
     }
   }, [searchParams]);
 
-  // 扩展的主题公园涂色页面数据 (使用连续ID 1-80)
-  const allColoringPages = [
-    // Disney World (id 1-20)
-    { id: 1, title: 'Mickey Mouse Castle', park: 'Disney World', likes: 456, downloads: 2340 },
-    { id: 2, title: 'Cinderella\'s Carriage', park: 'Disney World', likes: 389, downloads: 1980 },
-    { id: 3, title: 'Donald Duck Adventure', park: 'Disney World', likes: 298, downloads: 1560 },
-    { id: 4, title: 'Minnie Mouse Bow', park: 'Disney World', likes: 445, downloads: 2100 },
-    { id: 5, title: 'Goofy\'s Playhouse', park: 'Disney World', likes: 267, downloads: 1340 },
-    { id: 6, title: 'Pluto\'s Bone', park: 'Disney World', likes: 189, downloads: 890 },
-    { id: 7, title: 'Fairy Tale Castle', park: 'Disney World', likes: 567, downloads: 2890 },
-    { id: 8, title: 'Magic Wand', park: 'Disney World', likes: 234, downloads: 1200 },
-    { id: 9, title: 'Princess Crown', park: 'Disney World', likes: 678, downloads: 3450 },
-    { id: 10, title: 'Enchanted Forest', park: 'Disney World', likes: 345, downloads: 1780 },
-    { id: 11, title: 'Flying Carpet', park: 'Disney World', likes: 234, downloads: 1120 },
-    { id: 12, title: 'Pirate Ship', park: 'Disney World', likes: 456, downloads: 2340 },
-    { id: 13, title: 'Treasure Chest', park: 'Disney World', likes: 298, downloads: 1560 },
-    { id: 14, title: 'Magic Mirror', park: 'Disney World', likes: 389, downloads: 1980 },
-    { id: 15, title: 'Fairy Godmother', park: 'Disney World', likes: 445, downloads: 2100 },
-    { id: 16, title: 'Sleeping Beauty', park: 'Disney World', likes: 567, downloads: 2890 },
-    { id: 17, title: 'Snow White Apple', park: 'Disney World', likes: 234, downloads: 1200 },
-    { id: 18, title: 'Beast\'s Rose', park: 'Disney World', likes: 345, downloads: 1780 },
-    { id: 19, title: 'Ariel\'s Trident', park: 'Disney World', likes: 456, downloads: 2340 },
-    { id: 20, title: 'Simba\'s Pride', park: 'Disney World', likes: 567, downloads: 2890 },
-
-    // Universal Studios (id 21-40)
-    { id: 21, title: 'Jurassic T-Rex', park: 'Universal Studios', likes: 678, downloads: 3200 },
-    { id: 22, title: 'Transformer Robot', park: 'Universal Studios', likes: 543, downloads: 2780 },
-    { id: 23, title: 'Harry Potter Wand', park: 'Universal Studios', likes: 789, downloads: 4100 },
-    { id: 24, title: 'Hogwarts Castle', park: 'Universal Studios', likes: 890, downloads: 4560 },
-    { id: 25, title: 'Minion Stuart', park: 'Universal Studios', likes: 456, downloads: 2340 },
-    { id: 26, title: 'King Kong', park: 'Universal Studios', likes: 345, downloads: 1780 },
-    { id: 27, title: 'Shrek Ogre', park: 'Universal Studios', likes: 234, downloads: 1200 },
-    { id: 28, title: 'Spider-Man Web', park: 'Universal Studios', likes: 567, downloads: 2890 },
-    { id: 29, title: 'Hulk Smash', park: 'Universal Studios', likes: 678, downloads: 3450 },
-    { id: 30, title: 'Iron Man Suit', park: 'Universal Studios', likes: 789, downloads: 4100 },
-    { id: 31, title: 'Captain America Shield', park: 'Universal Studios', likes: 543, downloads: 2780 },
-    { id: 32, title: 'Thor Hammer', park: 'Universal Studios', likes: 456, downloads: 2340 },
-    { id: 33, title: 'Mummy Tomb', park: 'Universal Studios', likes: 345, downloads: 1780 },
-    { id: 34, title: 'E.T. Spaceship', park: 'Universal Studios', likes: 234, downloads: 1200 },
-    { id: 35, title: 'Jaws Shark', park: 'Universal Studios', likes: 567, downloads: 2890 },
-    { id: 36, title: 'Back to Future Car', park: 'Universal Studios', likes: 678, downloads: 3450 },
-    { id: 37, title: 'Despicable Me Rocket', park: 'Universal Studios', likes: 789, downloads: 4100 },
-    { id: 38, title: 'Fast & Furious Car', park: 'Universal Studios', likes: 543, downloads: 2780 },
-    { id: 39, title: 'Simpsons Donut', park: 'Universal Studios', likes: 456, downloads: 2340 },
-    { id: 40, title: 'Wizarding World', park: 'Universal Studios', likes: 890, downloads: 4560 },
-
-    // Six Flags (id 41-60)
-    { id: 41, title: 'Roller Coaster Loop', park: 'Six Flags', likes: 345, downloads: 1780 },
-    { id: 42, title: 'Ferris Wheel Giant', park: 'Six Flags', likes: 234, downloads: 1200 },
-    { id: 43, title: 'Carousel Horses', park: 'Six Flags', likes: 456, downloads: 2340 },
-    { id: 44, title: 'Bumper Cars', park: 'Six Flags', likes: 567, downloads: 2890 },
-    { id: 45, title: 'Cotton Candy Stand', park: 'Six Flags', likes: 123, downloads: 650 },
-    { id: 46, title: 'Popcorn Wagon', park: 'Six Flags', likes: 189, downloads: 890 },
-    { id: 47, title: 'Ring Toss Game', park: 'Six Flags', likes: 267, downloads: 1340 },
-    { id: 48, title: 'Duck Pond Game', park: 'Six Flags', likes: 298, downloads: 1560 },
-    { id: 49, title: 'Balloon Dart', park: 'Six Flags', likes: 345, downloads: 1780 },
-    { id: 50, title: 'Prize Teddy Bear', park: 'Six Flags', likes: 234, downloads: 1200 },
-    { id: 51, title: 'Funhouse Mirror', park: 'Six Flags', likes: 456, downloads: 2340 },
-    { id: 52, title: 'Haunted House', park: 'Six Flags', likes: 567, downloads: 2890 },
-    { id: 53, title: 'Log Flume', park: 'Six Flags', likes: 678, downloads: 3450 },
-    { id: 54, title: 'Water Slide', park: 'Six Flags', likes: 789, downloads: 4100 },
-    { id: 55, title: 'Swing Ride', park: 'Six Flags', likes: 543, downloads: 2780 },
-    { id: 56, title: 'Tilt-a-Whirl', park: 'Six Flags', likes: 456, downloads: 2340 },
-    { id: 57, title: 'Spinning Teacups', park: 'Six Flags', likes: 345, downloads: 1780 },
-    { id: 58, title: 'Pirate Ship Swing', park: 'Six Flags', likes: 234, downloads: 1200 },
-    { id: 59, title: 'Gravity Drop', park: 'Six Flags', likes: 567, downloads: 2890 },
-    { id: 60, title: 'Super Loop', park: 'Six Flags', likes: 678, downloads: 3450 },
-
-    // Cedar Point (id 61-80)
-    { id: 61, title: 'Steel Vengeance', park: 'Cedar Point', likes: 789, downloads: 4100 },
-    { id: 62, title: 'Millennium Force', park: 'Cedar Point', likes: 678, downloads: 3450 },
-    { id: 63, title: 'Maverick Horse', park: 'Cedar Point', likes: 567, downloads: 2890 },
-    { id: 64, title: 'Top Thrill Dragster', park: 'Cedar Point', likes: 890, downloads: 4560 },
-    { id: 65, title: 'GateKeeper Wings', park: 'Cedar Point', likes: 456, downloads: 2340 },
-    { id: 66, title: 'Raptor Claws', park: 'Cedar Point', likes: 345, downloads: 1780 },
-    { id: 67, title: 'Magnum XL', park: 'Cedar Point', likes: 234, downloads: 1200 },
-    { id: 68, title: 'Blue Streak', park: 'Cedar Point', likes: 567, downloads: 2890 },
-    { id: 69, title: 'Gemini Twins', park: 'Cedar Point', likes: 678, downloads: 3450 },
-    { id: 70, title: 'Iron Dragon', park: 'Cedar Point', likes: 789, downloads: 4100 },
-    { id: 71, title: 'Corkscrew Twist', park: 'Cedar Point', likes: 543, downloads: 2780 },
-    { id: 72, title: 'Mine Ride', park: 'Cedar Point', likes: 456, downloads: 2340 },
-    { id: 73, title: 'Wildcat Prowl', park: 'Cedar Point', likes: 345, downloads: 1780 },
-    { id: 74, title: 'Cedar Creek', park: 'Cedar Point', likes: 234, downloads: 1200 },
-    { id: 75, title: 'SkyCoaster', park: 'Cedar Point', likes: 567, downloads: 2890 },
-    { id: 76, title: 'Power Tower', park: 'Cedar Point', likes: 678, downloads: 3450 },
-    { id: 77, title: 'Wicked Twister', park: 'Cedar Point', likes: 789, downloads: 4100 },
-    { id: 78, title: 'Disaster Transport', park: 'Cedar Point', likes: 543, downloads: 2780 },
-    { id: 79, title: 'Valravn Dive', park: 'Cedar Point', likes: 890, downloads: 4560 },
-    { id: 80, title: 'Rougarou Beast', park: 'Cedar Point', likes: 678, downloads: 3450 }
-  ];
+  // 主题公园涂色页面数据类型定义
+  interface ThemeParkColoringPage {
+    id: number;
+    title: string;
+    park: string;
+    likes: number;
+    downloads: number;
+  }
+  
+  // 主题公园涂色页面数据状态
+  const [allColoringPages, setAllColoringPages] = useState<ThemeParkColoringPage[]>([]);
+  
+  // 获取主题公园涂色页面数据
+  useEffect(() => {
+    const fetchThemeParkPages = async () => {
+      try {
+        console.log('🏰 正在从API获取主题公园涂色页面数据...');
+        
+        // 调用真实的主题公园API
+        const { api } = await import('../../lib/apiClient');
+        const response = await api.themeParks.list();
+        
+        if (response.success && response.data && Array.isArray(response.data.pages)) {
+          console.log('✅ 成功获取主题公园涂色页面数据:', response.data);
+          
+          // 转换API数据为组件需要的格式
+          const formattedPages = response.data.pages.map((page: {
+            id: number;
+            title: string;
+            themePark?: string;
+            theme?: string;
+            likes?: number;
+            downloads?: number;
+            thumbnailUrl?: string;
+            categoryName?: string;
+            difficulty?: string;
+            ageRange?: string;
+          }) => ({
+            id: page.id,
+            title: page.title,
+            park: page.themePark || page.theme || 'Theme Park Adventure',
+            likes: page.likes || 0,
+            downloads: page.downloads || 0,
+            thumbnailUrl: page.thumbnailUrl,
+            categoryName: page.categoryName || 'Theme Parks',
+            difficulty: page.difficulty || 'medium',
+            ageRange: page.ageRange || '6-12岁'
+          }));
+          
+          setAllColoringPages(formattedPages);
+        } else {
+          console.warn('⚠️ API返回数据格式不正确，使用空数组');
+          setAllColoringPages([]);
+        }
+      } catch (error) {
+        console.error('❌ 获取主题公园涂色页面数据失败:', error);
+        setAllColoringPages([]);
+      }
+    };
+    
+    fetchThemeParkPages();
+  }, []);
+  
+  // 原有的硬编码数据已移除，现在使用动态获取的数据
 
   // 处理主题公园多选
   const handleParkChange = (park: string) => {

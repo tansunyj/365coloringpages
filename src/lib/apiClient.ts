@@ -306,7 +306,30 @@ export const api = {
   },
 
   coloringBooks: {
-    list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING_BOOKS.LIST),
+    list: (params?: {
+      page?: number;
+      limit?: number;
+      sort?: string;
+    }) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING_BOOKS.LIST, {
+      page: params?.page || 1,
+      limit: params?.limit || 10,
+      sort: params?.sort || 'popular',
+      book: '',
+      q: ''
+    }),
+    pages: (params?: {
+      q?: string;
+      book?: string;
+      page?: number;
+      limit?: number;
+      sort?: string;
+    }) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING_BOOKS.PAGES, {
+      q: params?.q || '',
+      book: params?.book || '',
+      page: params?.page || 1,
+      limit: params?.limit || 20,
+      sort: params?.sort || 'popular'
+    }),
     detail: (slug: string) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING_BOOKS.DETAIL(slug)),
   },
 

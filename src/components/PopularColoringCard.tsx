@@ -45,10 +45,7 @@ export default function PopularColoringCard({
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
   };
 
-  const handleDownload = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    console.log('Downloading:', title);
-  };
+
 
   const handleCardClick = () => {
     // 导航到Popular分类详情页面
@@ -88,12 +85,6 @@ export default function PopularColoringCard({
           >
             <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
           </button>
-          <button
-            onClick={handleDownload}
-            className="p-2 bg-white/90 text-gray-600 rounded-full backdrop-blur-sm hover:bg-white hover:text-blue-500 transition-all duration-200 hover:scale-110"
-          >
-            <Download className="h-4 w-4" />
-          </button>
         </div>
         
         {/* 增强的悬浮叠加层 - 显示标题和统计信息 */}
@@ -105,10 +96,6 @@ export default function PopularColoringCard({
                 <span className="flex items-center gap-1">
                   <Heart className="h-3 w-3" />
                   {likeCount}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Download className="h-3 w-3" />
-                  {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

@@ -33,8 +33,27 @@ interface PopularColoringPage {
   isFavorited: boolean;
 }
 
-// 模拟热门涂色页面数据
-const mockPopularPages: PopularColoringPage[] = [
+// TODO: 替换为真实的数据库查询
+async function getPopularPagesFromDatabase(): Promise<PopularColoringPage[]> {
+  try {
+    // 这里应该是真实的数据库查询
+    // 例如: const pages = await db.coloringPages.findMany({
+    //   where: { status: 'published' },
+    //   orderBy: { downloads: 'desc' },
+    //   include: { primaryCategory: true }
+    // });
+    
+    // 暂时返回空数组，需要连接到真实数据库
+    console.warn('⚠️ Popular API: 请连接到真实数据库以获取热门涂色页面数据');
+    return [];
+  } catch (error) {
+    console.error('❌ 获取热门涂色页面数据失败:', error);
+    return [];
+  }
+}
+
+// 临时保留的示例数据（仅用于开发测试）
+const examplePopularPages: PopularColoringPage[] = [
   {
     id: 8,
     title: "可爱小狗涂色页",
@@ -348,14 +367,16 @@ const mockPopularPages: PopularColoringPage[] = [
 ];
 
 // 热门页面搜索函数
-function searchPopularPages(
+async function searchPopularPages(
   query: string = '',
   category: string = '',
   page: number = 1,
   limit: number = 10,
   sortBy: string = 'popular'
 ) {
-  let filteredPages = [...mockPopularPages];
+  // 从数据库获取数据，如果获取失败则使用示例数据
+  const allPages = await getPopularPagesFromDatabase();
+  let filteredPages = allPages.length > 0 ? [...allPages] : [...examplePopularPages];
 
   // 关键词搜索
   if (query.trim()) {
@@ -434,7 +455,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 执行搜索
-    const searchResults = searchPopularPages(query, category, page, limit, sortBy);
+    const searchResults = await searchPopularPages(query, category, page, limit, sortBy);
 
     // 模拟网络延迟
     await new Promise(resolve => setTimeout(resolve, 200));

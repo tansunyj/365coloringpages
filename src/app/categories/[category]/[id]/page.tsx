@@ -15,16 +15,20 @@ export async function generateStaticParams() {
     'prehistoric', 'space', 'ocean', 'holidays', 'superhero', 
     'food', 'magic', 'farm', 'celebration', 'default'
   ];
-  const ids = Array.from({ length: 100 }, (_, i) => (i + 1).toString());
   
-  const params = [];
-  for (const category of categories) {
-    for (const id of ids) {
-      params.push({ category, id });
+  const staticParams: { category: string; id: string }[] = [];
+  
+  categories.forEach(category => {
+    // 生成 1-200 的ID范围
+    for (let i = 1; i <= 200; i++) {
+      staticParams.push({
+        category,
+        id: i.toString()
+      });
     }
-  }
+  });
   
-  return params;
+  return staticParams;
 }
 
 export default async function CategoryDetailPage({ params }: CategoryDetailPageProps) {

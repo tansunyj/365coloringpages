@@ -20,16 +20,20 @@ export async function generateStaticParams() {
     'legoland'
   ];
   
-  const commonIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'];
+  // 扩展ID范围以支持更多页面，包括三位数ID
+  const staticParams: { slug: string; id: string }[] = [];
   
-  const params = [];
-  for (const slug of themeParkSlugs) {
-    for (const id of commonIds) {
-      params.push({ slug, id });
+  themeParkSlugs.forEach(slug => {
+    // 生成 1-200 的ID范围
+    for (let i = 1; i <= 200; i++) {
+      staticParams.push({
+        slug,
+        id: i.toString()
+      });
     }
-  }
+  });
   
-  return params;
+  return staticParams;
 }
 
 export default async function ThemeParkDetailPage({ 

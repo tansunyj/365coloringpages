@@ -18,8 +18,23 @@ interface ColoringPage {
   updatedAt: string;
 }
 
-// 模拟数据库数据（实际项目中应该从数据库获取）
-const mockColoringPages: ColoringPage[] = [
+// TODO: 替换为真实的数据库查询
+async function getColoringPagesFromDatabase(): Promise<ColoringPage[]> {
+  try {
+    // 这里应该是真实的数据库查询
+    // 例如: const pages = await db.coloringPages.findMany({...});
+    
+    // 暂时返回空数组，需要连接到真实数据库
+    console.warn('⚠️ Search API: 请连接到真实数据库以获取涂色页面数据');
+    return [];
+  } catch (error) {
+    console.error('❌ 获取涂色页面数据失败:', error);
+    return [];
+  }
+}
+
+// 临时保留的示例数据（仅用于开发测试）
+const exampleColoringPages: ColoringPage[] = [
   {
     id: 1,
     title: '可爱小狗涂色页',
@@ -263,14 +278,16 @@ const mockColoringPages: ColoringPage[] = [
 ];
 
 // 搜索函数
-function searchColoringPages(
+async function searchColoringPages(
   query: string,
   page: number = 1,
   limit: number = 12,
   sortBy: string = 'relevance',
   category?: string
 ) {
-  let filteredPages = [...mockColoringPages];
+  // 从数据库获取数据，如果获取失败则使用示例数据
+  const allPages = await getColoringPagesFromDatabase();
+  let filteredPages = allPages.length > 0 ? [...allPages] : [...exampleColoringPages];
 
   // 关键词搜索
   if (query.trim()) {
@@ -279,7 +296,7 @@ function searchColoringPages(
       page.title.toLowerCase().includes(searchTerm) ||
       page.description.toLowerCase().includes(searchTerm) ||
       page.category.toLowerCase().includes(searchTerm) ||
-      page.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      page.tags.some((tag: string) => tag.toLowerCase().includes(searchTerm))
     );
   }
 
@@ -306,9 +323,9 @@ function searchColoringPages(
         const searchTerm = query.toLowerCase();
         filteredPages.sort((a, b) => {
           const aScore = a.title.toLowerCase().includes(searchTerm) ? 2 : 
-                        a.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ? 1 : 0;
+                        a.tags.some((tag: string) => tag.toLowerCase().includes(searchTerm)) ? 1 : 0;
           const bScore = b.title.toLowerCase().includes(searchTerm) ? 2 : 
-                        b.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ? 1 : 0;
+                        b.tags.some((tag: string) => tag.toLowerCase().includes(searchTerm)) ? 1 : 0;
           return bScore - aScore;
         });
       }
@@ -350,7 +367,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 执行搜索
-    const searchResults = searchColoringPages(query, page, limit, sortBy, category);
+    const searchResults = await searchColoringPages(query, page, limit, sortBy, category);
 
     // 模拟网络延迟
     await new Promise(resolve => setTimeout(resolve, 300));

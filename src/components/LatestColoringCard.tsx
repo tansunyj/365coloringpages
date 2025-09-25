@@ -45,11 +45,6 @@ export default function LatestColoringCard({
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
   };
 
-  const handleDownload = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    console.log('Downloading:', title);
-  };
-
   const handleCardClick = () => {
     // 生成分类 slug
     const getCategorySlug = (categoryName: string): string => {
@@ -82,7 +77,7 @@ export default function LatestColoringCard({
       {/* 图片区域 - 1:1 比例 (正方形) */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
-          src={thumbnailUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"}
+          src={thumbnailUrl || "https://images.unsplash.com/photo-1555400113-b651d7eb7525?w=400&h=400&fit=crop"}
           alt={title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -106,12 +101,6 @@ export default function LatestColoringCard({
           >
             <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
           </button>
-          <button
-            onClick={handleDownload}
-            className="p-2 bg-white/90 text-gray-600 rounded-full backdrop-blur-sm hover:bg-white hover:text-blue-500 transition-all duration-200 hover:scale-110"
-          >
-            <Download className="h-4 w-4" />
-          </button>
         </div>
 
         {/* 增强的悬浮叠加层 - 显示标题和统计信息 */}
@@ -123,10 +112,6 @@ export default function LatestColoringCard({
                 <span className="flex items-center gap-1">
                   <Heart className="h-3 w-3" />
                   {likeCount}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Download className="h-3 w-3" />
-                                      {downloadCount}
                 </span>
               </div>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">

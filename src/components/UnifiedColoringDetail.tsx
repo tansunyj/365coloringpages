@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -28,179 +28,187 @@ interface ColoringPageDetail {
   title: string;
   description: string;
   author: string;
-  dimensions: string;
-  format: string;
-  image: string;
   categories: string[];
-  likes: number;
-  downloads: number;
+  thumbnailUrl?: string;
+  imageUrl?: string;
+  difficulty?: string;
+  ageRange?: string;
+  views?: number;
+  likes?: number;
+  downloads?: number;
+  isLiked?: boolean;
+  createdAt?: string;
+  tags?: string[];
+}
+
+// API响应数据类型
+interface ApiColoringPageData {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  thumbnailUrl: string;
+  originalFileUrl: string;
+  fileFormat: string;
+  fileSize: number;
+  difficulty: string;
+  ageRange: string;
+  theme: string;
+  style: string;
+  size: string;
+  isPremium: number;
+  isFeatured: number;
+  status: string;
+  publishedAt: string;
+  metaTitle: string;
+  metaDescription: string | null;
+  sourceType: string;
+  createdByUser: string;
+  aiPrompt: string | null;
+  previewUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+  categories: Array<{
+    id: number;
+    name: string;
+    slug: string;
+    color: string;
+  }>;
   isLiked: boolean;
+  isFavorited: boolean;
+  tags?: string[];
 }
 
 export default function UnifiedColoringDetail({ id, type, category, park, searchParams }: UnifiedColoringDetailProps) {
-  // 根据来源生成对应的数据
-  const generatePageData = () => {
-    switch (type) {
-      case 'popular':
-        return generatePopularData();
-      case 'latest':
-        return generateLatestData();
-      case 'first-coloring-book':
-        return generateFirstColoringBookData();
-      case 'theme-parks':
-        return generateThemeParkData();
-      case 'categories':
-        return generateCategoryData();
-      case 'search':
-        return generateSearchData();
-      default:
-        return generateDefaultData();
-    }
-  };
+  // 状态管理
+  const [coloringPageData, setColoringPageData] = useState<ColoringPageDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
-  const generatePopularData = () => {
-    const popularTitles = [
-      'Magical Unicorn Adventure', 'Dragon Kingdom Castle', 'Underwater Mermaid Palace',
-      'Enchanted Forest Animals', 'Space Explorer Mission', 'Princess Butterfly Garden'
-    ];
+  // 从后端API获取涂色页面详情
+  useEffect(() => {
+    const fetchColoringPageDetail = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const { api } = await import('../lib/apiClient');
+        const response = await api.coloring.detail(parseInt(id));
+        
+        if (response.success && response.data) {
+          const pageData = response.data as ApiColoringPageData;
+          
+          console.log('📄 接收到的API数据:', pageData);
+          console.log('🖼️ 图片URL信息:', {
+            thumbnailUrl: pageData.thumbnailUrl,
+            previewUrl: pageData.previewUrl,
+            originalFileUrl: pageData.originalFileUrl
+          });
+          
+          // 处理categories数组，提取分类名称
+          const categoryNames = pageData.categories ? 
+            pageData.categories.map((cat) => cat.name) : [type];
+          
+          // 处理图片URL，确保它们是有效的
+          const getValidImageUrl = (url: string | null | undefined): string => {
+            if (!url) return 'https://via.placeholder.com/600x800?text=No+Image';
+            
+            // 如果是相对路径，转换为绝对路径
+            if (url.startsWith('/')) {
+              return `http://localhost:3001${url}`;
+            }
+            
+            // 如果已经是绝对路径，直接返回
+            if (url.startsWith('http')) {
+              return url;
+            }
+            
+            // 其他情况，使用placeholder
+            return 'https://via.placeholder.com/600x800?text=Invalid+URL';
+          };
+          
+          const thumbnailUrl = getValidImageUrl(pageData.thumbnailUrl || pageData.previewUrl);
+          const imageUrl = getValidImageUrl(pageData.thumbnailUrl || pageData.previewUrl);
+          
+          console.log('🔧 处理后的图片URL:', { thumbnailUrl, imageUrl });
+          
+          setColoringPageData({
+            id: pageData.id?.toString() || id,
+            title: pageData.title || 'Untitled Coloring Page',
+            description: pageData.description || 'A beautiful coloring page for you to enjoy.',
+            author: pageData.createdByUser || 'Unknown Artist',
+            categories: categoryNames,
+            thumbnailUrl: thumbnailUrl,
+            imageUrl: imageUrl,
+            difficulty: pageData.difficulty || 'medium',
+            ageRange: pageData.ageRange || '3-12岁',
+            views: 0, // API响应中没有views字段，设为0
+            likes: 0, // API响应中没有likes字段，设为0  
+            downloads: 0, // API响应中没有downloads字段，设为0
+            isLiked: pageData.isLiked || false,
+            createdAt: pageData.createdAt || pageData.publishedAt,
+            tags: pageData.tags || []
+          });
+          
+          setIsLiked(pageData.isLiked || false);
+          setLikeCount(0); // API中没有点赞数量，设为0
+        } else {
+          // 如果API返回失败，使用fallback数据
+          setColoringPageData(generateFallbackData());
+        }
+      } catch (error) {
+        console.error('Failed to fetch coloring page detail:', error);
+        // API调用失败时使用fallback数据
+        setColoringPageData(generateFallbackData());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchColoringPageDetail();
+  }, [id, type]);
+
+  // Fallback数据生成（当API失败时使用）
+  const generateFallbackData = (): ColoringPageDetail => {
+    const fallbackTitles = {
+      'popular': ['Magical Unicorn Adventure', 'Dragon Kingdom Castle', 'Underwater Mermaid Palace'],
+      'latest': ['Modern Art Patterns', 'Geometric Mandala', 'Contemporary Flowers'],
+      'theme-parks': ['Roller Coaster Adventure', 'Carousel Dreams', 'Ferris Wheel Fun'],
+      'categories': ['Category Coloring Page', 'Beautiful Design', 'Creative Art'],
+      'first-coloring-book': ['Simple Circle Fun', 'Happy Square', 'Friendly Triangle'],
+      'search': ['Search Result Page', 'Found Design', 'Matching Art']
+    };
+
+    const titles = fallbackTitles[type] || fallbackTitles['categories'];
     const pageId = parseInt(id) || 1;
-    const index = (pageId - 1) % popularTitles.length;
-    const selectedTitle = popularTitles[index] || 'Popular Coloring Page';
+    const index = (pageId - 1) % titles.length;
+    const selectedTitle = titles[index];
+
     return {
+      id,
       title: selectedTitle,
-      description: `A beautiful and intricate coloring page featuring ${selectedTitle.toLowerCase()}. Perfect for both kids and adults who love detailed artwork.`,
-      author: 'ColoringMaster',
-      categories: ['Fantasy', 'Adventure', 'Popular']
+      description: `A beautiful coloring page featuring ${selectedTitle.toLowerCase()}. Perfect for creative expression.`,
+      author: 'Creative Artist',
+      categories: [type, 'Creative'],
+      thumbnailUrl: 'https://via.placeholder.com/400x400?text=Fallback+Image',
+      imageUrl: 'https://via.placeholder.com/600x800?text=Fallback+Image',
+      difficulty: 'medium',
+      ageRange: '3-12岁',
+      views: Math.floor(Math.random() * 1000) + 100,
+      likes: Math.floor(Math.random() * 100) + 10,
+      downloads: Math.floor(Math.random() * 500) + 50,
+      isLiked: false
     };
   };
 
-  const generateLatestData = () => {
-    const latestTitles = [
-      'Modern Art Patterns', 'Geometric Mandala', 'Contemporary Flowers',
-      'Abstract Waves', 'Urban Cityscape', 'Minimalist Nature'
-    ];
-    const pageId = parseInt(id) || 1;
-    const index = (pageId - 1) % latestTitles.length;
-    const selectedTitle = latestTitles[index] || 'Latest Coloring Page';
-    
-    // 根据分类生成相应的标题和描述
-    let categoryTitle = selectedTitle;
-    let categoryDescription = `Our newest addition: ${selectedTitle.toLowerCase()}. Fresh designs with modern artistic flair.`;
-    
-    if (category) {
-      const categoryDisplayName = category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      categoryTitle = `${categoryDisplayName}: ${selectedTitle}`;
-      categoryDescription = `Discover our latest ${categoryDisplayName.toLowerCase()} themed coloring page: ${selectedTitle.toLowerCase()}. Perfect for anyone who loves ${categoryDisplayName.toLowerCase()} designs.`;
-    }
-    
-    return {
-      title: categoryTitle,
-      description: categoryDescription,
-      author: 'ArtistPro',
-      categories: category ? [category.replace(/-/g, ' '), 'Latest', 'Trending'] : ['Modern', 'Latest', 'Trending']
-    };
-  };
-
-  const generateFirstColoringBookData = () => {
-    const firstBookTitles = [
-      'Simple Circle Fun', 'Happy Square', 'Friendly Triangle',
-      'Big Heart Shape', 'Smiling Sun', 'Little Flower'
-    ];
-    const pageId = parseInt(id) || 1;
-    const index = (pageId - 1) % firstBookTitles.length;
-    const selectedTitle = firstBookTitles[index] || 'Simple Coloring Page';
-    const categoryName = category ? decodeURIComponent(category).replace(/-/g, ' ') : 'Basic Shapes';
-    return {
-      title: selectedTitle,
-      description: `Perfect for beginners! This simple ${selectedTitle.toLowerCase()} design is ideal for young artists just starting their coloring journey.`,
-      author: 'BeginnerFriend',
-      categories: [categoryName, 'Beginner', 'Simple']
-    };
-  };
-
-  const generateThemeParkData = () => {
-    const themeParkTitles = [
-      'Roller Coaster Adventure', 'Ferris Wheel Fun', 'Carousel Horses',
-      'Cotton Candy Stand', 'Magic Castle', 'Bumper Cars'
-    ];
-    const pageId = parseInt(id) || 1;
-    const index = (pageId - 1) % themeParkTitles.length;
-    const selectedTitle = themeParkTitles[index] || 'Theme Park Adventure';
-    const parkName = park ? decodeURIComponent(park).replace(/-/g, ' ') : 'Theme Park';
-    return {
-      title: selectedTitle,
-      description: `Experience the excitement of ${parkName} with this thrilling ${selectedTitle.toLowerCase()} coloring page!`,
-      author: 'ParkArtist',
-      categories: [parkName, 'Theme Park', 'Adventure']
-    };
-  };
-
-  const generateCategoryData = () => {
-    const categoryTitles = [
-      'Nature Scene', 'Animal Portrait', 'Floral Design',
-      'Vehicle Adventure', 'Food Fun', 'Holiday Special'
-    ];
-    const pageId = parseInt(id) || 1;
-    const index = (pageId - 1) % categoryTitles.length;
-    const categoryName = category || 'General';
-    const selectedTitle = categoryTitles[index] || 'Coloring Page';
-    return {
-      title: selectedTitle,
-      description: `A wonderful ${selectedTitle.toLowerCase()} from our ${categoryName} collection.`,
-      author: 'CategoryExpert',
-      categories: [categoryName, 'Collection', 'Featured']
-    };
-  };
-
-  const generateSearchData = () => {
-    const searchTitles = [
-      'Cute Puppy Coloring Page', 'Adorable Dog Portrait', 'Playful Pet Scene',
-      'Happy Animal Friend', 'Lovely Pet Drawing', 'Sweet Dog Illustration'
-    ];
-    const pageId = parseInt(id) || 1;
-    const index = (pageId - 1) % searchTitles.length;
-    const selectedTitle = searchTitles[index] || 'Search Result Coloring Page';
-    const searchQuery = searchParams?.q || '';
-    return {
-      title: selectedTitle,
-      description: `Found in search for "${searchQuery}": ${selectedTitle.toLowerCase()}. A perfect match for your coloring needs!`,
-      author: 'SearchArtist',
-      categories: ['Search Result', 'Featured', 'Match']
-    };
-  };
-
-  const generateDefaultData = () => {
-    return {
-      title: `Coloring Page ${id}`,
-      description: 'A beautiful coloring page perfect for all ages.',
-      author: 'Artist',
-      categories: ['General', 'Fun']
-    };
-  };
-
-  const pageData = generatePageData();
-
-  // 模拟涂色页面数据
-  const coloringPageData: ColoringPageDetail = {
-    id: id,
-    title: pageData.title,
-    description: pageData.description,
-    author: pageData.author,
-    dimensions: '8.5" x 11"',
-    format: 'PDF',
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo",
-    categories: pageData.categories,
-    likes: 300,
-    downloads: 1250,
-    isLiked: false
-  };
-
-  const [isLiked, setIsLiked] = useState(coloringPageData.isLiked);
-  const [likeCount, setLikeCount] = useState(coloringPageData.likes);
   const router = useRouter();
 
   // 生成面包屑导航
   const getBreadcrumbPath = () => {
+    if (!coloringPageData) return [];
+
     switch (type) {
       case 'popular':
         if (category) {
@@ -333,6 +341,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   // 相关推荐数据 - 根据当前页面ID生成唯一的相关页面ID
   // 使用更大的偏移量避免与真实数据ID冲突
   const generateRelatedPages = () => {
+    if (!coloringPageData) return [];
     const baseId = parseInt(id) || 1;
     const offset = 10000; // 使用10000作为偏移量，避免与真实数据冲突
     return [
@@ -351,7 +360,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   };
 
   const handleDownload = () => {
-    console.log('Downloading:', coloringPageData.title);
+    console.log('Downloading:', coloringPageData?.title);
     // 这里可以添加实际的下载逻辑
   };
 
@@ -362,8 +371,8 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: coloringPageData.title,
-        text: coloringPageData.description,
+        title: coloringPageData?.title || 'Coloring Page',
+        text: coloringPageData?.description || 'A beautiful coloring page for you to enjoy.',
         url: window.location.href,
       });
     } else {
@@ -372,6 +381,18 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
       alert('Link copied to clipboard!');
     }
   };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+  }
+
+  if (!coloringPageData) {
+    return <div className="min-h-screen flex items-center justify-center">No data available.</div>;
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fcfcf8' }}>
@@ -394,11 +415,16 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <div className="relative aspect-[3/4] mb-6">
                 <Image
-                  src={coloringPageData.image}
+                  src={coloringPageData.imageUrl || 'https://via.placeholder.com/600x800?text=No+Image'}
                   alt={coloringPageData.title}
                   fill
                   className="object-cover rounded-xl"
                   unoptimized
+                  onError={(e) => {
+                    console.error('图片加载失败:', coloringPageData.imageUrl);
+                    // 图片加载失败时设置fallback图片
+                    e.currentTarget.src = 'https://via.placeholder.com/600x800?text=Image+Not+Found';
+                  }}
                 />
               </div>
               
@@ -475,20 +501,24 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
                   <span className="font-medium text-gray-900">{coloringPageData.author}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Dimensions:</span>
-                  <span className="font-medium text-gray-900">{coloringPageData.dimensions}</span>
+                  <span className="text-gray-600">Difficulty:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.difficulty}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Format:</span>
-                  <span className="font-medium text-gray-900">{coloringPageData.format}</span>
+                  <span className="text-gray-600">Age Range:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.ageRange}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Views:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.views?.toLocaleString() || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Downloads:</span>
-                  <span className="font-medium text-gray-900">{coloringPageData.downloads.toLocaleString()}</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.downloads?.toLocaleString() || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Source:</span>
-                  <span className="font-medium text-gray-900 capitalize">{type.replace('-', ' ')}</span>
+                  <span className="text-gray-600">Created At:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.createdAt ? new Date(coloringPageData.createdAt).toLocaleDateString() : 'N/A'}</span>
                 </div>
               </div>
             </div>

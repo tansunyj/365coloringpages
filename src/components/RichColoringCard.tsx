@@ -189,19 +189,6 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     }
   };
 
-  // 处理下载
-  const handleDownload = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    try {
-      // const response = await api.coloring.download(id);
-      console.log(`Download coloring page ${id}`);
-    } catch (error) {
-      console.error('Failed to download:', error);
-    }
-  };
-
   // 图片加载错误处理
   const handleImageError = () => {
     setImageError(true);
@@ -264,12 +251,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
               >
                 <Heart className={`h-5 w-5 ${liked ? 'fill-current' : ''}`} />
               </button>
-              <button
-                onClick={handleDownload}
-                className="bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors text-gray-700 hover:text-orange-500"
-              >
-                <Download className="h-5 w-5" />
-              </button>
+
               <button className="bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors text-gray-700 hover:text-blue-500">
                 <Eye className="h-5 w-5" />
               </button>
@@ -307,20 +289,8 @@ export default function RichColoringCard(props: RichColoringCardProps) {
                 <Heart className={`h-4 w-4 mr-1 ${liked ? 'text-red-500' : ''}`} />
                 {(likeCount || 0).toLocaleString()}
               </span>
-              <span className="flex items-center">
-                <Download className="h-4 w-4 mr-1" />
-                {(downloads || 0).toLocaleString()}
-              </span>
             </div>
           </div>
-
-          {/* 下载按钮 */}
-          <button
-            onClick={handleDownload}
-            className="w-full bg-gradient-to-r from-orange-400 to-yellow-400 hover:from-orange-500 hover:to-yellow-500 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
-          >
-            Free Download
-          </button>
         </div>
       </div>
     </Link>

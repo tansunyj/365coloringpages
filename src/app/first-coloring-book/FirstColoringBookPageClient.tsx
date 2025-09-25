@@ -49,122 +49,65 @@ export default function FirstColoringBookPageClient() {
     }
   }, [searchParams]);
 
-  // 扩展的 First Coloring Book 涂色页面数据 (使用连续ID 1-100)
-  const allColoringPages = [
-    // Basic Shapes (id 1-15)
-    { id: 1, title: 'Simple Circle', category: 'Basic Shapes', likes: 234, downloads: 1200 },
-    { id: 2, title: 'Big Square', category: 'Basic Shapes', likes: 189, downloads: 890 },
-    { id: 3, title: 'Happy Triangle', category: 'Basic Shapes', likes: 267, downloads: 1340 },
-    { id: 4, title: 'Rectangle Fun', category: 'Basic Shapes', likes: 298, downloads: 1560 },
-    { id: 5, title: 'Oval Shape', category: 'Basic Shapes', likes: 156, downloads: 780 },
-    { id: 6, title: 'Diamond Bright', category: 'Basic Shapes', likes: 223, downloads: 1100 },
-    { id: 7, title: 'Star Shape', category: 'Basic Shapes', likes: 345, downloads: 1750 },
-    { id: 8, title: 'Heart Shape', category: 'Basic Shapes', likes: 412, downloads: 2050 },
-    { id: 9, title: 'Cross Simple', category: 'Basic Shapes', likes: 178, downloads: 920 },
-    { id: 10, title: 'Arrow Point', category: 'Basic Shapes', likes: 201, downloads: 1000 },
-    { id: 11, title: 'Pentagon Shape', category: 'Basic Shapes', likes: 134, downloads: 670 },
-    { id: 12, title: 'Hexagon Fun', category: 'Basic Shapes', likes: 167, downloads: 830 },
-    { id: 13, title: 'Octagon Big', category: 'Basic Shapes', likes: 145, downloads: 720 },
-    { id: 14, title: 'Crescent Moon', category: 'Basic Shapes', likes: 289, downloads: 1450 },
-    { id: 15, title: 'Lightning Bolt', category: 'Basic Shapes', likes: 256, downloads: 1280 },
+  // 涂色页面数据状态 - 使用API数据
+  const [allColoringPages, setAllColoringPages] = useState<Array<{
+    id: number;
+    title: string;
+    category: string;
+    likes: number;
+    downloads: number;
+    thumbnailUrl?: string;
+    difficulty?: string;
+    ageRange?: string;
+  }>>([]);
 
-    // Nature (id 16-30)
-    { id: 16, title: 'Happy Sun', category: 'Nature', likes: 345, downloads: 1800 },
-    { id: 17, title: 'Smiling Cloud', category: 'Nature', likes: 278, downloads: 1390 },
-    { id: 18, title: 'Rainbow Bright', category: 'Nature', likes: 445, downloads: 2340 },
-    { id: 19, title: 'Simple Flower', category: 'Nature', likes: 356, downloads: 1750 },
-    { id: 20, title: 'Green Tree', category: 'Nature', likes: 234, downloads: 1200 },
-    { id: 21, title: 'Butterfly Wings', category: 'Nature', likes: 389, downloads: 1950 },
-    { id: 22, title: 'Ladybug Spots', category: 'Nature', likes: 267, downloads: 1340 },
-    { id: 23, title: 'Bee Busy', category: 'Nature', likes: 198, downloads: 990 },
-    { id: 24, title: 'Leaf Simple', category: 'Nature', likes: 156, downloads: 780 },
-    { id: 25, title: 'Mushroom Red', category: 'Nature', likes: 223, downloads: 1115 },
-    { id: 26, title: 'Grass Green', category: 'Nature', likes: 134, downloads: 670 },
-    { id: 27, title: 'Rock Stone', category: 'Nature', likes: 178, downloads: 890 },
-    { id: 28, title: 'Water Drop', category: 'Nature', likes: 245, downloads: 1225 },
-    { id: 29, title: 'Snowflake', category: 'Nature', likes: 312, downloads: 1560 },
-    { id: 30, title: 'Mountain High', category: 'Nature', likes: 289, downloads: 1445 },
+  // 获取涂色书页面数据
+  useEffect(() => {
+    const fetchColoringBookPages = async () => {
+      try {
+        console.log('📚 正在从API获取涂色书页面数据...');
+        
+        const { api } = await import('../../lib/apiClient');
+        const response = await api.coloringBooks.pages({
+          book: 'first-coloring-book',
+          page: 1,
+          limit: 100
+        });
+        
+        if (response.success && response.data) {
+          console.log('✅ 成功获取涂色书页面数据:', response.data);
+          
+          // 检查数据结构并转换
+          const responseData = response.data as { pages?: unknown[] };
+          const pages = responseData.pages || [];
+          
+          // 转换API数据为组件需要的格式
+          const formattedPages = pages.map((page) => ({
+            id: page.id || 0,
+            title: page.title || 'Untitled',
+            category: page.categoryName || 'Basic Shapes',
+            likes: page.likes || 0,
+            downloads: page.downloads || 0,
+            thumbnailUrl: page.thumbnailUrl,
+            difficulty: page.difficulty || 'easy',
+            ageRange: page.ageRange || '3-6岁'
+          }));
+          
+          setAllColoringPages(formattedPages);
+        } else {
+          console.warn('⚠️ API返回数据格式不正确，使用空数组');
+          setAllColoringPages([]);
+        }
+      } catch (error) {
+        console.error('❌ 获取涂色书页面数据失败:', error);
+        setAllColoringPages([]);
+      }
+    };
+    
+    fetchColoringBookPages();
+  }, []);
 
-    // Animals (id 31-45)
-    { id: 31, title: 'Little Cat', category: 'Animals', likes: 567, downloads: 2890 },
-    { id: 32, title: 'Happy Dog', category: 'Animals', likes: 445, downloads: 2225 },
-    { id: 33, title: 'Bunny Ears', category: 'Animals', likes: 356, downloads: 1780 },
-    { id: 34, title: 'Fish Swimming', category: 'Animals', likes: 234, downloads: 1170 },
-    { id: 35, title: 'Bird Flying', category: 'Animals', likes: 298, downloads: 1490 },
-    { id: 36, title: 'Elephant Big', category: 'Animals', likes: 389, downloads: 1945 },
-    { id: 37, title: 'Giraffe Tall', category: 'Animals', likes: 267, downloads: 1335 },
-    { id: 38, title: 'Lion Mane', category: 'Animals', likes: 445, downloads: 2225 },
-    { id: 39, title: 'Monkey Play', category: 'Animals', likes: 178, downloads: 890 },
-    { id: 40, title: 'Frog Green', category: 'Animals', likes: 223, downloads: 1115 },
-    { id: 41, title: 'Turtle Slow', category: 'Animals', likes: 156, downloads: 780 },
-    { id: 42, title: 'Snake Long', category: 'Animals', likes: 134, downloads: 670 },
-    { id: 43, title: 'Duck Yellow', category: 'Animals', likes: 289, downloads: 1445 },
-    { id: 44, title: 'Pig Pink', category: 'Animals', likes: 201, downloads: 1005 },
-    { id: 45, title: 'Cow Spots', category: 'Animals', likes: 245, downloads: 1225 },
-
-    // Fruits (id 46-60)
-    { id: 46, title: 'Big Apple', category: 'Fruits', likes: 298, downloads: 1560 },
-    { id: 47, title: 'Yellow Banana', category: 'Fruits', likes: 234, downloads: 1170 },
-    { id: 48, title: 'Orange Round', category: 'Fruits', likes: 267, downloads: 1335 },
-    { id: 49, title: 'Red Strawberry', category: 'Fruits', likes: 345, downloads: 1725 },
-    { id: 50, title: 'Purple Grapes', category: 'Fruits', likes: 189, downloads: 945 },
-    { id: 51, title: 'Green Pear', category: 'Fruits', likes: 223, downloads: 1115 },
-    { id: 52, title: 'Watermelon Slice', category: 'Fruits', likes: 356, downloads: 1780 },
-    { id: 53, title: 'Pineapple Crown', category: 'Fruits', likes: 278, downloads: 1390 },
-    { id: 54, title: 'Cherry Red', category: 'Fruits', likes: 156, downloads: 780 },
-    { id: 55, title: 'Lemon Yellow', category: 'Fruits', likes: 201, downloads: 1005 },
-    { id: 56, title: 'Peach Soft', category: 'Fruits', likes: 178, downloads: 890 },
-    { id: 57, title: 'Plum Purple', category: 'Fruits', likes: 134, downloads: 670 },
-    { id: 58, title: 'Coconut Brown', category: 'Fruits', likes: 245, downloads: 1225 },
-    { id: 59, title: 'Kiwi Green', category: 'Fruits', likes: 167, downloads: 835 },
-    { id: 60, title: 'Mango Sweet', category: 'Fruits', likes: 289, downloads: 1445 },
-
-    // Emotions (id 61-75)
-    { id: 61, title: 'Smiling Face', category: 'Emotions', likes: 456, downloads: 2100 },
-    { id: 62, title: 'Happy Eyes', category: 'Emotions', likes: 345, downloads: 1725 },
-    { id: 63, title: 'Surprised Look', category: 'Emotions', likes: 234, downloads: 1170 },
-    { id: 64, title: 'Sleepy Yawn', category: 'Emotions', likes: 189, downloads: 945 },
-    { id: 65, title: 'Winking Eye', category: 'Emotions', likes: 267, downloads: 1335 },
-    { id: 66, title: 'Laughing Mouth', category: 'Emotions', likes: 298, downloads: 1490 },
-    { id: 67, title: 'Thinking Face', category: 'Emotions', likes: 178, downloads: 890 },
-    { id: 68, title: 'Excited Jump', category: 'Emotions', likes: 356, downloads: 1780 },
-    { id: 69, title: 'Calm Peaceful', category: 'Emotions', likes: 223, downloads: 1115 },
-    { id: 70, title: 'Curious Wonder', category: 'Emotions', likes: 245, downloads: 1225 },
-    { id: 71, title: 'Proud Smile', category: 'Emotions', likes: 201, downloads: 1005 },
-    { id: 72, title: 'Shy Blush', category: 'Emotions', likes: 156, downloads: 780 },
-    { id: 73, title: 'Brave Strong', category: 'Emotions', likes: 289, downloads: 1445 },
-    { id: 74, title: 'Kind Heart', category: 'Emotions', likes: 334, downloads: 1670 },
-    { id: 75, title: 'Grateful Thanks', category: 'Emotions', likes: 278, downloads: 1390 },
-
-    // Fun (id 76-90)
-    { id: 76, title: 'Balloon', category: 'Fun', likes: 267, downloads: 1340 },
-    { id: 77, title: 'Birthday Cake', category: 'Fun', likes: 445, downloads: 2225 },
-    { id: 78, title: 'Party Hat', category: 'Fun', likes: 234, downloads: 1170 },
-    { id: 79, title: 'Ice Cream Cone', category: 'Fun', likes: 356, downloads: 1780 },
-    { id: 80, title: 'Candy Sweet', category: 'Fun', likes: 189, downloads: 945 },
-    { id: 81, title: 'Toy Car', category: 'Fun', likes: 298, downloads: 1490 },
-    { id: 82, title: 'Teddy Bear', category: 'Fun', likes: 378, downloads: 1890 },
-    { id: 83, title: 'Ball Round', category: 'Fun', likes: 156, downloads: 780 },
-    { id: 84, title: 'Kite Flying', category: 'Fun', likes: 223, downloads: 1115 },
-    { id: 85, title: 'Swing Play', category: 'Fun', likes: 201, downloads: 1005 },
-    { id: 86, title: 'Slide Fun', category: 'Fun', likes: 178, downloads: 890 },
-    { id: 87, title: 'Sandbox Dig', category: 'Fun', likes: 134, downloads: 670 },
-    { id: 88, title: 'Bubbles Pop', category: 'Fun', likes: 245, downloads: 1225 },
-    { id: 89, title: 'Music Note', category: 'Fun', likes: 167, downloads: 835 },
-    { id: 90, title: 'Dance Move', category: 'Fun', likes: 289, downloads: 1445 },
-
-    // Shapes (id 91-100)
-    { id: 91, title: 'Red Heart', category: 'Shapes', likes: 389, downloads: 1980 },
-    { id: 92, title: 'Blue Star', category: 'Shapes', likes: 423, downloads: 2050 },
-    { id: 93, title: 'Green Circle', category: 'Shapes', likes: 234, downloads: 1170 },
-    { id: 94, title: 'Yellow Square', category: 'Shapes', likes: 267, downloads: 1335 },
-    { id: 95, title: 'Pink Triangle', category: 'Shapes', likes: 189, downloads: 945 },
-    { id: 96, title: 'Orange Diamond', category: 'Shapes', likes: 298, downloads: 1490 },
-    { id: 97, title: 'Purple Oval', category: 'Shapes', likes: 156, downloads: 780 },
-    { id: 98, title: 'Brown Rectangle', category: 'Shapes', likes: 178, downloads: 890 },
-    { id: 99, title: 'Black Pentagon', category: 'Shapes', likes: 134, downloads: 670 },
-    { id: 100, title: 'White Hexagon', category: 'Shapes', likes: 223, downloads: 1115 }
-  ];
+  // 静态数据已完全移除，现在全部使用API动态数据
 
   // 分类选择处理
   const handleCategoryChange = (category: string) => {

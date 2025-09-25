@@ -39,9 +39,6 @@ export default function ColoringCard({
               <Heart className="h-5 w-5 text-gray-700" />
             </button>
             <button className="bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors">
-              <Download className="h-5 w-5 text-gray-700" />
-            </button>
-            <button className="bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors">
               <Eye className="h-5 w-5 text-gray-700" />
             </button>
           </div>
@@ -49,7 +46,7 @@ export default function ColoringCard({
 
         {/* 分类标签 */}
         <div className="absolute top-3 left-3">
-          <span className="bg-white/90 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
+          <span className="bg-white/90 text-gray-700 px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm">
             {category}
           </span>
         </div>
@@ -65,20 +62,11 @@ export default function ColoringCard({
         <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
           <div className="flex items-center space-x-4">
             <span className="flex items-center">
-              <Download className="h-4 w-4 mr-1" />
-              {downloadCount.toLocaleString()}
-            </span>
-            <span className="flex items-center">
               <Heart className="h-4 w-4 mr-1" />
               {likeCount.toLocaleString()}
             </span>
           </div>
         </div>
-
-        {/* 下载按钮 */}
-        <button className="w-full bg-gradient-to-r from-orange-400 to-yellow-400 hover:from-orange-500 hover:to-yellow-500 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200">
-          Free Download
-        </button>
       </div>
     </div>
   );

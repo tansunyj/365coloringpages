@@ -11,16 +11,19 @@ interface ThemeParkDetailPageProps {
 // 生成静态参数
 export async function generateStaticParams() {
   const parks = ['disney-world', 'universal-studios', 'six-flags', 'cedar-point'];
-  const ids = Array.from({ length: 20 }, (_, i) => (i + 1).toString());
+  const staticParams: { park: string; id: string }[] = [];
   
-  const params = [];
-  for (const park of parks) {
-    for (const id of ids) {
-      params.push({ park, id });
+  parks.forEach(park => {
+    // 生成 1-200 的ID范围
+    for (let i = 1; i <= 200; i++) {
+      staticParams.push({
+        park,
+        id: i.toString()
+      });
     }
-  }
+  });
   
-  return params;
+  return staticParams;
 }
 
 export default async function ThemeParkDetailPage({ params }: ThemeParkDetailPageProps) {
@@ -30,7 +33,7 @@ export default async function ThemeParkDetailPage({ params }: ThemeParkDetailPag
     <Suspense fallback={<div>Loading...</div>}>
       <UnifiedColoringDetail 
         id={id} 
-        type="theme-park"
+        type="theme-parks"
         park={park}
       />
     </Suspense>

@@ -34,7 +34,7 @@ export default function SimpleThemeParkCard({
       {/* 图片区域 - 1:1 比例 (正方形) */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
-          src={coverUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"}
+          src={coverUrl || "https://images.unsplash.com/photo-1566403033175-c1c4a29e1df0?w=400&h=400&fit=crop"}
           alt={title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"
