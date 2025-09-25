@@ -1,23 +1,87 @@
 'use client';
 
-
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SimpleFirstColoringCard from './SimpleFirstColoringCard';
+import { api } from '../lib/apiClient';
+
+// 定义涂色书数据接口
+interface ColoringBook {
+  id: number;
+  title: string;
+  description: string;
+  coverImage: string;
+  slug: string;
+  isActive: boolean;
+  displayOrder: number;
+  pageCount: number;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// API响应接口
+interface ColoringBooksResponse {
+  success: boolean;
+  data: {
+    books: ColoringBook[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      totalCount: number;
+      limit: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+      startRecord: number;
+      endRecord: number;
+    };
+    filters: {
+      query: string;
+      book: string;
+      sort: string;
+    };
+    meta: {
+      totalResults: number;
+    };
+  };
+  message: string;
+}
 
 export default function FirstColoringBookSection() {
-  // My First Coloring Book 数据 - 适合初学者的简单涂色页面
-  const firstColoringBookData = [
-    { id: 1, title: 'Simple Circle', category: 'Basic Shapes' },
-    { id: 2, title: 'Happy Sun', category: 'Nature' },
-    { id: 3, title: 'Smiling Face', category: 'Emotions' },
-    { id: 4, title: 'Big Apple', category: 'Fruits' },
-    { id: 5, title: 'Little Cat', category: 'Animals' },
-    { id: 6, title: 'Red Heart', category: 'Shapes' },
-    { id: 7, title: 'Rainbow', category: 'Nature' },
-    { id: 8, title: 'Balloon', category: 'Fun' },
-    { id: 9, title: 'Flower', category: 'Nature' },
-    { id: 10, title: 'Star', category: 'Shapes' }
-  ];
+  const [coloringBooks, setColoringBooks] = useState<ColoringBook[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // 获取涂色书数据
+  useEffect(() => {
+    const fetchColoringBooks = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await api.coloringBooks.list() as ColoringBooksResponse;
+        
+        if (response.success && response.data && response.data.books && Array.isArray(response.data.books)) {
+          // 过滤出激活的涂色书，按显示顺序排序，只显示前10个
+          const activeBooks = response.data.books
+            .filter(book => book.isActive)
+            .sort((a, b) => a.displayOrder - b.displayOrder)
+            .slice(0, 10);
+          
+          setColoringBooks(activeBooks);
+        } else {
+          setError('Failed to load coloring books');
+        }
+      } catch (err) {
+        console.error('Error fetching coloring books:', err);
+        setError('Failed to load coloring books');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchColoringBooks();
+  }, []);
 
   return (
     <section className="py-8" style={{ backgroundColor: '#f0f8f0' }}>
@@ -39,16 +103,40 @@ export default function FirstColoringBookSection() {
         </div>
         
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {firstColoringBookData.map((page) => (
-              <SimpleFirstColoringCard
-                key={page.id}
-                id={page.id}
-                title={page.title}
-                category={page.category}
-              />
-            ))}
-          </div>
+          {error ? (
+            <div className="text-center py-8">
+              <p className="text-red-600">Failed to load coloring books</p>
+            </div>
+          ) : isLoading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading coloring books...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              {coloringBooks.map((book) => {
+                // 根据类型显示友好的分类文本
+                const getCategoryLabel = (type: string) => {
+                  switch (type) {
+                    case 'first-coloring': return 'First Coloring';
+                    case 'latest': return 'Latest';
+                    case 'popular': return 'Popular';
+                    default: return type;
+                  }
+                };
+                
+                return (
+                  <SimpleFirstColoringCard
+                    key={book.id}
+                    id={book.id}
+                    title={book.title}
+                    category={getCategoryLabel(book.type)}
+                    slug={book.slug}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </section>

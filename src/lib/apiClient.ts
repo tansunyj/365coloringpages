@@ -206,7 +206,21 @@ export const api = {
     limit?: number;
     sort?: string;
     category?: string;
-  }) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.SEARCH, params),
+    // 新增的筛选参数
+    tags?: string;
+    difficulty?: string;
+    ageRange?: string;
+    features?: string;
+    style?: string;
+    quality?: string;
+    [key: string]: string | number | boolean | undefined; // 允许额外的筛选参数
+  }) => {
+    // 过滤掉 undefined 值
+    const filteredParams = Object.fromEntries(
+      Object.entries(params).filter(([_, value]) => value !== undefined)
+    ) as Record<string, string | number | boolean>;
+    return apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.SEARCH, filteredParams);
+  },
 
   coloring: {
     detail: (id: number, params?: { source?: string; ref?: string }) => 
@@ -250,6 +264,40 @@ export const api = {
   categories: {
     list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.LIST),
     detail: (slug: string) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.DETAIL(slug)),
+    pages: (params: {
+      slug: string;
+      page?: number;
+      limit?: number;
+      sort?: string;
+      q?: string;
+    }) => {
+      const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(([key, value]) => key === 'slug' || (value !== undefined && value !== ''))
+      ) as Record<string, string | number | boolean>;
+      
+      const { slug, ...queryParams } = filteredParams;
+      return apiClient.get<ApiResponse>(
+        API_ENDPOINTS.PUBLIC.CATEGORIES.DETAIL(slug as string), 
+        queryParams
+      );
+    },
+  },
+
+  themeParks: {
+    list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.THEME_PARKS.LIST),
+    detail: (slug: string, params?: {
+      q?: string;
+      page?: number;
+      limit?: number;
+      sort?: string;
+      difficulty?: string;
+      ageRange?: string;
+    }) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.THEME_PARKS.DETAIL(slug), params),
+  },
+
+  coloringBooks: {
+    list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING_BOOKS.LIST),
+    detail: (slug: string) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING_BOOKS.DETAIL(slug)),
   },
 
   auth: {

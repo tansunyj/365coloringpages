@@ -9,11 +9,13 @@ interface SimpleFirstColoringCardProps {
   id: number;
   title: string;
   category: string;
+  slug?: string;
 }
 
 export default function SimpleFirstColoringCard({ 
   title, 
-  category
+  category,
+  slug
 }: SimpleFirstColoringCardProps) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
@@ -37,9 +39,14 @@ export default function SimpleFirstColoringCard({
   };
 
   const handleCardClick = () => {
-    // 跳转到First Coloring Book列表页面，并预选对应的分类
-    const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
-    router.push(`/first-coloring-book?category=${encodeURIComponent(categorySlug)}`);
+    if (slug) {
+      // 如果有slug，跳转到涂色书详情页
+      router.push(`/first-coloring-book/${slug}`);
+    } else {
+      // 否则跳转到First Coloring Book列表页面，并预选对应的分类
+      const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
+      router.push(`/first-coloring-book?category=${encodeURIComponent(categorySlug)}`);
+    }
   };
 
   return (

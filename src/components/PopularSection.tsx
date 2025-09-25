@@ -143,9 +143,9 @@ export default function PopularSection() {
           {/* 卡片网格 - 2行5列 */}
           {!isLoading && !error && coloringPages.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {coloringPages.map((page) => (
+              {coloringPages.map((page, index) => (
                 <PopularColoringCard
-                  key={page.id}
+                  key={`popular-${page.id}-${index}`}
                   id={page.id}
                   title={page.title}
                   category={page.categoryName}

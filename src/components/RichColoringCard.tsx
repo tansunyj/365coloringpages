@@ -299,15 +299,15 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             <div className="flex items-center space-x-4">
               <span className="flex items-center">
                 <Eye className="h-4 w-4 mr-1" />
-                {views.toLocaleString()}
+                {(views || 0).toLocaleString()}
               </span>
               <span className="flex items-center">
                 <Heart className={`h-4 w-4 mr-1 ${liked ? 'text-red-500' : ''}`} />
-                {likeCount.toLocaleString()}
+                {(likeCount || 0).toLocaleString()}
               </span>
               <span className="flex items-center">
                 <Download className="h-4 w-4 mr-1" />
-                {downloads.toLocaleString()}
+                {(downloads || 0).toLocaleString()}
               </span>
             </div>
           </div>

@@ -1,10 +1,17 @@
 import { Suspense } from 'react';
-import FirstColoringBookPageClient from './FirstColoringBookPageClient';
+import FirstColoringBookListClient from './FirstColoringBookListClient';
 
 export default function FirstColoringBookPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <FirstColoringBookPageClient />
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <FirstColoringBookListClient />
     </Suspense>
   );
 } 

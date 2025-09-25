@@ -152,9 +152,21 @@ class ApiClientUtil {
         console.log('🎢 Theme Parks API Call:', 'http://localhost:3001/api/theme-parks', themeParksParams);
         return await apiClient.get<ApiResponse>('http://localhost:3001/api/theme-parks', themeParksParams) as ApiResponse;
         
-      case 'latest':
       case 'first-coloring-book':
-        // 这些API暂时不可用，返回空结果
+        // 统一调用涂色书列表API，通过book参数筛选
+        const { apiClient: coloringBooksApiClient } = await import('../lib/apiClient');
+        const coloringBooksParams = {
+          q: params.q || '',
+          page: params.page,
+          limit: params.limit,
+          sort: params.sort || '',
+          book: (params.category && params.category !== 'all' && params.category !== '') ? params.category : ''  // 使用book参数筛选涂色书，选择"所有"时为空
+        };
+        console.log('📚 Coloring Books API Call:', 'http://localhost:3001/api/coloring-books', coloringBooksParams);
+        return await coloringBooksApiClient.get<ApiResponse>('http://localhost:3001/api/coloring-books', coloringBooksParams) as ApiResponse;
+        
+      case 'latest':
+        // 这个API暂时不可用，返回空结果
         return {
           success: true,
           data: {
@@ -203,6 +215,26 @@ class ApiClientUtil {
             name: park.name,
             slug: park.slug,
             color: park.brandColor || '#FF6B6B'
+          }));
+        }
+        return [];
+      } else if (type === 'first-coloring-book') {
+        // 获取涂色书列表
+        interface ColoringBookApiResponse {
+          success: boolean;
+          data: {
+            books: Array<{ id: number; title: string; slug: string; type: string }>;
+          };
+        }
+        const response = await api.coloringBooks.list() as ColoringBookApiResponse;
+        
+        if (response.success && response.data && response.data.books && Array.isArray(response.data.books)) {
+          // 转换涂色书数据格式为分类格式
+          return response.data.books.map((book: { id: number; title: string; slug: string; type: string }) => ({
+            id: book.id,
+            name: book.title,
+            slug: book.slug,
+            color: '#34D399' // 使用绿色主题
           }));
         }
         return [];
@@ -388,12 +420,72 @@ export default function UnifiedListPage({
               isLiked: false,
               isFavorited: false
             }));
+          } else if (type === 'first-coloring-book') {
+            // 涂色书API直接返回数组 - 需要转换为涂色页面格式
+            interface ColoringBookItem {
+              id: number;
+              title: string;
+              description: string;
+              coverImage: string;
+              slug: string;
+              type: string;
+              pageCount: number;
+              createdAt: string;
+              updatedAt?: string;
+            }
+            pageItems = response.data.map((book: ColoringBookItem) => ({
+              id: book.id,
+              title: book.title,
+              description: book.description,
+              thumbnailUrl: book.coverImage,
+              difficulty: 'easy' as const,
+              ageRange: 'all',
+              views: 0, // 默认值，因为涂色书数据没有这些统计信息
+              likes: 0,
+              downloads: book.pageCount || 0, // 使用页面数量作为下载数
+              categoryName: book.title,
+              categorySlug: book.slug,
+              categoryColor: '#34D399', // 绿色主题
+              createdAt: book.createdAt,
+              isLiked: false,
+              isFavorited: false
+            }));
           } else {
             pageItems = response.data;
           }
         } else {
           // 其他API返回对象格式
-          pageItems = response.data.pages || response.data.items || [];
+          if (type === 'first-coloring-book' && 'books' in response.data && Array.isArray(response.data.books)) {
+            // 处理新的涂色书API格式
+            interface ColoringBookItem {
+              id: number;
+              title: string;
+              description: string;
+              coverImage: string;
+              slug: string;
+              pageCount: number;
+              createdAt: string;
+            }
+            pageItems = response.data.books.map((book: ColoringBookItem) => ({
+              id: book.id,
+              title: book.title,
+              description: book.description,
+              thumbnailUrl: book.coverImage,
+              difficulty: 'easy' as const,
+              ageRange: 'all',
+              views: 0,
+              likes: 0,
+              downloads: book.pageCount || 0,
+              categoryName: book.title,
+              categorySlug: book.slug,
+              categoryColor: '#34D399',
+              createdAt: book.createdAt,
+              isLiked: false,
+              isFavorited: false
+            }));
+          } else {
+            pageItems = response.data.pages || response.data.items || [];
+          }
         }
         console.log('📄 Page Items:', pageItems);
         
@@ -564,6 +656,8 @@ export default function UnifiedListPage({
     switch (type) {
       case 'theme-parks':
         return '所有主题公园';
+      case 'first-coloring-book':
+        return '所有涂色书';
       default:
         return '所有分类';
     }
@@ -780,7 +874,11 @@ export default function UnifiedListPage({
                    categoryColor={item.categoryColor}
                    isLiked={item.isLiked}
                    linkType={type}
-                   linkCategory={type === 'theme-parks' ? currentCategory || 'theme-park-adventures' : (item.categorySlug || category)}
+                   linkCategory={
+                    type === 'theme-parks' ? currentCategory || 'theme-park-adventures' :
+                    type === 'first-coloring-book' ? currentCategory || 'first-coloring-book' :
+                    (item.categorySlug || category)
+                  }
                    linkPark={park}
                    searchParams={{
                      q: currentQuery,
