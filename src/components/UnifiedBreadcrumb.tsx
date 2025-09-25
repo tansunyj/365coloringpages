@@ -86,7 +86,7 @@ class BreadcrumbPathGenerator {
         return this.generatePopularPath(category, itemTitle);
       
       case 'latest':
-        return this.generateLatestPath(itemTitle);
+        return this.generateLatestPath(category, itemTitle);
       
       case 'first-coloring-book':
         return this.generateFirstColoringBookPath(category, itemTitle);
@@ -129,13 +129,22 @@ class BreadcrumbPathGenerator {
   /**
    * 生成Latest页面面包屑
    */
-  private static generateLatestPath(itemTitle?: string): BreadcrumbItem[] {
+  private static generateLatestPath(category?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
       { name: 'Home', href: '/' },
       { name: 'Latest', href: '/latest' }
     ];
 
-    if (itemTitle) {
+    if (category && itemTitle) {
+      // 详情页面：分类链接跳转到主列表页并预选分类
+      const categoryDisplay = CategoryNameMapper.getDisplayName(category);
+      basePath.push({ 
+        name: categoryDisplay, 
+        href: `/latest?category=${category}` // 跳转到主列表页并预选分类
+      });
+      basePath.push({ name: itemTitle, href: '#' });
+    } else if (itemTitle) {
+      // 如果只有标题没有分类，直接添加标题
       basePath.push({ name: itemTitle, href: '#' });
     }
 

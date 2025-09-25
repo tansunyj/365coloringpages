@@ -50,6 +50,11 @@ export const API_ENDPOINTS = {
       STATS: `${API_BASE_URL}/api/popular/stats`,
     },
     
+    // 最新上传接口
+    LATEST: {
+      LIST: `${API_BASE_URL}/api/latest`,
+    },
+    
     // 分类接口
     CATEGORIES: {
       LIST: `${API_BASE_URL}/api/categories`,

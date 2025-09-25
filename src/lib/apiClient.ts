@@ -261,6 +261,16 @@ export const api = {
     ),
   },
 
+  latest: {
+    list: (params?: {
+      q?: string;
+      category?: string;
+      page?: number;
+      limit?: number;
+      sort?: string;
+    }) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.LATEST.LIST, params),
+  },
+
   categories: {
     list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.LIST),
     detail: (slug: string) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.DETAIL(slug)),

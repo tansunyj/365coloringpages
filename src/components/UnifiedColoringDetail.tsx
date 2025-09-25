@@ -82,11 +82,22 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
     const pageId = parseInt(id) || 1;
     const index = (pageId - 1) % latestTitles.length;
     const selectedTitle = latestTitles[index] || 'Latest Coloring Page';
+    
+    // 根据分类生成相应的标题和描述
+    let categoryTitle = selectedTitle;
+    let categoryDescription = `Our newest addition: ${selectedTitle.toLowerCase()}. Fresh designs with modern artistic flair.`;
+    
+    if (category) {
+      const categoryDisplayName = category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      categoryTitle = `${categoryDisplayName}: ${selectedTitle}`;
+      categoryDescription = `Discover our latest ${categoryDisplayName.toLowerCase()} themed coloring page: ${selectedTitle.toLowerCase()}. Perfect for anyone who loves ${categoryDisplayName.toLowerCase()} designs.`;
+    }
+    
     return {
-      title: selectedTitle,
-      description: `Our newest addition: ${selectedTitle.toLowerCase()}. Fresh designs with modern artistic flair.`,
+      title: categoryTitle,
+      description: categoryDescription,
       author: 'ArtistPro',
-      categories: ['Modern', 'Latest', 'Trending']
+      categories: category ? [category.replace(/-/g, ' '), 'Latest', 'Trending'] : ['Modern', 'Latest', 'Trending']
     };
   };
 

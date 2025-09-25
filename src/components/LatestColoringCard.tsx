@@ -11,6 +11,8 @@ interface LatestColoringCardProps {
   likes?: number;
   downloads?: number;
   id?: number;
+  thumbnailUrl?: string;
+  categorySlug?: string;
 }
 
 export default function LatestColoringCard({ 
@@ -18,7 +20,9 @@ export default function LatestColoringCard({
   category, 
   likes,
   downloads,
-  id
+  id,
+  thumbnailUrl,
+  categorySlug
 }: LatestColoringCardProps) {
   // 使用useEffect来设置随机数，避免水合错误
   const [likeCount, setLikeCount] = useState(0);
@@ -47,8 +51,27 @@ export default function LatestColoringCard({
   };
 
   const handleCardClick = () => {
-    // 导航到专用的 Latest 详情页面
-    router.push(`/latest/${pageId}`);
+    // 生成分类 slug
+    const getCategorySlug = (categoryName: string): string => {
+      const categoryMap: Record<string, string> = {
+        '动物': 'animals',
+        '幻想': 'fantasy', 
+        '海洋': 'ocean',
+        '太空': 'space',
+        '自然': 'nature',
+        '史前动物': 'prehistoric',
+        '超级英雄': 'superhero',
+        '农场': 'farm',
+        '童话': 'fairy-tale',
+        '节日': 'holidays'
+      };
+      
+      return categoryMap[categoryName] || 'animals'; // 默认分类
+    };
+
+    const slug = categorySlug || getCategorySlug(category);
+    // 导航到Latest分类详情页面
+    router.push(`/latest/${slug}/${pageId}`);
   };
 
   return (
@@ -59,7 +82,7 @@ export default function LatestColoringCard({
       {/* 图片区域 - 1:1 比例 (正方形) */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"
+          src={thumbnailUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"}
           alt={title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"

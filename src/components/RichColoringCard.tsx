@@ -99,7 +99,9 @@ class LinkGenerator {
           : `/first-coloring-book/${id}`;
           
       case 'latest':
-        return `/latest/${id}`;
+        return linkCategory 
+          ? `/latest/${linkCategory}/${id}`
+          : `/latest/animals/${id}`; // 默认分类
         
       default:
         return `/coloring/${id}`;

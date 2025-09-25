@@ -166,31 +166,17 @@ class ApiClientUtil {
         return await coloringBooksApiClient.get<ApiResponse>('http://localhost:3001/api/coloring-books', coloringBooksParams) as ApiResponse;
         
       case 'latest':
-        // 这个API暂时不可用，返回空结果
-        return {
-          success: true,
-          data: {
-            pages: [],
-            pagination: {
-              currentPage: 1,
-              totalPages: 1,
-              totalCount: 0,
-              limit: params.limit,
-              hasNextPage: false,
-              hasPrevPage: false,
-              startRecord: 0,
-              endRecord: 0
-            },
-            filters: {
-              sort: params.sort || '',
-              category: params.category || ''
-            },
-            meta: {
-              totalResults: 0
-            }
-          },
-          message: '暂无数据'
+        // 调用最新上传涂色页面接口
+        const { apiClient: latestApiClient } = await import('../lib/apiClient');
+        const latestParams = {
+          q: params.q || '',
+          category: (params.category && params.category !== 'all' && params.category !== '') ? params.category : '',
+          page: params.page,
+          limit: params.limit,
+          sort: params.sort || 'newest'
         };
+        console.log('🆕 Latest API Call:', 'http://localhost:3001/api/latest', latestParams);
+        return await latestApiClient.get<ApiResponse>('http://localhost:3001/api/latest', latestParams) as ApiResponse;
         
       default:
         throw new Error(`Unsupported page type: ${type}`);
@@ -293,6 +279,27 @@ export default function UnifiedListPage({
   defaultSort = 'popular',
   itemsPerPage = 15
 }: UnifiedListPageProps) {
+  
+  // 辅助函数：从分类名称生成slug
+  const getCategorySlugFromName = (categoryName?: string): string => {
+    if (!categoryName) return 'animals';
+    
+    const categoryMap: Record<string, string> = {
+      '动物': 'animals',
+      '幻想': 'fantasy', 
+      '海洋': 'ocean',
+      '太空': 'space',
+      '自然': 'nature',
+      '史前动物': 'prehistoric',
+      '超级英雄': 'superhero',
+      '农场': 'farm',
+      '童话': 'fairy-tale',
+      '节日': 'holidays'
+    };
+    
+    return categoryMap[categoryName] || 'animals';
+  };
+
   // 状态管理
   const [items, setItems] = useState<ColoringPageItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -663,10 +670,6 @@ export default function UnifiedListPage({
     }
   };
 
-
-
-
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -877,6 +880,13 @@ export default function UnifiedListPage({
                    linkCategory={
                     type === 'theme-parks' ? currentCategory || 'theme-park-adventures' :
                     type === 'first-coloring-book' ? currentCategory || 'first-coloring-book' :
+                    type === 'latest' ? (
+                      // 为 latest 类型生成分类 slug
+                      item.categorySlug || 
+                      getCategorySlugFromName(item.categoryName) || 
+                      category || 
+                      'animals'
+                    ) :
                     (item.categorySlug || category)
                   }
                    linkPark={park}
