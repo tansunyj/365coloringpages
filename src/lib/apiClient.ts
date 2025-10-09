@@ -361,7 +361,14 @@ export const api = {
     },
 
     keywords: {
-      list: () => adminApiClient.get<ApiResponse>(API_ENDPOINTS.ADMIN.KEYWORDS.LIST),
+      list: (params?: {
+        q?: string;
+        page?: number;
+        limit?: number;
+        status?: string;  // 状态筛选：'active'(激活) / 'inactive'(停用) / ''(全部)
+        startDate?: string;  // 开始日期筛选（格式：YYYY-MM-DD）
+        endDate?: string;  // 结束日期筛选（格式：YYYY-MM-DD）
+      }) => adminApiClient.get<ApiResponse>(API_ENDPOINTS.ADMIN.KEYWORDS.LIST, params),
       create: (data: {
         keyword: string;
         displayOrder: number;
@@ -419,6 +426,96 @@ export const api = {
       setActive: (id: number) => adminApiClient.post<ApiResponse>(
         API_ENDPOINTS.ADMIN.BANNERS.SET_ACTIVE,
         { id }
+      ),
+    },
+
+    coloringPages: {
+      list: (params?: {
+        q?: string;
+        page?: number;
+        limit?: number;
+        status?: string;
+        difficulty?: string;
+        theme?: string;
+        style?: string;
+      }) => adminApiClient.get<ApiResponse>(
+        'http://localhost:3001/api/admin/coloring-pages',
+        params
+      ),
+      create: (data: {
+        title: string;
+        slug: string;
+        description?: string;
+        imageUrl?: string;
+        thumbnailUrl?: string;
+        categoryId?: number;
+        tags?: string[];
+        difficulty?: string;
+        isActive?: boolean;
+        seoTitle?: string;
+        seoDescription?: string;
+      }) => adminApiClient.post<ApiResponse>('http://localhost:3001/api/admin/coloring-pages', data),
+      update: (id: number, data: {
+        title?: string;
+        slug?: string;
+        description?: string;
+        imageUrl?: string;
+        thumbnailUrl?: string;
+        categoryId?: number;
+        tags?: string[];
+        difficulty?: string;
+        isActive?: boolean;
+        seoTitle?: string;
+        seoDescription?: string;
+      }) => adminApiClient.put<ApiResponse>(`http://localhost:3001/api/admin/coloring-pages/${id}`, data),
+      delete: (id: number) => adminApiClient.delete<ApiResponse>(
+        `http://localhost:3001/api/admin/coloring-pages?id=${id}`
+      ),
+      toggleStatus: (id: number, action: 'publish' | 'unpublish' | 'freeze' | 'unfreeze') => 
+        adminApiClient.post<ApiResponse>(
+          `http://localhost:3001/api/admin/coloring-pages/${id}/toggle-status`,
+          { action }
+        ),
+    },
+
+    categories: {
+      list: (params?: string | {
+        page?: number;
+        limit?: number;
+        search?: string;
+        isActive?: string;
+      }) => {
+        const queryParams = typeof params === 'string' ? params : (params || {});
+        return adminApiClient.get<ApiResponse>(
+          typeof params === 'string' 
+            ? `${API_ENDPOINTS.ADMIN.CATEGORIES.LIST}?${params}`
+            : API_ENDPOINTS.ADMIN.CATEGORIES.LIST,
+          typeof params === 'string' ? undefined : queryParams
+        );
+      },
+      create: (data: {
+        name: string;
+        slug: string;
+        description?: string;
+        icon?: string;
+        color?: string;
+        imageUrl?: string;
+        sortOrder?: number;
+        isActive?: boolean;
+      }) => adminApiClient.post<ApiResponse>(API_ENDPOINTS.ADMIN.CATEGORIES.CREATE, data),
+      update: (data: {
+        id: number;
+        name?: string;
+        slug?: string;
+        description?: string;
+        icon?: string;
+        color?: string;
+        imageUrl?: string;
+        sortOrder?: number;
+        isActive?: boolean;
+      }) => adminApiClient.put<ApiResponse>(API_ENDPOINTS.ADMIN.CATEGORIES.UPDATE, data),
+      delete: (id: number) => adminApiClient.delete<ApiResponse>(
+        buildUrlWithParams(API_ENDPOINTS.ADMIN.CATEGORIES.DELETE, { id })
       ),
     },
 

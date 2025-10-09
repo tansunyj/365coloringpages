@@ -60,8 +60,8 @@ interface ApiColoringPageData {
   isFeatured: number;
   status: string;
   publishedAt: string;
-  metaTitle: string;
-  metaDescription: string | null;
+  seoTitle: string;
+  seoDescription: string | null;
   sourceType: string;
   createdByUser: string;
   aiPrompt: string | null;
@@ -117,7 +117,8 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
             
             // 如果是相对路径，转换为绝对路径
             if (url.startsWith('/')) {
-              return `http://localhost:3001${url}`;
+              const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+              return `${apiBaseUrl}${url}`;
             }
             
             // 如果已经是绝对路径，直接返回

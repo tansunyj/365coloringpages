@@ -15,8 +15,8 @@ interface ThemePark {
   brandColor: string;
   sortOrder: number;
   isActive: boolean;
-  metaTitle: string | null;
-  metaDescription: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
   createdByAdmin: string | null;
   createdAt: string;
   updatedAt: string;

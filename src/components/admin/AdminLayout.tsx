@@ -63,13 +63,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const navigation = [
     { name: '仪表板', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: '内容管理', href: '/admin/content', icon: FolderOpen, children: [
+      { name: '涂色卡管理', href: '/admin/content/coloring-page', icon: ImageIcon },
       { name: '分类管理', href: '/admin/content/categories', icon: FolderOpen },
       { name: '主题公园', href: '/admin/content/theme-parks', icon: Palette },
       { name: '第一本涂色书', href: '/admin/content/first-coloring', icon: BookOpen },
       { name: 'Banner设置', href: '/admin/content/banners', icon: ImageIcon },
       { name: '热门关键词', href: '/admin/content/keywords', icon: Flag },
     ]},
-    { name: '图片管理', href: '/admin/images', icon: ImageIcon },
     { name: '用户管理', href: '/admin/users', icon: Users },
   ];
 

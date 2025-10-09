@@ -21,7 +21,10 @@ import {
   Download,
   Settings,
   UserCheck,
-  Crown
+  Crown,
+  AlertCircle,
+  AlertTriangle,
+  X
 } from 'lucide-react';
 
 interface ColoringImage {
@@ -40,6 +43,14 @@ interface ColoringImage {
   tags?: string[];
 }
 
+type ToastType = 'success' | 'error' | 'warning';
+
+interface Toast {
+  id: number;
+  type: ToastType;
+  message: string;
+}
+
 export default function AdminImageManagement() {
   const [images, setImages] = useState<ColoringImage[]>([]);
   const [filteredImages, setFilteredImages] = useState<ColoringImage[]>([]);
@@ -54,6 +65,18 @@ export default function AdminImageManagement() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingImage, setEditingImage] = useState<ColoringImage | null>(null);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  // Toast 提示函数
+  const showToast = (type: ToastType, message: string) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, type, message }]);
+    
+    // 3秒后自动移除
+    setTimeout(() => {
+      setToasts(prev => prev.filter(toast => toast.id !== id));
+    }, 3000);
+  };
 
   // 模拟数据加载
   useEffect(() => {
@@ -617,6 +640,50 @@ export default function AdminImageManagement() {
           }}
         />
       )}
+
+      {/* Toast 容器 */}
+      <div className="fixed top-[30%] left-1/2 transform -translate-x-1/2 z-50 space-y-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            style={{
+              animation: 'slideIn 0.3s ease-out forwards'
+            }}
+            className={`flex items-center gap-3 min-w-[300px] px-4 py-3 rounded-lg shadow-lg transition-all ${
+              toast.type === 'success'
+                ? 'bg-green-500 text-white'
+                : toast.type === 'error'
+                ? 'bg-red-500 text-white'
+                : 'bg-orange-500 text-white'
+            }`}
+          >
+            {toast.type === 'success' && <CheckCircle className="h-5 w-5 flex-shrink-0" />}
+            {toast.type === 'error' && <AlertCircle className="h-5 w-5 flex-shrink-0" />}
+            {toast.type === 'warning' && <AlertTriangle className="h-5 w-5 flex-shrink-0" />}
+            <span className="flex-1 text-sm font-medium">{toast.message}</span>
+            <button
+              onClick={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Toast 动画样式 */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes slideIn {
+          from {
+            transform: translateY(-50px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+      `}} />
     </AdminLayout>
   );
 }

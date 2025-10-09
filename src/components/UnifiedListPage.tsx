@@ -149,8 +149,9 @@ class ApiClientUtil {
           sort: params.sort || '',
           theme: (params.category && params.category !== 'all' && params.category !== '') ? params.category : ''  // 使用theme参数筛选主题公园，选择"所有"时为空
         };
-        console.log('🎢 Theme Parks API Call:', 'http://localhost:3001/api/theme-parks', themeParksParams);
-        return await apiClient.get<ApiResponse>('http://localhost:3001/api/theme-parks', themeParksParams) as ApiResponse;
+        const { API_ENDPOINTS } = await import('../lib/apiConfig');
+        console.log('🎢 Theme Parks API Call:', API_ENDPOINTS.PUBLIC.THEME_PARKS.LIST, themeParksParams);
+        return await apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.THEME_PARKS.LIST, themeParksParams) as ApiResponse;
         
       case 'first-coloring-book':
         // 调用新的涂色书页面API，通过book参数筛选
@@ -162,8 +163,9 @@ class ApiClientUtil {
           sort: params.sort || 'popular',
           book: (params.category && params.category !== 'all' && params.category !== '') ? params.category : ''  // 使用book参数筛选涂色书，选择"所有"时为空
         };
-        console.log('📚 Coloring Books Pages API Call:', 'http://localhost:3001/api/coloring-books/pages', coloringBooksParams);
-        return await coloringBooksApiClient.get<ApiResponse>('http://localhost:3001/api/coloring-books/pages', coloringBooksParams) as ApiResponse;
+        const { API_ENDPOINTS: coloringBooksEndpoints } = await import('../lib/apiConfig');
+        console.log('📚 Coloring Books Pages API Call:', coloringBooksEndpoints.PUBLIC.COLORING_BOOKS.PAGES, coloringBooksParams);
+        return await coloringBooksApiClient.get<ApiResponse>(coloringBooksEndpoints.PUBLIC.COLORING_BOOKS.PAGES, coloringBooksParams) as ApiResponse;
         
       case 'latest':
         // 调用最新上传涂色页面接口
@@ -175,8 +177,9 @@ class ApiClientUtil {
           limit: params.limit,
           sort: params.sort || 'newest'
         };
-        console.log('🆕 Latest API Call:', 'http://localhost:3001/api/latest', latestParams);
-        return await latestApiClient.get<ApiResponse>('http://localhost:3001/api/latest', latestParams) as ApiResponse;
+        const { API_ENDPOINTS: latestEndpoints } = await import('../lib/apiConfig');
+        console.log('🆕 Latest API Call:', latestEndpoints.PUBLIC.LATEST.LIST, latestParams);
+        return await latestApiClient.get<ApiResponse>(latestEndpoints.PUBLIC.LATEST.LIST, latestParams) as ApiResponse;
         
       default:
         throw new Error(`Unsupported page type: ${type}`);

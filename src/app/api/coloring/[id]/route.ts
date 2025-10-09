@@ -19,8 +19,8 @@ interface ColoringPageDetail {
   isFeatured: number;
   status: string;
   publishedAt: string;
-  metaTitle: string;
-  metaDescription: string | null;
+  seoTitle: string;
+  seoDescription: string | null;
   sourceType: string;
   createdByUser: string;
   aiPrompt: string | null;
@@ -71,8 +71,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "海底世界探险涂色页",
-    metaDescription: "神秘的海底世界，有各种海洋生物和珊瑚礁",
+    seoTitle: "海底世界探险涂色页",
+    seoDescription: "神秘的海底世界，有各种海洋生物和珊瑚礁",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -108,8 +108,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "太空冒险之旅涂色页",
-    metaDescription: "宇航员在太空中的奇妙冒险，包含行星和飞船",
+    seoTitle: "太空冒险之旅涂色页",
+    seoDescription: "宇航员在太空中的奇妙冒险，包含行星和飞船",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -145,8 +145,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "森林里的小动物涂色页",
-    metaDescription: "可爱的森林小动物们在树林中玩耍",
+    seoTitle: "森林里的小动物涂色页",
+    seoDescription: "可爱的森林小动物们在树林中玩耍",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -182,8 +182,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "恐龙时代涂色页",
-    metaDescription: "史前恐龙的世界，各种恐龙在古老的大地上生活",
+    seoTitle: "恐龙时代涂色页",
+    seoDescription: "史前恐龙的世界，各种恐龙在古老的大地上生活",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -219,8 +219,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "魔法森林涂色页",
-    metaDescription: "充满魔法的神秘森林，有精灵和魔法生物",
+    seoTitle: "魔法森林涂色页",
+    seoDescription: "充满魔法的神秘森林，有精灵和魔法生物",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -256,8 +256,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "超级英雄城市涂色页",
-    metaDescription: "超级英雄保护城市的激动人心场景",
+    seoTitle: "超级英雄城市涂色页",
+    seoDescription: "超级英雄保护城市的激动人心场景",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -293,8 +293,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "农场生活涂色页",
-    metaDescription: "快乐的农场生活，有各种农场动物和农作物",
+    seoTitle: "农场生活涂色页",
+    seoDescription: "快乐的农场生活，有各种农场动物和农作物",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,
@@ -330,8 +330,8 @@ const exampleColoringPages: Record<number, ColoringPageDetail> = {
     isFeatured: 1,
     status: "published",
     publishedAt: "2025-09-22T11:29:10.000Z",
-    metaTitle: "节日庆典涂色页",
-    metaDescription: "各种节日庆祝活动的欢乐场景",
+    seoTitle: "节日庆典涂色页",
+    seoDescription: "各种节日庆祝活动的欢乐场景",
     sourceType: "admin",
     createdByUser: "system",
     aiPrompt: null,

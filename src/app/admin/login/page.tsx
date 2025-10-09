@@ -5,6 +5,21 @@ import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Shield, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 
+interface LoginResponse {
+  success: boolean;
+  data?: {
+    token: string;
+    user: {
+      id: number;
+      email: string;
+      name: string;
+      role: string;
+    };
+  };
+  message?: string;
+  error?: string;
+}
+
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,16 +37,28 @@ export default function AdminLogin() {
       const { api } = await import('../../../lib/apiClient');
       const data = await api.admin.auth.login({ email, password });
 
-      if (data.success) {
+      console.log('🔍 登录API响应:', data);
+      console.log('🔍 响应类型:', typeof data);
+      console.log('🔍 success字段:', data.success);
+
+      // 类型断言来访问响应字段
+      const loginResponse = data as LoginResponse;
+      console.log('🔍 token字段:', loginResponse.data?.token);
+      console.log('🔍 user字段:', loginResponse.data?.user);
+
+      if (data.success && loginResponse.data) {
         // 设置管理员登录状态
-        localStorage.setItem('adminToken', data.token);
-        localStorage.setItem('adminUser', JSON.stringify(data.user));
+        localStorage.setItem('adminToken', loginResponse.data.token);
+        localStorage.setItem('adminUser', JSON.stringify(loginResponse.data.user));
         
+        console.log('✅ localStorage已设置，准备跳转到dashboard');
         router.push('/admin/dashboard');
       } else {
+        console.log('❌ 登录失败:', data.error);
         setError(data.error || '登录失败');
       }
     } catch (err) {
+      console.error('❌ 登录异常:', err);
       setError('网络错误，请检查网络连接后重试');
     } finally {
       setIsLoading(false);

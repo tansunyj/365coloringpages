@@ -34,6 +34,13 @@ export async function POST(request: NextRequest) {
     // 获取管理员配置
     const { adminConfig } = await getAdminConfig();
 
+    // 添加调试信息
+    console.log('🔐 管理员登录尝试:');
+    console.log('输入邮箱:', email);
+    console.log('配置邮箱:', adminConfig.email);
+    console.log('邮箱匹配:', email === adminConfig.email);
+    console.log('密码匹配:', password === adminConfig.password);
+
     // 验证管理员账号
     if (email === adminConfig.email && password === adminConfig.password) {
       // 创建管理员用户信息（不包含密码）
@@ -49,9 +56,11 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        token,
-        user: adminUser,
-        message: '登录成功'
+        data: {
+          token,
+          user: adminUser
+        },
+        message: '管理员登录成功'
       });
     } else {
       return NextResponse.json(
