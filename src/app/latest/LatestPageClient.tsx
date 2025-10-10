@@ -17,7 +17,7 @@ export default function LatestPageClient() {
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort="newest"
+      defaultSort=""
       itemsPerPage={15}
     />
   );

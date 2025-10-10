@@ -17,7 +17,7 @@ export default function CategoriesPageClient() {
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort="popular"
+      defaultSort=""
       itemsPerPage={20}
     />
   );

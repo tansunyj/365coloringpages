@@ -68,3 +68,17 @@ body {
 .hero-bg-transition {
   transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* 淡入动画 - 用于内容区域平滑切换 */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}

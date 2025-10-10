@@ -141,7 +141,7 @@ export default function PopularCategoryClient({ category }: PopularCategoryClien
     },
     
     // 搜索参数
-    defaultSort: 'popular',
+    defaultSort: '',
     defaultCategory: category, // 预选当前分类
     pageSize: 15,
     

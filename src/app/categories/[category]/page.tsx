@@ -7,17 +7,34 @@ interface CategoryPageProps {
   }>;
 }
 
-// 为静态导出生成路径
+// 为静态导出生成路径 - 从API获取所有分类
 export async function generateStaticParams() {
-  const categories = [
-    'animals', 'fairy-tale', 'fantasy', 'vehicles', 'nature', 
-    'prehistoric', 'space', 'ocean', 'holidays', 'superhero', 
-    'food', 'magic', 'farm', 'celebration'
-  ];
+  // 开发环境下跳过静态参数生成，避免启动时的API调用问题
+  if (process.env.NODE_ENV === 'development') {
+    return [];
+  }
   
-  return categories.map(category => ({
-    category
-  }));
+  try {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const response = await fetch(`${API_BASE}/api/categories/list`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch categories for static generation');
+      return [];
+    }
+    
+    const data = await response.json();
+    const categories = data.data || [];
+    
+    return categories.map((cat: { slug: string }) => ({
+      category: cat.slug
+    }));
+  } catch (error) {
+    console.error('Error generating static params for categories:', error);
+    return [];
+  }
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {

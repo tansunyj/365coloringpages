@@ -8,35 +8,60 @@ interface FirstColoringBookDetailPageProps {
   }>;
 }
 
-// 生成静态参数 - 为静态导出提供更多路径
+// 生成静态参数 - 从API获取所有涂色书和涂色页面的组合
 export async function generateStaticParams() {
-  const coloringBookSlugs = [
-    'first-coloring-book', 'latest-pages', 'popular-pages',
-    'animals', 'nature', 'shapes', 'emotions', 'fruits'
-  ];
-  
-  // 包含所有可能的ID范围
-  const allIds = [
-    // 基础ID范围 1-20
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 
-    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-    // 扩展ID范围 21-50
-    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
-    '41', '42', '43', '44', '45', '46', '47', '48', '49', '50',
-    // 涂色书页面ID 106-113 (重要的API数据)
-    '106', '107', '108', '109', '110', '111', '112', '113'
-  ];
-  
-  const params = [];
-  for (const slug of coloringBookSlugs) {
-    for (const id of allIds) {
-      params.push({ slug, id });
-    }
+  // 开发环境下跳过静态参数生成，避免启动时的API调用问题
+  if (process.env.NODE_ENV === 'development') {
+    return [];
   }
   
-  console.log(`🚀 生成了 ${params.length} 个静态参数组合`);
-  return params;
+  try {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    // 获取所有涂色书
+    const booksResponse = await fetch(`${API_BASE}/api/coloring-books?limit=1000`, {
+      cache: 'no-store'
+    });
+    
+    if (!booksResponse.ok) {
+      console.error('Failed to fetch coloring books for static generation');
+      return [];
+    }
+    
+    const booksData = await booksResponse.json();
+    const books = booksData.data?.books || [];
+    
+    const staticParams: { slug: string; id: string }[] = [];
+    
+    // 为每个涂色书获取其关联的涂色页面
+    for (const book of books) {
+      try {
+        const pagesResponse = await fetch(
+          `${API_BASE}/api/coloring-books/${book.slug}/pages?limit=1000`,
+          { cache: 'no-store' }
+        );
+        
+        if (pagesResponse.ok) {
+          const pagesData = await pagesResponse.json();
+          const pages = pagesData.data?.pages || [];
+          
+          pages.forEach((page: { id: number }) => {
+            staticParams.push({
+              slug: book.slug,
+              id: page.id.toString()
+            });
+          });
+        }
+      } catch (error) {
+        console.error(`Error fetching pages for coloring book ${book.slug}:`, error);
+      }
+    }
+    
+    console.log(`🚀 生成了 ${staticParams.length} 个静态参数组合`);
+    return staticParams;
+  } catch (error) {
+    console.error('Error generating static params for coloring book details:', error);
+    return [];
+  }
 }
 
 export default async function FirstColoringBookDetailPage({

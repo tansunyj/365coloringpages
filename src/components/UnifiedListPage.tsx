@@ -118,24 +118,46 @@ class ApiClientUtil {
           page: params.page,
           limit: params.limit,
           category: params.category !== 'all' ? params.category : '',
-          sort: params.sort || 'popular'
-        }) as ApiResponse;
-        
-      case 'categories':
-        return await api.categories.pages({
-          slug: params.category && params.category !== 'all' ? params.category : 'animals',
-          page: params.page,
-          limit: params.limit,
           sort: params.sort || 'popular',
           q: params.q || ''
         }) as ApiResponse;
+        
+      case 'categories':
+        // 如果没有指定具体分类，获取所有分类下的涂色卡片
+        if (!params.category || params.category === 'all' || params.category === '') {
+          // 调用 /api/categories?page=1&limit=20&sort=newest 获取所有涂色卡片
+          const { apiClient } = await import('../lib/apiClient');
+          const { API_ENDPOINTS } = await import('../lib/apiConfig');
+          
+          const categoriesParams: Record<string, string | number> = {
+            page: params.page,
+            limit: params.limit,
+          };
+          
+          if (params.sort) categoriesParams.sort = params.sort;
+          if (params.q) categoriesParams.q = params.q;
+          
+          return await apiClient.get<ApiResponse>(
+            API_ENDPOINTS.PUBLIC.CATEGORIES.LIST,
+            categoriesParams
+          ) as ApiResponse;
+        } else {
+          // 获取具体分类下的涂色页面
+          return await api.categories.pages({
+            slug: params.category,
+            page: params.page,
+            limit: params.limit,
+            sort: params.sort || 'newest',
+            q: params.q || ''
+          }) as ApiResponse;
+        }
         
       case 'search':
         return await api.search({
           q: params.q || '',
           page: params.page,
           limit: params.limit,
-          sort: params.sort || 'relevance',
+          sort: params.sort || '', // 搜索接口不需要 sort 参数值
           category: params.category !== 'all' ? params.category : ''
         }) as ApiResponse;
         
@@ -229,10 +251,16 @@ class ApiClientUtil {
         return [];
       } else {
         // 获取普通分类列表
-        const response = await api.categories.list();
+        const response = await api.categories.list() as any;
         
+        // 处理返回格式: {success: true, data: [{id, name, slug, ...}, ...]}
         if (response.success && Array.isArray(response.data)) {
-          return response.data;
+          return response.data.map((cat: any) => ({
+            id: cat.id,
+            name: cat.name,
+            slug: cat.slug,
+            color: '#3B82F6' // 默认蓝色
+          }));
         }
         return [];
       }
@@ -244,15 +272,14 @@ class ApiClientUtil {
 }
 
 /**
- * 排序选项配置
+ * 统一的排序选项配置
  */
 const SORT_OPTIONS = [
-  { value: 'relevance', label: '相关度' },
-  { value: 'popular', label: '热门度' },
-  { value: 'newest', label: '最新' },
-  { value: 'oldest', label: '最早' },
-  { value: 'views', label: '浏览量' },
-  { value: 'downloads', label: '下载量' },
+  { value: 'newest', label: '最新发布', icon: '🆕' },
+  { value: 'popular', label: '最受欢迎', icon: '🔥' },
+  { value: 'downloads', label: '下载最多', icon: '⬇️' },
+  { value: 'likes', label: '点赞最多', icon: '❤️' },
+  { value: 'random', label: '随机探索', icon: '🎲' },
 ];
 
 /**
@@ -279,7 +306,7 @@ export default function UnifiedListPage({
   showSearch = true,
   showCategoryFilter = true,
   showSortFilter = true,
-  defaultSort = 'popular',
+  defaultSort = '',
   itemsPerPage = 15
 }: UnifiedListPageProps) {
   
@@ -341,7 +368,7 @@ export default function UnifiedListPage({
   }, [currentQuery, currentCategory, currentSort]);
 
   /**
-   * 更新URL参数
+   * 更新URL参数 - 使用 replace 避免整个页面刷新
    */
   const updateUrl = useCallback((params: Record<string, string | number>) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -363,7 +390,8 @@ export default function UnifiedListPage({
     }
     
     const newUrl = `${window.location.pathname}?${newSearchParams.toString()}`;
-    router.push(newUrl);
+    // 使用 replace 而不是 push，避免整个页面刷新
+    router.replace(newUrl, { scroll: false });
   }, [router, searchParams]);
 
   /**
@@ -377,6 +405,8 @@ export default function UnifiedListPage({
         setLoading(true);
         setCurrentPage(1);
         setHasMore(true);
+        // 清空现有数据，避免重复显示
+        setItems([]);
       }
       setError(null);
       
@@ -602,24 +632,24 @@ export default function UnifiedListPage({
   }, [loadingMore, hasMore, currentPage, type, currentLimit, currentCategory, currentSort, currentQuery, park]);
 
   /**
-   * 加载分类数据
+   * 加载分类数据 - 只在组件挂载时加载一次
    */
-  const loadCategories = useCallback(async () => {
-    if (showCategoryFilter) {
-      const categoryData = await ApiClientUtil.fetchCategories(type);
-      setCategories(categoryData);
-    }
+  useEffect(() => {
+    const loadCategories = async () => {
+      if (showCategoryFilter) {
+        const categoryData = await ApiClientUtil.fetchCategories(type);
+        setCategories(categoryData);
+      }
+    };
+    
+    loadCategories();
   }, [showCategoryFilter, type]);
 
   // 数据加载效果 - 只在搜索条件变化时重新加载
   useEffect(() => {
     console.log('🔥 useEffect Triggered - currentCategory:', currentCategory, 'type:', type);
-    loadData();
-  }, [currentLimit, currentCategory, currentSort, currentQuery, type, park]);
-
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
+    loadData(false); // 明确传递 false，表示不是加载更多，而是重新加载
+  }, [currentLimit, currentCategory, currentSort, currentQuery, type, park, loadData]);
 
   // 无限滚动检测
   useEffect(() => {
@@ -812,7 +842,7 @@ export default function UnifiedListPage({
                     >
                       {SORT_OPTIONS.map((option) => (
                         <option key={option.value} value={option.value}>
-                          {option.label}
+                          {option.icon} {option.label}
                         </option>
                       ))}
                     </select>
@@ -842,33 +872,37 @@ export default function UnifiedListPage({
         )}
 
         {/* 内容区域 */}
-        {loading ? (
-          <div className="flex justify-center items-center py-16">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">加载中...</p>
-            </div>
-          </div>
-        ) : error ? (
+        {error ? (
           <div className="text-center py-16">
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={() => loadData()}
-              className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+              className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
             >
               重新加载
             </button>
           </div>
-        ) : items.length === 0 ? (
+        ) : items.length === 0 && !loading ? (
           <div className="text-center py-16">
             <p className="text-gray-500 mb-4">没有找到相关的涂色页面</p>
             <p className="text-sm text-gray-400">尝试调整搜索条件或浏览其他分类</p>
           </div>
         ) : (
-          <>
-                         {/* 涂色卡片网格 */}
-             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-               {items.map((item) => (
+          <div className="relative">
+            {/* 小型加载指示器 - 固定在右上角 */}
+            {loading && (
+              <div className="fixed top-24 right-8 z-50 bg-white shadow-lg rounded-lg px-4 py-3 flex items-center space-x-3 border border-gray-200">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-600"></div>
+                <span className="text-sm text-gray-700 font-medium">加载中...</span>
+              </div>
+            )}
+
+            {/* 涂色卡片网格 - 使用 key 强制重新渲染以避免闪烁 */}
+            <div 
+              key={`${currentCategory}-${currentSort}-${currentQuery}`}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 animate-fadeIn"
+            >
+                {items.map((item) => (
                  <RichColoringCard
                    key={item.id}
                    id={item.id}
@@ -894,6 +928,14 @@ export default function UnifiedListPage({
                       category || 
                       'animals'
                     ) :
+                    type === 'categories' ? (
+                      // 为 categories 类型生成分类 slug
+                      item.categorySlug || 
+                      getCategorySlugFromName(item.categoryName) || 
+                      currentCategory ||
+                      category || 
+                      'animals'
+                    ) :
                     (item.categorySlug || category)
                   }
                    linkPark={park}
@@ -906,7 +948,7 @@ export default function UnifiedListPage({
                    }}
                  />
                ))}
-             </div>
+            </div>
 
             {/* 无限滚动加载指示器 */}
             <div ref={observerRef} className="flex justify-center items-center py-8">
@@ -922,7 +964,7 @@ export default function UnifiedListPage({
                 </div>
               )}
             </div>
-          </>
+          </div>
         )}
       </main>
 

@@ -69,7 +69,7 @@ export default function ThemeParkDetailClient({ parkSlug }: ThemeParkDetailClien
     },
     
     // 搜索参数
-    defaultSort: 'relevance',
+    defaultSort: '',
     defaultCategory: 'all',
     pageSize: 20,
     

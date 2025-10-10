@@ -6,19 +6,34 @@ interface PageProps {
   }>;
 }
 
-// 为静态导出生成路径
+// 为静态导出生成路径 - 从API获取所有涂色页面
 export async function generateStaticParams() {
-  // 为涂色页面生成所有可能的ID
-  const staticParams: { id: string }[] = [];
-  
-  // 生成1-50的ID范围，覆盖所有涂色页面
-  for (let i = 1; i <= 50; i++) {
-    staticParams.push({
-      id: i.toString()
-    });
+  // 开发环境下跳过静态参数生成，避免启动时的API调用问题
+  if (process.env.NODE_ENV === 'development') {
+    return [];
   }
-
-  return staticParams;
+  
+  try {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const response = await fetch(`${API_BASE}/api/admin/coloring-pages?limit=1000`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch coloring pages for static generation');
+      return [];
+    }
+    
+    const data = await response.json();
+    const pages = data.data?.pages || data.data?.items || data.data?.coloringPages || [];
+    
+    return pages.map((page: { id: number }) => ({
+      id: page.id.toString()
+    }));
+  } catch (error) {
+    console.error('Error generating static params for coloring pages:', error);
+    return [];
+  }
 }
 
 export default async function ColoringDetailPage({ params }: PageProps) {

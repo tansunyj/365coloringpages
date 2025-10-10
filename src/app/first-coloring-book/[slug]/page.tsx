@@ -7,16 +7,34 @@ interface FirstColoringBookSlugPageProps {
   }>;
 }
 
-// 生成静态参数 - 为常见涂色书提供静态路径
+// 生成静态参数 - 从API获取所有涂色书的slug
 export async function generateStaticParams() {
-  const commonColoringBooks = [
-    'first-coloring-book', 'latest-pages', 'popular-pages',
-    'animals', 'nature', 'shapes', 'emotions', 'fruits'
-  ];
-
-  return commonColoringBooks.map((slug) => ({
-    slug,
-  }));
+  // 开发环境下跳过静态参数生成，避免启动时的API调用问题
+  if (process.env.NODE_ENV === 'development') {
+    return [];
+  }
+  
+  try {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const response = await fetch(`${API_BASE}/api/coloring-books?limit=1000`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch coloring books for static generation');
+      return [];
+    }
+    
+    const data = await response.json();
+    const books = data.data?.books || [];
+    
+    return books.map((book: { slug: string }) => ({
+      slug: book.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params for coloring books:', error);
+    return [];
+  }
 }
 
 export default async function FirstColoringBookSlugPage({

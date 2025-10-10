@@ -15,8 +15,10 @@ import {
   Upload,
   CheckCircle,
   AlertCircle,
-  AlertTriangle
+  AlertTriangle,
+  Link
 } from 'lucide-react';
+import ManageRelatedColoringPages from '@/components/admin/ManageRelatedColoringPages';
 
 interface Category {
   id: number;
@@ -27,6 +29,7 @@ interface Category {
   isActive: number;
   seoTitle?: string;
   seoDescription?: string;
+  coloringPageCount?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -67,6 +70,21 @@ export default function AdminCategories() {
   const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailCategory, setDetailCategory] = useState<Category | null>(null);
+  const [showManageColoringPages, setShowManageColoringPages] = useState(false);
+  const [managingCategory, setManagingCategory] = useState<Category | null>(null);
+  
+  // Metadata 状态
+  const [metadata, setMetadata] = useState<{
+    themes: Array<{ value: string; label: string }>;
+    styles: Array<{ value: string; label: string }>;
+    difficulties: Array<{ value: string; label: string }>;
+    ageRanges: Array<{ value: string; label: string }>;
+  }>({
+    themes: [],
+    styles: [],
+    difficulties: [],
+    ageRanges: []
+  });
 
   // Toast 提示函数
   const showToast = (type: ToastType, message: string) => {
@@ -110,6 +128,25 @@ export default function AdminCategories() {
     }
 
     showToast(toastType, errorMessage);
+  };
+
+  // 加载 Metadata
+  const loadMetadata = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/metadata');
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        setMetadata({
+          themes: result.data.themes || [],
+          styles: result.data.styles || [],
+          difficulties: result.data.difficulties || [],
+          ageRanges: result.data.ageRanges || []
+        });
+      }
+    } catch (error) {
+      console.error('加载元数据失败:', error);
+    }
   };
 
   // 加载分类列表
@@ -174,6 +211,11 @@ export default function AdminCategories() {
       setIsLoading(false);
     }
   };
+
+  // 初始化加载元数据（只执行一次）
+  useEffect(() => {
+    loadMetadata();
+  }, []);
 
   useEffect(() => {
     loadCategories(currentPage, searchTerm, statusFilter);
@@ -525,6 +567,9 @@ export default function AdminCategories() {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         分类
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -535,6 +580,9 @@ export default function AdminCategories() {
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         SEO描述
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        涂色卡数量
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         排序
@@ -557,6 +605,9 @@ export default function AdminCategories() {
                         className="hover:bg-gray-50 cursor-pointer"
                         onClick={() => handleRowClick(category)}
                       >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">#{category.id}</div>
+                        </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="ml-4">
@@ -578,6 +629,13 @@ export default function AdminCategories() {
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-600 max-w-xs truncate" title={category.seoDescription || '未设置'}>
                             {category.seoDescription || '未设置'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              {category.coloringPageCount || 0} 个
+                            </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -613,27 +671,38 @@ export default function AdminCategories() {
                           {category.updatedAt}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-4">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setManagingCategory(category);
+                                setShowManageColoringPages(true);
+                              }}
+                              className="text-blue-600 hover:text-blue-900 transition-colors p-2 rounded-md hover:bg-blue-50"
+                              title="关联涂色卡"
+                            >
+                              <Link className="h-5 w-5" />
+                            </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setEditingCategory(category);
                                 setIsModalOpen(true);
                               }}
-                              className="text-orange-600 hover:text-orange-900 transition-colors"
+                              className="text-orange-600 hover:text-orange-900 transition-colors p-2 rounded-md hover:bg-orange-50"
                               title="编辑"
                             >
-                              <Edit2 className="h-4 w-4" />
+                              <Edit2 className="h-5 w-5" />
                             </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteCategory(category.id);
                               }}
-                              className="text-red-600 hover:text-red-900 transition-colors"
+                              className="text-red-600 hover:text-red-900 transition-colors p-2 rounded-md hover:bg-red-50"
                               title="删除"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-5 w-5" />
                             </button>
                           </div>
                         </td>
@@ -768,6 +837,24 @@ export default function AdminCategories() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* 关联涂色卡管理模态框 */}
+        {showManageColoringPages && managingCategory && (
+          <ManageRelatedColoringPages
+            entityType="category"
+            entityId={managingCategory.id}
+            entityName={managingCategory.name}
+            metadata={metadata}
+            onClose={() => {
+              setShowManageColoringPages(false);
+              setManagingCategory(null);
+            }}
+            onUpdate={() => {
+              // 可选：关联更新后刷新列表
+              loadCategories(currentPage, searchTerm, statusFilter);
+            }}
+          />
         )}
 
         {/* Toast 容器 */}
@@ -1061,12 +1148,25 @@ function CategoryDetailModal({ category, onClose }: CategoryDetailModalProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                  涂色卡数量
+                </label>
+                <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {category.coloringPageCount || 0} 个涂色卡
+                  </span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   排序
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {category.sortOrder}
                 </div>
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   状态
@@ -1079,6 +1179,7 @@ function CategoryDetailModal({ category, onClose }: CategoryDetailModalProps) {
                   </span>
                 </div>
               </div>
+              <div></div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

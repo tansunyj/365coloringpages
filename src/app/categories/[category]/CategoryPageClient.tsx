@@ -50,7 +50,7 @@ export default function CategoryPageClient({ category }: CategoryPageClientProps
       subtitle={`探索${displayName}主题的精美涂色内容`}
       description={`浏览我们精心收集的${displayName}涂色页面，适合不同年龄段的用户使用。`}
       showSearch={true}
-      showCategoryFilter={false}
+      showCategoryFilter={true}
       showSortFilter={true}
       defaultSort=""
       itemsPerPage={10}

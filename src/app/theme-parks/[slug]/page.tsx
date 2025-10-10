@@ -7,22 +7,35 @@ interface ThemeParkSlugPageProps {
   }>;
 }
 
-// 生成静态参数 - 为常见主题公园提供静态路径
+// 生成静态参数 - 从API获取所有主题公园的slug
 export async function generateStaticParams() {
-  const commonThemeParks = [
-    'theme-park-adventures',
-    'disney-world',
-    'universal-studios',
-    'six-flags',
-    'cedar-point',
-    'legoland',
-    'knots-berry-farm',
-    'busch-gardens'
-  ];
+  // 开发环境下跳过静态参数生成，避免启动时的API调用问题
+  if (process.env.NODE_ENV === 'development') {
+    return [];
+  }
   
-  return commonThemeParks.map((slug) => ({
-    slug,
-  }));
+  try {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    // 从API获取所有主题公园
+    const response = await fetch(`${API_BASE}/api/theme-parks?limit=1000`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      console.error('Failed to fetch theme parks for static generation');
+      return [];
+    }
+    
+    const data = await response.json();
+    const themeParks = data.data?.themeParks || [];
+    
+    return themeParks.map((park: { slug: string }) => ({
+      slug: park.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params for theme parks:', error);
+    return [];
+  }
 }
 
 export default async function ThemeParkSlugPage({ 

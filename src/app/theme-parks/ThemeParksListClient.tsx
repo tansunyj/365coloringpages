@@ -22,7 +22,7 @@ export default function ThemeParksListClient({ initialCategory }: ThemeParksList
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort="popular"
+      defaultSort=""
       itemsPerPage={20}
     />
   );

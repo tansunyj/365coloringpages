@@ -18,8 +18,10 @@ import {
   AlertCircle,
   AlertTriangle,
   EyeOff,
-  XCircle
+  XCircle,
+  Link
 } from 'lucide-react';
+import ManageRelatedColoringPages from '@/components/admin/ManageRelatedColoringPages';
 
 interface ThemePark {
   id: number;
@@ -35,7 +37,7 @@ interface ThemePark {
   createdByAdmin?: string;
   createdAt: string;
   updatedAt: string;
-  pageCount: number;
+  coloringPageCount: number;
 }
 
 interface PaginationInfo {
@@ -75,6 +77,8 @@ export default function AdminThemeParks() {
   const [deleteParkId, setDeleteParkId] = useState<number | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailPark, setDetailPark] = useState<ThemePark | null>(null);
+  const [showManageColoringPages, setShowManageColoringPages] = useState(false);
+  const [managingPark, setManagingPark] = useState<ThemePark | null>(null);
 
   // Toast 提示函数
   const showToast = (type: ToastType, message: string) => {
@@ -559,6 +563,9 @@ export default function AdminThemeParks() {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         主题公园
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -571,7 +578,7 @@ export default function AdminThemeParks() {
                         SEO描述
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        页面数
+                        涂色卡数量
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         排序
@@ -594,6 +601,9 @@ export default function AdminThemeParks() {
                         className="hover:bg-gray-50 cursor-pointer"
                         onClick={() => handleRowClick(park)}
                       >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">#{park.id}</div>
+                        </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-12 w-12">
@@ -634,9 +644,10 @@ export default function AdminThemeParks() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center text-sm text-gray-900">
-                            <ImageIcon className="h-4 w-4 text-blue-500 mr-1" />
-                            {park.pageCount} 页
+                          <div className="flex items-center">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              {park.coloringPageCount || 0} 个
+                            </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -672,27 +683,38 @@ export default function AdminThemeParks() {
                           {park.updatedAt}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-4">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setManagingPark(park);
+                                setShowManageColoringPages(true);
+                              }}
+                              className="text-blue-600 hover:text-blue-900 transition-colors p-2 rounded-md hover:bg-blue-50"
+                              title="关联涂色卡"
+                            >
+                              <Link className="h-5 w-5" />
+                            </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setEditingPark(park);
                                 setIsModalOpen(true);
                               }}
-                              className="text-orange-600 hover:text-orange-900 transition-colors"
+                              className="text-orange-600 hover:text-orange-900 transition-colors p-2 rounded-md hover:bg-orange-50"
                               title="编辑"
                             >
-                              <Edit2 className="h-4 w-4" />
+                              <Edit2 className="h-5 w-5" />
                             </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeletePark(park.id);
                               }}
-                              className="text-red-600 hover:text-red-900 transition-colors"
+                              className="text-red-600 hover:text-red-900 transition-colors p-2 rounded-md hover:bg-red-50"
                               title="删除"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-5 w-5" />
                             </button>
                           </div>
                         </td>
@@ -828,6 +850,23 @@ export default function AdminThemeParks() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* 关联涂色卡管理模态框 */}
+        {showManageColoringPages && managingPark && (
+          <ManageRelatedColoringPages
+            entityType="theme-park"
+            entityId={managingPark.id}
+            entityName={managingPark.name}
+            onClose={() => {
+              setShowManageColoringPages(false);
+              setManagingPark(null);
+            }}
+            onUpdate={() => {
+              // 可选：关联更新后刷新列表
+              loadThemeParks(currentPage, searchTerm, statusFilter);
+            }}
+          />
         )}
 
         {/* Toast 容器 */}
@@ -1312,10 +1351,12 @@ function ThemeParkDetailModal({ park, onClose }: ThemeParkDetailModalProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  页面数量
+                  涂色卡数量
                 </label>
-                <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
-                  {park.pageCount} 页
+                <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {park.coloringPageCount || 0} 个涂色卡
+                  </span>
                 </div>
               </div>
               <div>

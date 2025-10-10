@@ -243,7 +243,7 @@ export default function UniversalSearchComponent({
         q: query || undefined,
         page,
         limit: config.pageSize || 12,
-        sort: sortBy !== 'relevance' ? sortBy : undefined,
+        sort: undefined, // 搜索接口不需要 sort 参数
         category: categoryFilter !== 'all' ? categoryFilter : undefined,
         difficulty: difficultyFilter || undefined,
         ageRange: ageRangeFilter || undefined,

@@ -58,6 +58,7 @@ export const API_ENDPOINTS = {
     // 分类接口
     CATEGORIES: {
       LIST: `${API_BASE_URL}/api/categories`,
+      LIST_ALL: `${API_BASE_URL}/api/categories/list`, // 获取所有分类列表（给下拉框用）
       DETAIL: (slug: string) => `${API_BASE_URL}/api/categories/${slug}`,
     },
     

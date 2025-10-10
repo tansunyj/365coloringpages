@@ -21,7 +21,7 @@ export default function LatestCategoryClient({ category }: LatestCategoryClientP
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort="newest"
+      defaultSort=""
       itemsPerPage={15}
     />
   );

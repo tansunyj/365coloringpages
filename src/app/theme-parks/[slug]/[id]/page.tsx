@@ -8,32 +8,59 @@ interface ThemeParkDetailPageProps {
   }>;
 }
 
-// 生成静态参数 - 为静态导出提供更多路径
+// 生成静态参数 - 从API获取所有主题公园和涂色页面的组合
 export async function generateStaticParams() {
-  // 预生成一些常见的主题公园和ID组合
-  const themeParkSlugs = [
-    'theme-park-adventures',
-    'disney-world', 
-    'universal-studios',
-    'six-flags',
-    'cedar-point',
-    'legoland'
-  ];
+  // 开发环境下跳过静态参数生成，避免启动时的API调用问题
+  if (process.env.NODE_ENV === 'development') {
+    return [];
+  }
   
-  // 扩展ID范围以支持更多页面，包括三位数ID
-  const staticParams: { slug: string; id: string }[] = [];
-  
-  themeParkSlugs.forEach(slug => {
-    // 生成 1-200 的ID范围
-    for (let i = 1; i <= 200; i++) {
-      staticParams.push({
-        slug,
-        id: i.toString()
-      });
+  try {
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    // 获取所有主题公园
+    const parksResponse = await fetch(`${API_BASE}/api/theme-parks?limit=1000`, {
+      cache: 'no-store'
+    });
+    
+    if (!parksResponse.ok) {
+      console.error('Failed to fetch theme parks for static generation');
+      return [];
     }
-  });
-  
-  return staticParams;
+    
+    const parksData = await parksResponse.json();
+    const themeParks = parksData.data?.themeParks || [];
+    
+    const staticParams: { slug: string; id: string }[] = [];
+    
+    // 为每个主题公园获取其关联的涂色页面
+    for (const park of themeParks) {
+      try {
+        const pagesResponse = await fetch(
+          `${API_BASE}/api/theme-parks/${park.slug}/coloring-pages?limit=1000`,
+          { cache: 'no-store' }
+        );
+        
+        if (pagesResponse.ok) {
+          const pagesData = await pagesResponse.json();
+          const pages = pagesData.data?.coloringPages || [];
+          
+          pages.forEach((page: { id: number }) => {
+            staticParams.push({
+              slug: park.slug,
+              id: page.id.toString()
+            });
+          });
+        }
+      } catch (error) {
+        console.error(`Error fetching pages for theme park ${park.slug}:`, error);
+      }
+    }
+    
+    return staticParams;
+  } catch (error) {
+    console.error('Error generating static params for theme park details:', error);
+    return [];
+  }
 }
 
 export default async function ThemeParkDetailPage({ 

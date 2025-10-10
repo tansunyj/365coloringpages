@@ -215,9 +215,9 @@ export const api = {
     quality?: string;
     [key: string]: string | number | boolean | undefined; // 允许额外的筛选参数
   }) => {
-    // 过滤掉 undefined 值
+    // 过滤掉 undefined 和空字符串的值
     const filteredParams = Object.fromEntries(
-      Object.entries(params).filter(([_, value]) => value !== undefined)
+      Object.entries(params).filter(([_, value]) => value !== undefined && value !== '')
     ) as Record<string, string | number | boolean>;
     return apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.SEARCH, filteredParams);
   },
@@ -254,6 +254,7 @@ export const api = {
       limit?: number;
       category?: string;
       sort?: string;
+      q?: string;
     }) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.POPULAR.LIST, params),
     stats: (period?: string) => apiClient.get<ApiResponse>(
       API_ENDPOINTS.PUBLIC.POPULAR.STATS,
@@ -272,7 +273,7 @@ export const api = {
   },
 
   categories: {
-    list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.LIST),
+    list: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.LIST_ALL), // 获取所有分类列表（给下拉框用）
     detail: (slug: string) => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.CATEGORIES.DETAIL(slug)),
     pages: (params: {
       slug: string;

@@ -730,6 +730,9 @@ export default function AdminKeywords() {
                   <thead className="bg-gray-50">
                     <tr>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         关键词
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -756,6 +759,9 @@ export default function AdminKeywords() {
                         className="hover:bg-gray-50 transition-colors cursor-pointer"
                         onClick={() => handleRowClick(keyword)}
                       >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">#{keyword.id}</div>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <Tag className="h-4 w-4 text-orange-500 mr-2" />
