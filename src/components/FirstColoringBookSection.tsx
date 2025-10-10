@@ -132,6 +132,7 @@ export default function FirstColoringBookSection() {
                     title={book.title}
                     category={getCategoryLabel(book.type)}
                     slug={book.slug}
+                    coverImage={book.coverImage}
                   />
                 );
               })}

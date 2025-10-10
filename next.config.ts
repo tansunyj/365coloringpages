@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // 只在生产构建时启用静态导出，开发环境使用正常模式
+  ...(process.env.NODE_ENV === 'production' && { output: 'export' }),
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   images: {

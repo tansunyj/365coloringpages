@@ -27,6 +27,15 @@ interface ColoringPageItem {
   createdAt: string;
   isLiked?: boolean;
   isFavorited?: boolean;
+  bookTitle?: string;
+  bookName?: string;  // 添加 bookName 字段支持
+  bookType?: string;
+  themeParkName?: string;
+  themeParkSlug?: string;
+  // 涂色书页面API返回的字段
+  coloringBookId?: number;
+  coloringBookName?: string;
+  coloringBookSlug?: string;
 }
 
 /**
@@ -526,6 +535,13 @@ export default function UnifiedListPage({
           } else if (type === 'first-coloring-book' && 'pages' in response.data && Array.isArray(response.data.pages)) {
             // 处理涂色书页面API格式 - 数据已经是标准格式，直接使用
             console.log('🔄 Processing coloring book pages from new API:', response.data.pages);
+            
+            // 检查第一条数据的字段，帮助调试
+            if (response.data.pages.length > 0) {
+              console.log('📝 First page item fields:', Object.keys(response.data.pages[0]));
+              console.log('📝 First page item:', response.data.pages[0]);
+            }
+            
             pageItems = response.data.pages;
           } else {
             pageItems = response.data.pages || response.data.items || [];
@@ -939,6 +955,10 @@ export default function UnifiedListPage({
                     (item.categorySlug || category)
                   }
                    linkPark={park}
+                   bookTitle={item.coloringBookName || item.bookTitle || item.bookName}
+                   bookType={item.bookType}
+                   themeParkName={item.themeParkName}
+                   themeParkSlug={item.themeParkSlug}
                    searchParams={{
                      q: currentQuery,
                      page: currentPage.toString(),

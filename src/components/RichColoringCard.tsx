@@ -24,6 +24,10 @@ interface RichColoringCardProps {
   linkType: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
   linkCategory?: string;
   linkPark?: string;
+  bookTitle?: string;
+  bookType?: string;
+  themeParkName?: string;
+  themeParkSlug?: string;
   searchParams?: {
     q?: string;
     page?: string;
@@ -144,7 +148,12 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     likes,
     downloads,
     categoryName,
-    isLiked = false
+    isLiked = false,
+    bookTitle,
+    bookType,
+    themeParkName,
+    themeParkSlug,
+    linkType
   } = props;
 
   const [liked, setLiked] = useState(isLiked);
@@ -174,18 +183,34 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     e.preventDefault();
     e.stopPropagation();
     
+    // 先更新UI，提供即时反馈
+    const wasLiked = liked;
+    const previousCount = likeCount;
+    
     setLiked(!liked);
     setLikeCount(prev => liked ? prev - 1 : prev + 1);
     
-    // 这里可以调用API更新点赞状态
+    // 调用API更新点赞状态
     try {
-      // const response = await api.coloring.like(id);
-      console.log(`${liked ? 'Unlike' : 'Like'} coloring page ${id}`);
+      const { api } = await import('../lib/apiClient');
+      
+      if (wasLiked) {
+        // 取消点赞
+        await api.coloring.unlike(id);
+        console.log(`✅ 取消点赞成功: 涂色页面 ${id}`);
+      } else {
+        // 点赞
+        await api.coloring.like(id);
+        console.log(`✅ 点赞成功: 涂色页面 ${id}`);
+      }
     } catch (error) {
       // 如果API调用失败，回滚状态
-      setLiked(liked);
-      setLikeCount(likes);
-      console.error('Failed to update like status:', error);
+      console.error('❌ 点赞操作失败:', error);
+      setLiked(wasLiked);
+      setLikeCount(previousCount);
+      
+      // 可以在这里添加错误提示
+      // toast.error('操作失败，请稍后重试');
     }
   };
 
@@ -219,51 +244,53 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             </div>
           )}
 
-          {/* 分类标签 - 左上角 */}
-          <div className="absolute top-3 left-3">
-            <span className={`${categoryBgColor} text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md`}>
-              {categoryName}
-            </span>
-          </div>
-
-          {/* 难度标签 - 右上角 */}
-          <div className="absolute top-3 right-3">
-            <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center space-x-1">
-              {Array.from({ length: difficultyInfo.stars }).map((_, index) => (
-                <Star key={index} className={`h-3 w-3 ${difficultyInfo.color} fill-current`} />
-              ))}
-              <span className={`text-xs font-medium ${difficultyInfo.color}`}>
-                {difficultyInfo.text}
+          {/* 分类/涂色书/主题公园标题标签 - 左上角 */}
+          <div className="absolute top-3 left-3 z-10">
+            {linkType === 'theme-parks' && themeParkName ? (
+              // 主题公园页面：显示主题公园名称
+              <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md">
+                {themeParkName}
               </span>
-            </div>
+            ) : linkType === 'first-coloring-book' ? (
+              // 涂色书页面：优先显示涂色书名称，如果没有则显示"涂色书"
+              <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md">
+                {bookTitle || 'My First Coloring Book'}
+              </span>
+            ) : (
+              // 其他页面：显示分类名称
+              <span className={`${categoryBgColor} text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md`}>
+                {categoryName}
+              </span>
+            )}
           </div>
 
-          {/* 悬浮操作按钮 */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <div className="flex space-x-3">
-              <button
-                onClick={handleLike}
-                className={`p-3 rounded-full shadow-lg transition-colors ${
-                  liked 
-                    ? 'bg-red-500 text-white' 
-                    : 'bg-white/90 hover:bg-white text-gray-700 hover:text-red-500'
-                }`}
-              >
-                <Heart className={`h-5 w-5 ${liked ? 'fill-current' : ''}`} />
-              </button>
-
-              <button className="bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-colors text-gray-700 hover:text-blue-500">
-                <Eye className="h-5 w-5" />
-              </button>
-            </div>
+          {/* 收藏按钮 - 右上角 */}
+          <div className="absolute top-3 right-3 z-10">
+            <button
+              onClick={handleLike}
+              className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
+                liked 
+                  ? 'bg-red-500 text-white scale-110' 
+                  : 'bg-white/90 hover:bg-white text-gray-700 hover:text-red-500 hover:scale-110'
+              }`}
+            >
+              <Heart className={`h-5 w-5 ${liked ? 'fill-current' : ''}`} />
+            </button>
           </div>
         </div>
 
         {/* 卡片内容 */}
         <div className="p-4">
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
-            {title}
-          </h3>
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors flex-1">
+              {title}
+            </h3>
+            {linkType === 'first-coloring-book' && bookType && (
+              <span className="bg-white/30 backdrop-blur-sm text-gray-800 px-2 py-1 text-xs font-bold rounded-full shadow-md ml-2 flex-shrink-0">
+                {bookType}
+              </span>
+            )}
+          </div>
           
           {description && (
             <p className="text-sm text-gray-600 mb-3 line-clamp-2">
@@ -271,25 +298,35 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             </p>
           )}
 
-          {/* 年龄范围 */}
+          {/* 年龄范围和难度 */}
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
               适合年龄: {ageRange}
             </span>
+            <div className="flex items-center space-x-1 text-xs">
+              {Array.from({ length: difficultyInfo.stars }).map((_, index) => (
+                <Star key={index} className={`h-3 w-3 ${difficultyInfo.color} fill-current`} />
+              ))}
+              <span className={`font-bold ${difficultyInfo.color}`}>
+                {difficultyInfo.text}
+              </span>
+            </div>
           </div>
           
           {/* 统计信息 */}
-          <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-            <div className="flex items-center space-x-4">
-              <span className="flex items-center">
-                <Eye className="h-4 w-4 mr-1" />
-                {(views || 0).toLocaleString()}
-              </span>
-              <span className="flex items-center">
-                <Heart className={`h-4 w-4 mr-1 ${liked ? 'text-red-500' : ''}`} />
-                {(likeCount || 0).toLocaleString()}
-              </span>
-            </div>
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <span className="flex items-center">
+              <Heart className={`h-4 w-4 mr-1 ${liked ? 'text-red-500' : ''}`} />
+              {(likeCount || 0).toLocaleString()}
+            </span>
+            <span className="flex items-center">
+              <Eye className="h-4 w-4 mr-1" />
+              {(views || 0).toLocaleString()}
+            </span>
+            <span className="flex items-center">
+              <Download className="h-4 w-4 mr-1" />
+              {(downloads || 0).toLocaleString()}
+            </span>
           </div>
         </div>
       </div>

@@ -10,12 +10,14 @@ interface SimpleFirstColoringCardProps {
   title: string;
   category: string;
   slug?: string;
+  coverImage?: string;
 }
 
 export default function SimpleFirstColoringCard({ 
   title, 
   category,
-  slug
+  slug,
+  coverImage
 }: SimpleFirstColoringCardProps) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
@@ -57,7 +59,7 @@ export default function SimpleFirstColoringCard({
       {/* 图片区域 - 1:1 比例 (正方形) */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
-          src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=400&fit=crop"
+          src={coverImage || "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=400&fit=crop"}
           alt={title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -65,47 +67,10 @@ export default function SimpleFirstColoringCard({
         />
         
         {/* 在图片上方添加彩色点缀 */}
-        <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-blue-400 to-green-500 text-white text-xs font-bold rounded-full opacity-90">
-          {category}
+        <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full opacity-90">
+          {title}
         </div>
         
-        {/* 右上角快速操作按钮 */}
-        <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button
-            onClick={handleLike}
-            className={`p-2 rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110 ${
-              isLiked 
-                ? 'bg-red-500/90 text-white' 
-                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-red-500'
-            }`}
-          >
-            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
-          </button>
-          <button
-            onClick={handleDownload}
-            className="p-2 bg-white/90 text-gray-600 rounded-full backdrop-blur-sm hover:bg-white hover:text-green-500 transition-all duration-200 hover:scale-110"
-          >
-            <Download className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* 增强的悬浮叠加层 - 显示标题和统计信息 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
-          <div className="w-full p-4 text-white">
-            <h3 className="text-sm font-bold truncate mb-2">{title}</h3>
-            <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1">
-                  <Heart className="h-3 w-3" />
-                  {likeCount}
-                </span>
-              </div>
-              <span className="bg-white/20 px-2 py-1 rounded-full text-xs font-medium">
-                Easy
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

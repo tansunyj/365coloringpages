@@ -47,13 +47,6 @@ export default function SimpleThemeParkCard({
         </div>
         
 
-        
-        {/* 悬浮叠加层 - 显示标题 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
-          <div className="w-full p-4 text-white">
-            <h3 className="text-sm font-bold truncate">{title}</h3>
-          </div>
-        </div>
       </div>
     </div>
   );
