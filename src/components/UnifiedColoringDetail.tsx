@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Download, Printer, Heart, Share2, Star } from 'lucide-react';
+import { Download, Printer, Heart, Share2, Star, Copy } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 import UnifiedBreadcrumb from './UnifiedBreadcrumb';
@@ -32,6 +32,9 @@ interface ColoringPageDetail {
   categories: string[];
   thumbnailUrl?: string;
   imageUrl?: string;
+  theme?: string;
+  style?: string;
+  size?: string;
   difficulty?: string;
   ageRange?: string;
   views?: number;
@@ -40,6 +43,7 @@ interface ColoringPageDetail {
   isLiked?: boolean;
   createdAt?: string;
   tags?: string[];
+  aiPrompt?: string | null;
 }
 
 // API响应数据类型
@@ -152,6 +156,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             categories: categoryNames,
             thumbnailUrl: thumbnailUrl,
             imageUrl: imageUrl,
+            theme: pageData.theme || 'N/A',
+            style: pageData.style || 'N/A',
+            size: pageData.size || 'N/A',
             difficulty: pageData.difficulty || 'medium',
             ageRange: pageData.ageRange || '3-12岁',
             views: pageData.views || 0, // 从API读取views，如果没有则为0
@@ -159,7 +166,8 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             downloads: pageData.downloads || 0, // 从API读取downloads，如果没有则为0
             isLiked: pageData.isLiked || false,
             createdAt: pageData.createdAt || pageData.publishedAt,
-            tags: pageData.tags || []
+            tags: pageData.tags || [],
+            aiPrompt: pageData.aiPrompt || null
           });
           
           setIsLiked(pageData.isLiked || false);
@@ -209,6 +217,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       categories: [type, 'Creative'],
       thumbnailUrl: 'https://via.placeholder.com/400x400?text=Fallback+Image',
       imageUrl: 'https://via.placeholder.com/600x800?text=Fallback+Image',
+      theme: 'Fantasy',
+      style: 'Cartoon',
+      size: 'A4',
       difficulty: 'medium',
       ageRange: '3-12岁',
       views: Math.floor(Math.random() * 1000) + 100,
@@ -456,47 +467,35 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         )}
 
         {/* 主要内容区域 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 mb-16">
           {/* 左侧图片区域 */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="relative aspect-[3/4] mb-6">
-                <Image
-                  src={coloringPageData.imageUrl || 'https://via.placeholder.com/600x800?text=No+Image'}
-                  alt={coloringPageData.title}
-                  fill
-                  className="object-cover rounded-xl"
-                  unoptimized
-                  onError={(e) => {
-                    // 图片加载失败时设置fallback图片
-                    e.currentTarget.src = 'https://via.placeholder.com/600x800?text=Image+Not+Found';
-                  }}
-                />
-              </div>
-              
-              {/* 操作按钮 */}
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-3">
-                  <button
-                    onClick={handleDownload}
-                    className={`flex items-center px-6 py-3 text-white rounded-lg transition-colors font-medium ${getThemeColor()}`}
-                  >
-                    <Download className="h-5 w-5 mr-2" />
-                    Download
-                  </button>
-                  <button
-                    onClick={handlePrint}
-                    className="flex items-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    <Printer className="h-5 w-5 mr-2" />
-                    Print
-                  </button>
-                </div>
-                
-                <div className="flex space-x-2">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="relative aspect-square">
+              <Image
+                src={coloringPageData.imageUrl || 'https://via.placeholder.com/600x800?text=No+Image'}
+                alt={coloringPageData.title}
+                fill
+                className="object-cover rounded-xl"
+                unoptimized
+                onError={(e) => {
+                  // 图片加载失败时设置fallback图片
+                  e.currentTarget.src = 'https://via.placeholder.com/600x800?text=Image+Not+Found';
+                }}
+              />
+            </div>
+          </div>
+
+          {/* 右侧信息区域 */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-3">
+            {/* 基本信息 */}
+            <div>
+              <div className="flex items-start justify-between mb-2">
+                <h1 className="text-2xl font-bold text-gray-900 flex-1">{coloringPageData.title}</h1>
+                {/* 点赞、收藏、分享按钮 - 标题右上角 */}
+                <div className="flex space-x-1.5 ml-4">
                   <button
                     onClick={handleLike}
-                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
                       isLiked 
                         ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -504,15 +503,15 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                     title={isLiked ? '已点赞' : '点赞'}
                   >
                     <Heart 
-                      className={`h-5 w-5 mr-2 transition-all duration-200`}
+                      className={`h-4 w-4 mr-1.5 transition-all duration-200`}
                       fill={isLiked ? 'currentColor' : 'none'}
                       strokeWidth={2}
                     />
-                    <span className="font-medium">{likeCount}</span>
+                    <span className="font-medium text-sm">{likeCount}</span>
                   </button>
                   <button
                     onClick={handleFavorite}
-                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+                    className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
                       isFavorited 
                         ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -520,79 +519,101 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                     title={isFavorited ? '已收藏' : '收藏'}
                   >
                     <Star 
-                      className={`h-5 w-5 transition-all duration-200`}
+                      className={`h-4 w-4 transition-all duration-200`}
                       fill={isFavorited ? 'currentColor' : 'none'}
                       strokeWidth={2}
                     />
                   </button>
                   <button
                     onClick={handleShare}
-                    className="flex items-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="flex items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    <Share2 className="h-5 w-5" />
+                    <Share2 className="h-4 w-4" />
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* 右侧信息区域 */}
-          <div className="space-y-8">
-            {/* 基本信息 */}
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{coloringPageData.title}</h1>
-              <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 {coloringPageData.description}
               </p>
-              
-              {/* 分类标签 */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {coloringPageData.categories.map((cat, index) => (
-                  <span
-                    key={`${cat}-${index}`}
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${getTagColor()}`}
-                  >
-                    {cat}
-                  </span>
-                ))}
-              </div>
             </div>
 
             {/* 详细信息 */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Details</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Author:</span>
-                  <span className="font-medium text-gray-900">{coloringPageData.author}</span>
+            <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Details</h3>
+              <div className="grid grid-cols-2 gap-0 overflow-hidden rounded-lg">
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-white border-r border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Theme:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.theme}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Difficulty:</span>
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-blue-50 border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Style:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.style}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-blue-50 border-r border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Size:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.size}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-white border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Difficulty:</span>
                   <span className="font-medium text-gray-900">{coloringPageData.difficulty}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Age Range:</span>
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-white border-r border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Age Range:</span>
                   <span className="font-medium text-gray-900">{coloringPageData.ageRange}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Views:</span>
-                  <span className="font-medium text-gray-900">{coloringPageData.views?.toLocaleString() || 'N/A'}</span>
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-blue-50 border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Author:</span>
+                  <span className="font-medium text-gray-900">{coloringPageData.author}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Downloads:</span>
-                  <span className="font-medium text-gray-900">{coloringPageData.downloads?.toLocaleString() || 'N/A'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Created At:</span>
+                <div className="flex justify-between items-center text-sm px-3 py-1.5 bg-blue-50 border-r border-b border-gray-100">
+                  <span className="text-gray-600 font-medium">Created:</span>
                   <span className="font-medium text-gray-900">{coloringPageData.createdAt ? new Date(coloringPageData.createdAt).toLocaleDateString() : 'N/A'}</span>
+                </div>
+                <div className="col-span-2 flex items-start gap-2 text-sm px-3 py-1.5 bg-white">
+                  <span className="text-gray-600 font-medium whitespace-nowrap">Categories:</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {coloringPageData.categories.map((cat, index) => (
+                      <span
+                        key={`${cat}-${index}`}
+                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${getTagColor()}`}
+                      >
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* AI提示词 */}
+            {coloringPageData.aiPrompt && (
+              <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">Prompt</h3>
+                <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
+                  <input
+                    type="text"
+                    value={coloringPageData.aiPrompt}
+                    readOnly
+                    className="flex-1 text-sm text-gray-700 bg-transparent focus:outline-none"
+                  />
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(coloringPageData.aiPrompt || '');
+                      alert('Prompt copied to clipboard!');
+                    }}
+                    className="flex-shrink-0 p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                    title="Copy prompt"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* 使用指南 */}
-            <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">How to Use</h3>
-              <ul className="space-y-2 text-gray-700">
+            <div className="bg-gray-50 rounded-xl p-3 border border-gray-200 flex-1 flex flex-col justify-end">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">How to Use</h3>
+              <ul className="space-y-1 text-sm text-gray-700">
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-gray-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                   Click &quot;Download&quot; to save the coloring page to your device
@@ -610,6 +631,24 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                   Share your finished artwork with friends and family!
                 </li>
               </ul>
+            </div>
+
+            {/* 下载、打印按钮 - 底部 */}
+            <div className="flex gap-2">
+              <button
+                onClick={handleDownload}
+                className={`flex-1 flex items-center justify-center px-4 py-2.5 text-white rounded-lg transition-colors font-medium ${getThemeColor()}`}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download
+              </button>
+              <button
+                onClick={handlePrint}
+                className="flex-1 flex items-center justify-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <Printer className="h-4 w-4 mr-2" />
+                Print
+              </button>
             </div>
           </div>
         </div>
