@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -77,6 +77,9 @@ interface ApiColoringPageData {
   }>;
   isLiked: boolean;
   isFavorited: boolean;
+  likes?: number; // 点赞数量
+  views?: number; // 浏览次数
+  downloads?: number; // 下载次数
   tags?: string[];
 }
 
@@ -88,9 +91,21 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
   const [isLiked, setIsLiked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  
+  // 防止重复加载 - 记录上一次加载的ID
+  const lastLoadedId = useRef<string>('');
 
   // 从后端API获取涂色页面详情
   useEffect(() => {
+    // 如果ID相同，跳过重复加载
+    if (lastLoadedId.current === id) {
+      console.log('🚫 详情ID未变化，跳过重复加载:', id);
+      return;
+    }
+    
+    console.log('🔄 开始加载详情数据，ID:', id);
+    lastLoadedId.current = id;
+    
     const fetchColoringPageDetail = async () => {
       try {
         setLoading(true);
@@ -139,9 +154,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             imageUrl: imageUrl,
             difficulty: pageData.difficulty || 'medium',
             ageRange: pageData.ageRange || '3-12岁',
-            views: 0, // API响应中没有views字段，设为0
-            likes: 0, // API响应中没有likes字段，设为0  
-            downloads: 0, // API响应中没有downloads字段，设为0
+            views: pageData.views || 0, // 从API读取views，如果没有则为0
+            likes: pageData.likes || 0, // 从API读取likes，如果没有则为0
+            downloads: pageData.downloads || 0, // 从API读取downloads，如果没有则为0
             isLiked: pageData.isLiked || false,
             createdAt: pageData.createdAt || pageData.publishedAt,
             tags: pageData.tags || []
@@ -149,7 +164,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           
           setIsLiked(pageData.isLiked || false);
           setIsFavorited(pageData.isFavorited || false);
-          setLikeCount(0); // API中没有点赞数量，设为0
+          setLikeCount(pageData.likes || 0); // 从API读取点赞数量
+          
+          console.log('✅ 详情数据加载成功，点赞数:', pageData.likes);
         } else {
           // 如果API返回失败，使用fallback数据
           setColoringPageData(generateFallbackData());
@@ -164,7 +181,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     };
 
     fetchColoringPageDetail();
-  }, [id, type]);
+    // 注意：只依赖id，避免type变化导致重复加载
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // Fallback数据生成（当API失败时使用）
   const generateFallbackData = (): ColoringPageDetail => {
@@ -477,26 +496,34 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                 <div className="flex space-x-2">
                   <button
                     onClick={handleLike}
-                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                       isLiked 
                         ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                     title={isLiked ? '已点赞' : '点赞'}
                   >
-                    <Heart className={`h-5 w-5 mr-2 ${isLiked ? 'fill-current' : ''}`} />
-                    {likeCount}
+                    <Heart 
+                      className={`h-5 w-5 mr-2 transition-all duration-200`}
+                      fill={isLiked ? 'currentColor' : 'none'}
+                      strokeWidth={2}
+                    />
+                    <span className="font-medium">{likeCount}</span>
                   </button>
                   <button
                     onClick={handleFavorite}
-                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                       isFavorited 
                         ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                     title={isFavorited ? '已收藏' : '收藏'}
                   >
-                    <Star className={`h-5 w-5 mr-2 ${isFavorited ? 'fill-current' : ''}`} />
+                    <Star 
+                      className={`h-5 w-5 transition-all duration-200`}
+                      fill={isFavorited ? 'currentColor' : 'none'}
+                      strokeWidth={2}
+                    />
                   </button>
                   <button
                     onClick={handleShare}

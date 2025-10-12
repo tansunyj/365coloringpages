@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X, Download, Printer, Heart, Share2, Star } from 'lucide-react';
 
@@ -40,9 +40,23 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
+  
+  // 防止重复加载 - 记录上一次加载的ID和打开状态
+  const lastLoadedId = useRef<number>(0);
+  const lastOpenState = useRef<boolean>(false);
 
   useEffect(() => {
     if (!isOpen || !coloringPageId) return;
+    
+    // 如果弹窗状态和ID都没变，跳过重复加载
+    if (lastLoadedId.current === coloringPageId && lastOpenState.current === isOpen) {
+      console.log('🚫 弹窗详情未变化，跳过重复加载:', coloringPageId);
+      return;
+    }
+    
+    console.log('🔄 开始加载弹窗详情数据，ID:', coloringPageId);
+    lastLoadedId.current = coloringPageId;
+    lastOpenState.current = isOpen;
 
     const fetchColoringPageDetail = async () => {
       try {
@@ -229,28 +243,36 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
                     {/* 点赞按钮 */}
                     <button
                       onClick={handleLike}
-                      className={`flex items-center px-3 py-2 rounded-lg transition-colors text-sm ${
+                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 text-sm ${
                         isLiked 
                           ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                       title={isLiked ? '取消点赞' : '点赞'}
                     >
-                      <Heart className={`h-4 w-4 mr-1 ${isLiked ? 'fill-current' : ''}`} />
-                      {likeCount}
+                      <Heart 
+                        className={`h-4 w-4 mr-1 transition-all duration-200`}
+                        fill={isLiked ? 'currentColor' : 'none'}
+                        strokeWidth={2}
+                      />
+                      <span className="font-medium">{likeCount}</span>
                     </button>
                     
                     {/* 收藏按钮 */}
                     <button
                       onClick={handleFavorite}
-                      className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
+                      className={`flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
                         isFavorited 
                           ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                       title={isFavorited ? '取消收藏' : '收藏'}
                     >
-                      <Star className={`h-4 w-4 ${isFavorited ? 'fill-current' : ''}`} />
+                      <Star 
+                        className={`h-4 w-4 transition-all duration-200`}
+                        fill={isFavorited ? 'currentColor' : 'none'}
+                        strokeWidth={2}
+                      />
                     </button>
                     
                     {/* 分享按钮 */}
