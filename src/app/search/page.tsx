@@ -17,8 +17,8 @@ export default function SearchPage() {
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort=""
-      itemsPerPage={12}
+      defaultSort="popular"
+      itemsPerPage={40}
     />
   );
 } 

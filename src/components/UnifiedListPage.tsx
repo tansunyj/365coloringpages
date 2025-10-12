@@ -285,7 +285,7 @@ const SORT_OPTIONS = [
   { value: 'popular', label: '最受欢迎', icon: '🔥' },
   { value: 'downloads', label: '下载最多', icon: '⬇️' },
   { value: 'likes', label: '点赞最多', icon: '❤️' },
-  { value: 'random', label: '随机探索', icon: '🎲' },
+  { value: 'views', label: '浏览最多', icon: '👁️' },
 ];
 
 /**
@@ -916,7 +916,7 @@ export default function UnifiedListPage({
                    views={item.views}
                    likes={item.likes}
                    downloads={item.downloads}
-                   categoryName={item.categoryName}
+                   categoryName={item.categoryName || '其他'}
                    categoryColor={item.categoryColor}
                    isLiked={item.isLiked}
                    linkType={type}

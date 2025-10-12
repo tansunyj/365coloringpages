@@ -5,6 +5,33 @@ import { Settings, Palette, Heart, Download, User, Mail, Lock, Camera, Save, X, 
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { API_ENDPOINTS } from '@/lib/apiConfig';
+
+// API 请求工具函数
+const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token && { 'Authorization': `Bearer ${token}` }),
+    ...options.headers
+  };
+
+  const response = await fetch(url, {
+    ...options,
+    headers
+  });
+
+  if (response.status === 401) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userInfo');
+    window.location.href = '/';
+    throw new Error('Token 已失效，请重新登录');
+  }
+
+  return response;
+};
 
 // 头像裁剪对话框组件
 const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
@@ -187,14 +214,6 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
       displayHeight
     );
     tempCtx.restore();
-
-      containerSize: { width: containerWidth, height: containerHeight },
-      imageNatural: { width: img.naturalWidth, height: img.naturalHeight },
-      displaySize: { width: displayWidth, height: displayHeight },
-      position: position,
-      scale: scale,
-      imgCenter: { x: imgCenterX, y: imgCenterY }
-    });
 
     // 裁剪区域参数（固定在容器中心的200x200圆形）
     const cropRadius = 100;
@@ -616,164 +635,212 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [userInfo, setUserInfo] = useState({
-    nickname: 'coloringfan123',
-    email: 'fan123@email.com',
-    password: '••••••••',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
+    id: 0,
+    nickname: '',
+    email: '',
+    avatar: '',
+    provider: '',
+    totalCreations: 0,
+    totalFavorites: 0,
+    totalLikes: 0
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // 获取用户信息
+  const fetchUserInfo = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.ME);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setUserInfo({
+          id: result.data.id,
+          nickname: result.data.name || '',
+          email: result.data.email || '',
+          avatar: result.data.avatar || '',
+          provider: result.data.provider || '',
+          totalCreations: result.data.totalCreations || 0,
+          totalFavorites: result.data.totalFavorites || 0,
+          totalLikes: result.data.totalLikes || 0
+        });
+        setError('');
+      } else {
+        setError(result.error || '获取用户信息失败');
+      }
+    } catch (err) {
+      console.error('获取用户信息失败:', err);
+      setError('获取用户信息失败，请重新登录');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 组件加载时获取用户信息
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   // 在组件加载时通知Header组件用户已登录
   useEffect(() => {
-    // 通过localStorage或其他方式通知Header组件用户状态
-    // 这里我们使用事件来通知Header组件
-    const loginEvent = new CustomEvent('userLogin', {
-      detail: {
-        isLoggedIn: true,
-        userAvatar: userInfo.avatar
-      }
-    });
-    window.dispatchEvent(loginEvent);
+    if (userInfo.avatar) {
+      const loginEvent = new CustomEvent('userLogin', {
+        detail: {
+          isLoggedIn: true,
+          userAvatar: userInfo.avatar
+        }
+      });
+      window.dispatchEvent(loginEvent);
+    }
 
     return () => {
-      // 清理事件
       const logoutEvent = new CustomEvent('userLogout');
       window.dispatchEvent(logoutEvent);
     };
   }, [userInfo.avatar]);
 
-  // 模拟更多我的作品数据（用于分页演示）
-  const myCreations = [
-    {
-      id: 1,
-      title: 'Disney Castle',
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=300&fit=crop',
-      createdAt: '2024-01-15'
-    },
-    {
-      id: 2,
-      title: 'Lion King',
-      image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop',
-      createdAt: '2024-01-14'
-    },
-    {
-      id: 3,
-      title: 'Ocean World',
-      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop',
-      createdAt: '2024-01-13'
-    },
-    {
-      id: 4,
-      title: 'Mandala Pattern',
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop',
-      createdAt: '2024-01-12'
-    },
-    {
-      id: 5,
-      title: 'Robot Friend',
-      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=300&fit=crop',
-      createdAt: '2024-01-11'
-    },
-    {
-      id: 6,
-      title: 'Space Adventure',
-      image: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=300&h=300&fit=crop',
-      createdAt: '2024-01-10'
-    },
-    {
-      id: 7,
-      title: 'Fairy Tale',
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop',
-      createdAt: '2024-01-09'
-    },
-    {
-      id: 8,
-      title: 'Dragon Quest',
-      image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop',
-      createdAt: '2024-01-08'
-    },
-    {
-      id: 9,
-      title: 'Forest Animals',
-      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop',
-      createdAt: '2024-01-07'
-    },
-    {
-      id: 10,
-      title: 'Underwater Scene',
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=300&fit=crop',
-      createdAt: '2024-01-06'
-    },
-    {
-      id: 11,
-      title: 'Mountain View',
-      image: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=300&h=300&fit=crop',
-      createdAt: '2024-01-05'
-    },
-    {
-      id: 12,
-      title: 'City Skyline',
-      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=300&fit=crop',
-      createdAt: '2024-01-04'
-    }
-  ];
+  // 更新个人资料
+  const updateProfile = async (name?: string, avatar?: string) => {
+    try {
+      const body: any = {};
+      if (name) body.name = name;
+      if (avatar) body.avatar = avatar;
 
-  // 模拟更多我的收藏数据（用于分页演示）
-  const myFavorites = [
-    {
-      id: 1,
-      title: 'Butterfly Garden',
-      image: 'https://images.unsplash.com/photo-1587613865763-4b8b0d19e8ab?w=300&h=300&fit=crop',
-      category: 'Nature'
-    },
-    {
-      id: 2,
-      title: 'Princess Castle',
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=300&fit=crop',
-      category: 'Fantasy'
-    },
-    {
-      id: 3,
-      title: 'Unicorn Magic',
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop',
-      category: 'Fantasy'
-    },
-    {
-      id: 4,
-      title: 'Flower Mandala',
-      image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=300&fit=crop',
-      category: 'Patterns'
-    },
-    {
-      id: 5,
-      title: 'Ocean Waves',
-      image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop',
-      category: 'Nature'
-    },
-    {
-      id: 6,
-      title: 'Space Galaxy',
-      image: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=300&h=300&fit=crop',
-      category: 'Fantasy'
-    },
-    {
-      id: 7,
-      title: 'Cute Animals',
-      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=300&fit=crop',
-      category: 'Animals'
-    },
-    {
-      id: 8,
-      title: 'Tropical Fish',
-      image: 'https://images.unsplash.com/photo-1587613865763-4b8b0d19e8ab?w=300&h=300&fit=crop',
-      category: 'Animals'
-    },
-    {
-      id: 9,
-      title: 'Magic Forest',
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop',
-      category: 'Nature'
+      const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.PROFILE, {
+        method: 'PUT',
+        body: JSON.stringify(body)
+      });
+
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setUserInfo(prev => ({
+          ...prev,
+          nickname: result.data.name || prev.nickname,
+          avatar: result.data.avatar || prev.avatar
+        }));
+        // 通知 Header 更新头像
+        const avatarUpdateEvent = new CustomEvent('userAvatarUpdate', {
+          detail: { avatar: result.data.avatar }
+        });
+        window.dispatchEvent(avatarUpdateEvent);
+        alert('个人资料更新成功');
+        return true;
+      } else {
+        alert(result.error || '更新失败');
+        return false;
+      }
+    } catch (error) {
+      console.error('更新个人资料失败:', error);
+      alert('更新失败，请重试');
+      return false;
     }
-  ];
+  };
+
+  // 修改密码
+  const changePassword = async (oldPassword: string, newPassword: string) => {
+    try {
+      const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.CHANGE_PASSWORD, {
+        method: 'POST',
+        body: JSON.stringify({ oldPassword, newPassword })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('密码修改成功，请重新登录');
+        localStorage.removeItem('token');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userInfo');
+        window.location.href = '/';
+        return true;
+      } else {
+        alert(result.error || '修改失败');
+        return false;
+      }
+    } catch (error) {
+      console.error('修改密码失败:', error);
+      alert('修改失败，请重试');
+      return false;
+    }
+  };
+
+  // 获取列表数据（创作/收藏/点赞）
+  const [creations, setCreations] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [likes, setLikes] = useState<any[]>([]);
+  const [creationsPagination, setCreationsPagination] = useState({ currentPage: 1, totalPages: 1, hasNextPage: false, hasPrevPage: false });
+  const [favoritesPagination, setFavoritesPagination] = useState({ currentPage: 1, totalPages: 1, hasNextPage: false, hasPrevPage: false });
+  const [likesPagination, setLikesPagination] = useState({ currentPage: 1, totalPages: 1, hasNextPage: false, hasPrevPage: false });
+  const [listLoading, setListLoading] = useState(false);
+
+  // 获取创作列表
+  const fetchCreations = async (page: number = 1) => {
+    try {
+      setListLoading(true);
+      const response = await fetchWithAuth(`${API_ENDPOINTS.PUBLIC.USER.CREATIONS}?page=${page}&limit=${itemsPerPage}`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setCreations(result.data.pages || []);
+        setCreationsPagination(result.data.pagination || { currentPage: 1, totalPages: 1, hasNextPage: false, hasPrevPage: false });
+      }
+    } catch (error) {
+      console.error('获取创作列表失败:', error);
+    } finally {
+      setListLoading(false);
+    }
+  };
+
+  // 获取收藏列表
+  const fetchFavorites = async (page: number = 1) => {
+    try {
+      setListLoading(true);
+      const response = await fetchWithAuth(`${API_ENDPOINTS.PUBLIC.USER.FAVORITES}?page=${page}&limit=${itemsPerPage}`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setFavorites(result.data.pages || []);
+        setFavoritesPagination(result.data.pagination || { currentPage: 1, totalPages: 1, hasNextPage: false, hasPrevPage: false });
+      }
+    } catch (error) {
+      console.error('获取收藏列表失败:', error);
+    } finally {
+      setListLoading(false);
+    }
+  };
+
+  // 获取点赞列表
+  const fetchLikes = async (page: number = 1) => {
+    try {
+      setListLoading(true);
+      const response = await fetchWithAuth(`${API_ENDPOINTS.PUBLIC.USER.LIKES}?page=${page}&limit=${itemsPerPage}`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setLikes(result.data.pages || []);
+        setLikesPagination(result.data.pagination || { currentPage: 1, totalPages: 1, hasNextPage: false, hasPrevPage: false });
+      }
+    } catch (error) {
+      console.error('获取点赞列表失败:', error);
+    } finally {
+      setListLoading(false);
+    }
+  };
+
+  // Tab 切换时加载数据
+  useEffect(() => {
+    if (activeTab === 'my-creations') {
+      fetchCreations(creationsCurrentPage);
+    } else if (activeTab === 'my-favorites') {
+      fetchFavorites(favoritesCurrentPage);
+    } else if (activeTab === 'my-likes') {
+      fetchLikes(1); // 我的点赞暂时使用第一页
+    }
+  }, [activeTab, creationsCurrentPage, favoritesCurrentPage]);
+
+
 
   const handleSave = () => {
     setIsEditing(false);
@@ -853,22 +920,6 @@ export default function ProfilePage() {
     alert('密码已在对话框中更新，请点击右下角的"Save Changes"按钮最终保存！');
   };
 
-  // 计算分页数据
-  const getCreationsPaginationData = () => {
-    const totalPages = Math.ceil(myCreations.length / itemsPerPage);
-    const startIndex = (creationsCurrentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentItems = myCreations.slice(startIndex, endIndex);
-    return { currentItems, totalPages };
-  };
-
-  const getFavoritesPaginationData = () => {
-    const totalPages = Math.ceil(myFavorites.length / itemsPerPage);
-    const startIndex = (favoritesCurrentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentItems = myFavorites.slice(startIndex, endIndex);
-    return { currentItems, totalPages };
-  };
 
   const menuItems = [
     {
@@ -987,76 +1038,100 @@ export default function ProfilePage() {
   );
 
   const renderMyCreations = () => {
-    const { currentItems, totalPages } = getCreationsPaginationData();
-    
     return (
       <div className="bg-white rounded-lg p-8">
         <h2 className="text-2xl font-semibold text-gray-900 mb-6">My Creations</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentItems.map((creation) => (
-            <div key={creation.id} className="group cursor-pointer">
-              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
-                <Image
-                  src={creation.image}
-                  alt={creation.title}
-                  width={300}
-                  height={300}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
-                  unoptimized
-                />
-              </div>
-              <h3 className="font-medium text-gray-900">{creation.title}</h3>
-              <p className="text-sm text-gray-500">Created on {creation.createdAt}</p>
+        {listLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
+          </div>
+        ) : creations.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {creations.map((creation) => (
+                <div key={creation.id} className="group cursor-pointer">
+                  <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                    <Image
+                      src={creation.thumbnailUrl || creation.imageUrl}
+                      alt={creation.title}
+                      width={300}
+                      height={300}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                      unoptimized
+                    />
+                  </div>
+                  <h3 className="font-medium text-gray-900">{creation.title}</h3>
+                  <p className="text-sm text-gray-500">Created on {new Date(creation.createdAt).toLocaleDateString()}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* 分页组件 */}
-        <Pagination
-          currentPage={creationsCurrentPage}
-          totalPages={totalPages}
-          onPageChange={setCreationsCurrentPage}
-        />
+            {/* 分页组件 */}
+            {creationsPagination.totalPages > 1 && (
+              <Pagination
+                currentPage={creationsPagination.currentPage}
+                totalPages={creationsPagination.totalPages}
+                onPageChange={setCreationsCurrentPage}
+              />
+            )}
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500">You haven't created any coloring pages yet.</p>
+          </div>
+        )}
       </div>
     );
   };
 
   const renderMyFavorites = () => {
-    const { currentItems, totalPages } = getFavoritesPaginationData();
-    
     return (
       <div className="bg-white rounded-lg p-8">
         <h2 className="text-2xl font-semibold text-gray-900 mb-6">My Favorites</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentItems.map((favorite) => (
-            <div key={favorite.id} className="group cursor-pointer">
-              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
-                <Image
-                  src={favorite.image}
-                  alt={favorite.title}
-                  width={300}
-                  height={300}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
-                  unoptimized
-                />
-                <div className="absolute top-3 right-3">
-                  <Heart className="h-5 w-5 text-red-500 fill-current" />
+        {listLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
+          </div>
+        ) : favorites.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {favorites.map((favorite) => (
+                <div key={favorite.id} className="group cursor-pointer">
+                  <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
+                    <Image
+                      src={favorite.thumbnailUrl || favorite.imageUrl}
+                      alt={favorite.title}
+                      width={300}
+                      height={300}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                      unoptimized
+                    />
+                    <div className="absolute top-3 right-3">
+                      <Heart className="h-5 w-5 text-red-500 fill-current" />
+                    </div>
+                  </div>
+                  <h3 className="font-medium text-gray-900">{favorite.title}</h3>
+                  <p className="text-sm text-gray-500">Favorited on {new Date(favorite.favoritedAt || favorite.createdAt).toLocaleDateString()}</p>
                 </div>
-              </div>
-              <h3 className="font-medium text-gray-900">{favorite.title}</h3>
-              <p className="text-sm text-gray-500">{favorite.category}</p>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* 分页组件 */}
-        <Pagination
-          currentPage={favoritesCurrentPage}
-          totalPages={totalPages}
-          onPageChange={setFavoritesCurrentPage}
-        />
+            {/* 分页组件 */}
+            {favoritesPagination.totalPages > 1 && (
+              <Pagination
+                currentPage={favoritesPagination.currentPage}
+                totalPages={favoritesPagination.totalPages}
+                onPageChange={setFavoritesCurrentPage}
+              />
+            )}
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500">You haven't favorited any coloring pages yet.</p>
+          </div>
+        )}
       </div>
     );
   };

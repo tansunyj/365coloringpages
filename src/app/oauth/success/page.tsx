@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-
-// API 基础 URL
-const API_BASE_URL = 'http://localhost:3001';
+import { API_ENDPOINTS } from '@/lib/apiConfig';
 
 export default function OAuthSuccessPage() {
   const router = useRouter();
@@ -25,12 +23,17 @@ export default function OAuthSuccessPage() {
       try {
         setIsLoadingUserInfo(true);
         
+        console.log('🔐 OAuth 登录成功，开始获取用户信息...');
+        console.log('Token:', token.substring(0, 20) + '...');
+        console.log('Provider:', provider);
+        
         // 保存 token 到 localStorage
         localStorage.setItem('authToken', token);
+        localStorage.setItem('token', token); // 兼容性
         localStorage.setItem('authProvider', provider || 'unknown');
         
-        // 使用 token 获取用户信息
-        const response = await fetch(`${API_BASE_URL}/api/user/me`, {
+        // 使用 token 获取用户信息（根据接口文档使用 /api/user/me）
+        const response = await fetch(API_ENDPOINTS.PUBLIC.USER.ME, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -38,25 +41,43 @@ export default function OAuthSuccessPage() {
           },
         });
         
+        console.log('📡 用户信息接口响应状态:', response.status);
+        
         if (!response.ok) {
           const errorText = await response.text();
+          console.error('❌ 获取用户信息失败:', errorText);
           throw new Error(`获取用户信息失败: ${response.status} ${errorText}`);
         }
 
         const data = await response.json();
+        console.log('📦 用户信息数据:', data);
         
         if (data.success && data.data) {
           // 保存真实的用户信息到 localStorage
-          localStorage.setItem('userInfo', JSON.stringify(data.data));
+          const userInfo = {
+            id: data.data.id,
+            email: data.data.email,
+            name: data.data.name,
+            avatar: data.data.avatar,
+            provider: data.data.provider
+          };
+          
+          console.log('💾 保存用户信息到 localStorage:', userInfo);
+          localStorage.setItem('userInfo', JSON.stringify(userInfo));
+          
+          console.log('✅ 用户信息保存成功，准备跳转...');
         } else {
+          console.error('❌ 后端返回格式错误:', data);
           throw new Error('后端返回的用户信息格式不正确');
         }
         
         // 延迟跳转，让用户看到加载动画
         setTimeout(() => {
+          console.log('🔄 跳转到首页...');
           window.location.href = '/';
         }, 1000);
       } catch (err) {
+        console.error('❌ OAuth 登录流程失败:', err);
         setError(err instanceof Error ? err.message : '获取用户信息失败，请重试');
       } finally {
         setIsLoadingUserInfo(false);

@@ -22,8 +22,8 @@ export default function FirstColoringBookListClient({ initialCategory }: FirstCo
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort=""
-      itemsPerPage={20}
+      defaultSort="newest"
+      itemsPerPage={40}
     />
   );
 } 

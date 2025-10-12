@@ -354,6 +354,21 @@ export const api = {
     ),
   },
 
+  // 👤 用户信息接口
+  user: {
+    me: () => apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.USER.ME),
+    updateProfile: (data: { name?: string; avatar?: string }) =>
+      apiClient.put<ApiResponse>(API_ENDPOINTS.PUBLIC.USER.PROFILE, data),
+    changePassword: (data: { oldPassword: string; newPassword: string }) =>
+      apiClient.post<ApiResponse>(API_ENDPOINTS.PUBLIC.USER.CHANGE_PASSWORD, data),
+    creations: (params?: { page?: number; limit?: number }) =>
+      apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.USER.CREATIONS, params),
+    favorites: (params?: { page?: number; limit?: number }) =>
+      apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.USER.FAVORITES, params),
+    likes: (params?: { page?: number; limit?: number }) =>
+      apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.USER.LIKES, params),
+  },
+
   // 🔐 管理员接口
   admin: {
     auth: {

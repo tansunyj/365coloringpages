@@ -96,12 +96,28 @@ export const API_ENDPOINTS = {
     AUTH: {
       REGISTER: `${API_BASE_URL}/api/auth/register`,
       LOGIN: `${API_BASE_URL}/api/auth/login`,
+      LOGIN_OR_REGISTER: `${API_BASE_URL}/api/auth/login-or-register`, // 二合一接口
       LOGOUT: `${API_BASE_URL}/api/auth/logout`,
       ME: `${API_BASE_URL}/api/auth/me`,
       GOOGLE: `${API_BASE_URL}/api/auth/google`,
       GOOGLE_CALLBACK: `${API_BASE_URL}/api/auth/google/callback`,
       GITHUB: `${API_BASE_URL}/api/auth/github`,
       GITHUB_CALLBACK: `${API_BASE_URL}/api/auth/github/callback`,
+    },
+    
+    // 验证码接口
+    CAPTCHA: {
+      GENERATE: `${API_BASE_URL}/api/captcha/generate`,
+    },
+    
+    // 用户信息接口
+    USER: {
+      ME: `${API_BASE_URL}/api/user/me`,
+      PROFILE: `${API_BASE_URL}/api/user/profile`,
+      CHANGE_PASSWORD: `${API_BASE_URL}/api/user/change-password`,
+      CREATIONS: `${API_BASE_URL}/api/user/creations`,
+      FAVORITES: `${API_BASE_URL}/api/user/favorites`,
+      LIKES: `${API_BASE_URL}/api/user/likes`,
     },
     
     // 文件上传接口

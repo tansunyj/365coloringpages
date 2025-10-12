@@ -24,6 +24,9 @@ export default function LatestColoringCard({
   thumbnailUrl,
   categorySlug
 }: LatestColoringCardProps) {
+  // 标准化分类名称，如果为空则显示"其他"
+  const displayCategory = !category || category.trim() === '' ? '其他' : category;
+  
   // 使用useEffect来设置随机数，避免水合错误
   const [likeCount, setLikeCount] = useState(0);
   const [downloadCount, setDownloadCount] = useState(0);

@@ -17,8 +17,8 @@ export default function PopularPageClient() {
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort=""
-      itemsPerPage={20}
+      defaultSort="popular"
+      itemsPerPage={40}
     />
   );
 } 

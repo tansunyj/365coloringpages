@@ -27,6 +27,9 @@ export default function ColoringPageCard({ page }: ColoringPageCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(page.likes);
   const router = useRouter();
+  
+  // 标准化分类名称，如果为空则显示"其他"
+  const displayCategory = !page.category || page.category.trim() === '' ? '其他' : page.category;
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -64,7 +67,7 @@ export default function ColoringPageCard({ page }: ColoringPageCardProps) {
             <div className="text-gray-400 text-center p-4">
               <div className="text-5xl mb-3 filter drop-shadow-sm">🎨</div>
               <div className="text-sm font-semibold text-gray-500 mb-1">Line Art</div>
-              <div className="text-xs text-gray-400 font-medium">{page.category}</div>
+              <div className="text-xs text-gray-400 font-medium">{displayCategory}</div>
             </div>
           </div>
         )}

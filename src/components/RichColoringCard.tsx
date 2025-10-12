@@ -55,11 +55,26 @@ class CategoryColorUtil {
     '食物': 'bg-amber-500',
     '魔法': 'bg-violet-500',
     '农场': 'bg-lime-500',
-    '庆祝': 'bg-rose-500'
+    '庆祝': 'bg-rose-500',
+    '其他': 'bg-gray-500'
   };
 
   static getBackgroundColor(categoryName: string): string {
+    // 如果分类名称为空或未定义，使用"其他"的颜色
+    if (!categoryName || categoryName.trim() === '') {
+      return this.colorMap['其他'];
+    }
     return this.colorMap[categoryName] || 'bg-gray-500';
+  }
+  
+  /**
+   * 标准化分类名称，如果为空则返回"其他"
+   */
+  static normalizeCategoryName(categoryName?: string | null): string {
+    if (!categoryName || categoryName.trim() === '') {
+      return '其他';
+    }
+    return categoryName;
   }
 }
 
@@ -147,7 +162,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     views,
     likes,
     downloads,
-    categoryName,
+    categoryName: rawCategoryName,
     isLiked = false,
     bookTitle,
     bookType,
@@ -159,6 +174,9 @@ export default function RichColoringCard(props: RichColoringCardProps) {
   const [liked, setLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(likes);
   const [imageError, setImageError] = useState(false);
+
+  // 标准化分类名称，如果为空则显示"其他"
+  const categoryName = CategoryColorUtil.normalizeCategoryName(rawCategoryName);
 
   // 生成详情页链接
   const detailLink = LinkGenerator.generateDetailLink(props);

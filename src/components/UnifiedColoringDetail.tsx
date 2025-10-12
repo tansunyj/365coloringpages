@@ -100,11 +100,6 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
         if (response.success && response.data) {
           const pageData = response.data as ApiColoringPageData;
           
-            thumbnailUrl: pageData.thumbnailUrl,
-            previewUrl: pageData.previewUrl,
-            originalFileUrl: pageData.originalFileUrl
-          });
-          
           // 处理categories数组，提取分类名称
           const categoryNames = pageData.categories ? 
             pageData.categories.map((cat) => cat.name) : [type];

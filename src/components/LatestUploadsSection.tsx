@@ -146,11 +146,11 @@ export default function LatestUploadsSection() {
                   key={page.id}
                   id={page.id}
                   title={page.title}
-                  category={page.categoryName}
+                  category={page.categoryName || '其他'}
                   likes={page.likes}
                   downloads={page.downloads}
                   thumbnailUrl={page.thumbnailUrl}
-                  categorySlug={getCategorySlug(page.categoryName)}
+                  categorySlug={getCategorySlug(page.categoryName || '其他')}
                 />
               ))}
             </div>

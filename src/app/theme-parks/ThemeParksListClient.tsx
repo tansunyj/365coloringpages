@@ -22,8 +22,8 @@ export default function ThemeParksListClient({ initialCategory }: ThemeParksList
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
-      defaultSort=""
-      itemsPerPage={20}
+      defaultSort="popular"
+      itemsPerPage={40}
     />
   );
 } 
