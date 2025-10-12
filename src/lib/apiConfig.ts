@@ -19,7 +19,6 @@ export const API_ENDPOINTS = {
     // 热门关键词
     KEYWORDS: {
       GET: `${API_BASE_URL}/api/keywords`,
-      POST: `${API_BASE_URL}/api/keywords`,
     },
     
     // 搜索接口

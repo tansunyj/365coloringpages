@@ -393,6 +393,7 @@ export async function POST(request: NextRequest) {
     const { query, resultCount, clickedItemId } = body;
 
     // 这里可以记录搜索行为用于分析
+    console.log('Search analytics:', {
       query,
       resultCount,
       clickedItemId,

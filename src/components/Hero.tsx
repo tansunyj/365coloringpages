@@ -4,8 +4,7 @@ import { Search } from 'lucide-react';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
-import { getActiveBannerGroup, getDefaultBannerGroup, type BannerGroup, type BannerImage } from '@/lib/bannerService';
+import { getActiveBannerGroup, getDefaultBannerGroup, type BannerGroup } from '@/lib/bannerService';
 import SimpleColoringCard from './SimpleColoringCard';
 
 // ThemeSection相关类型定义
@@ -274,15 +273,8 @@ export default function Hero() {
   };
 
   const handleKeywordClick = async (keyword: string) => {
-    // 记录关键词点击
-    try {
-      const { api } = await import('../lib/apiClient');
-      await api.keywords.click(keyword);
-    } catch (error) {
-      console.error('Error recording keyword click:', error);
-    }
-    
-    // 跳转到搜索结果页面，使用关键词搜索
+    // 直接跳转到搜索结果页面，使用关键词搜索
+    // 后端会根据查询自动记录关键词，不需要额外调用POST接口
     const searchParams = new URLSearchParams({
       q: keyword,
       page: '1',

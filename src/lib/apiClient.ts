@@ -210,10 +210,6 @@ export const api = {
     get: () => apiClient.get<ApiResponse<Array<{ keyword: string; clickCount: number }>>>(
       API_ENDPOINTS.PUBLIC.KEYWORDS.GET
     ),
-    click: (keyword: string) => apiClient.post<ApiResponse>(
-      API_ENDPOINTS.PUBLIC.KEYWORDS.POST,
-      { keyword }
-    ),
   },
 
   search: (params: {
