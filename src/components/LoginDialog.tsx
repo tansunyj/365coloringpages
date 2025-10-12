@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Github } from 'lucide-react';
+import { X, Github, Eye, EyeOff } from 'lucide-react';
 import { API_ENDPOINTS } from '@/lib/apiConfig';
 import { fetchWithIP } from '@/lib/clientIP';
 
@@ -11,6 +11,14 @@ interface LoginDialogProps {
   onLoginSuccess: () => void;
 }
 
+// 生成默认头像URL（基于用户邮箱或名称）
+const generateDefaultAvatar = (email: string, name?: string) => {
+  // 使用UI Avatars服务生成漂亮的字母头像
+  const displayName = name || email.split('@')[0];
+  // 使用邮箱的首字母，背景色使用橙黄色系，只显示首字母
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f59e0b&color=fff&size=200&bold=true&length=1`;
+};
+
 export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDialogProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,6 +27,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
   const [captchaSvg, setCaptchaSvg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   // 对话框打开时重置所有状态
   useEffect(() => {
@@ -31,6 +40,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
       setCaptchaSvg('');
       setError('');
       setIsLoading(false);
+      setShowPassword(false);
     }
   }, [isOpen]);
 
@@ -73,6 +83,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
     setCaptchaSvg('');
     setError('');
     setIsLoading(false);
+    setShowPassword(false);
     onClose();
   };
 
@@ -194,7 +205,18 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
         
         // 保存用户信息
         if (result.data.user) {
-          localStorage.setItem('userInfo', JSON.stringify(result.data.user));
+          // 如果没有头像，生成默认头像
+          const avatarUrl = result.data.user.avatar && result.data.user.avatar.trim() !== ''
+            ? result.data.user.avatar
+            : generateDefaultAvatar(result.data.user.email, result.data.user.name);
+          
+          const userInfo = {
+            ...result.data.user,
+            avatar: avatarUrl  // 使用生成的头像URL
+          };
+          
+          console.log('💾 登录/注册成功，保存用户信息:', userInfo);
+          localStorage.setItem('userInfo', JSON.stringify(userInfo));
         }
         
         // 登录成功
@@ -335,17 +357,31 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
                 <label htmlFor="password" className="block text-xs font-medium text-gray-700 mb-1.5">
                   Password
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="8+ chars: A-Z, a-z, 0-9, !@#$..."
-                  autoComplete="new-password"
-                  minLength={8}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 text-sm placeholder:text-gray-400"
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="8+ chars: A-Z, a-z, 0-9, !@#$..."
+                    autoComplete="new-password"
+                    minLength={8}
+                    className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 text-sm placeholder:text-gray-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
                 <p className="mt-1 text-xs text-gray-500">
                   Include: uppercase, lowercase, number & symbol
                 </p>

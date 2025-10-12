@@ -35,6 +35,14 @@ export default function Header() {
     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face'
   ];
 
+  // 生成默认头像URL（基于用户邮箱或名称）
+  const generateDefaultAvatar = (email: string, name?: string) => {
+    // 使用UI Avatars服务生成漂亮的字母头像
+    const displayName = name || email.split('@')[0];
+    // 使用邮箱的首字母，背景色使用橙黄色系，只显示首字母
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f59e0b&color=fff&size=200&bold=true&length=1`;
+  };
+
   // 检查登录状态的函数（提取出来以便复用）
   const checkLoginStatus = () => {
     const token = localStorage.getItem('authToken') || localStorage.getItem('token');
@@ -57,8 +65,11 @@ export default function Header() {
         });
         
         setIsLoggedIn(true);
-        // 如果有头像就使用用户头像，否则使用默认头像
-        setCurrentUserAvatar(userInfo.avatar || userAvatars[0]);
+        // 如果有头像就使用，否则生成默认头像
+        const avatarUrl = userInfo.avatar && userInfo.avatar.trim() !== '' 
+          ? userInfo.avatar 
+          : generateDefaultAvatar(userInfo.email, userInfo.name);
+        setCurrentUserAvatar(avatarUrl);
         // 设置用户邮箱
         setUserEmail(userInfo.email || 'user@example.com');
       } catch (error) {
@@ -136,9 +147,6 @@ export default function Header() {
     };
   }, []);
 
-  // 使用默认头像作为后备
-  const displayAvatar = currentUserAvatar || userAvatars[0];
-  
   const handleAuthClick = () => {
     if (isLoggedIn) {
       // 如果已登录，切换用户菜单显示状态
@@ -203,9 +211,20 @@ export default function Header() {
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.data) {
-            localStorage.setItem('userInfo', JSON.stringify(data.data));
+            // 如果没有头像，生成默认头像
+            const avatarUrl = data.data.avatar && data.data.avatar.trim() !== ''
+              ? data.data.avatar
+              : generateDefaultAvatar(data.data.email, data.data.name);
+            
+            const userInfo = {
+              ...data.data,
+              avatar: avatarUrl  // 使用生成的头像URL
+            };
+            
+            console.log('💾 登录成功，保存用户信息到Header:', userInfo);
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
             localStorage.setItem('authToken', token);
-            setCurrentUserAvatar(data.data.avatar || userAvatars[0]);
+            setCurrentUserAvatar(avatarUrl);
             setUserEmail(data.data.email || 'user@example.com');
           }
         }
@@ -330,10 +349,10 @@ export default function Header() {
                 className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 hover:scale-105"
               >
                 {isLoggedIn ? (
-                  // 已登录：显示用户头像
+                  // 已登录：显示用户头像（真实头像或默认生成的头像）
                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-yellow-400 hover:border-yellow-500 transition-colors">
                     <Image
-                      src={displayAvatar}
+                      src={currentUserAvatar}
                       alt="User Avatar"
                       width={40}
                       height={40}
@@ -358,7 +377,7 @@ export default function Header() {
                       {/* 用户头像 */}
                       <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white shadow-md flex-shrink-0">
                         <Image
-                          src={displayAvatar}
+                          src={currentUserAvatar}
                           alt="User Avatar"
                           width={56}
                           height={56}

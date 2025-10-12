@@ -349,6 +349,9 @@ export default function UnifiedListPage({
   // 滚动检测
   const observerRef = useRef<HTMLDivElement>(null);
   
+  // 防止重复加载的标记 - 记录上一次的查询参数
+  const lastQueryRef = useRef<string>('');
+  
   // 路由和搜索参数
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -366,12 +369,43 @@ export default function UnifiedListPage({
   const [selectedCategory, setSelectedCategory] = useState(currentCategory);
   const [selectedSort, setSelectedSort] = useState(currentSort);
   
-  // 同步URL参数到状态
+  // 用于标记是否是首次加载，避免URL参数覆盖用户输入
+  const isInitialMount = useRef(true);
+  // 记录上一次的URL查询词，用于检测外部导航
+  const lastUrlQuery = useRef(currentQuery);
+  
+  // 同步URL参数到状态 - 只在初始化或外部导航时更新
   useEffect(() => {
-    setSearchQuery(currentQuery);
-    setSelectedCategory(currentCategory);
-    setSelectedSort(currentSort);
-  }, [currentQuery, currentCategory, currentSort]);
+    // 只在组件首次挂载时同步URL参数到搜索框
+    if (isInitialMount.current) {
+      setSearchQuery(currentQuery);
+      setSelectedCategory(currentCategory);
+      setSelectedSort(currentSort);
+      lastUrlQuery.current = currentQuery;
+      isInitialMount.current = false;
+      return;
+    }
+    
+    // 对于分类和排序，始终同步（因为用户不会手动输入这些）
+    if (selectedCategory !== currentCategory) {
+      setSelectedCategory(currentCategory);
+    }
+    if (selectedSort !== currentSort) {
+      setSelectedSort(currentSort);
+    }
+    
+    // 对于搜索关键词：只在URL查询词发生变化时同步
+    // 这通常意味着：
+    // 1. 用户点击了搜索按钮（updateUrl被调用）
+    // 2. 用户使用了浏览器后退/前进按钮
+    // 3. 用户从外部链接进入
+    // 但不会在用户正在输入时同步，保护用户的输入体验
+    if (currentQuery !== lastUrlQuery.current) {
+      console.log('🔄 URL搜索词已变化，同步到搜索框:', currentQuery);
+      setSearchQuery(currentQuery);
+      lastUrlQuery.current = currentQuery;
+    }
+  }, [currentQuery, currentCategory, currentSort, selectedCategory, selectedSort]);
 
   /**
    * 更新URL参数 - 使用 replace 避免整个页面刷新
@@ -653,8 +687,22 @@ export default function UnifiedListPage({
 
   // 数据加载效果 - 只在搜索条件变化时重新加载
   useEffect(() => {
+    // 生成当前查询的唯一标识
+    const currentQueryKey = `${type}-${currentLimit}-${currentCategory}-${currentSort}-${currentQuery}-${park || ''}`;
+    
+    // 如果查询参数没有变化，不重复加载
+    if (lastQueryRef.current === currentQueryKey) {
+      console.log('🚫 查询参数未变化，跳过重复加载:', currentQueryKey);
+      return;
+    }
+    
+    console.log('🔄 查询参数已变化，开始加载数据:', currentQueryKey);
+    lastQueryRef.current = currentQueryKey;
+    
     loadData(false); // 明确传递 false，表示不是加载更多，而是重新加载
-  }, [currentLimit, currentCategory, currentSort, currentQuery, type, park, loadData]);
+    // 注意：不要把 loadData 作为依赖项，避免因函数重新创建导致重复调用
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLimit, currentCategory, currentSort, currentQuery, type, park]);
 
   // 无限滚动检测
   useEffect(() => {

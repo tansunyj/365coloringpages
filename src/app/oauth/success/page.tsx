@@ -4,6 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { API_ENDPOINTS } from '@/lib/apiConfig';
 
+// 生成默认头像URL（基于用户邮箱或名称）
+const generateDefaultAvatar = (email: string, name?: string) => {
+  // 使用UI Avatars服务生成漂亮的字母头像
+  const displayName = name || email.split('@')[0];
+  // 使用邮箱的首字母，背景色使用橙黄色系，只显示首字母
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f59e0b&color=fff&size=200&bold=true&length=1`;
+};
+
 export default function OAuthSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,12 +61,19 @@ export default function OAuthSuccessPage() {
         console.log('📦 用户信息数据:', data);
         
         if (data.success && data.data) {
+          // 如果没有头像，生成默认头像
+          const avatarUrl = data.data.avatar && data.data.avatar.trim() !== ''
+            ? data.data.avatar
+            : generateDefaultAvatar(data.data.email, data.data.name);
+          
+          console.log('🖼️ 头像URL:', { original: data.data.avatar, final: avatarUrl });
+          
           // 保存真实的用户信息到 localStorage
           const userInfo = {
             id: data.data.id,
             email: data.data.email,
             name: data.data.name,
-            avatar: data.data.avatar,
+            avatar: avatarUrl,  // 使用生成的头像URL
             provider: data.data.provider
           };
           

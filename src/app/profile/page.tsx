@@ -9,6 +9,14 @@ import UnifiedColoringDetail from '@/components/UnifiedColoringDetail';
 import Toast from '@/components/Toast';
 import { API_ENDPOINTS } from '@/lib/apiConfig';
 
+// 生成默认头像URL（基于用户邮箱或名称）
+const generateDefaultAvatar = (email: string, name?: string) => {
+  // 使用UI Avatars服务生成漂亮的字母头像
+  const displayName = name || email.split('@')[0];
+  // 使用邮箱的首字母，背景色使用橙黄色系，只显示首字母
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f59e0b&color=fff&size=200&bold=true&length=1`;
+};
+
 // API 请求工具函数
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('authToken') || localStorage.getItem('token');
@@ -545,10 +553,23 @@ const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
       showToast('请填写完整的密码信息', 'warning');
       return;
     }
-    if (newPassword.length < 6) {
-      showToast('新密码长度至少6位', 'warning');
+    
+    // 密码复杂性验证
+    if (newPassword.length < 8) {
+      showToast('新密码长度至少8位', 'warning');
       return;
     }
+    
+    const hasUpperCase = /[A-Z]/.test(newPassword);
+    const hasLowerCase = /[a-z]/.test(newPassword);
+    const hasNumber = /[0-9]/.test(newPassword);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword);
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+      showToast('新密码必须包含大写字母、小写字母、数字和特殊字符', 'warning');
+      return;
+    }
+    
     onSave(currentPassword, newPassword);
     setCurrentPassword('');
     setNewPassword('');
@@ -614,7 +635,7 @@ const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
-                  placeholder="Enter new password (min 6 characters)"
+                  placeholder="8+ chars: A-Z, a-z, 0-9, !@#$..."
                 />
                 <button
                   type="button"
@@ -739,12 +760,19 @@ export default function ProfilePage() {
           hasAvatar: !!result.data.avatar
         });
         
+        // 如果没有头像，生成默认头像
+        const avatarUrl = result.data.avatar && result.data.avatar.trim() !== ''
+          ? result.data.avatar
+          : generateDefaultAvatar(result.data.email, result.data.name);
+        
+        console.log('🖼️ 头像URL:', { original: result.data.avatar, final: avatarUrl });
+        
         // 更新React状态
         setUserInfo({
           id: result.data.id,
           nickname: result.data.name || '',
           email: result.data.email || '',
-          avatar: result.data.avatar || '',
+          avatar: avatarUrl,
           provider: result.data.provider || '',
           totalCreations: result.data.totalCreations || 0,
           totalFavorites: result.data.totalFavorites || 0,
@@ -756,7 +784,7 @@ export default function ProfilePage() {
           id: result.data.id,
           email: result.data.email,
           name: result.data.name,
-          avatar: result.data.avatar,
+          avatar: avatarUrl,  // 使用生成的头像URL
           provider: result.data.provider
         };
         localStorage.setItem('userInfo', JSON.stringify(userInfoForStorage));
@@ -866,28 +894,44 @@ export default function ProfilePage() {
   // 修改密码
   const changePassword = async (oldPassword: string, newPassword: string) => {
     try {
-      const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.CHANGE_PASSWORD, {
+      console.log('🔒 开始修改密码...');
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+      
+      if (!token) {
+        showToast('未找到登录信息，请先登录', 'error');
+        return false;
+      }
+
+      // 直接使用fetch，不使用fetchWithAuth，避免401时自动清除登录信息
+      const response = await fetch(API_ENDPOINTS.PUBLIC.USER.CHANGE_PASSWORD, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ oldPassword, newPassword })
       });
 
+      console.log('📥 密码修改响应状态:', response.status);
+
       const result = await response.json();
+      console.log('📦 密码修改响应:', result);
+      
+      if (response.status === 401) {
+        // 当前密码错误，不清除登录信息
+        showToast('当前密码错误，请检查后重试', 'error');
+        return false;
+      }
       
       if (result.success) {
-        showToast('密码修改成功，请重新登录', 'success');
-        setTimeout(() => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userInfo');
-          window.location.href = '/';
-        }, 1500);
+        showToast('密码修改成功！', 'success');
         return true;
       } else {
-        showToast(result.error || '修改失败', 'error');
+        showToast(result.error || '密码修改失败', 'error');
         return false;
       }
     } catch (error) {
-      console.error('修改密码失败:', error);
+      console.error('❌ 修改密码异常:', error);
       showToast('修改失败，请重试', 'error');
       return false;
     }
@@ -972,7 +1016,7 @@ export default function ProfilePage() {
   const handleSave = async () => {
     try {
       console.log('💾 开始保存用户信息...');
-    setIsEditing(false);
+      setIsEditing(false);
       
       // 如果昵称有变化，调用API更新
       const storedUserInfo = localStorage.getItem('userInfo');
@@ -985,15 +1029,11 @@ export default function ProfilePage() {
             showToast('昵称更新失败，请重试', 'error');
             return;
           }
+          showToast('昵称更新成功！', 'success');
+        } else {
+          showToast('没有需要保存的更改', 'info');
         }
       }
-      
-    if (passwordChanged) {
-      showToast('账户信息已保存！密码已更新。', 'success');
-      setPasswordChanged(false);
-    } else {
-      showToast('账户信息已保存！', 'success');
-    }
     } catch (error) {
       console.error('❌ 保存失败:', error);
       showToast('保存失败，请重试', 'error');
@@ -1190,12 +1230,17 @@ export default function ProfilePage() {
     setIsCropDialogOpen(true);
   };
 
-  const handlePasswordChange = (currentPassword: string, newPassword: string) => {
-    // 这里可以添加密码验证逻辑
+  const handlePasswordChange = async (currentPassword: string, newPassword: string) => {
+    // 立即调用密码修改API
+    console.log('🔒 开始修改密码...');
+    const success = await changePassword(currentPassword, newPassword);
     
-    // 更新密码状态
-    setPasswordChanged(true);
-    showToast('密码已在对话框中更新，请点击右下角的"Save Changes"按钮最终保存！', 'info');
+    if (success) {
+      // 密码修改成功后会自动跳转到首页重新登录
+      setIsPasswordDialogOpen(false);
+      setPasswordChanged(false);
+    }
+    // 失败的情况已经在changePassword中显示了Toast
   };
 
 
@@ -1273,11 +1318,6 @@ export default function ProfilePage() {
               Change
             </button>
           </div>
-          {passwordChanged && (
-            <p className="text-xs text-green-600 mt-1">
-              Password has been updated in dialog. Click &quot;Save Changes&quot; to apply.
-            </p>
-          )}
         </div>
       </div>
 
@@ -1285,15 +1325,10 @@ export default function ProfilePage() {
       <div className="flex justify-end mt-8">
         <button
           onClick={handleSave}
-          className={`px-6 py-3 rounded-lg transition-colors flex items-center gap-2 ${
-            passwordChanged 
-              ? 'bg-green-500 hover:bg-green-600 text-white' 
-              : 'bg-blue-500 hover:bg-blue-600 text-white'
-          }`}
+          className="px-6 py-3 rounded-lg transition-colors flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
         >
           <Save className="h-4 w-4" />
           Save Changes
-          {passwordChanged && <span className="text-xs">(Password Updated)</span>}
         </button>
       </div>
 
@@ -1606,8 +1641,7 @@ export default function ProfilePage() {
               {/* 用户头像区域 */}
               <div className="flex justify-center mb-6 pb-6 border-b border-gray-100">
                 <div className="relative group">
-                  <div className="w-20 h-20 rounded-full overflow-hidden relative bg-gray-200 flex items-center justify-center">
-                    {userInfo.avatar ? (
+                  <div className="w-20 h-20 rounded-full overflow-hidden relative">
                     <Image
                       src={userInfo.avatar}
                       alt="User Avatar"
@@ -1616,9 +1650,6 @@ export default function ProfilePage() {
                       className="object-cover"
                       unoptimized
                     />
-                    ) : (
-                      <User className="h-10 w-10 text-gray-400" />
-                    )}
                     {/* 悬停时显示的相机图标覆盖层 */}
                     <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                          onClick={handleAvatarUpload}>
