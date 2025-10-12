@@ -26,8 +26,6 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 
-
-
   // 图片加载完成后初始化
   const handleImageLoad = () => {
     if (imageRef.current) {
@@ -190,7 +188,6 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
     );
     tempCtx.restore();
 
-    console.log('Crop Debug Info:', {
       containerSize: { width: containerWidth, height: containerHeight },
       imageNatural: { width: img.naturalWidth, height: img.naturalHeight },
       displaySize: { width: displayWidth, height: displayHeight },
@@ -850,8 +847,6 @@ export default function ProfilePage() {
 
   const handlePasswordChange = (currentPassword: string, newPassword: string) => {
     // 这里可以添加密码验证逻辑
-    console.log('Current password:', currentPassword);
-    console.log('New password:', newPassword);
     
     // 更新密码状态
     setPasswordChanged(true);

@@ -33,7 +33,6 @@ export default function ThemeParkColoringCard({ page }: ThemeParkColoringCardPro
   const handleDownloadClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 防止触发卡片点击
     // 这里可以添加下载逻辑
-    console.log(`Downloading ${page.title}`);
   };
 
   return (

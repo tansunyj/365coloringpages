@@ -133,12 +133,10 @@ export default function AdminThemeParks() {
       const token = localStorage.getItem('adminToken');
       
       if (!token) {
-        console.error('❌ Token 不存在，跳转到登录页');
         window.location.href = '/admin/login';
         return;
       }
 
-      console.log('🔐 加载主题公园列表 - Token存在:', !!token);
 
       const response = await fetch(`http://localhost:3001/api/admin/theme-parks?page=${page}&limit=${itemsPerPage}&q=${search}&status=${status}`, {
         headers: {
@@ -147,7 +145,6 @@ export default function AdminThemeParks() {
         },
       });
 
-      console.log('🔐 加载响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -158,7 +155,6 @@ export default function AdminThemeParks() {
       }
 
       const data = await response.json();
-      console.log('🔐 加载响应数据:', data);
 
       if (response.ok && data.success && data.data) {
         setThemeParks(data.data.themeParks || []);
@@ -229,7 +225,6 @@ export default function AdminThemeParks() {
         return;
       }
 
-      console.log('📝 新增主题公园 - 请求数据:', parkData);
 
       const response = await fetch('http://localhost:3001/api/admin/theme-parks', {
         method: 'POST',
@@ -240,7 +235,6 @@ export default function AdminThemeParks() {
         body: JSON.stringify(parkData),
       });
 
-      console.log('📝 新增响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -251,7 +245,6 @@ export default function AdminThemeParks() {
       }
 
       const data = await response.json();
-      console.log('📝 新增响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '主题公园添加成功！');
@@ -280,7 +273,6 @@ export default function AdminThemeParks() {
         return;
       }
 
-      console.log('✏️ 编辑主题公园 - 请求数据:', parkData);
 
       const response = await fetch(`http://localhost:3001/api/admin/theme-parks/${parkData.id}`, {
         method: 'PUT',
@@ -291,7 +283,6 @@ export default function AdminThemeParks() {
         body: JSON.stringify(parkData),
       });
 
-      console.log('✏️ 编辑响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -302,7 +293,6 @@ export default function AdminThemeParks() {
       }
 
       const data = await response.json();
-      console.log('✏️ 编辑响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '主题公园更新成功！');
@@ -339,7 +329,6 @@ export default function AdminThemeParks() {
         return;
       }
 
-      console.log('🗑️ 删除主题公园 - ID:', deleteParkId);
 
       const response = await fetch(`http://localhost:3001/api/admin/theme-parks?id=${deleteParkId}`, {
         method: 'DELETE',
@@ -348,7 +337,6 @@ export default function AdminThemeParks() {
         },
       });
 
-      console.log('🗑️ 删除响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -359,7 +347,6 @@ export default function AdminThemeParks() {
       }
 
       const data = await response.json();
-      console.log('🗑️ 删除响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '主题公园删除成功！');
@@ -405,7 +392,6 @@ export default function AdminThemeParks() {
       const park = themeParks.find(p => p.id === parkId);
       if (!park) return;
 
-      console.log('🔄 切换状态 - ID:', parkId, '当前状态:', park.isActive);
 
       const response = await fetch(`http://localhost:3001/api/admin/theme-parks/${parkId}`, {
         method: 'PUT',
@@ -419,7 +405,6 @@ export default function AdminThemeParks() {
         }),
       });
 
-      console.log('🔄 切换状态响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -430,7 +415,6 @@ export default function AdminThemeParks() {
       }
 
       const data = await response.json();
-      console.log('🔄 切换状态响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', park.isActive ? '已停用主题公园' : '已激活主题公园');
@@ -1150,7 +1134,6 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
         return;
       }
 
-      console.log('🔐 图片上传 - Token存在:', !!token);
 
       const formData = new FormData();
       formData.append('file', file);
@@ -1163,7 +1146,6 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
         body: formData,
       });
 
-      console.log('📤 图片上传响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -1174,15 +1156,11 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
       }
 
       const result = await response.json();
-      console.log('📤 图片上传响应数据:', result);
 
       if (result.success && result.data?.thumbnailUrl) {
         onImageChange(result.data.thumbnailUrl);
-        console.log('🎉 图片上传成功，显示 toast');
         showToast('success', '图片上传成功！');
-        console.log('✅ Toast 已调用');
       } else {
-        console.log('❌ 图片上传失败，显示错误 toast');
         showToast('error', result.message || '上传失败');
       }
     } catch (error) {

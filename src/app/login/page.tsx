@@ -18,7 +18,6 @@ export default function LoginPage() {
     
     // 模拟登录请求
     setTimeout(() => {
-      console.log('Login attempt:', { email, password });
       setIsLoading(false);
       // 这里可以添加实际的登录逻辑
       // 成功后跳转到首页

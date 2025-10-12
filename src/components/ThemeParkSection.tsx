@@ -55,7 +55,6 @@ export default function ThemeParkSection() {
           setError('Failed to load theme parks');
         }
       } catch (err) {
-        console.error('Error fetching theme parks:', err);
         setError('Failed to load theme parks');
       } finally {
         setIsLoading(false);

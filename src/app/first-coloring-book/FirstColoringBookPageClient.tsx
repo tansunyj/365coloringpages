@@ -65,7 +65,6 @@ export default function FirstColoringBookPageClient() {
   useEffect(() => {
     const fetchColoringBookPages = async () => {
       try {
-        console.log('📚 正在从API获取涂色书页面数据...');
         
         const { api } = await import('../../lib/apiClient');
         const response = await api.coloringBooks.pages({
@@ -75,7 +74,6 @@ export default function FirstColoringBookPageClient() {
         });
         
         if (response.success && response.data) {
-          console.log('✅ 成功获取涂色书页面数据:', response.data);
           
           // 检查数据结构并转换
           const responseData = response.data as { pages?: unknown[] };
@@ -95,11 +93,9 @@ export default function FirstColoringBookPageClient() {
           
           setAllColoringPages(formattedPages);
         } else {
-          console.warn('⚠️ API返回数据格式不正确，使用空数组');
           setAllColoringPages([]);
         }
       } catch (error) {
-        console.error('❌ 获取涂色书页面数据失败:', error);
         setAllColoringPages([]);
       }
     };

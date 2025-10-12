@@ -100,8 +100,6 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
         if (response.success && response.data) {
           const pageData = response.data as ApiColoringPageData;
           
-          console.log('📄 接收到的API数据:', pageData);
-          console.log('🖼️ 图片URL信息:', {
             thumbnailUrl: pageData.thumbnailUrl,
             previewUrl: pageData.previewUrl,
             originalFileUrl: pageData.originalFileUrl
@@ -133,7 +131,6 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
           const thumbnailUrl = getValidImageUrl(pageData.thumbnailUrl || pageData.previewUrl);
           const imageUrl = getValidImageUrl(pageData.thumbnailUrl || pageData.previewUrl);
           
-          console.log('🔧 处理后的图片URL:', { thumbnailUrl, imageUrl });
           
           setColoringPageData({
             id: pageData.id?.toString() || id,
@@ -361,7 +358,6 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   };
 
   const handleDownload = () => {
-    console.log('Downloading:', coloringPageData?.title);
     // 这里可以添加实际的下载逻辑
   };
 
@@ -422,7 +418,6 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
                   className="object-cover rounded-xl"
                   unoptimized
                   onError={(e) => {
-                    console.error('图片加载失败:', coloringPageData.imageUrl);
                     // 图片加载失败时设置fallback图片
                     e.currentTarget.src = 'https://via.placeholder.com/600x800?text=Image+Not+Found';
                   }}

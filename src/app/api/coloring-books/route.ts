@@ -48,7 +48,6 @@ async function getColoringBooksFromDatabase(): Promise<ColoringBook[]> {
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Coloring Books API: 请连接到真实数据库以获取涂色书数据');
     return [];
   } catch (error) {
     console.error('❌ 获取涂色书数据失败:', error);
@@ -65,7 +64,6 @@ async function getColoringBookPagesFromDatabase(): Promise<ColoringBookPage[]> {
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Coloring Book Pages API: 请连接到真实数据库以获取涂色书页面数据');
     return [];
   } catch (error) {
     console.error('❌ 获取涂色书页面数据失败:', error);

@@ -21,7 +21,6 @@ export async function generateStaticParams() {
     });
     
     if (!response.ok) {
-      console.error('Failed to fetch categories for static generation');
       return [];
     }
     
@@ -32,7 +31,6 @@ export async function generateStaticParams() {
       category: cat.slug
     }));
   } catch (error) {
-    console.error('Error generating static params for categories:', error);
     return [];
   }
 }

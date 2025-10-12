@@ -43,7 +43,6 @@ async function getColoringPageFromDatabase(id: number): Promise<ColoringPageDeta
     // 这里应该连接到真实的数据库
     // const page = await db.coloringPages.findUnique({ where: { id } });
     // return page;
-    console.log(`🔍 尝试从数据库获取涂色页面详情，ID: ${id}`);
     return null;
   } catch (error) {
     console.error('❌ 获取涂色页面详情失败:', error);
@@ -360,7 +359,6 @@ export async function GET(
     const { id } = await params;
     const coloringPageId = parseInt(id);
 
-    console.log(`🎨 涂色页面详情API调用，ID: ${coloringPageId}`);
 
     // 参数验证
     if (isNaN(coloringPageId) || coloringPageId <= 0) {

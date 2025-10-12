@@ -36,7 +36,6 @@ export default function CategoriesColoringCard({ page }: CategoriesColoringCardP
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Downloading:', page.title);
   };
 
   // 将category名称转换为URL友好的slug

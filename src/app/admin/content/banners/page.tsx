@@ -146,7 +146,6 @@ export default function AdminBannerManagement() {
       });
 
       const apiUrl = `http://localhost:3001/api/admin/banners?${params}`;
-      console.log('API调用参数:', { page, search, status, url: apiUrl });
 
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -300,7 +299,6 @@ export default function AdminBannerManagement() {
 
   // 处理状态筛选
   const handleStatusFilter = (status: string) => {
-    console.log('状态筛选变更:', { 旧值: statusFilter, 新值: status, 搜索词: searchTerm });
     setStatusFilter(status);
     setCurrentPage(1); // 重置到第一页
     // 使用新的status值直接调用loadBannerGroups
@@ -439,7 +437,6 @@ export default function AdminBannerManagement() {
       setBannerGroups(prev => prev.map(g => 
         g.id === id ? { ...g, status: currentStatus } : g
       ));
-      console.error('切换Banner状态失败:', error);
       showToast('error', '网络错误，状态更新失败');
     }
   };
@@ -967,12 +964,10 @@ function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModa
   };
 
   const handleImageChange = useCallback((id: number, field: keyof BannerImage, value: string | number) => {
-    console.log(`handleImageChange 被调用:`, { id, field, value });
     setFormData(prev => {
       const newImages = prev.images.map(img => 
         img.id === id ? { ...img, [field]: value } : img
       );
-      console.log(`更新后的images:`, newImages);
       return {
         ...prev,
         images: newImages
@@ -1092,15 +1087,6 @@ function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModa
 
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
                 {formData.images.map((image, index) => {
-                  console.log(`渲染图片 #${index + 1}:`, {
-                    id: image.id,
-                    title: image.title,
-                    subtitle: image.subtitle,
-                    linkType: image.linkType,
-                    // 检查ID是否唯一
-                    isDuplicate: formData.images.filter(img => img.id === image.id).length > 1
-                  });
-                  
                   // 如果发现重复ID，使用index作为后备key
                   const uniqueKey = formData.images.filter(img => img.id === image.id).length > 1 
                     ? `${image.id}-${index}` 
@@ -1169,15 +1155,6 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
   // 这样可以确保每个组件都使用自己的props，避免状态污染
   const linkType = (image.linkType as 'categories' | 'theme-parks' | 'coloring-books') || 'categories';
 
-  // 调试信息：记录组件渲染
-  console.log(`BannerImageItem ${image.id} 渲染:`, {
-    imageId: image.id,
-    imageTitle: image.title,
-    imageSubtitle: image.subtitle,
-    imageLinkType: image.linkType,
-    computedLinkType: linkType
-  });
-
   // 初始化时设置默认跳转链接（仅在linkType改变时）
   useEffect(() => {
     if (!image.linkTarget || image.linkTarget === '') {
@@ -1187,7 +1164,6 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
 
   // 根据linkType更新跳转链接前缀
   const handleLinkTypeChange = (type: 'categories' | 'theme-parks' | 'coloring-books') => {
-    console.log(`linkType变化 - ID: ${image.id}, 新类型: ${type}`);
     
     // 更新linkType字段
     onChange(image.id, 'linkType', type);
@@ -1345,7 +1321,6 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                   name={`title-${image.id}`}
                   value={image.title}
                   onChange={(e) => {
-                    console.log(`标题输入变化 - ID: ${image.id}, 新值: ${e.target.value}`);
                     onChange(image.id, 'title', e.target.value);
                   }}
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
@@ -1363,7 +1338,6 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                   name={`subtitle-${image.id}`}
                   value={image.subtitle || ''}
                   onChange={(e) => {
-                    console.log(`副标题输入变化 - ID: ${image.id}, 新值: ${e.target.value}`);
                     onChange(image.id, 'subtitle', e.target.value);
                   }}
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"

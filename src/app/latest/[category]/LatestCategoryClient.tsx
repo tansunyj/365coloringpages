@@ -9,7 +9,6 @@ interface LatestCategoryClientProps {
 
 export default function LatestCategoryClient({ category }: LatestCategoryClientProps) {
   // 调试信息
-  console.log('🚀 LatestCategoryClient mounted with category:', category);
   
   return (
     <UnifiedListPage

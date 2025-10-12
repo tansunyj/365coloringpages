@@ -61,13 +61,11 @@ export default function AIGeneratorClient() {
 
   const handleDownload = () => {
     if (currentImage) {
-      console.log('Downloading:', currentImage.prompt);
     }
   };
 
   const handlePrint = () => {
     if (currentImage) {
-      console.log('Printing:', currentImage.prompt);
     }
   };
 

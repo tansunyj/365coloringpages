@@ -19,7 +19,6 @@ async function getCategoriesFromDatabase(): Promise<Category[]> {
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Categories API: 请连接到真实数据库以获取分类数据');
     return [];
   } catch (error) {
     console.error('❌ 获取分类数据失败:', error);

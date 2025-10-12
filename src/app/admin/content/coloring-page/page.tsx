@@ -218,7 +218,6 @@ export default function AdminColoringPages() {
 
         setMetadata(metadataMap);
       } else {
-        console.error('加载元数据失败:', data);
       }
     } catch (error) {
       console.error('加载元数据失败:', error);
@@ -1245,9 +1244,6 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
 
   // 调试：监控 imagePreview 变化
   useEffect(() => {
-    console.log('🖼️ ColoringPageModal - imagePreview 更新为:', imagePreview);
-    console.log('🖼️ imagePreview 是否有值:', !!imagePreview);
-    console.log('🖼️ imagePreview 长度:', imagePreview?.length || 0);
   }, [imagePreview]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -1282,7 +1278,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
     try {
       // 创建FormData
       const uploadFormData = new FormData();
-      uploadFormData.append('image', file);
+      uploadFormData.append('file', file);
 
       // 上传图片
       const token = localStorage.getItem('adminToken');
@@ -1301,13 +1297,6 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
         const thumbnailUrl = data.data.thumbnailUrl;
         const originalUrl = data.data.originalUrl;
         
-        console.log('=============================================');
-        console.log('✅ 图片上传成功！');
-        console.log('📸 预览URL:', previewUrl);
-        console.log('📸 缩略图URL:', thumbnailUrl);
-        console.log('📸 原始URL:', originalUrl);
-        console.log('🔄 设置 imagePreview 为:', previewUrl);
-        console.log('=============================================');
         
         setImagePreview(previewUrl);
         setFormData({
@@ -1319,12 +1308,10 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
         
         // 再次确认 imagePreview 已设置
         setTimeout(() => {
-          console.log('⏰ 1秒后检查 imagePreview 状态');
         }, 1000);
         
         showToast('success', '图片上传成功');
       } else {
-        console.error('❌ 图片上传失败:', data);
         showToast('error', data.message || '图片上传失败');
       }
     } catch (error) {
@@ -1379,7 +1366,6 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
                           e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23ddd" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3E加载失败%3C/text%3E%3C/svg%3E';
                         }}
                         onLoad={() => {
-                          console.log('✅ 图片加载成功:', imagePreview);
                         }}
                       />
                     </div>

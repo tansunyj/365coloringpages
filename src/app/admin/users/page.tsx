@@ -139,12 +139,10 @@ export default function AdminUsers() {
       const token = localStorage.getItem('adminToken');
       
       if (!token) {
-        console.error('❌ Token 不存在，跳转到登录页');
         window.location.href = '/admin/login';
         return;
       }
 
-      console.log('🔐 加载用户列表 - Token存在:', !!token);
 
       const response = await fetch(`http://localhost:3001/api/admin/users?page=${page}&limit=${itemsPerPage}&q=${search}&status=${status}`, {
         headers: {
@@ -153,7 +151,6 @@ export default function AdminUsers() {
         },
       });
 
-      console.log('🔐 加载响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -164,7 +161,6 @@ export default function AdminUsers() {
       }
 
       const data = await response.json();
-      console.log('🔐 加载响应数据:', data);
 
       if (response.ok && data.success && data.data) {
         setUsers(data.data.users || []);
@@ -235,7 +231,6 @@ export default function AdminUsers() {
         return;
       }
 
-      console.log('📝 新增用户 - 请求数据:', userData);
 
       const response = await fetch('http://localhost:3001/api/admin/users', {
         method: 'POST',
@@ -246,7 +241,6 @@ export default function AdminUsers() {
         body: JSON.stringify(userData),
       });
 
-      console.log('📝 新增响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -257,7 +251,6 @@ export default function AdminUsers() {
       }
 
       const data = await response.json();
-      console.log('📝 新增响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '用户添加成功！');
@@ -286,7 +279,6 @@ export default function AdminUsers() {
         return;
       }
 
-      console.log('✏️ 编辑用户 - 请求数据:', userData);
 
       const response = await fetch(`http://localhost:3001/api/admin/users/${userData.id}`, {
         method: 'PUT',
@@ -297,7 +289,6 @@ export default function AdminUsers() {
         body: JSON.stringify(userData),
       });
 
-      console.log('✏️ 编辑响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -308,7 +299,6 @@ export default function AdminUsers() {
       }
 
       const data = await response.json();
-      console.log('✏️ 编辑响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '用户更新成功！');
@@ -345,7 +335,6 @@ export default function AdminUsers() {
         return;
       }
 
-      console.log('🗑️ 删除用户 - ID:', deleteUserId);
 
       const response = await fetch(`http://localhost:3001/api/admin/users?id=${deleteUserId}`, {
         method: 'DELETE',
@@ -354,7 +343,6 @@ export default function AdminUsers() {
         },
       });
 
-      console.log('🗑️ 删除响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -365,7 +353,6 @@ export default function AdminUsers() {
       }
 
       const data = await response.json();
-      console.log('🗑️ 删除响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '用户删除成功！');
@@ -412,7 +399,6 @@ export default function AdminUsers() {
       if (!user) return;
 
       const action = user.isActive ? 'freeze' : 'unfreeze';
-      console.log('🔄 切换冻结状态 - ID:', userId, '当前状态:', user.isActive, '操作:', action);
 
       const response = await fetch(`http://localhost:3001/api/admin/users/${userId}/toggle-freeze`, {
         method: 'POST',
@@ -425,7 +411,6 @@ export default function AdminUsers() {
         }),
       });
 
-      console.log('🔄 切换冻结状态响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -436,7 +421,6 @@ export default function AdminUsers() {
       }
 
       const data = await response.json();
-      console.log('🔄 切换冻结状态响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', user.isActive ? '用户已冻结' : '用户已解冻');

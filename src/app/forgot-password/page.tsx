@@ -16,7 +16,6 @@ export default function ForgotPasswordPage() {
     
     // 模拟发送重置密码邮件
     setTimeout(() => {
-      console.log('Password reset email sent to:', email);
       setIsLoading(false);
       setIsSubmitted(true);
     }, 1000);

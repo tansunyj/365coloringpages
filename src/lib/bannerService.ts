@@ -175,14 +175,11 @@ export const getActiveBannerGroup = async (): Promise<BannerGroup | null> => {
 
       // 确保至少有一张图片
       if (bannerGroup.images.length === 0) {
-        console.warn('API returned no banner images, using fallback');
         return null;
       }
 
-      console.log('Successfully loaded banner data from API:', bannerGroup);
       return bannerGroup;
     } else {
-      console.warn('API response format is invalid:', data);
       return null;
     }
   } catch (error) {

@@ -24,7 +24,6 @@ export async function generateStaticParams() {
     });
     
     if (!categoriesResponse.ok) {
-      console.error('Failed to fetch categories for static generation');
       return [];
     }
     
@@ -53,13 +52,11 @@ export async function generateStaticParams() {
           });
         }
       } catch (error) {
-        console.error(`Error fetching pages for category ${cat.slug}:`, error);
       }
     }
     
     return staticParams;
   } catch (error) {
-    console.error('Error generating static params for category details:', error);
     return [];
   }
 }

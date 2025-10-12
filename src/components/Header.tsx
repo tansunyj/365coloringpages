@@ -82,7 +82,6 @@ export default function Header() {
     setIsLoggedIn(false);
     setIsUserMenuOpen(false);
     setCurrentUserAvatar('');
-    console.log('用户已登出');
   };
 
   // 处理登录成功
@@ -90,7 +89,6 @@ export default function Header() {
     setIsLoggedIn(true);
     setIsLoginDialogOpen(false);
     setCurrentUserAvatar(userAvatars[0]); // 设置默认头像
-    console.log('登录成功');
   };
 
   // 处理注册成功
@@ -98,7 +96,6 @@ export default function Header() {
     setIsLoggedIn(true);
     setIsSignupDialogOpen(false);
     setCurrentUserAvatar(userAvatars[0]); // 设置默认头像
-    console.log('注册成功');
   };
 
   // 语言切换函数
@@ -250,7 +247,6 @@ export default function Header() {
                   <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
-                      console.log('我的收藏');
                     }}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
@@ -260,7 +256,6 @@ export default function Header() {
                   <button
                     onClick={() => {
                       setIsUserMenuOpen(false);
-                      console.log('我的下载');
                     }}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >

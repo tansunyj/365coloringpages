@@ -135,7 +135,6 @@ export default function PopularCategoryClient({ category }: PopularCategoryClien
         
         return transformedResponse;
       } catch (error) {
-        console.error('Popular API error:', error);
         throw error;
       }
     },

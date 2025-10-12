@@ -33,7 +33,6 @@ export default function ThemeParkListCard({
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Downloading:', title);
   };
 
   // 将park名称转换为URL友好的slug

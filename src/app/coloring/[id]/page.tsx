@@ -20,7 +20,6 @@ export async function generateStaticParams() {
     });
     
     if (!response.ok) {
-      console.error('Failed to fetch coloring pages for static generation');
       return [];
     }
     
@@ -31,7 +30,6 @@ export async function generateStaticParams() {
       id: page.id.toString()
     }));
   } catch (error) {
-    console.error('Error generating static params for coloring pages:', error);
     return [];
   }
 }

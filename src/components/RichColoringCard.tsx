@@ -197,11 +197,9 @@ export default function RichColoringCard(props: RichColoringCardProps) {
       if (wasLiked) {
         // 取消点赞
         await api.coloring.unlike(id);
-        console.log(`✅ 取消点赞成功: 涂色页面 ${id}`);
       } else {
         // 点赞
         await api.coloring.like(id);
-        console.log(`✅ 点赞成功: 涂色页面 ${id}`);
       }
     } catch (error) {
       // 如果API调用失败，回滚状态

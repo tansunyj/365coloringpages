@@ -136,12 +136,10 @@ export default function AdminFirstColoring() {
       
       // 检查 token 是否存在
       if (!token) {
-        console.error('❌ Token 不存在，跳转到登录页');
         window.location.href = '/admin/login';
         return;
       }
 
-      console.log('🔐 加载涂色书列表 - Token存在:', !!token);
 
       const response = await fetch(`http://localhost:3001/api/admin/coloring-books?page=${page}&limit=${itemsPerPage}&q=${search}&status=${status}`, {
         headers: {
@@ -150,7 +148,6 @@ export default function AdminFirstColoring() {
         },
       });
 
-      console.log('📋 加载响应状态:', response.status);
 
       // 如果是401未授权，跳转到登录页
       if (response.status === 401) {
@@ -228,7 +225,6 @@ export default function AdminFirstColoring() {
         return;
       }
 
-      console.log('📝 新增涂色书 - 请求数据:', bookData);
 
       const response = await fetch('http://localhost:3001/api/admin/coloring-books', {
         method: 'POST',
@@ -239,7 +235,6 @@ export default function AdminFirstColoring() {
         body: JSON.stringify(bookData),
       });
 
-      console.log('📝 新增响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -252,7 +247,6 @@ export default function AdminFirstColoring() {
       }
 
       const data = await response.json();
-      console.log('📝 新增响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '涂色书添加成功！');
@@ -280,7 +274,6 @@ export default function AdminFirstColoring() {
         return;
       }
 
-      console.log('✏️ 编辑涂色书 - 请求数据:', bookData);
 
       const response = await fetch(`http://localhost:3001/api/admin/coloring-books/${bookData.id}`, {
         method: 'PUT',
@@ -291,7 +284,6 @@ export default function AdminFirstColoring() {
         body: JSON.stringify(bookData),
       });
 
-      console.log('✏️ 编辑响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -304,7 +296,6 @@ export default function AdminFirstColoring() {
       }
 
       const data = await response.json();
-      console.log('✏️ 编辑响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '涂色书更新成功！');
@@ -339,7 +330,6 @@ export default function AdminFirstColoring() {
         return;
       }
 
-      console.log('🗑️ 删除涂色书 - ID:', deleteBookId);
 
       const response = await fetch(`http://localhost:3001/api/admin/coloring-books?id=${deleteBookId}`, {
         method: 'DELETE',
@@ -349,7 +339,6 @@ export default function AdminFirstColoring() {
         },
       });
 
-      console.log('🗑️ 删除响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -362,7 +351,6 @@ export default function AdminFirstColoring() {
       }
 
       const data = await response.json();
-      console.log('🗑️ 删除响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', '涂色书删除成功！');
@@ -407,7 +395,6 @@ export default function AdminFirstColoring() {
       const book = books.find(b => b.id === bookId);
       if (!book) return;
 
-      console.log('🔄 切换状态 - ID:', bookId, '当前状态:', book.isActive);
 
       const response = await fetch(`http://localhost:3001/api/admin/coloring-books/${bookId}`, {
         method: 'PUT',
@@ -421,7 +408,6 @@ export default function AdminFirstColoring() {
         }),
       });
 
-      console.log('🔄 切换状态响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -434,7 +420,6 @@ export default function AdminFirstColoring() {
       }
 
       const data = await response.json();
-      console.log('🔄 切换状态响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', book.isActive ? '已停用涂色书' : '已激活涂色书');
@@ -996,8 +981,6 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
         return;
       }
 
-      console.log('🔐 上传图片 - Token存在:', !!token);
-      console.log('🔐 上传图片 - Token前10位:', token.substring(0, 10));
 
       const formData = new FormData();
       formData.append('file', file);
@@ -1010,19 +993,14 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
         body: formData,
       });
 
-      console.log('📤 上传响应状态:', response.status);
 
       const result = await response.json();
-      console.log('📤 上传响应数据:', result);
 
       if (result.success && result.data?.thumbnailUrl) {
         onImageChange(result.data.thumbnailUrl);
-        console.log('🎉 图片上传成功，显示 toast');
         // 确保使用 toast 而不是 alert
         showToast('success', '图片上传成功！');
-        console.log('✅ Toast 已调用');
       } else {
-        console.log('❌ 图片上传失败，显示错误 toast');
         showToast('error', result.message || '上传失败');
       }
     } catch (error) {

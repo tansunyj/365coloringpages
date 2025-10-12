@@ -37,7 +37,6 @@ export default function SimpleFirstColoringCard({
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Downloading:', title);
   };
 
   const handleCardClick = () => {

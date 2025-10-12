@@ -35,11 +35,6 @@ export async function POST(request: NextRequest) {
     const { adminConfig } = await getAdminConfig();
 
     // 添加调试信息
-    console.log('🔐 管理员登录尝试:');
-    console.log('输入邮箱:', email);
-    console.log('配置邮箱:', adminConfig.email);
-    console.log('邮箱匹配:', email === adminConfig.email);
-    console.log('密码匹配:', password === adminConfig.password);
 
     // 验证管理员账号
     if (email === adminConfig.email && password === adminConfig.password) {

@@ -22,7 +22,6 @@ export async function generateStaticParams() {
     });
     
     if (!response.ok) {
-      console.error('Failed to fetch theme parks for static generation');
       return [];
     }
     
@@ -33,7 +32,6 @@ export async function generateStaticParams() {
       slug: park.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params for theme parks:', error);
     return [];
   }
 }

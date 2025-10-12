@@ -21,7 +21,6 @@ export async function generateStaticParams() {
     });
     
     if (!response.ok) {
-      console.error('Failed to fetch coloring books for static generation');
       return [];
     }
     
@@ -32,7 +31,6 @@ export async function generateStaticParams() {
       slug: book.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params for coloring books:', error);
     return [];
   }
 }

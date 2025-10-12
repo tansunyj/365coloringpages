@@ -181,7 +181,6 @@ class ApiClientUtil {
           theme: (params.category && params.category !== 'all' && params.category !== '') ? params.category : ''  // 使用theme参数筛选主题公园，选择"所有"时为空
         };
         const { API_ENDPOINTS } = await import('../lib/apiConfig');
-        console.log('🎢 Theme Parks API Call:', API_ENDPOINTS.PUBLIC.THEME_PARKS.LIST, themeParksParams);
         return await apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.THEME_PARKS.LIST, themeParksParams) as ApiResponse;
         
       case 'first-coloring-book':
@@ -195,7 +194,6 @@ class ApiClientUtil {
           book: (params.category && params.category !== 'all' && params.category !== '') ? params.category : ''  // 使用book参数筛选涂色书，选择"所有"时为空
         };
         const { API_ENDPOINTS: coloringBooksEndpoints } = await import('../lib/apiConfig');
-        console.log('📚 Coloring Books Pages API Call:', coloringBooksEndpoints.PUBLIC.COLORING_BOOKS.PAGES, coloringBooksParams);
         return await coloringBooksApiClient.get<ApiResponse>(coloringBooksEndpoints.PUBLIC.COLORING_BOOKS.PAGES, coloringBooksParams) as ApiResponse;
         
       case 'latest':
@@ -209,7 +207,6 @@ class ApiClientUtil {
           sort: params.sort || 'newest'
         };
         const { API_ENDPOINTS: latestEndpoints } = await import('../lib/apiConfig');
-        console.log('🆕 Latest API Call:', latestEndpoints.PUBLIC.LATEST.LIST, latestParams);
         return await latestApiClient.get<ApiResponse>(latestEndpoints.PUBLIC.LATEST.LIST, latestParams) as ApiResponse;
         
       default:
@@ -422,7 +419,6 @@ export default function UnifiedListPage({
       const actualPageToLoad = pageToLoad || (isLoadMore ? currentPage : 1);
       
       if (type === 'theme-parks') {
-        console.log('📍 LoadData - Current Category:', currentCategory, 'URL Category:', urlCategory, 'Prop Category:', category);
       }
       
       const response = await ApiClientUtil.fetchData(type, {
@@ -435,7 +431,6 @@ export default function UnifiedListPage({
       });
       
       if (response.success) {
-        console.log('🔍 API Response Data:', response.data);
         
         // 处理不同API响应格式的数据字段
         let pageItems: ColoringPageItem[] = [];
@@ -534,12 +529,9 @@ export default function UnifiedListPage({
             }));
           } else if (type === 'first-coloring-book' && 'pages' in response.data && Array.isArray(response.data.pages)) {
             // 处理涂色书页面API格式 - 数据已经是标准格式，直接使用
-            console.log('🔄 Processing coloring book pages from new API:', response.data.pages);
             
             // 检查第一条数据的字段，帮助调试
             if (response.data.pages.length > 0) {
-              console.log('📝 First page item fields:', Object.keys(response.data.pages[0]));
-              console.log('📝 First page item:', response.data.pages[0]);
             }
             
             pageItems = response.data.pages;
@@ -547,7 +539,6 @@ export default function UnifiedListPage({
             pageItems = response.data.pages || response.data.items || [];
           }
         }
-        console.log('📄 Page Items:', pageItems);
         
         if (isLoadMore) {
           // 追加数据，确保没有重复的ID
@@ -581,7 +572,6 @@ export default function UnifiedListPage({
           startRecord: 1,
           endRecord: pageItems.length
         });
-        console.log('📊 Pagination Data:', paginationData);
         
         setPagination(paginationData);
         
@@ -663,7 +653,6 @@ export default function UnifiedListPage({
 
   // 数据加载效果 - 只在搜索条件变化时重新加载
   useEffect(() => {
-    console.log('🔥 useEffect Triggered - currentCategory:', currentCategory, 'type:', type);
     loadData(false); // 明确传递 false，表示不是加载更多，而是重新加载
   }, [currentLimit, currentCategory, currentSort, currentQuery, type, park, loadData]);
 
@@ -700,8 +689,6 @@ export default function UnifiedListPage({
   };
 
   const handleCategoryChange = (categorySlug: string) => {
-    console.log('🔄 Category Change:', categorySlug);
-    console.log('🔄 Before Update - URL Category:', urlCategory, 'Current Category:', currentCategory);
     setSelectedCategory(categorySlug);
     updateUrl({ category: categorySlug, page: 1 });
   };
@@ -741,7 +728,6 @@ export default function UnifiedListPage({
             category: currentCategory
           }}
         />
-
 
 
         {/* 搜索和筛选区域 - 响应式布局 */}

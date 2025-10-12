@@ -33,7 +33,6 @@ export default function FirstColoringListCard({
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Downloading:', title);
   };
 
   // 将category名称转换为URL友好的slug

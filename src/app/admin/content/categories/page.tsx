@@ -163,7 +163,6 @@ export default function AdminCategories() {
         return;
       }
 
-      console.log('🔐 加载分类列表 - Token存在:', !!token);
 
       const params = new URLSearchParams({
         page: page.toString(),
@@ -179,7 +178,6 @@ export default function AdminCategories() {
         },
       });
 
-      console.log('📤 加载响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -190,7 +188,6 @@ export default function AdminCategories() {
       }
 
       const data = await response.json();
-      console.log('📤 加载分类列表 - 响应数据:', data);
 
       if (response.ok && data.success && data.data) {
         setCategories(data.data.categories || []);
@@ -391,7 +388,6 @@ export default function AdminCategories() {
       const newStatus = category.isActive === 1 ? 'inactive' : 'active';
       const action = category.isActive === 1 ? 'deactivate' : 'activate';
 
-      console.log('🔄 切换状态 - ID:', categoryId, '当前状态:', currentStatus, '新状态:', newStatus);
 
       // 乐观更新：立即更新本地状态
       setCategories(prevCategories => 
@@ -413,7 +409,6 @@ export default function AdminCategories() {
         }),
       });
 
-      console.log('🔄 切换状态响应状态:', response.status);
 
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
@@ -424,7 +419,6 @@ export default function AdminCategories() {
       }
 
       const data = await response.json();
-      console.log('🔄 切换状态响应数据:', data);
 
       if (response.ok && data.success) {
         showToast('success', action === 'activate' ? '已激活分类' : '已停用分类');

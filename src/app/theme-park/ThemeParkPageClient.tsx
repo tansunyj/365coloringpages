@@ -66,14 +66,12 @@ export default function ThemeParkPageClient() {
   useEffect(() => {
     const fetchThemeParkPages = async () => {
       try {
-        console.log('🏰 正在从API获取主题公园涂色页面数据...');
         
         // 调用真实的主题公园API
         const { api } = await import('../../lib/apiClient');
         const response = await api.themeParks.list();
         
         if (response.success && response.data && Array.isArray(response.data.pages)) {
-          console.log('✅ 成功获取主题公园涂色页面数据:', response.data);
           
           // 转换API数据为组件需要的格式
           const formattedPages = response.data.pages.map((page: {
@@ -101,7 +99,6 @@ export default function ThemeParkPageClient() {
           
           setAllColoringPages(formattedPages);
         } else {
-          console.warn('⚠️ API返回数据格式不正确，使用空数组');
           setAllColoringPages([]);
         }
       } catch (error) {

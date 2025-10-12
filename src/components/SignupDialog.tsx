@@ -70,7 +70,6 @@ export default function SignupDialog({ isOpen, onClose, onSwitchToLogin, onSignu
     setIsVerifyingCode(true);
     // 模拟发送验证码
     setTimeout(() => {
-      console.log('Verification code sent to:', email);
       setIsCodeSent(true);
       setIsVerifyingCode(false);
     }, 1000);
@@ -94,7 +93,6 @@ export default function SignupDialog({ isOpen, onClose, onSwitchToLogin, onSignu
     
     // 模拟注册请求
     setTimeout(() => {
-      console.log('Signup:', { email, password, verificationCode });
       alert('注册成功！');
       setIsLoading(false);
       // 调用注册成功回调
@@ -105,13 +103,11 @@ export default function SignupDialog({ isOpen, onClose, onSwitchToLogin, onSignu
 
   // Google 注册
   const handleGoogleSignup = () => {
-    console.log('Google signup clicked');
     // 这里集成Google OAuth
   };
 
   // GitHub 注册
   const handleGithubSignup = () => {
-    console.log('GitHub signup clicked');
     // 这里集成GitHub OAuth
   };
 

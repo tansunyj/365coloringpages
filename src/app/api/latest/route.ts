@@ -28,7 +28,6 @@ async function getLatestPagesFromDatabase(): Promise<LatestColoringPage[]> {
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Latest API: 请连接到真实数据库以获取最新涂色页面数据');
     return [];
   } catch (error) {
     console.error('❌ 获取最新涂色页面数据失败:', error);

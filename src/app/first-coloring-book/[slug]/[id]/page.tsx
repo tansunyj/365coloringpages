@@ -23,7 +23,6 @@ export async function generateStaticParams() {
     });
     
     if (!booksResponse.ok) {
-      console.error('Failed to fetch coloring books for static generation');
       return [];
     }
     
@@ -52,14 +51,11 @@ export async function generateStaticParams() {
           });
         }
       } catch (error) {
-        console.error(`Error fetching pages for coloring book ${book.slug}:`, error);
       }
     }
     
-    console.log(`🚀 生成了 ${staticParams.length} 个静态参数组合`);
     return staticParams;
   } catch (error) {
-    console.error('Error generating static params for coloring book details:', error);
     return [];
   }
 }

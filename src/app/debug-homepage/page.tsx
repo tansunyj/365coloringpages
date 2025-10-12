@@ -21,7 +21,6 @@ export default function DebugHomepage() {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
     
     // 测试1: 直接fetch keywords
-    console.log('=== 开始测试Keywords API ===');
     try {
       const startTime = Date.now();
       const response = await fetch(`${apiBaseUrl}/api/keywords`, {
@@ -41,7 +40,6 @@ export default function DebugHomepage() {
         url: `${apiBaseUrl}/api/keywords`
       });
       
-      console.log('Direct fetch结果:', data);
     } catch (error) {
       results.push({
         test: 'Direct Fetch Keywords',
@@ -49,11 +47,9 @@ export default function DebugHomepage() {
         error: error instanceof Error ? error.message : 'Unknown error',
         url: `${apiBaseUrl}/api/keywords`
       });
-      console.error('Direct fetch错误:', error);
     }
     
     // 测试2: 使用apiClient
-    console.log('=== 开始测试ApiClient ===');
     try {
       const { api } = await import('../../lib/apiClient');
       const startTime = Date.now();
@@ -68,7 +64,6 @@ export default function DebugHomepage() {
         url: '通过ApiClient调用'
       });
       
-      console.log('ApiClient结果:', response);
     } catch (error) {
       results.push({
         test: 'ApiClient Keywords',
@@ -76,11 +71,9 @@ export default function DebugHomepage() {
         error: error instanceof Error ? error.message : 'Unknown error',
         url: '通过ApiClient调用'
       });
-      console.error('ApiClient错误:', error);
     }
     
     // 测试3: 检查Hero组件同样的逻辑
-    console.log('=== 模拟Hero组件逻辑 ===');
     try {
       const { api } = await import('../../lib/apiClient');
       const response = await api.keywords.get();
@@ -108,7 +101,6 @@ export default function DebugHomepage() {
         url: 'Hero组件逻辑模拟'
       });
       
-      console.log('Hero逻辑模拟结果:', { response, processedKeywords });
     } catch (error) {
       results.push({
         test: 'Hero Logic Simulation',
@@ -116,7 +108,6 @@ export default function DebugHomepage() {
         error: error instanceof Error ? error.message : 'Unknown error',
         url: 'Hero组件逻辑模拟'
       });
-      console.error('Hero逻辑模拟错误:', error);
     }
     
     setApiTests(results);

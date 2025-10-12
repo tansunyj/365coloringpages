@@ -53,7 +53,6 @@ export default function LoginDialog({ isOpen, onClose, onSwitchToSignup, onLogin
     
     // 模拟登录请求
     setTimeout(() => {
-      console.log('Login attempt:', { email, password });
       setIsLoading(false);
       // 调用登录成功回调
       onLoginSuccess();

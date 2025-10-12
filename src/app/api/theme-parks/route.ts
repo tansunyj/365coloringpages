@@ -38,7 +38,6 @@ async function getThemeParksFromDatabase(): Promise<ThemePark[]> {
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Theme Parks API: 请连接到真实数据库以获取主题公园数据');
     return [];
   } catch (error) {
     console.error('❌ 获取主题公园数据失败:', error);
@@ -55,7 +54,6 @@ async function getThemeParkPagesFromDatabase(): Promise<ThemeParkColoringPage[]>
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Theme Park Pages API: 请连接到真实数据库以获取主题公园涂色页面数据');
     return [];
   } catch (error) {
     console.error('❌ 获取主题公园涂色页面数据失败:', error);

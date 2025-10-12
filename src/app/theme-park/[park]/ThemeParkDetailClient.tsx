@@ -45,7 +45,6 @@ export default function ThemeParkDetailClient({ parkSlug }: ThemeParkDetailClien
           }
         }
       } catch (error) {
-        console.error('Failed to fetch theme park:', error);
       } finally {
         setIsLoadingThemePark(false);
       }

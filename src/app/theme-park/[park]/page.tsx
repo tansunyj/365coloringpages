@@ -25,7 +25,6 @@ export async function generateStaticParams() {
       }
     }
   } catch (error) {
-    console.error('Error fetching theme parks for static generation:', error);
   }
   
   // 如果 API 调用失败，返回默认的主题公园列表

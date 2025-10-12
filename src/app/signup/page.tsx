@@ -24,7 +24,6 @@ export default function SignupPage() {
     setIsVerifyingCode(true);
     // 模拟发送验证码
     setTimeout(() => {
-      console.log('Verification code sent to:', email);
       setIsCodeSent(true);
       setIsVerifyingCode(false);
     }, 1000);
@@ -43,7 +42,6 @@ export default function SignupPage() {
     
     // 模拟注册请求
     setTimeout(() => {
-      console.log('Email signup:', { email, password, verificationCode });
       setIsLoading(false);
       router.push('/');
     }, 1000);
@@ -51,13 +49,11 @@ export default function SignupPage() {
 
   // Google 注册
   const handleGoogleSignup = () => {
-    console.log('Google signup clicked');
     // 这里集成Google OAuth
   };
 
   // GitHub 注册
   const handleGithubSignup = () => {
-    console.log('GitHub signup clicked');
     // 这里集成GitHub OAuth
   };
 

@@ -29,7 +29,6 @@ async function getColoringBookPagesFromDatabase(): Promise<ColoringBookPage[]> {
     // 这里应该连接到真实的数据库
     // const pages = await db.coloringBookPages.findMany();
     // return pages;
-    console.log('📚 尝试从数据库获取涂色书页面数据...');
     return [];
   } catch (error) {
     console.error('❌ 获取涂色书页面数据失败:', error);
@@ -329,9 +328,6 @@ async function searchColoringBookPages(
   const allPages = await getColoringBookPagesFromDatabase();
   let filteredPages = allPages.length > 0 ? [...allPages] : [...exampleColoringBookPages];
 
-  console.log('🔍 搜索参数:', { query, book, page, limit, sortBy });
-  console.log('📄 原始页面数量:', filteredPages.length);
-
   // 关键词搜索
   if (query.trim()) {
     const searchTerm = query.toLowerCase();
@@ -340,13 +336,11 @@ async function searchColoringBookPages(
       page.description.toLowerCase().includes(searchTerm) ||
       page.categoryName.toLowerCase().includes(searchTerm)
     );
-    console.log('🔍 关键词筛选后页面数量:', filteredPages.length);
   }
 
   // 涂色书筛选 - 根据bookSlug筛选
   if (book && book !== 'all' && book !== '') {
     filteredPages = filteredPages.filter(page => page.bookSlug === book);
-    console.log(`📚 涂色书筛选 (${book}) 后页面数量:`, filteredPages.length);
   }
 
   // 排序
@@ -374,7 +368,6 @@ async function searchColoringBookPages(
   const endIndex = startIndex + limit;
   const paginatedPages = sortedPages.slice(startIndex, endIndex);
 
-  console.log('📊 分页结果:', { startIndex, endIndex, paginatedCount: paginatedPages.length });
 
   return {
     items: paginatedPages,
@@ -409,7 +402,6 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const sortBy = searchParams.get('sort') || 'popular';
 
-    console.log('📚 涂色书页面API调用:', { query, book, page, limit, sortBy });
 
     // 参数验证
     if (page < 1 || limit < 1 || limit > 50) {

@@ -62,6 +62,7 @@ export default function AdminKeywords() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showBatchModal, setShowBatchModal] = useState(false);
   const [editingKeyword, setEditingKeyword] = useState<Keyword | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   // 格式化日期为 yyyy-MM-dd HH:mm:ss 格式
   const formatDateForInput = (dateString?: string) => {
@@ -214,8 +215,57 @@ export default function AdminKeywords() {
     }
   };
 
+  // 更新URL参数
+  const updateURL = (params: { q?: string; status?: string; startDate?: string; endDate?: string; page?: number }) => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams();
+      
+      const q = params.q !== undefined ? params.q : searchTerm;
+      const status = params.status !== undefined ? params.status : statusFilter;
+      const startDate = params.startDate !== undefined ? params.startDate : startDateFilter;
+      const endDate = params.endDate !== undefined ? params.endDate : endDateFilter;
+      const page = params.page !== undefined ? params.page : currentPage;
+      
+      if (q) urlParams.set('q', q);
+      if (status) urlParams.set('status', status);
+      if (startDate) urlParams.set('startDate', startDate);
+      if (endDate) urlParams.set('endDate', endDate);
+      if (page > 1) urlParams.set('page', page.toString());
+      
+      const newURL = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`;
+      window.history.pushState({}, '', newURL);
+    }
+  };
+
+  // 初始化：从URL读取参数
   useEffect(() => {
-    loadKeywords(currentPage, searchTerm, statusFilter, startDateFilter, endDateFilter);
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const qParam = urlParams.get('q') || '';
+      const statusParam = urlParams.get('status') || '';
+      const startDateParam = urlParams.get('startDate') || '';
+      const endDateParam = urlParams.get('endDate') || '';
+      const pageParam = parseInt(urlParams.get('page') || '1');
+      
+      // 设置初始状态
+      if (qParam) setSearchTerm(qParam);
+      if (statusParam) setStatusFilter(statusParam);
+      if (startDateParam) setStartDateFilter(startDateParam);
+      if (endDateParam) setEndDateFilter(endDateParam);
+      if (pageParam > 1) setCurrentPage(pageParam);
+      
+      // 加载数据
+      loadKeywords(pageParam, qParam, statusParam, startDateParam, endDateParam);
+      setIsInitialized(true);
+    }
+  }, []);
+
+  // 当页码或筛选条件变化时重新加载
+  useEffect(() => {
+    if (isInitialized) {
+      loadKeywords(currentPage, searchTerm, statusFilter, startDateFilter, endDateFilter);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   // 处理搜索输入
@@ -226,14 +276,27 @@ export default function AdminKeywords() {
   // 清空搜索框
   const handleClearSearch = () => {
     setSearchTerm('');
-    setCurrentPage(1);
-    loadKeywords(1, '', statusFilter, startDateFilter, endDateFilter);
+    updateURL({ q: '', page: 1 });
+    
+    // 如果当前已经是第1页，直接加载数据；否则设置页码会触发useEffect
+    if (currentPage === 1) {
+      loadKeywords(1, '', statusFilter, startDateFilter, endDateFilter);
+    } else {
+      setCurrentPage(1);
+    }
   };
 
   // 处理查询按钮点击
   const handleQueryClick = () => {
-    setCurrentPage(1);
-    loadKeywords(1, searchTerm, statusFilter, startDateFilter, endDateFilter);
+    // 更新URL
+    updateURL({ q: searchTerm, status: statusFilter, startDate: startDateFilter, endDate: endDateFilter, page: 1 });
+    
+    // 如果当前已经是第1页，直接加载数据；否则设置页码会触发useEffect
+    if (currentPage === 1) {
+      loadKeywords(1, searchTerm, statusFilter, startDateFilter, endDateFilter);
+    } else {
+      setCurrentPage(1);
+    }
   };
 
   // 重置所有筛选条件
@@ -242,8 +305,14 @@ export default function AdminKeywords() {
     setStatusFilter('');
     setStartDateFilter('');
     setEndDateFilter('');
-    setCurrentPage(1);
-    loadKeywords(1, '', '', '', '');
+    updateURL({ q: '', status: '', startDate: '', endDate: '', page: 1 });
+    
+    // 如果当前已经是第1页，直接加载数据；否则设置页码会触发useEffect
+    if (currentPage === 1) {
+      loadKeywords(1, '', '', '', '');
+    } else {
+      setCurrentPage(1);
+    }
   };
 
   // 重置表单

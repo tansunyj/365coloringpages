@@ -216,13 +216,11 @@ export default function ManageRelatedColoringPages({
       );
 
       const result = await response.json();
-      console.log('📦 左侧列表 API 响应:', result);
       
       if (result.success && result.data) {
         const items = result.data.pages || result.data.items || result.data.coloringPages || [];
         const pagination = result.data.pagination || relatedPagination;
         
-        console.log('📦 解析后的数据:', { items: items.length, pagination });
         
         setRelatedPages(items);
         setRelatedPagination(pagination);
@@ -231,7 +229,6 @@ export default function ManageRelatedColoringPages({
         const ids = new Set<number>(items.map((item: ColoringPage) => item.id));
         setOriginalRelatedIds(ids);
       } else {
-        console.error('❌ API 返回失败:', result);
         showToast('error', '加载已关联涂色卡失败');
       }
     } catch (error) {
@@ -264,18 +261,15 @@ export default function ManageRelatedColoringPages({
       );
 
       const result = await response.json();
-      console.log('📦 右侧列表 API 响应:', result);
       
       if (result.success && result.data) {
         const items = result.data.pages || result.data.items || result.data.coloringPages || [];
         const pagination = result.data.pagination || availablePagination;
         
-        console.log('📦 解析后的数据:', { items: items.length, pagination });
         
         setAvailablePages(items);
         setAvailablePagination(pagination);
       } else {
-        console.error('❌ API 返回失败:', result);
         showToast('error', '加载涂色卡列表失败');
       }
     } catch (error) {

@@ -36,7 +36,6 @@ export default function ColoringPageCard({ page }: ColoringPageCardProps) {
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Downloading:', page.title);
   };
 
   const handleClick = () => {

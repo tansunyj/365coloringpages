@@ -136,7 +136,6 @@ export default function Hero() {
     
     // 防止重复调用：如果已经开始加载过，就不再加载
     if (categoriesLoadingStarted.current) {
-      console.log('Categories加载已开始过，跳过重复调用');
       return;
     }
     
@@ -145,18 +144,14 @@ export default function Hero() {
     
     const loadCategories = async () => {
       try {
-        console.log('🔥 开始加载分类数据... (只应该看到这条日志一次)');
-        
         const { api } = await import('../lib/apiClient');
         const response = await api.categories.list();
         
-        console.log('Categories API响应:', response);
         
         // 检查组件是否仍然挂载
         if (!isMounted) return;
         
         if (response.success && response.data) {
-          console.log('✅ 成功获取分类数据:', response.data);
           // 过滤活跃的分类并按sortOrder排序，取前6个
           const activeCategories = (response.data as Category[])
             .filter((cat: Category) => cat.isActive === 1)
@@ -164,7 +159,6 @@ export default function Hero() {
             .slice(0, 6);
           setCategories(activeCategories);
         } else {
-          console.warn('⚠️ API响应格式不正确或无数据:', response);
           // 使用空数组作为fallback
           setCategories([]);
         }
@@ -182,7 +176,6 @@ export default function Hero() {
       } finally {
         if (isMounted) {
           setCategoriesLoading(false);
-          console.log('🏁 Categories加载完成');
         }
       }
     };
@@ -202,7 +195,6 @@ export default function Hero() {
     
     // 防止重复调用：如果已经开始加载过，就不再加载
     if (keywordsLoadingStarted.current) {
-      console.log('Keywords加载已开始过，跳过重复调用');
       return;
     }
     
@@ -211,25 +203,21 @@ export default function Hero() {
     
     const loadKeywords = async () => {
       try {
-        console.log('🔥 开始加载热门关键词...');
         
         const { api } = await import('../lib/apiClient');
         const response = await api.keywords.get();
         
-        console.log('Keywords API响应:', response);
         
         // 检查组件是否仍然挂载
         if (!isMounted) return;
         
         if (response.success && response.data) {
-          console.log('✅ 成功获取关键词数据:', response.data);
           // 按点击数排序，取前8个关键词
           const sortedKeywords = (response.data as HotKeyword[])
             .sort((a, b) => b.clickCount - a.clickCount)
             .slice(0, 8);
           setHotKeywords(sortedKeywords);
         } else {
-          console.warn('⚠️ API响应格式不正确或无数据:', response);
           // 使用默认关键词作为fallback
           const fallbackKeywords = ['小狗', '公主', '独角兽', '汽车', '花朵', '恐龙', '超级英雄', '魔法'];
           setHotKeywords(fallbackKeywords.map(keyword => ({ keyword, clickCount: 0 })));
@@ -249,7 +237,6 @@ export default function Hero() {
       } finally {
         if (isMounted) {
           setKeywordsLoading(false);
-          console.log('🏁 Keywords加载完成');
         }
       }
     };

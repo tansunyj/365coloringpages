@@ -44,7 +44,6 @@ async function getPopularPagesFromDatabase(): Promise<PopularColoringPage[]> {
     // });
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Popular API: 请连接到真实数据库以获取热门涂色页面数据');
     return [];
   } catch (error) {
     console.error('❌ 获取热门涂色页面数据失败:', error);

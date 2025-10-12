@@ -25,7 +25,6 @@ async function getColoringPagesFromDatabase(): Promise<ColoringPage[]> {
     // 例如: const pages = await db.coloringPages.findMany({...});
     
     // 暂时返回空数组，需要连接到真实数据库
-    console.warn('⚠️ Search API: 请连接到真实数据库以获取涂色页面数据');
     return [];
   } catch (error) {
     console.error('❌ 获取涂色页面数据失败:', error);
@@ -394,7 +393,6 @@ export async function POST(request: NextRequest) {
     const { query, resultCount, clickedItemId } = body;
 
     // 这里可以记录搜索行为用于分析
-    console.log('搜索记录:', {
       query,
       resultCount,
       clickedItemId,

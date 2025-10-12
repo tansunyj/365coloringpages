@@ -22,7 +22,6 @@ export default function TestBannerPage() {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
       const apiUrl = `${apiBaseUrl}/api/banners`;
       
-      console.log('Testing banner API:', apiUrl);
       
       const response = await fetch(apiUrl, {
         method: 'GET',
