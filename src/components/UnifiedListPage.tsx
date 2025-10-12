@@ -919,6 +919,7 @@ export default function UnifiedListPage({
                    categoryName={item.categoryName || '其他'}
                    categoryColor={item.categoryColor}
                    isLiked={item.isLiked}
+                   isFavorited={item.isFavorited}
                    linkType={type}
                    linkCategory={
                     type === 'theme-parks' ? currentCategory || 'theme-park-adventures' :

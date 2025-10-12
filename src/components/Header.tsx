@@ -152,10 +152,12 @@ export default function Header() {
   // 处理登出
   const handleLogout = async () => {
     try {
+      console.log('🚪 用户点击退出登录');
       const token = localStorage.getItem('authToken') || localStorage.getItem('token');
       
       if (token) {
         // 调用后端退出接口
+        console.log('📤 调用后端退出接口');
         await fetch(API_ENDPOINTS.PUBLIC.AUTH.LOGOUT, {
           method: 'POST',
           headers: {
@@ -163,18 +165,25 @@ export default function Header() {
             'Content-Type': 'application/json',
           },
         });
+        console.log('✅ 后端退出成功');
       }
     } catch (error) {
-      console.error('退出登录失败:', error);
+      console.error('❌ 退出登录失败:', error);
     } finally {
       // 无论后端调用是否成功，都清除本地存储
+      console.log('🧹 清除本地存储');
       setIsLoggedIn(false);
       setIsUserMenuOpen(false);
       setCurrentUserAvatar('');
+      setUserEmail('');
       localStorage.removeItem('authToken');
       localStorage.removeItem('userInfo');
       localStorage.removeItem('authProvider');
       localStorage.removeItem('token');
+      
+      // ⭐ 关键：跳转到首页
+      console.log('🏠 跳转到首页');
+      router.push('/');
     }
   };
 

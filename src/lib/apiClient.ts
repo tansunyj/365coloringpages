@@ -121,12 +121,26 @@ export class ApiClient {
     this.token = undefined;
   }
 
+  // 获取token（优先使用实例token，否则从localStorage获取）
+  private getToken(): string | undefined {
+    if (this.token) {
+      return this.token;
+    }
+    
+    // 尝试从localStorage获取token（浏览器环境）
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      return localStorage.getItem('authToken') || localStorage.getItem('token') || undefined;
+    }
+    
+    return undefined;
+  }
+
   // GET请求
   async get<T>(url: string, params?: Record<string, string | number | boolean>): Promise<T> {
     const finalUrl = params ? buildUrlWithParams(url, params) : url;
     return request<T>(finalUrl, {
       method: 'GET',
-      token: this.token,
+      token: this.getToken(),
     });
   }
 
@@ -135,7 +149,7 @@ export class ApiClient {
     return request<T>(url, {
       method: 'POST',
       body: data,
-      token: this.token,
+      token: this.getToken(),
     });
   }
 
@@ -144,7 +158,7 @@ export class ApiClient {
     return request<T>(url, {
       method: 'PUT',
       body: data,
-      token: this.token,
+      token: this.getToken(),
     });
   }
 
@@ -152,25 +166,27 @@ export class ApiClient {
   async delete<T>(url: string): Promise<T> {
     return request<T>(url, {
       method: 'DELETE',
-      token: this.token,
+      token: this.getToken(),
     });
   }
 
   // 文件上传
   async upload<T>(url: string, formData: FormData): Promise<T> {
+    const token = this.getToken();
     return request<T>(url, {
       method: 'POST',
       body: formData,
-      token: this.token,
+      token,
       timeout: REQUEST_CONFIG.TIMEOUT.UPLOAD,
-      headers: REQUEST_CONFIG.UPLOAD_HEADERS(this.token),
+      headers: REQUEST_CONFIG.UPLOAD_HEADERS(token),
     });
   }
 
   // 下载文件
   async download(url: string): Promise<Blob> {
+    const token = this.getToken();
     const response = await fetch(url, {
-      headers: this.token ? { 'Authorization': `Bearer ${this.token}` } : {},
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
     });
 
     if (!response.ok) {

@@ -1,33 +1,61 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Settings, Palette, Heart, Download, User, Mail, Lock, Camera, Save, X, Eye, EyeOff, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { Settings, Palette, Heart, Download, User, Mail, Lock, Camera, Save, X, Eye, EyeOff, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, ZoomOut, Star } from 'lucide-react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import UnifiedColoringDetail from '@/components/UnifiedColoringDetail';
+import Toast from '@/components/Toast';
 import { API_ENDPOINTS } from '@/lib/apiConfig';
 
 // API 请求工具函数
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+  
+  console.log('🔐 fetchWithAuth 调用:', {
+    url,
+    hasToken: !!token,
+    tokenPrefix: token ? token.substring(0, 20) + '...' : 'null',
+    method: options.method || 'GET'
+  });
+
+  if (!token) {
+    console.error('❌ 未找到 token，请先登录');
+    alert('未找到登录信息，请先登录');
+    window.location.href = '/';
+    throw new Error('未找到 token');
+  }
 
   const headers = {
     'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` }),
+    'Authorization': `Bearer ${token}`,
     ...options.headers
   };
+
+  console.log('📤 发送请求:', { url, headers: { ...headers, Authorization: headers.Authorization?.substring(0, 30) + '...' } });
 
   const response = await fetch(url, {
     ...options,
     headers
   });
 
+  console.log('📥 响应状态:', response.status, response.statusText);
+
   if (response.status === 401) {
+    console.error('❌ Token 已失效 (401)');
     localStorage.removeItem('token');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userInfo');
+    alert('登录已过期，请重新登录');
     window.location.href = '/';
     throw new Error('Token 已失效，请重新登录');
+  }
+
+  if (response.status === 500) {
+    console.error('❌ 服务器错误 (500)');
+    const errorText = await response.text();
+    console.error('错误详情:', errorText);
   }
 
   return response;
@@ -126,13 +154,13 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
     if (file) {
       // 验证文件类型
       if (!file.type.startsWith('image/')) {
-        alert('请选择图片文件！');
+        showToast('请选择图片文件！', 'warning');
         return;
       }
 
       // 验证文件大小（限制为5MB）
       if (file.size > 5 * 1024 * 1024) {
-        alert('图片文件大小不能超过5MB！');
+        showToast('图片文件大小不能超过5MB！', 'warning');
         return;
       }
 
@@ -501,10 +529,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: {
 };
 
 // 密码修改对话框组件
-const PasswordChangeDialog = ({ isOpen, onClose, onSave }: {
+const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
   isOpen: boolean;
   onClose: () => void;
   onSave: (currentPassword: string, newPassword: string) => void;
+  showToast: (message: string, type: 'success' | 'error' | 'warning' | 'info') => void;
 }) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -513,11 +542,11 @@ const PasswordChangeDialog = ({ isOpen, onClose, onSave }: {
 
   const handleSave = () => {
     if (!currentPassword || !newPassword) {
-      alert('请填写完整的密码信息');
+      showToast('请填写完整的密码信息', 'warning');
       return;
     }
     if (newPassword.length < 6) {
-      alert('新密码长度至少6位');
+      showToast('新密码长度至少6位', 'warning');
       return;
     }
     onSave(currentPassword, newPassword);
@@ -631,6 +660,31 @@ export default function ProfilePage() {
   const [favoritesCurrentPage, setFavoritesCurrentPage] = useState(1);
   const itemsPerPage = 6;
   
+  // 详情Dialog状态
+  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
+  const [selectedDetailId, setSelectedDetailId] = useState<string>('');
+  
+  // Toast状态管理
+  const [toast, setToast] = useState<{
+    show: boolean;
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+  }>({
+    show: false,
+    message: '',
+    type: 'info'
+  });
+
+  // 显示Toast的函数
+  const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+    setToast({ show: true, message, type });
+  };
+
+  // 关闭Toast的函数
+  const closeToast = () => {
+    setToast({ ...toast, show: false });
+  };
+  
   // 文件上传相关的ref
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -650,11 +704,42 @@ export default function ProfilePage() {
   // 获取用户信息
   const fetchUserInfo = async () => {
     try {
+      console.log('👤 开始获取用户信息...');
       setLoading(true);
+      
+      // 检查localStorage中的token
+      const authToken = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
+      console.log('🔍 localStorage 检查:', {
+        hasAuthToken: !!authToken,
+        hasToken: !!token,
+        authTokenPrefix: authToken?.substring(0, 20),
+        tokenPrefix: token?.substring(0, 20)
+      });
+      
+      // 同步token：如果只有token没有authToken，或者只有authToken没有token，则同步
+      if (token && !authToken) {
+        localStorage.setItem('authToken', token);
+        console.log('🔄 已同步 authToken');
+      } else if (authToken && !token) {
+        localStorage.setItem('token', authToken);
+        console.log('🔄 已同步 token');
+      }
+      
       const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.ME);
       const result = await response.json();
       
+      console.log('📦 用户信息响应:', result);
+      
       if (result.success && result.data) {
+        console.log('✅ 获取用户信息成功:', {
+          id: result.data.id,
+          name: result.data.name,
+          email: result.data.email,
+          hasAvatar: !!result.data.avatar
+        });
+        
+        // 更新React状态
         setUserInfo({
           id: result.data.id,
           nickname: result.data.name || '',
@@ -665,12 +750,37 @@ export default function ProfilePage() {
           totalFavorites: result.data.totalFavorites || 0,
           totalLikes: result.data.totalLikes || 0
         });
+        
+        // ⭐ 关键：保存到localStorage，供Header使用
+        const userInfoForStorage = {
+          id: result.data.id,
+          email: result.data.email,
+          name: result.data.name,
+          avatar: result.data.avatar,
+          provider: result.data.provider
+        };
+        localStorage.setItem('userInfo', JSON.stringify(userInfoForStorage));
+        console.log('💾 用户信息已保存到localStorage:', userInfoForStorage);
+        
+        // ⭐ 立即触发事件通知Header（不依赖React状态更新）
+        if (userInfoForStorage.avatar) {
+    const loginEvent = new CustomEvent('userLogin', {
+      detail: {
+        isLoggedIn: true,
+              userAvatar: userInfoForStorage.avatar
+      }
+    });
+    window.dispatchEvent(loginEvent);
+          console.log('📢 已触发userLogin事件');
+        }
+        
         setError('');
       } else {
+        console.error('❌ 获取用户信息失败:', result.error);
         setError(result.error || '获取用户信息失败');
       }
     } catch (err) {
-      console.error('获取用户信息失败:', err);
+      console.error('❌ 获取用户信息异常:', err);
       setError('获取用户信息失败，请重新登录');
     } finally {
       setLoading(false);
@@ -682,30 +792,22 @@ export default function ProfilePage() {
     fetchUserInfo();
   }, []);
 
-  // 在组件加载时通知Header组件用户已登录
-  useEffect(() => {
-    if (userInfo.avatar) {
-      const loginEvent = new CustomEvent('userLogin', {
-        detail: {
-          isLoggedIn: true,
-          userAvatar: userInfo.avatar
-        }
-      });
-      window.dispatchEvent(loginEvent);
-    }
-
-    return () => {
-      const logoutEvent = new CustomEvent('userLogout');
-      window.dispatchEvent(logoutEvent);
-    };
-  }, [userInfo.avatar]);
-
   // 更新个人资料
   const updateProfile = async (name?: string, avatar?: string) => {
     try {
+      console.log('📝 ===== 调用用户资料更新接口 =====');
+      console.log('📝 接口:', API_ENDPOINTS.PUBLIC.USER.PROFILE);
+      console.log('📝 方法: PUT');
+      console.log('📝 参数:', { 
+        name: name || '(未修改)', 
+        avatar: avatar ? avatar : '(未修改)'
+      });
+      
       const body: any = {};
       if (name) body.name = name;
       if (avatar) body.avatar = avatar;
+
+      console.log('📤 发送请求体:', JSON.stringify(body, null, 2));
 
       const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.PROFILE, {
         method: 'PUT',
@@ -713,27 +815,50 @@ export default function ProfilePage() {
       });
 
       const result = await response.json();
+      console.log('📥 更新接口响应:', result);
       
       if (result.success && result.data) {
+        console.log('✅ 用户资料更新成功！');
+        
+        // 更新本地状态
         setUserInfo(prev => ({
           ...prev,
           nickname: result.data.name || prev.nickname,
           avatar: result.data.avatar || prev.avatar
         }));
-        // 通知 Header 更新头像
+        console.log('   → React状态已更新');
+        
+        // 更新 localStorage
+        const storedUserInfo = localStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          const userInfoObj = JSON.parse(storedUserInfo);
+          userInfoObj.name = result.data.name || userInfoObj.name;
+          userInfoObj.avatar = result.data.avatar || userInfoObj.avatar;
+          localStorage.setItem('userInfo', JSON.stringify(userInfoObj));
+          console.log('   → localStorage已更新');
+        }
+        
+        // 通知 Header 更新（这会触发Header的checkLoginStatus）
         const avatarUpdateEvent = new CustomEvent('userAvatarUpdate', {
-          detail: { avatar: result.data.avatar }
+          detail: { 
+            avatar: result.data.avatar,
+            userAvatar: result.data.avatar
+          }
         });
         window.dispatchEvent(avatarUpdateEvent);
-        alert('个人资料更新成功');
+        console.log('   → Header组件已通知');
+        console.log('📝 ===== 用户资料更新完成 =====\n');
+        
+        showToast('个人资料更新成功', 'success');
         return true;
       } else {
-        alert(result.error || '更新失败');
+        console.error('❌ 用户资料更新失败:', result.error);
+        showToast(result.error || '更新失败', 'error');
         return false;
       }
     } catch (error) {
-      console.error('更新个人资料失败:', error);
-      alert('更新失败，请重试');
+      console.error('❌ 更新个人资料异常:', error);
+      showToast('更新失败，请重试', 'error');
       return false;
     }
   };
@@ -749,19 +874,21 @@ export default function ProfilePage() {
       const result = await response.json();
       
       if (result.success) {
-        alert('密码修改成功，请重新登录');
-        localStorage.removeItem('token');
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userInfo');
-        window.location.href = '/';
+        showToast('密码修改成功，请重新登录', 'success');
+        setTimeout(() => {
+          localStorage.removeItem('token');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userInfo');
+          window.location.href = '/';
+        }, 1500);
         return true;
       } else {
-        alert(result.error || '修改失败');
+        showToast(result.error || '修改失败', 'error');
         return false;
       }
     } catch (error) {
       console.error('修改密码失败:', error);
-      alert('修改失败，请重试');
+      showToast('修改失败，请重试', 'error');
       return false;
     }
   };
@@ -842,23 +969,34 @@ export default function ProfilePage() {
 
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    try {
+      console.log('💾 开始保存用户信息...');
     setIsEditing(false);
+      
+      // 如果昵称有变化，调用API更新
+      const storedUserInfo = localStorage.getItem('userInfo');
+      if (storedUserInfo) {
+        const originalInfo = JSON.parse(storedUserInfo);
+        if (userInfo.nickname !== originalInfo.name) {
+          console.log('📝 昵称已更改，调用API更新');
+          const success = await updateProfile(userInfo.nickname);
+          if (!success) {
+            showToast('昵称更新失败，请重试', 'error');
+            return;
+          }
+        }
+      }
+      
     if (passwordChanged) {
-      alert('账户信息已保存！密码已更新。');
+      showToast('账户信息已保存！密码已更新。', 'success');
       setPasswordChanged(false);
     } else {
-      alert('账户信息已保存！');
+      showToast('账户信息已保存！', 'success');
     }
-
-    // 更新头像后通知Header组件
-    if (userInfo.avatar) {
-      const updateAvatarEvent = new CustomEvent('userAvatarUpdate', {
-        detail: {
-          userAvatar: userInfo.avatar
-        }
-      });
-      window.dispatchEvent(updateAvatarEvent);
+    } catch (error) {
+      console.error('❌ 保存失败:', error);
+      showToast('保存失败，请重试', 'error');
     }
   };
 
@@ -874,13 +1012,13 @@ export default function ProfilePage() {
     if (file) {
       // 验证文件类型
       if (!file.type.startsWith('image/')) {
-        alert('请选择图片文件！');
+        showToast('请选择图片文件！', 'warning');
         return;
       }
 
       // 验证文件大小（限制为5MB）
       if (file.size > 5 * 1024 * 1024) {
-        alert('图片文件大小不能超过5MB！');
+        showToast('图片文件大小不能超过5MB！', 'warning');
         return;
       }
 
@@ -898,12 +1036,152 @@ export default function ProfilePage() {
     }
   };
 
+  // 将base64转换为File对象
+  const base64ToFile = (base64String: string, fileName: string): File => {
+    const arr = base64String.split(',');
+    const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/png';
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], fileName, { type: mime });
+  };
+
+  // 上传图片到服务器
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+      
+      console.log('📤 ===== 开始上传图片到服务器 =====');
+      console.log('📤 上传接口:', API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE);
+      console.log('📤 文件信息:', {
+        fileName: file.name,
+        fileSize: `${(file.size / 1024).toFixed(2)} KB`,
+        fileType: file.type
+      });
+      console.log('📤 Token:', token ? token.substring(0, 20) + '...' : 'null');
+
+      if (!token) {
+        console.error('❌ 没有找到 token，无法上传图片');
+        showToast('请先登录后再上传图片', 'warning');
+        return null;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      console.log('📤 发送 POST 请求到:', API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE);
+      console.log('📤 请求头:', { Authorization: `Bearer ${token.substring(0, 20)}...` });
+      console.log('📤 请求体: FormData { file: 图像二进制流 }');
+      
+      const response = await fetch(API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      console.log('📥 上传接口响应状态:', response.status, response.statusText);
+
+      const result = await response.json();
+      console.log('📥 上传接口完整响应:', JSON.stringify(result, null, 2));
+
+      if (result.success && result.data) {
+        // 上传接口返回多个URL：previewUrl, thumbnailUrl, originalUrl
+        const imageUrl = result.data.previewUrl || result.data.originalUrl || result.data.url;
+        
+        if (!imageUrl) {
+          console.error('❌ 响应中未找到图片URL');
+          console.error('响应数据:', result.data);
+          showToast('图片上传失败：未获取到图片URL', 'error');
+          return null;
+        }
+        
+        console.log('✅ 图片上传成功！');
+        console.log('📦 返回的URL地址:');
+        console.log('   - previewUrl:', result.data.previewUrl || '(无)');
+        console.log('   - thumbnailUrl:', result.data.thumbnailUrl || '(无)');
+        console.log('   - originalUrl:', result.data.originalUrl || '(无)');
+        console.log('✅ 使用URL:', imageUrl);
+        console.log('📤 ===== 图片上传完成 =====\n');
+        return imageUrl;
+      } else {
+        console.error('❌ 图片上传失败:', result.error || '未知错误');
+        showToast(result.error || '图片上传失败', 'error');
+        return null;
+      }
+    } catch (error) {
+      console.error('❌ 图片上传异常:', error);
+      showToast('图片上传失败，请重试', 'error');
+      return null;
+    }
+  };
+
   // 处理裁剪完成
-  const handleCropSave = (croppedImage: string) => {
+  const handleCropSave = async (croppedImage: string) => {
+    try {
+      console.log('\n🖼️ ========== 开始头像更新流程 ==========');
+      console.log('步骤1: 立即更新本地UI（用户即时看到效果）');
+      
+      // 第1步：立即更新本地状态（给用户即时反馈）
     setUserInfo(prev => ({
       ...prev,
       avatar: croppedImage
     }));
+      console.log('✅ 步骤1完成：本地UI已更新\n');
+      
+      // 第2步：将base64转换为File对象
+      console.log('步骤2: 将base64转换为File对象');
+      const fileName = `avatar-${Date.now()}.png`;
+      const file = base64ToFile(croppedImage, fileName);
+      console.log('✅ 步骤2完成：File对象已创建', {
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        type: file.type
+      });
+      console.log('\n');
+      
+      // 第3步：调用上传接口，获取图片URL
+      console.log('步骤3: 调用图片上传接口 POST /api/upload/image');
+      const imageUrl = await uploadImage(file);
+      
+      if (!imageUrl) {
+        console.error('❌ 步骤3失败：未获取到图片URL');
+        showToast('头像上传失败，请重试', 'error');
+        // 恢复原头像
+        fetchUserInfo();
+        return;
+      }
+      
+      console.log('✅ 步骤3完成：获取到图片URL');
+      console.log('   图片URL:', imageUrl);
+      console.log('\n');
+      
+      // 第4步：调用API更新用户资料
+      console.log('步骤4: 调用用户资料更新接口 PUT /api/user/profile');
+      console.log('   参数: { avatar:', imageUrl, '}');
+      const success = await updateProfile(undefined, imageUrl);
+      
+      if (success) {
+        console.log('✅ 步骤4完成：用户资料更新成功');
+        console.log('✅ ========== 头像更新流程完成 ==========\n');
+        setIsCropDialogOpen(false);
+        setTempImageUrl('');
+      } else {
+        console.error('❌ 步骤4失败：用户资料更新失败');
+        console.log('❌ ========== 头像更新流程失败 ==========\n');
+        // 失败时恢复原头像
+        fetchUserInfo();
+      }
+    } catch (error) {
+      console.error('❌ 头像更新流程异常:', error);
+      console.log('❌ ========== 头像更新流程异常终止 ==========\n');
+      showToast('头像更新失败，请重试', 'error');
+      fetchUserInfo();
+    }
   };
 
   // 处理重新上传（从裁剪对话框中）
@@ -917,7 +1195,7 @@ export default function ProfilePage() {
     
     // 更新密码状态
     setPasswordChanged(true);
-    alert('密码已在对话框中更新，请点击右下角的"Save Changes"按钮最终保存！');
+    showToast('密码已在对话框中更新，请点击右下角的"Save Changes"按钮最终保存！', 'info');
   };
 
 
@@ -1033,6 +1311,7 @@ export default function ProfilePage() {
         isOpen={isPasswordDialogOpen}
         onClose={() => setIsPasswordDialogOpen(false)}
         onSave={handlePasswordChange}
+        showToast={showToast}
       />
     </div>
   );
@@ -1048,32 +1327,60 @@ export default function ProfilePage() {
           </div>
         ) : creations.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {creations.map((creation) => (
-                <div key={creation.id} className="group cursor-pointer">
-                  <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
-                    <Image
+            <div key={creation.id} className="group cursor-pointer" onClick={() => handleViewDetail(creation.id)}>
+              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
+                <Image
                       src={creation.thumbnailUrl || creation.imageUrl}
-                      alt={creation.title}
-                      width={300}
-                      height={300}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
-                      unoptimized
-                    />
-                  </div>
-                  <h3 className="font-medium text-gray-900">{creation.title}</h3>
-                  <p className="text-sm text-gray-500">Created on {new Date(creation.createdAt).toLocaleDateString()}</p>
+                  alt={creation.title}
+                  width={300}
+                  height={300}
+                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                  unoptimized
+                />
+                {/* 点赞和收藏按钮 - 右上角 */}
+                <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
+                  {/* 点赞按钮（上方） */}
+                  <button
+                    onClick={(e) => handleLike(creation.id, creation.isLiked || false, e)}
+                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
+                      creation.isLiked
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-white/90 hover:bg-white text-gray-600 hover:text-red-500'
+                    }`}
+                    title={creation.isLiked ? '已点赞' : '点赞'}
+                  >
+                    <Heart className={`h-5 w-5 ${creation.isLiked ? 'fill-current' : ''}`} />
+                  </button>
+                  
+                  {/* 收藏按钮（下方） */}
+                  <button
+                    onClick={(e) => handleFavorite(creation.id, creation.isFavorited || false, e)}
+                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
+                      creation.isFavorited
+                        ? 'bg-yellow-500 text-white' 
+                        : 'bg-white/90 hover:bg-white text-gray-600 hover:text-yellow-500'
+                    }`}
+                    title={creation.isFavorited ? '已收藏' : '收藏'}
+                  >
+                    <Star className={`h-5 w-5 ${creation.isFavorited ? 'fill-current' : ''}`} />
+                  </button>
                 </div>
-              ))}
+              </div>
+              <h3 className="font-medium text-gray-900">{creation.title}</h3>
+                  <p className="text-sm text-gray-500">Created on {new Date(creation.createdAt).toLocaleDateString()}</p>
             </div>
+          ))}
+        </div>
 
-            {/* 分页组件 */}
+        {/* 分页组件 */}
             {creationsPagination.totalPages > 1 && (
-              <Pagination
+        <Pagination
                 currentPage={creationsPagination.currentPage}
                 totalPages={creationsPagination.totalPages}
-                onPageChange={setCreationsCurrentPage}
-              />
+          onPageChange={setCreationsCurrentPage}
+        />
             )}
           </>
         ) : (
@@ -1083,6 +1390,123 @@ export default function ProfilePage() {
         )}
       </div>
     );
+  };
+
+  // 处理取消收藏（已废弃，使用handleFavorite代替）
+  const handleUnfavorite = async (pageId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    await handleFavorite(pageId, true, e);
+  };
+
+  // 处理点赞
+  const handleLike = async (pageId: number, isLiked: boolean, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+      if (!token) {
+        showToast('请先登录', 'warning');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:3001/api/coloring-pages/${pageId}/like`, {
+        method: isLiked ? 'DELETE' : 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        // 刷新当前列表
+        if (activeTab === 'my-creations') {
+          fetchCreations(creationsCurrentPage);
+        } else if (activeTab === 'my-favorites') {
+          fetchFavorites(favoritesCurrentPage);
+        }
+      } else {
+        showToast(result.error || '操作失败', 'error');
+      }
+    } catch (error) {
+      console.error('❌ 点赞操作失败:', error);
+      showToast('操作失败，请重试', 'error');
+    }
+  };
+
+  // 处理收藏
+  const handleFavorite = async (pageId: number, isFavorited: boolean, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+      if (!token) {
+        showToast('请先登录', 'warning');
+        return;
+      }
+
+      console.log(`${isFavorited ? '💔 取消收藏' : '💛 添加收藏'}:`, pageId);
+
+      if (isFavorited) {
+        // 取消收藏 - 使用新的API
+        const response = await fetch(`http://localhost:3001/api/user/favorite`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ pageId }),
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          console.log('✅ 取消收藏成功');
+          // 刷新当前列表
+          if (activeTab === 'my-creations') {
+            fetchCreations(creationsCurrentPage);
+          } else if (activeTab === 'my-favorites') {
+            fetchFavorites(favoritesCurrentPage);
+          }
+        } else {
+          showToast(result.error || '操作失败', 'error');
+        }
+      } else {
+        // 添加收藏 - 使用旧的API
+        const response = await fetch(`http://localhost:3001/api/coloring-pages/${pageId}/favorite`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          console.log('✅ 添加收藏成功');
+          // 刷新当前列表
+          if (activeTab === 'my-creations') {
+            fetchCreations(creationsCurrentPage);
+          } else if (activeTab === 'my-favorites') {
+            fetchFavorites(favoritesCurrentPage);
+          }
+        } else {
+          showToast(result.error || '操作失败', 'error');
+        }
+      }
+    } catch (error) {
+      console.error('❌ 收藏操作失败:', error);
+      showToast('操作失败，请重试', 'error');
+    }
+  };
+
+  // 处理查看卡片详情
+  const handleViewDetail = (pageId: number) => {
+    console.log('👁️ 查看详情:', pageId);
+    setSelectedDetailId(pageId.toString());
+    setIsDetailDialogOpen(true);
   };
 
   const renderMyFavorites = () => {
@@ -1096,35 +1520,56 @@ export default function ProfilePage() {
           </div>
         ) : favorites.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {favorites.map((favorite) => (
-                <div key={favorite.id} className="group cursor-pointer">
-                  <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
-                    <Image
+            <div key={favorite.id} className="group cursor-pointer" onClick={() => handleViewDetail(favorite.id)}>
+              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
+                <Image
                       src={favorite.thumbnailUrl || favorite.imageUrl}
-                      alt={favorite.title}
-                      width={300}
-                      height={300}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
-                      unoptimized
-                    />
-                    <div className="absolute top-3 right-3">
-                      <Heart className="h-5 w-5 text-red-500 fill-current" />
-                    </div>
-                  </div>
-                  <h3 className="font-medium text-gray-900">{favorite.title}</h3>
-                  <p className="text-sm text-gray-500">Favorited on {new Date(favorite.favoritedAt || favorite.createdAt).toLocaleDateString()}</p>
+                  alt={favorite.title}
+                  width={300}
+                  height={300}
+                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                  unoptimized
+                />
+                {/* 点赞和收藏按钮 - 右上角 */}
+                <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
+                  {/* 点赞按钮（上方） */}
+                  <button
+                    onClick={(e) => handleLike(favorite.id, favorite.isLiked || false, e)}
+                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
+                      favorite.isLiked
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-white/90 hover:bg-white text-gray-600 hover:text-red-500'
+                    }`}
+                    title={favorite.isLiked ? '已点赞' : '点赞'}
+                  >
+                    <Heart className={`h-5 w-5 ${favorite.isLiked ? 'fill-current' : ''}`} />
+                  </button>
+                  
+                  {/* 收藏按钮（下方） */}
+                  <button
+                    onClick={(e) => handleFavorite(favorite.id, true, e)}
+                    className="p-2 rounded-full shadow-lg transition-all duration-200 bg-yellow-500 text-white"
+                    title="已收藏"
+                  >
+                    <Star className="h-5 w-5 fill-current" />
+                  </button>
                 </div>
-              ))}
+              </div>
+              <h3 className="font-medium text-gray-900">{favorite.title}</h3>
+                  <p className="text-sm text-gray-500">Favorited on {new Date(favorite.favoritedAt || favorite.createdAt).toLocaleDateString()}</p>
             </div>
+          ))}
+        </div>
 
-            {/* 分页组件 */}
+        {/* 分页组件 */}
             {favoritesPagination.totalPages > 1 && (
-              <Pagination
+        <Pagination
                 currentPage={favoritesPagination.currentPage}
                 totalPages={favoritesPagination.totalPages}
-                onPageChange={setFavoritesCurrentPage}
-              />
+          onPageChange={setFavoritesCurrentPage}
+        />
             )}
           </>
         ) : (
@@ -1161,7 +1606,8 @@ export default function ProfilePage() {
               {/* 用户头像区域 */}
               <div className="flex justify-center mb-6 pb-6 border-b border-gray-100">
                 <div className="relative group">
-                  <div className="w-20 h-20 rounded-full overflow-hidden relative">
+                  <div className="w-20 h-20 rounded-full overflow-hidden relative bg-gray-200 flex items-center justify-center">
+                    {userInfo.avatar ? (
                     <Image
                       src={userInfo.avatar}
                       alt="User Avatar"
@@ -1170,6 +1616,9 @@ export default function ProfilePage() {
                       className="object-cover"
                       unoptimized
                     />
+                    ) : (
+                      <User className="h-10 w-10 text-gray-400" />
+                    )}
                     {/* 悬停时显示的相机图标覆盖层 */}
                     <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                          onClick={handleAvatarUpload}>
@@ -1209,6 +1658,43 @@ export default function ProfilePage() {
       </div>
 
       <Footer />
+      
+      {/* 详情Dialog */}
+      {isDetailDialogOpen && selectedDetailId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+          <div className="min-h-screen px-4 flex items-center justify-center">
+            <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-7xl my-8">
+              {/* 关闭按钮 */}
+              <button
+                onClick={() => setIsDetailDialogOpen(false)}
+                className="absolute top-4 right-4 z-50 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+                aria-label="关闭"
+              >
+                <X className="h-6 w-6 text-gray-600" />
+              </button>
+              
+              {/* 详情内容 */}
+              <div className="overflow-hidden rounded-2xl">
+                <UnifiedColoringDetail 
+                  id={selectedDetailId}
+                  type="categories"
+                  category="General"
+                  isDialog={true}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Toast通知 */}
+      {toast.show && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={closeToast}
+        />
+      )}
     </div>
   );
 } 

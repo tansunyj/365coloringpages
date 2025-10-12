@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Download, Printer, Heart, Share2 } from 'lucide-react';
+import { Download, Printer, Heart, Share2, Star } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 import UnifiedBreadcrumb from './UnifiedBreadcrumb';
@@ -14,6 +14,7 @@ interface UnifiedColoringDetailProps {
   type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
   category?: string;
   park?: string;
+  isDialog?: boolean; // 是否在Dialog中显示
   searchParams?: {
     q?: string;
     page?: string;
@@ -79,12 +80,13 @@ interface ApiColoringPageData {
   tags?: string[];
 }
 
-export default function UnifiedColoringDetail({ id, type, category, park, searchParams }: UnifiedColoringDetailProps) {
+export default function UnifiedColoringDetail({ id, type, category, park, isDialog = false, searchParams }: UnifiedColoringDetailProps) {
   // 状态管理
   const [coloringPageData, setColoringPageData] = useState<ColoringPageDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
   // 从后端API获取涂色页面详情
@@ -146,6 +148,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
           });
           
           setIsLiked(pageData.isLiked || false);
+          setIsFavorited(pageData.isFavorited || false);
           setLikeCount(0); // API中没有点赞数量，设为0
         } else {
           // 如果API返回失败，使用fallback数据
@@ -347,9 +350,40 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   
   const relatedPages = generateRelatedPages();
 
-  const handleLike = () => {
+  const handleLike = async () => {
+    const wasLiked = isLiked;
     setIsLiked(!isLiked);
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+
+    try {
+      const { api } = await import('../lib/apiClient');
+      if (wasLiked) {
+        await api.coloring.unlike(id);
+      } else {
+        await api.coloring.like(id);
+      }
+    } catch (error) {
+      console.error('❌ 点赞操作失败:', error);
+      setIsLiked(wasLiked);
+      setLikeCount(prev => wasLiked ? prev + 1 : prev - 1);
+    }
+  };
+
+  const handleFavorite = async () => {
+    const wasFavorited = isFavorited;
+    setIsFavorited(!isFavorited);
+
+    try {
+      const { api } = await import('../lib/apiClient');
+      if (wasFavorited) {
+        await api.coloring.unfavorite(id);
+      } else {
+        await api.coloring.favorite(id);
+      }
+    } catch (error) {
+      console.error('❌ 收藏操作失败:', error);
+      setIsFavorited(wasFavorited);
+    }
   };
 
   const handleDownload = () => {
@@ -387,18 +421,20 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fcfcf8' }}>
-      <Header />
+    <div className={isDialog ? '' : 'min-h-screen'} style={isDialog ? {} : { backgroundColor: '#fcfcf8' }}>
+      {!isDialog && <Header />}
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className={isDialog ? 'py-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}>
         {/* 面包屑导航 */}
-        <UnifiedBreadcrumb
-          type={type}
-          category={category}
-          park={park}
-          itemTitle={coloringPageData.title}
-          searchParams={searchParams}
-        />
+        {!isDialog && (
+          <UnifiedBreadcrumb
+            type={type}
+            category={category}
+            park={park}
+            itemTitle={coloringPageData.title}
+            searchParams={searchParams}
+          />
+        )}
 
         {/* 主要内容区域 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -446,9 +482,21 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
                         ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
+                    title={isLiked ? '已点赞' : '点赞'}
                   >
                     <Heart className={`h-5 w-5 mr-2 ${isLiked ? 'fill-current' : ''}`} />
                     {likeCount}
+                  </button>
+                  <button
+                    onClick={handleFavorite}
+                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                      isFavorited 
+                        ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    title={isFavorited ? '已收藏' : '收藏'}
+                  >
+                    <Star className={`h-5 w-5 mr-2 ${isFavorited ? 'fill-current' : ''}`} />
                   </button>
                   <button
                     onClick={handleShare}
@@ -539,65 +587,67 @@ export default function UnifiedColoringDetail({ id, type, category, park, search
           </div>
         </div>
 
-        {/* 相关推荐 */}
-        <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Coloring Pages</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {relatedPages.map((page) => (
-              <div
-                key={page.id}
-                onClick={() => {
-                  // 根据当前页面来源动态导航
-                  switch (type) {
-                    case 'popular':
-                      router.push(`/popular/${page.id}`);
-                      break;
-                    case 'latest':
-                      router.push(`/latest/${page.id}`);
-                      break;
-                    case 'first-coloring-book':
-                      router.push(`/first-coloring-book/${page.id}`);
-                      break;
-                    case 'theme-parks':
-                      router.push(`/theme-park/${page.id}`);
-                      break;
-                    case 'categories':
-                    default:
-                      router.push(`/categories/${page.id}`);
-                      break;
-                  }
-                }}
-                className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:border-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]"
-              >
-                <div className="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center relative overflow-hidden">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-200 to-purple-200 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl">🎨</span>
-                  </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                    <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <div className="bg-white rounded-full p-2 shadow-lg">
-                        <Heart className="h-4 w-4 text-gray-600" />
+        {/* 相关推荐 - 仅在非Dialog模式下显示 */}
+        {!isDialog && (
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Coloring Pages</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {relatedPages.map((page) => (
+                <div
+                  key={page.id}
+                  onClick={() => {
+                    // 根据当前页面来源动态导航
+                    switch (type) {
+                      case 'popular':
+                        router.push(`/popular/${page.id}`);
+                        break;
+                      case 'latest':
+                        router.push(`/latest/${page.id}`);
+                        break;
+                      case 'first-coloring-book':
+                        router.push(`/first-coloring-book/${page.id}`);
+                        break;
+                      case 'theme-parks':
+                        router.push(`/theme-park/${page.id}`);
+                        break;
+                      case 'categories':
+                      default:
+                        router.push(`/categories/${page.id}`);
+                        break;
+                    }
+                  }}
+                  className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:border-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]"
+                >
+                  <div className="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center relative overflow-hidden">
+                    <div className="w-24 h-24 bg-gradient-to-br from-blue-200 to-purple-200 rounded-lg flex items-center justify-center">
+                      <span className="text-2xl">🎨</span>
+                    </div>
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                      <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className="bg-white rounded-full p-2 shadow-lg">
+                          <Heart className="h-4 w-4 text-gray-600" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-yellow-600 transition-colors">
-                    {page.title}
-                  </h3>
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      {page.category}
-                    </span>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-yellow-600 transition-colors">
+                      {page.title}
+                    </h3>
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                        {page.category}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
-      <Footer />
+      {!isDialog && <Footer />}
     </div>
   );
 } 

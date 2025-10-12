@@ -21,6 +21,7 @@ interface RichColoringCardProps {
   categoryName: string;
   categoryColor: string;
   isLiked?: boolean;
+  isFavorited?: boolean;
   linkType: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
   linkCategory?: string;
   linkPark?: string;
@@ -164,6 +165,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     downloads,
     categoryName: rawCategoryName,
     isLiked = false,
+    isFavorited = false,
     bookTitle,
     bookType,
     themeParkName,
@@ -172,6 +174,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
   } = props;
 
   const [liked, setLiked] = useState(isLiked);
+  const [favorited, setFavorited] = useState(isFavorited);
   const [likeCount, setLikeCount] = useState(likes);
   const [imageError, setImageError] = useState(false);
 
@@ -230,6 +233,30 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     }
   };
 
+  // 处理收藏
+  const handleFavorite = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const wasFavorited = favorited;
+    setFavorited(!favorited);
+    
+    try {
+      const { api } = await import('../lib/apiClient');
+      
+      if (wasFavorited) {
+        // 取消收藏
+        await api.coloring.unfavorite(id);
+      } else {
+        // 收藏
+        await api.coloring.favorite(id);
+      }
+    } catch (error) {
+      console.error('❌ 收藏操作失败:', error);
+      setFavorited(wasFavorited);
+    }
+  };
+
   // 图片加载错误处理
   const handleImageError = () => {
     setImageError(true);
@@ -280,17 +307,32 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             )}
           </div>
 
-          {/* 收藏按钮 - 右上角 */}
-          <div className="absolute top-3 right-3 z-10">
+          {/* 点赞和收藏按钮 - 右上角 */}
+          <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
+            {/* 点赞按钮（上方） */}
             <button
               onClick={handleLike}
               className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
                 liked 
-                  ? 'bg-red-500 text-white scale-110' 
-                  : 'bg-white/90 hover:bg-white text-gray-700 hover:text-red-500 hover:scale-110'
+                  ? 'bg-red-500 text-white' 
+                  : 'bg-white/90 hover:bg-white text-gray-600 hover:text-red-500'
               }`}
+              title={liked ? '已点赞' : '点赞'}
             >
               <Heart className={`h-5 w-5 ${liked ? 'fill-current' : ''}`} />
+            </button>
+            
+            {/* 收藏按钮（下方） */}
+            <button
+              onClick={handleFavorite}
+              className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
+                favorited 
+                  ? 'bg-yellow-500 text-white' 
+                  : 'bg-white/90 hover:bg-white text-gray-600 hover:text-yellow-500'
+              }`}
+              title={favorited ? '已收藏' : '收藏'}
+            >
+              <Star className={`h-5 w-5 ${favorited ? 'fill-current' : ''}`} />
             </button>
           </div>
         </div>
