@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -33,6 +33,7 @@ interface ColoringPageDetail {
   categories: string[];
   thumbnailUrl?: string;
   imageUrl?: string;
+  originalFileUrl?: string;  // 高清原图，仅用于下载和打印
   theme?: string;
   style?: string;
   size?: string;
@@ -101,25 +102,35 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
   // 防止重复加载 - 记录上一次加载的ID
   const lastLoadedId = useRef<string>('');
   
+  // 防止重复获取相关推荐
+  const hasLoadedRelated = useRef<boolean>(false);
+  
   // 从 sessionStorage 读取列表数据（如果组件没有直接传递 allPages）
-  const [listPageData, setListPageData] = useState<any[]>([]);
-  useEffect(() => {
-    if (!allPages || allPages.length === 0) {
+  // 使用 useMemo 同步初始化，避免 useEffect 的异步问题
+  const listPageData = useMemo(() => {
+    // 优先使用传递的 allPages
+    if (allPages && Array.isArray(allPages) && allPages.length > 0) {
+      console.log('📦 使用传递的 allPages 数据:', allPages.length, '条');
+      return allPages;
+    }
+    
+    // 尝试从 sessionStorage 读取（仅在客户端）
+    if (typeof window !== 'undefined') {
       try {
         const storedData = sessionStorage.getItem('listPageAllData');
         if (storedData) {
           const parsed = JSON.parse(storedData);
           if (Array.isArray(parsed) && parsed.length > 0) {
             console.log('📦 从 sessionStorage 读取列表数据:', parsed.length, '条');
-            setListPageData(parsed);
+            return parsed;
           }
         }
       } catch (error) {
         console.error('❌ 读取 sessionStorage 失败:', error);
       }
-    } else {
-      setListPageData(allPages);
     }
+    
+    return [];
   }, [allPages]);
 
   // 从后端API获取涂色页面详情
@@ -167,8 +178,14 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             return 'https://via.placeholder.com/600x800?text=Invalid+URL';
           };
           
-          const thumbnailUrl = getValidImageUrl(pageData.thumbnailUrl || pageData.previewUrl);
-          const imageUrl = getValidImageUrl(pageData.thumbnailUrl || pageData.previewUrl);
+          // 缩略图：用于小图预览（最小尺寸）
+          const thumbnailUrl = getValidImageUrl(pageData.thumbnailUrl);
+          
+          // 详情页预览图：中等清晰度，不提供最高清原图（保护策略）
+          const imageUrl = getValidImageUrl(pageData.previewUrl || pageData.thumbnailUrl);
+          
+          // 原始高清图：仅用于下载和打印
+          const originalFileUrl = getValidImageUrl(pageData.originalFileUrl);
           
           
           setColoringPageData({
@@ -179,6 +196,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             categories: categoryNames,
             thumbnailUrl: thumbnailUrl,
             imageUrl: imageUrl,
+            originalFileUrl: originalFileUrl,  // 保存高清原图URL
             theme: pageData.theme || 'N/A',
             style: pageData.style || 'N/A',
             size: pageData.size || 'N/A',
@@ -228,7 +246,15 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           dataPool = listPageData;
         } else {
           // 如果没有传递数据，从API获取
+          // 但只调用一次，避免重复请求
+          if (hasLoadedRelated.current) {
+            console.log('⏭️ 已经获取过相关推荐，跳过重复请求');
+            return;
+          }
+          
           console.log('📡 列表页未传递数据，从API获取...');
+          hasLoadedRelated.current = true; // 标记为已加载
+          
           const { api } = await import('../lib/apiClient');
           
           // 随机选择排序方式，增加随机性
@@ -292,10 +318,14 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     };
 
     if (!isDialog) {
+      // 当ID变化时，重置标记，允许重新加载
+      if (lastLoadedId.current !== id) {
+        hasLoadedRelated.current = false;
+      }
       fetchRelatedPages();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, isDialog, listPageData]);
+  }, [id, isDialog]);
 
   // Fallback数据生成（当API失败时使用）
   const generateFallbackData = (): ColoringPageDetail => {
@@ -321,6 +351,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       categories: [type, 'Creative'],
       thumbnailUrl: 'https://via.placeholder.com/400x400?text=Fallback+Image',
       imageUrl: 'https://via.placeholder.com/600x800?text=Fallback+Image',
+      originalFileUrl: 'https://via.placeholder.com/1200x1600?text=Fallback+HighRes',
       theme: 'Fantasy',
       style: 'Cartoon',
       size: 'A4',
@@ -505,12 +536,289 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     }
   };
 
-  const handleDownload = () => {
-    // 这里可以添加实际的下载逻辑
+  /**
+   * 获取原始高清图片URL（公共函数）
+   * 调用 API 获取真实的高清图片地址
+   */
+  const getOriginalImageUrl = async (): Promise<string | null> => {
+    try {
+      console.log('🔍 正在获取原始图片URL，ID:', id);
+      const { api } = await import('../lib/apiClient');
+      const response = await api.coloring.getOriginalImage(parseInt(id));
+      
+      if (response.success && response.data && response.data.imageUrl) {
+        console.log('✅ 成功获取原始图片URL:', response.data.imageUrl);
+        return response.data.imageUrl;
+      } else {
+        console.warn('⚠️ API响应成功但未返回图片URL:', response);
+        return null;
+      }
+    } catch (error) {
+      console.error('❌ 获取原始图片URL失败:', error);
+      return null;
+    }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleDownload = async () => {
+    try {
+      console.log('📥 开始下载，ID:', id);
+      
+      // 1. 调用 API 获取原始图片 URL
+      const originalImageUrl = await getOriginalImageUrl();
+      
+      if (!originalImageUrl) {
+        alert('Sorry, unable to get the high-resolution image. Please try again later.');
+        return;
+      }
+      
+      console.log('✅ 获取到原始图片URL:', originalImageUrl);
+      
+      // 2. 使用 fetch 下载图片数据（R1存储桶已配置CORS）
+      console.log('🔄 开始获取图片数据...');
+      const response = await fetch(originalImageUrl);
+      
+      if (!response.ok) {
+        throw new Error(`图片下载失败: ${response.status} ${response.statusText}`);
+      }
+      
+      // 3. 将响应转换为 Blob
+      const blob = await response.blob();
+      console.log('✅ 图片数据获取成功，大小:', (blob.size / 1024 / 1024).toFixed(2), 'MB');
+      
+      // 4. 创建 Blob URL
+      const blobUrl = URL.createObjectURL(blob);
+      
+      // 5. 创建下载链接并触发下载
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `${coloringPageData?.title || 'coloring-page'}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // 6. 释放 Blob URL，避免内存泄漏
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+        console.log('🧹 已清理临时资源');
+      }, 100);
+      
+      console.log('✅ 下载完成');
+    } catch (error) {
+      console.error('❌ 下载失败:', error);
+      alert('Download failed. Please try again later.');
+    }
+  };
+
+  const handlePrint = async () => {
+    try {
+      console.log('🖨️ 准备打印...');
+      
+      // 调用 API 获取真实的高清原图 URL
+      const originalImageUrl = await getOriginalImageUrl();
+      
+      if (!originalImageUrl) {
+        alert('Sorry, unable to get the high-resolution image. Please try again later.');
+        return;
+      }
+      
+      console.log('✅ 获取到打印图片URL:', originalImageUrl);
+      
+      // 获取当前日期时间（用于版权信息）
+      const now = new Date();
+      
+      // 创建打印页面的HTML内容
+      const printHtml = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${coloringPageData?.title || 'Coloring Page'} - Print</title>
+            <style>
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+              }
+              
+              body {
+                font-family: Arial, sans-serif;
+                background: white;
+                padding: 20px;
+                margin: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+              }
+              
+              .print-container {
+                max-width: 100%;
+                margin: 0 auto;
+                position: relative;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+              }
+              
+              .print-image-wrapper {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+                margin: 20px 0;
+                padding-bottom: 30px;
+              }
+              
+              .print-image {
+                max-width: 100%;
+                height: auto;
+                display: block;
+              }
+              
+              .print-footer {
+                margin-top: auto;
+                padding: 3px 0px;
+                font-size: 8px;
+                color: #666;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+              }
+              
+              .print-copyright {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 8px;
+                white-space: nowrap;
+                margin-left: 0cm;
+              }
+              
+              .print-logo {
+                font-weight: bold;
+                color: #333;
+              }
+              
+              @media print {
+                body {
+                  padding: 0;
+                }
+                
+                .print-container {
+                  max-width: 100%;
+                }
+                
+                @page {
+                  margin: 1cm;
+                  @bottom-right {
+                    content: none;
+                  }
+                  @bottom-left {
+                    content: none;
+                  }
+                  @bottom-center {
+                    content: none;
+                  }
+                  @bottom {
+                    content: none;
+                  }
+                }
+                
+                /* 隐藏浏览器自动生成的页脚 */
+                @page :first {
+                  @bottom-right {
+                    content: none;
+                  }
+                  @bottom-left {
+                    content: none;
+                  }
+                  @bottom-center {
+                    content: none;
+                  }
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="print-container">
+              <div class="print-image-wrapper">
+                <img 
+                  src="${originalImageUrl}" 
+                  alt="${coloringPageData?.title || 'Coloring Page'}"
+                  class="print-image"
+                  onload="window.print();"
+                />
+              </div>
+              
+              <div class="print-footer">
+                <div class="print-copyright">
+                  <span class="print-logo">365 Coloring Pages ©${now.getFullYear()} 365coloringpages.com All rights reserved.</span>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
+      `;
+      
+      // 在当前页面创建打印内容
+      const printFrame = document.createElement('iframe');
+      printFrame.style.position = 'absolute';
+      printFrame.style.top = '-9999px';
+      printFrame.style.left = '-9999px';
+      printFrame.style.width = '0';
+      printFrame.style.height = '0';
+      printFrame.style.border = 'none';
+      
+      document.body.appendChild(printFrame);
+      
+      // 写入HTML内容到iframe
+      const iframeDoc = printFrame.contentDocument || printFrame.contentWindow?.document;
+      if (iframeDoc) {
+        iframeDoc.open();
+        iframeDoc.write(printHtml);
+        iframeDoc.close();
+        
+        // 等待图片加载完成后打印
+        const img = iframeDoc.querySelector('.print-image') as HTMLImageElement;
+        if (img) {
+          img.onload = () => {
+            iframeDoc.defaultView?.print();
+            // 打印完成后清理iframe
+            setTimeout(() => {
+              document.body.removeChild(printFrame);
+            }, 1000);
+          };
+          // 如果图片已经加载完成
+          if (img.complete) {
+            iframeDoc.defaultView?.print();
+            setTimeout(() => {
+              document.body.removeChild(printFrame);
+            }, 1000);
+          }
+        } else {
+          // 没有图片时直接打印
+          iframeDoc.defaultView?.print();
+          setTimeout(() => {
+            document.body.removeChild(printFrame);
+          }, 1000);
+        }
+        
+        console.log('✅ 打印对话框已打开');
+      } else {
+        console.warn('⚠️ 无法创建打印iframe');
+        alert('Print failed. Please try again.');
+        document.body.removeChild(printFrame);
+      }
+    } catch (error) {
+      console.error('❌ 打印失败:', error);
+      alert('Print failed. Please try again.');
+    }
   };
 
   const handleShare = () => {

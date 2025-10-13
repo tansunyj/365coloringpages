@@ -239,6 +239,8 @@ export const api = {
       apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING.DETAIL(id), params),
     download: (id: number, params?: { format?: string; size?: string }) =>
       apiClient.download(buildUrlWithParams(API_ENDPOINTS.PUBLIC.COLORING.DOWNLOAD(id), params || {})),
+    getOriginalImage: (id: number) => 
+      apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING.ORIGINAL_IMAGE(id)),
     view: (id: number, data: { source?: string; ref?: string }) =>
       apiClient.post<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING.VIEW(id), data),
     like: (id: number) => apiClient.post<ApiResponse>(API_ENDPOINTS.PUBLIC.COLORING.LIKE(id)),

@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
     COLORING: {
       DETAIL: (id: number) => `${API_BASE_URL}/api/coloring/${id}`,
       DOWNLOAD: (id: number) => `${API_BASE_URL}/api/coloring/${id}/download`,
+      ORIGINAL_IMAGE: (id: number) => `${API_BASE_URL}/api/coloring-pages/${id}/original-image`,
       VIEW: (id: number) => `${API_BASE_URL}/api/coloring/${id}/view`,
       LIKE: (id: number) => `${API_BASE_URL}/api/coloring-pages/${id}/like`,
       SHARE: (id: number) => `${API_BASE_URL}/api/coloring/${id}/share`,
