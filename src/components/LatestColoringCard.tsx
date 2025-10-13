@@ -13,6 +13,7 @@ interface LatestColoringCardProps {
   id?: number;
   thumbnailUrl?: string;
   categorySlug?: string;
+  allPages?: any[];
 }
 
 export default function LatestColoringCard({ 
@@ -22,7 +23,8 @@ export default function LatestColoringCard({
   downloads,
   id,
   thumbnailUrl,
-  categorySlug
+  categorySlug,
+  allPages
 }: LatestColoringCardProps) {
   // 标准化分类名称，如果为空则显示"其他"
   const displayCategory = !category || category.trim() === '' ? '其他' : category;
@@ -49,6 +51,12 @@ export default function LatestColoringCard({
   };
 
   const handleCardClick = () => {
+    // 存储完整的列表数据到sessionStorage（不筛选，详情页会处理）
+    if (allPages && allPages.length > 0) {
+      console.log('💾 LatestColoringCard 存储完整数据池:', allPages.length, '条');
+      sessionStorage.setItem('listPageAllData', JSON.stringify(allPages));
+    }
+    
     // 生成分类 slug
     const getCategorySlug = (categoryName: string): string => {
       const categoryMap: Record<string, string> = {

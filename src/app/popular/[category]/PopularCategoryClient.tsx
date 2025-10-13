@@ -9,7 +9,7 @@ import UniversalSearchComponent, {
   SearchApiResponse,
   TitleConfig
 } from '../../../components/UniversalSearchComponent';
-import PopularColoringCard from '../../../components/PopularColoringCard';
+import RichColoringCard from '../../../components/RichColoringCard';
 import { useTranslation } from '../../../hooks/useTranslation';
 
 // 分类数据接口
@@ -142,7 +142,7 @@ export default function PopularCategoryClient({ category }: PopularCategoryClien
     // 搜索参数
     defaultSort: '',
     defaultCategory: category, // 预选当前分类
-    pageSize: 15,
+    pageSize: 40,
     
     // 右上角筛选选项
     sortOptions: [
@@ -177,16 +177,25 @@ export default function PopularCategoryClient({ category }: PopularCategoryClien
     titleConfig: titleConfig,
     
     // 自定义渲染
-    renderItem: (item) => (
-      <PopularColoringCard
+    renderItem: (item, searchQuery, searchParams, allItems) => (
+      <RichColoringCard
         key={`${item.id}-${item.categorySlug || 'default'}`}
         id={item.id}
         title={item.title}
-        category={item.categoryName || item.category || ''}
+        description={item.description}
+        thumbnailUrl={item.thumbnailUrl}
+        difficulty={item.difficulty || 'medium'}
+        ageRange={item.ageRange || '3-12岁'}
+        views={item.views || 0}
         likes={item.likes || 0}
         downloads={item.downloads || 0}
-        thumbnailUrl={item.thumbnailUrl}
-        categorySlug={item.categorySlug || 'default'}
+        categoryName={item.categoryName || item.category || '其他'}
+        categoryColor={item.categoryColor || '#999'}
+        isLiked={item.isLiked || false}
+        isFavorited={item.isFavorited || false}
+        linkType="popular"
+        linkCategory={item.categorySlug || category}
+        allPages={allItems}
       />
     ),
   });

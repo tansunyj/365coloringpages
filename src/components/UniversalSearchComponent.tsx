@@ -106,7 +106,7 @@ export interface SearchConfig {
   titleConfig?: TitleConfig;
   
   // 自定义组件
-  renderItem?: (item: SearchResultItem, searchQuery?: string, searchParams?: URLSearchParams) => React.ReactNode;
+  renderItem?: (item: SearchResultItem, searchQuery?: string, searchParams?: URLSearchParams, allItems?: SearchResultItem[]) => React.ReactNode;
   
   // 兼容性：保留旧的标题字段
   title?: string;
@@ -653,7 +653,7 @@ export default function UniversalSearchComponent({
               <div className={`grid gap-6 ${config.gridCols || 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'}`}>
                 {items.map((item) => {
                   if (config.renderItem) {
-                    return config.renderItem(item, searchQuery, searchParams);
+                    return config.renderItem(item, searchQuery, searchParams, items);
                   }
                   
                   // 默认渲染

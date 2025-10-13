@@ -151,6 +151,7 @@ export default function LatestUploadsSection() {
                   downloads={page.downloads}
                   thumbnailUrl={page.thumbnailUrl}
                   categorySlug={getCategorySlug(page.categoryName || '其他')}
+                  allPages={coloringPages}
                 />
               ))}
             </div>

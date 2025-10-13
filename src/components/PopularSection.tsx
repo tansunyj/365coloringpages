@@ -153,6 +153,7 @@ export default function PopularSection() {
                   downloads={page.downloads}
                   thumbnailUrl={page.thumbnailUrl}
                   categorySlug={page.categorySlug}
+                  allPages={coloringPages}
                 />
               ))}
             </div>

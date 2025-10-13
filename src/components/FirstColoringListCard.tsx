@@ -11,6 +11,7 @@ interface FirstColoringListCardProps {
   category: string;
   likes?: number;
   downloads?: number;
+  allPages?: any[];
 }
 
 export default function FirstColoringListCard({ 
@@ -18,7 +19,8 @@ export default function FirstColoringListCard({
   title, 
   category,
   likes,
-  downloads
+  downloads,
+  allPages
 }: FirstColoringListCardProps) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
@@ -41,6 +43,14 @@ export default function FirstColoringListCard({
   };
 
   const handleCardClick = () => {
+    // 存储列表数据到sessionStorage
+    if (allPages && allPages.length > 0) {
+      const otherPages = allPages.filter(p => p.id !== id);
+      const shuffled = otherPages.sort(() => 0.5 - Math.random());
+      const selectedPages = shuffled.slice(0, 4);
+      sessionStorage.setItem('relatedColoringPages', JSON.stringify(selectedPages));
+    }
+    
     const categorySlug = getCategorySlug(category);
     router.push(`/first-coloring-book/${categorySlug}/${id}`);
   };

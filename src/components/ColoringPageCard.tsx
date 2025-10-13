@@ -20,9 +20,10 @@ interface ColoringPage {
 
 interface ColoringPageCardProps {
   page: ColoringPage;
+  allPages?: ColoringPage[];
 }
 
-export default function ColoringPageCard({ page }: ColoringPageCardProps) {
+export default function ColoringPageCard({ page, allPages }: ColoringPageCardProps) {
   const [imageError, setImageError] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(page.likes);
@@ -42,6 +43,14 @@ export default function ColoringPageCard({ page }: ColoringPageCardProps) {
   };
 
   const handleClick = () => {
+    // 存储列表数据到sessionStorage
+    if (allPages && allPages.length > 0) {
+      const otherPages = allPages.filter(p => p.id !== page.id);
+      const shuffled = otherPages.sort(() => 0.5 - Math.random());
+      const selectedPages = shuffled.slice(0, 4);
+      sessionStorage.setItem('relatedColoringPages', JSON.stringify(selectedPages));
+    }
+    
     // 导航到简化的详细页面
     router.push(`/categories/${page.id}`);
   };

@@ -36,6 +36,7 @@ interface RichColoringCardProps {
     sort?: string;
     category?: string;
   };
+  allPages?: any[];
 }
 
 /**
@@ -170,7 +171,8 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     bookType,
     themeParkName,
     themeParkSlug,
-    linkType
+    linkType,
+    allPages
   } = props;
 
   const [liked, setLiked] = useState(isLiked);
@@ -262,8 +264,17 @@ export default function RichColoringCard(props: RichColoringCardProps) {
     setImageError(true);
   };
 
+  // 处理卡片点击
+  const handleCardClick = () => {
+    // 存储完整的列表数据到sessionStorage（不筛选，详情页会处理）
+    if (allPages && allPages.length > 0) {
+      console.log('💾 RichColoringCard 存储完整数据池:', allPages.length, '条');
+      sessionStorage.setItem('listPageAllData', JSON.stringify(allPages));
+    }
+  };
+
   return (
-    <Link href={detailLink} className="group block">
+    <Link href={detailLink} onClick={handleCardClick} className="group block">
       <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-1 border border-gray-100">
         {/* 图片区域 */}
         <div className="relative aspect-square overflow-hidden bg-gray-100">

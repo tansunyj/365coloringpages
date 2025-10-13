@@ -15,6 +15,7 @@ interface UnifiedColoringDetailProps {
   category?: string;
   park?: string;
   isDialog?: boolean; // 是否在Dialog中显示
+  allPages?: any[]; // 列表页传递的所有数据（通常是40条）
   searchParams?: {
     q?: string;
     page?: string;
@@ -87,7 +88,7 @@ interface ApiColoringPageData {
   tags?: string[];
 }
 
-export default function UnifiedColoringDetail({ id, type, category, park, isDialog = false, searchParams }: UnifiedColoringDetailProps) {
+export default function UnifiedColoringDetail({ id, type, category, park, isDialog = false, allPages, searchParams }: UnifiedColoringDetailProps) {
   // 状态管理
   const [coloringPageData, setColoringPageData] = useState<ColoringPageDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -95,9 +96,31 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
   const [isLiked, setIsLiked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [relatedPages, setRelatedPages] = useState<any[]>([]);
   
   // 防止重复加载 - 记录上一次加载的ID
   const lastLoadedId = useRef<string>('');
+  
+  // 从 sessionStorage 读取列表数据（如果组件没有直接传递 allPages）
+  const [listPageData, setListPageData] = useState<any[]>([]);
+  useEffect(() => {
+    if (!allPages || allPages.length === 0) {
+      try {
+        const storedData = sessionStorage.getItem('listPageAllData');
+        if (storedData) {
+          const parsed = JSON.parse(storedData);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            console.log('📦 从 sessionStorage 读取列表数据:', parsed.length, '条');
+            setListPageData(parsed);
+          }
+        }
+      } catch (error) {
+        console.error('❌ 读取 sessionStorage 失败:', error);
+      }
+    } else {
+      setListPageData(allPages);
+    }
+  }, [allPages]);
 
   // 从后端API获取涂色页面详情
   useEffect(() => {
@@ -192,6 +215,87 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     // 注意：只依赖id，避免type变化导致重复加载
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  // 获取相关推荐数据
+  useEffect(() => {
+    const fetchRelatedPages = async () => {
+      try {
+        let dataPool: any[] = [];
+        
+        // 优先使用列表页传递的数据（通常是40条）
+        if (listPageData && Array.isArray(listPageData) && listPageData.length > 0) {
+          console.log('📦 使用列表页传递的数据池:', listPageData.length, '条');
+          dataPool = listPageData;
+        } else {
+          // 如果没有传递数据，从API获取
+          console.log('📡 列表页未传递数据，从API获取...');
+          const { api } = await import('../lib/apiClient');
+          
+          // 随机选择排序方式，增加随机性
+          const sortOptions = ['latest', 'popular', 'views', 'downloads'];
+          const randomSort = sortOptions[Math.floor(Math.random() * sortOptions.length)];
+          
+          // 获取数据（20条）
+          const response = await api.popular.list({
+            page: 1,
+            limit: 20,
+            sort: randomSort
+          });
+          
+          console.log('📦 API响应 - 排序方式:', randomSort, '数据:', response);
+          
+          if (response.success && response.data) {
+            // 尝试多种方式提取数组数据
+            if (Array.isArray(response.data)) {
+              dataPool = response.data;
+            } else if (Array.isArray(response.data.items)) {
+              dataPool = response.data.items;
+            } else if (Array.isArray(response.data.pages)) {
+              dataPool = response.data.pages;
+            } else {
+              console.warn('⚠️ API返回的数据不是数组格式:', response.data);
+              setRelatedPages([]);
+              return;
+            }
+          } else {
+            console.warn('⚠️ API响应失败或无数据');
+            setRelatedPages([]);
+            return;
+          }
+        }
+        
+        console.log('📊 数据池大小:', dataPool.length, '条');
+        
+        // 过滤掉当前页面
+        const filteredPages = dataPool.filter((page: any) => page.id.toString() !== id);
+        
+        console.log('🔍 过滤后剩余:', filteredPages.length, '条（已排除当前ID:', id, ')');
+        
+        // 使用 Fisher-Yates 洗牌算法，确保真正的随机
+        const shuffled = [...filteredPages];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        // 选择前4个
+        const selected = shuffled.slice(0, 4);
+        setRelatedPages(selected);
+        
+        console.log('✅ 加载相关推荐:', selected.length, '条');
+        console.log('🎲 推荐卡片IDs:', selected.map((p: any) => p.id).join(', '), '(当前页面ID:', id, ')');
+      } catch (error) {
+        console.error('❌ 获取相关推荐失败:', error);
+        // 如果失败，设置空数组
+        setRelatedPages([]);
+      }
+    };
+
+    if (!isDialog) {
+      fetchRelatedPages();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isDialog, listPageData]);
 
   // Fallback数据生成（当API失败时使用）
   const generateFallbackData = (): ColoringPageDetail => {
@@ -364,21 +468,6 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     }
   };
 
-  // 相关推荐数据 - 根据当前页面ID生成唯一的相关页面ID
-  // 使用更大的偏移量避免与真实数据ID冲突
-  const generateRelatedPages = () => {
-    if (!coloringPageData) return [];
-    const baseId = parseInt(id) || 1;
-    const offset = 10000; // 使用10000作为偏移量，避免与真实数据冲突
-    return [
-      { id: baseId + offset + 1, title: 'Related Page 1', category: 'Similar' },
-      { id: baseId + offset + 2, title: 'Related Page 2', category: 'Similar' },
-      { id: baseId + offset + 3, title: 'Related Page 3', category: 'Similar' },
-      { id: baseId + offset + 4, title: 'Related Page 4', category: 'Similar' }
-    ];
-  };
-  
-  const relatedPages = generateRelatedPages();
 
   const handleLike = async () => {
     const wasLiked = isLiked;
@@ -634,19 +723,19 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             </div>
 
             {/* 下载、打印按钮 - 底部 */}
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 onClick={handleDownload}
-                className={`flex-1 flex items-center justify-center px-4 py-2.5 text-white rounded-lg transition-colors font-medium ${getThemeColor()}`}
+                className="flex-1 flex items-center justify-center px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm hover:shadow-md"
               >
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-5 w-5 mr-2" />
                 Download
               </button>
               <button
                 onClick={handlePrint}
-                className="flex-1 flex items-center justify-center px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex-1 flex items-center justify-center px-5 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-all duration-200 font-medium shadow-sm hover:shadow-md"
               >
-                <Printer className="h-4 w-4 mr-2" />
+                <Printer className="h-5 w-5 mr-2" />
                 Print
               </button>
             </div>
@@ -654,60 +743,168 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         </div>
 
         {/* 相关推荐 - 仅在非Dialog模式下显示 */}
-        {!isDialog && (
+        {!isDialog && relatedPages.length > 0 && (
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Coloring Pages</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {relatedPages.map((page) => (
-                <div
-                  key={page.id}
-                  onClick={() => {
-                    // 根据当前页面来源动态导航
-                    switch (type) {
-                      case 'popular':
-                        router.push(`/popular/${page.id}`);
-                        break;
-                      case 'latest':
-                        router.push(`/latest/${page.id}`);
-                        break;
-                      case 'first-coloring-book':
-                        router.push(`/first-coloring-book/${page.id}`);
-                        break;
-                      case 'theme-parks':
-                        router.push(`/theme-park/${page.id}`);
-                        break;
-                      case 'categories':
-                      default:
-                        router.push(`/categories/${page.id}`);
-                        break;
-                    }
-                  }}
-                  className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:border-gray-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]"
-                >
-                  <div className="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center relative overflow-hidden">
-                    <div className="w-24 h-24 bg-gradient-to-br from-blue-200 to-purple-200 rounded-lg flex items-center justify-center">
-                      <span className="text-2xl">🎨</span>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {relatedPages.map((page) => {
+                // 处理图片URL - 支持多个可能的字段名
+                const getValidImageUrl = (): string => {
+                  // 尝试多个可能的图片字段
+                  const possibleUrls = [
+                    page.thumbnailUrl,
+                    page.previewUrl,
+                    page.imageUrl,
+                    page.thumbnail,
+                    page.image
+                  ];
+                  
+                  // 找到第一个非空的URL
+                  const url = possibleUrls.find(u => u && typeof u === 'string' && u.length > 0);
+                  
+                  console.log('🖼️ 处理图片URL:', {
+                    pageId: page.id,
+                    pageTitle: page.title,
+                    thumbnailUrl: page.thumbnailUrl,
+                    previewUrl: page.previewUrl,
+                    imageUrl: page.imageUrl,
+                    selectedUrl: url,
+                    urlType: typeof url,
+                    urlLength: url?.length || 0
+                  });
+                  
+                  if (!url) {
+                    console.warn('⚠️ 未找到有效的图片URL，使用占位符，页面数据:', page);
+                    return 'https://via.placeholder.com/400x400?text=No+Image';
+                  }
+                  
+                  // 如果是相对路径，转换为绝对路径
+                  if (url.startsWith('/')) {
+                    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+                    const fullUrl = `${apiBaseUrl}${url}`;
+                    console.log('🔄 转换相对路径:', { relative: url, absolute: fullUrl });
+                    return fullUrl;
+                  }
+                  
+                  // 如果已经是完整URL，直接返回
+                  if (url.startsWith('http://') || url.startsWith('https://')) {
+                    console.log('✅ 使用完整URL:', url);
+                    return url;
+                  }
+                  
+                  console.warn('⚠️ 无效的URL格式:', { url, page });
+                  return 'https://via.placeholder.com/400x400?text=Invalid+URL';
+                };
+
+                const imageUrl = getValidImageUrl();
+                
+                return (
+                  <div
+                    key={page.id}
+                    onClick={() => {
+                      // 构建正确的跳转URL，保留category/park参数
+                      let targetUrl = '';
+                      switch (type) {
+                        case 'popular':
+                          // 如果有category参数，保留它
+                          if (category) {
+                            targetUrl = `/popular/${category}/${page.id}`;
+                          } else {
+                            targetUrl = `/popular/all/${page.id}`;
+                          }
+                          break;
+                        case 'latest':
+                          // 如果有category参数，保留它
+                          if (category) {
+                            targetUrl = `/latest/${category}/${page.id}`;
+                          } else {
+                            targetUrl = `/latest/${page.id}`;
+                          }
+                          break;
+                        case 'first-coloring-book':
+                          // 如果有category参数，保留它
+                          if (category) {
+                            targetUrl = `/first-coloring-book/${category}/${page.id}`;
+                          } else {
+                            targetUrl = `/first-coloring-book/${page.id}`;
+                          }
+                          break;
+                        case 'theme-parks':
+                          // 如果有park参数，保留它
+                          if (park) {
+                            targetUrl = `/theme-parks/${park}/${page.id}`;
+                          } else {
+                            targetUrl = `/theme-parks/${page.id}`;
+                          }
+                          break;
+                        case 'categories':
+                          // 如果有category参数，保留它
+                          if (category) {
+                            targetUrl = `/categories/${category}/${page.id}`;
+                          } else {
+                            targetUrl = `/categories/${page.id}`;
+                          }
+                          break;
+                        case 'search':
+                          // 搜索详情页需要保留查询参数
+                          const params = new URLSearchParams();
+                          if (searchParams?.q) params.set('q', searchParams.q);
+                          if (searchParams?.page) params.set('page', searchParams.page);
+                          if (searchParams?.limit) params.set('limit', searchParams.limit);
+                          if (searchParams?.sort) params.set('sort', searchParams.sort);
+                          if (searchParams?.category) params.set('category', searchParams.category);
+                          params.set('id', page.id.toString());
+                          targetUrl = `/search/detail?${params.toString()}`;
+                          break;
+                        default:
+                          targetUrl = `/categories/${page.id}`;
+                          break;
+                      }
+                      
+                      console.log('🔗 跳转到详情页:', { 
+                        from: window.location.pathname, 
+                        to: targetUrl,
+                        type,
+                        category,
+                        park,
+                        pageId: page.id 
+                      });
+                      
+                      router.push(targetUrl);
+                    }}
+                    className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300"
+                  >
+                    <div className="aspect-square relative overflow-hidden bg-gray-200">
+                      <Image
+                        src={imageUrl}
+                        alt={page.title || 'Coloring Page'}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        unoptimized
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        onError={(e) => {
+                          console.error('❌ 图片加载失败:', imageUrl);
+                          console.error('❌ 完整的page数据:', JSON.stringify(page, null, 2));
+                          e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Image+Not+Found';
+                        }}
+                        onLoad={() => {
+                          console.log('✅ 图片加载成功:', imageUrl);
+                        }}
+                      />
                     </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                      <div className="transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <div className="bg-white rounded-full p-2 shadow-lg">
-                          <Heart className="h-4 w-4 text-gray-600" />
-                        </div>
+                    <div className="p-4">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="font-semibold text-gray-900 text-base line-clamp-2 group-hover:text-pink-600 transition-colors flex-1">
+                          {page.title || 'Untitled'}
+                        </h3>
+                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
+                          {page.difficulty || 'medium'}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-yellow-600 transition-colors">
-                      {page.title}
-                    </h3>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                        {page.category}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}

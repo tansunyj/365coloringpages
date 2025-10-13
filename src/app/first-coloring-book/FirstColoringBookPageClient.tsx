@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import FirstColoringListCard from '../../components/FirstColoringListCard';
+import RichColoringCard from '../../components/RichColoringCard';
 
 export default function FirstColoringBookPageClient() {
   const searchParams = useSearchParams();
@@ -53,12 +53,19 @@ export default function FirstColoringBookPageClient() {
   const [allColoringPages, setAllColoringPages] = useState<Array<{
     id: number;
     title: string;
+    description?: string;
     category: string;
+    categoryName?: string;
+    categorySlug?: string;
+    categoryColor?: string;
     likes: number;
     downloads: number;
+    views?: number;
     thumbnailUrl?: string;
     difficulty?: string;
     ageRange?: string;
+    isLiked?: boolean;
+    isFavorited?: boolean;
   }>>([]);
 
   // 获取涂色书页面数据
@@ -83,12 +90,19 @@ export default function FirstColoringBookPageClient() {
           const formattedPages = pages.map((page) => ({
             id: page.id || 0,
             title: page.title || 'Untitled',
+            description: page.description || '',
             category: page.categoryName || 'Basic Shapes',
+            categoryName: page.categoryName || 'Basic Shapes',
+            categorySlug: page.categorySlug || 'basic-shapes',
+            categoryColor: page.categoryColor || '#999',
             likes: page.likes || 0,
             downloads: page.downloads || 0,
+            views: page.views || 0,
             thumbnailUrl: page.thumbnailUrl,
             difficulty: page.difficulty || 'easy',
-            ageRange: page.ageRange || '3-6岁'
+            ageRange: page.ageRange || '3-6岁',
+            isLiked: page.isLiked || false,
+            isFavorited: page.isFavorited || false
           }));
           
           setAllColoringPages(formattedPages);
@@ -225,13 +239,24 @@ export default function FirstColoringBookPageClient() {
         {/* 涂色页面网格 */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12">
           {displayedPages.map((page) => (
-            <FirstColoringListCard
+            <RichColoringCard
               key={page.id}
               id={page.id}
               title={page.title}
-              category={page.category}
+              description={page.description || ''}
+              thumbnailUrl={page.thumbnailUrl || ''}
+              difficulty={(page.difficulty as 'easy' | 'medium' | 'hard') || 'easy'}
+              ageRange={page.ageRange || '3-6岁'}
+              views={page.views || 0}
               likes={page.likes}
               downloads={page.downloads}
+              categoryName={page.categoryName || page.category}
+              categoryColor={page.categoryColor || '#999'}
+              isLiked={page.isLiked || false}
+              isFavorited={page.isFavorited || false}
+              linkType="first-coloring-book"
+              linkCategory={page.categorySlug || 'basic-shapes'}
+              allPages={filteredPages}
             />
           ))}
         </div>

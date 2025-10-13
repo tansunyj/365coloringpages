@@ -313,7 +313,7 @@ export default function UnifiedListPage({
   showCategoryFilter = true,
   showSortFilter = true,
   defaultSort = '',
-  itemsPerPage = 15
+  itemsPerPage = 40
 }: UnifiedListPageProps) {
   
   // 辅助函数：从分类名称生成slug
@@ -1001,6 +1001,7 @@ export default function UnifiedListPage({
                      sort: currentSort,
                      category: currentCategory
                    }}
+                   allPages={items}
                  />
                ))}
             </div>

@@ -11,6 +11,7 @@ interface ThemeParkListCardProps {
   likes?: number;
   downloads?: number;
   id: number;
+  allPages?: any[];
 }
 
 export default function ThemeParkListCard({ 
@@ -18,7 +19,8 @@ export default function ThemeParkListCard({
   park, 
   likes,
   downloads,
-  id
+  id,
+  allPages
 }: ThemeParkListCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(likes || 50);
@@ -41,6 +43,14 @@ export default function ThemeParkListCard({
   };
 
   const handleCardClick = () => {
+    // 存储列表数据到sessionStorage
+    if (allPages && allPages.length > 0) {
+      const otherPages = allPages.filter(p => p.id !== id);
+      const shuffled = otherPages.sort(() => 0.5 - Math.random());
+      const selectedPages = shuffled.slice(0, 4);
+      sessionStorage.setItem('relatedColoringPages', JSON.stringify(selectedPages));
+    }
+    
     const parkSlug = getParkSlug(park);
     router.push(`/theme-park/${parkSlug}/${id}`);
   };

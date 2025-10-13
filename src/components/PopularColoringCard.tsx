@@ -13,6 +13,7 @@ interface PopularColoringCardProps {
   id?: number;
   thumbnailUrl?: string;
   categorySlug?: string;
+  allPages?: any[];
 }
 
 export default function PopularColoringCard({ 
@@ -22,7 +23,8 @@ export default function PopularColoringCard({
   downloads,
   id,
   thumbnailUrl,
-  categorySlug
+  categorySlug,
+  allPages
 }: PopularColoringCardProps) {
   // 标准化分类名称，如果为空则显示"其他"
   const displayCategory = !category || category.trim() === '' ? '其他' : category;
@@ -51,6 +53,12 @@ export default function PopularColoringCard({
 
 
   const handleCardClick = () => {
+    // 存储完整的列表数据到sessionStorage（不筛选，详情页会处理）
+    if (allPages && allPages.length > 0) {
+      console.log('💾 PopularColoringCard 存储完整数据池:', allPages.length, '条');
+      sessionStorage.setItem('listPageAllData', JSON.stringify(allPages));
+    }
+    
     // 导航到Popular分类详情页面
     const slug = categorySlug || 'animals'; // 默认分类
     router.push(`/popular/${slug}/${pageId}`);

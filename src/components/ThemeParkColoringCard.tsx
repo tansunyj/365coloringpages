@@ -12,14 +12,23 @@ interface ThemeParkColoringCardProps {
     likes?: number;
     downloads?: number;
   };
+  allPages?: any[];
 }
 
-export default function ThemeParkColoringCard({ page }: ThemeParkColoringCardProps) {
+export default function ThemeParkColoringCard({ page, allPages }: ThemeParkColoringCardProps) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
 
   // 点击卡片导航到主题公园详情页
   const handleCardClick = () => {
+    // 存储列表数据到sessionStorage
+    if (allPages && allPages.length > 0) {
+      const otherPages = allPages.filter(p => p.id !== page.id);
+      const shuffled = otherPages.sort(() => 0.5 - Math.random());
+      const selectedPages = shuffled.slice(0, 4);
+      sessionStorage.setItem('relatedColoringPages', JSON.stringify(selectedPages));
+    }
+    
     // 将主题公园名称转换为URL友好的格式
     const parkSlug = page.park.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
     router.push(`/theme-park/${parkSlug}/${page.id}`);

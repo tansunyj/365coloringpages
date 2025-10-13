@@ -103,7 +103,7 @@ export default function ThemeParkDetailClient({ parkSlug }: ThemeParkDetailClien
     centerTitle: true,
     
     // 自定义渲染
-    renderItem: (item) => (
+    renderItem: (item, searchQuery, searchParams, allItems) => (
       <ThemeParkListCard
         key={item.id}
         id={item.id}
@@ -111,6 +111,7 @@ export default function ThemeParkDetailClient({ parkSlug }: ThemeParkDetailClien
         park={themePark?.name || ''}
         likes={item.likes || 0}
         downloads={item.downloads || 0}
+        allPages={allItems}
       />
     ),
   };
