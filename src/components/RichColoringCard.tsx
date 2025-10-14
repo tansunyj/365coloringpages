@@ -29,6 +29,7 @@ interface RichColoringCardProps {
   bookType?: string;
   themeParkName?: string;
   themeParkSlug?: string;
+  slug?: string; // 添加slug字段
   searchParams?: {
     q?: string;
     page?: string;
@@ -88,41 +89,66 @@ class LinkGenerator {
    * 根据页面类型生成详情页链接
    */
   static generateDetailLink(props: RichColoringCardProps): string {
-    const { linkType, id, linkCategory, linkPark, searchParams } = props;
+    const { linkType, id, linkCategory, linkPark, searchParams, slug } = props;
 
     switch (linkType) {
       case 'categories':
-        return `/categories/${linkCategory}/${id}`;
+        // 使用新的slug-id格式
+        const pageSlug = slug || `page-${id}`;
+        return `/categories/${linkCategory}/${pageSlug}-${id}`;
         
       case 'popular':
-        return linkCategory 
-          ? `/popular/${linkCategory}/${id}`
-          : `/popular/all/${id}`;
+        // 使用新的URL结构：/popular/[category]/[slug-id]
+        if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
+          const pageSlug = slug || `page-${id}`;
+          return `/popular/${linkCategory}/${pageSlug}-${id}`;
+        } else {
+          return `/popular/all/${id}`;
+        }
           
       case 'search':
-        const params = new URLSearchParams();
-        if (searchParams?.q) params.set('q', searchParams.q);
-        if (searchParams?.page) params.set('page', searchParams.page);
-        if (searchParams?.limit) params.set('limit', searchParams.limit);
-        if (searchParams?.sort) params.set('sort', searchParams.sort);
-        if (searchParams?.category) params.set('category', searchParams.category);
-        params.set('id', id.toString());
-        return `/search/detail?${params.toString()}`;
+        // 使用新的URL结构：/search/[category]/[slug-id]
+        if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
+          const pageSlug = slug || `page-${id}`;
+          return `/search/${linkCategory}/${pageSlug}-${id}`;
+        } else {
+          // 如果没有分类，使用旧的查询参数方式
+          const params = new URLSearchParams();
+          if (searchParams?.q) params.set('q', searchParams.q);
+          if (searchParams?.page) params.set('page', searchParams.page);
+          if (searchParams?.limit) params.set('limit', searchParams.limit);
+          if (searchParams?.sort) params.set('sort', searchParams.sort);
+          if (searchParams?.category) params.set('category', searchParams.category);
+          params.set('id', id.toString());
+          return `/search/detail?${params.toString()}`;
+        }
         
       case 'theme-parks':
-        return linkCategory 
-          ? `/theme-parks/${linkCategory}/${id}`
-          : `/theme-parks/theme-park-adventures/${id}`;
+        // 使用新的URL结构：/theme-parks/[category]/[slug-id]
+        if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
+          const pageSlug = slug || `page-${id}`;
+          return `/theme-parks/${linkCategory}/${pageSlug}-${id}`;
+        } else {
+          return `/theme-parks/theme-park-adventures/${id}`;
+        }
           
       case 'first-coloring-book':
-        return linkCategory 
-          ? `/first-coloring-book/${linkCategory}/${id}`
-          : `/first-coloring-book/${id}`;
+        // 使用新的URL结构：/first-coloring-book/[category]/[slug-id]
+        if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
+          const pageSlug = slug || `page-${id}`;
+          return `/first-coloring-book/${linkCategory}/${pageSlug}-${id}`;
+        } else {
+          return `/first-coloring-book/first-coloring-book/${id}`;
+        }
           
       case 'latest':
-        return linkCategory 
-          ? `/latest/${linkCategory}/${id}`
-          : `/latest/animals/${id}`; // 默认分类
+        // 使用新的URL结构：/latest/[category]/[slug-id]
+        if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
+          const pageSlug = slug || `page-${id}`;
+          return `/latest/${linkCategory}/${pageSlug}-${id}`;
+        } else {
+          return `/latest/animals/${id}`; // 默认分类
+        }
         
       default:
         return `/coloring/${id}`;

@@ -821,17 +821,31 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: coloringPageData?.title || 'Coloring Page',
-        text: coloringPageData?.description || 'A beautiful coloring page for you to enjoy.',
-        url: window.location.href,
-      });
-    } else {
-      // 备用方案：复制到剪贴板
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+  const handleShare = async () => {
+    const currentUrl = window.location.href;
+    
+    try {
+      // 优先使用原生分享API（移动端支持）
+      if (navigator.share) {
+        await navigator.share({
+          title: coloringPageData?.title || 'Coloring Page',
+          text: coloringPageData?.description || 'A beautiful coloring page for you to enjoy.',
+          url: currentUrl,
+        });
+      } else {
+        // 桌面端：复制到剪贴板
+        await navigator.clipboard.writeText(currentUrl);
+        alert('链接已复制到剪贴板！');
+      }
+    } catch (error) {
+      // 如果原生分享失败，尝试复制到剪贴板
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        alert('链接已复制到剪贴板！');
+      } catch (clipboardError) {
+        console.error('复制失败:', clipboardError);
+        alert('复制失败，请手动复制链接');
+      }
     }
   };
 
@@ -1114,55 +1128,67 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                       let targetUrl = '';
                       switch (type) {
                         case 'popular':
-                          // 如果有category参数，保留它
-                          if (category) {
-                            targetUrl = `/popular/${category}/${page.id}`;
+                          // 使用新的URL结构：/popular/[category]/[slug-id]
+                          if (category && category !== 'all') {
+                            const pageSlug = page.slug || `page-${page.id}`;
+                            targetUrl = `/popular/${category}/${pageSlug}-${page.id}`;
                           } else {
                             targetUrl = `/popular/all/${page.id}`;
                           }
                           break;
                         case 'latest':
-                          // 如果有category参数，保留它
-                          if (category) {
-                            targetUrl = `/latest/${category}/${page.id}`;
+                          // 使用新的URL结构：/latest/[category]/[slug-id]
+                          if (category && category !== 'all' && category !== '') {
+                            const pageSlug = page.slug || `page-${page.id}`;
+                            targetUrl = `/latest/${category}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/latest/${page.id}`;
+                            targetUrl = `/latest/animals/${page.id}`;
                           }
                           break;
                         case 'first-coloring-book':
-                          // 如果有category参数，保留它
-                          if (category) {
-                            targetUrl = `/first-coloring-book/${category}/${page.id}`;
+                          // 使用新的URL结构：/first-coloring-book/[category]/[slug-id]
+                          if (category && category !== 'all' && category !== '') {
+                            const pageSlug = page.slug || `page-${page.id}`;
+                            targetUrl = `/first-coloring-book/${category}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/first-coloring-book/${page.id}`;
+                            targetUrl = `/first-coloring-book/first-coloring-book/${page.id}`;
                           }
                           break;
                         case 'theme-parks':
-                          // 如果有park参数，保留它
-                          if (park) {
-                            targetUrl = `/theme-parks/${park}/${page.id}`;
+                          // 使用新的URL结构：/theme-parks/[category]/[slug-id]
+                          if (park && park !== 'all' && park !== '') {
+                            const pageSlug = page.slug || `page-${page.id}`;
+                            targetUrl = `/theme-parks/${park}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/theme-parks/${page.id}`;
+                            targetUrl = `/theme-parks/theme-park-adventures/${page.id}`;
                           }
                           break;
                         case 'categories':
                           // 如果有category参数，保留它
                           if (category) {
-                            targetUrl = `/categories/${category}/${page.id}`;
+                            // 使用新的slug-id格式
+                            const pageSlug = page.slug || `page-${page.id}`;
+                            targetUrl = `/categories/${category}/${pageSlug}-${page.id}`;
                           } else {
                             targetUrl = `/categories/${page.id}`;
                           }
                           break;
                         case 'search':
-                          // 搜索详情页需要保留查询参数
-                          const params = new URLSearchParams();
-                          if (searchParams?.q) params.set('q', searchParams.q);
-                          if (searchParams?.page) params.set('page', searchParams.page);
-                          if (searchParams?.limit) params.set('limit', searchParams.limit);
-                          if (searchParams?.sort) params.set('sort', searchParams.sort);
-                          if (searchParams?.category) params.set('category', searchParams.category);
-                          params.set('id', page.id.toString());
-                          targetUrl = `/search/detail?${params.toString()}`;
+                          // 使用新的URL结构：/search/[category]/[slug-id]
+                          if (category && category !== 'all' && category !== '') {
+                            const pageSlug = page.slug || `page-${page.id}`;
+                            targetUrl = `/search/${category}/${pageSlug}-${page.id}`;
+                          } else {
+                            // 如果没有分类，使用旧的查询参数方式
+                            const params = new URLSearchParams();
+                            if (searchParams?.q) params.set('q', searchParams.q);
+                            if (searchParams?.page) params.set('page', searchParams.page);
+                            if (searchParams?.limit) params.set('limit', searchParams.limit);
+                            if (searchParams?.sort) params.set('sort', searchParams.sort);
+                            if (searchParams?.category) params.set('category', searchParams.category);
+                            params.set('id', page.id.toString());
+                            targetUrl = `/search/detail?${params.toString()}`;
+                          }
                           break;
                         default:
                           targetUrl = `/categories/${page.id}`;

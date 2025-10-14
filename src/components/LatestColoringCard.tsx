@@ -13,6 +13,7 @@ interface LatestColoringCardProps {
   id?: number;
   thumbnailUrl?: string;
   categorySlug?: string;
+  slug?: string; // 添加slug字段
   allPages?: any[];
 }
 
@@ -24,6 +25,7 @@ export default function LatestColoringCard({
   id,
   thumbnailUrl,
   categorySlug,
+  slug,
   allPages
 }: LatestColoringCardProps) {
   // 标准化分类名称，如果为空则显示"其他"
@@ -75,9 +77,10 @@ export default function LatestColoringCard({
       return categoryMap[categoryName] || 'animals'; // 默认分类
     };
 
-    const slug = categorySlug || getCategorySlug(category);
-    // 导航到Latest分类详情页面
-    router.push(`/latest/${slug}/${pageId}`);
+    const catSlug = categorySlug || getCategorySlug(category);
+    const pageSlug = slug || `page-${pageId}`;
+    // 导航到Latest分类详情页面，使用新的slug-id格式
+    router.push(`/latest/${catSlug}/${pageSlug}-${pageId}`);
   };
 
   return (

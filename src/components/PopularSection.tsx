@@ -26,6 +26,7 @@ interface PopularPage {
   categoryName: string;
   categorySlug: string;
   categoryColor: string;
+  slug?: string; // 添加slug字段
   tags: string[];
   primaryCategory: {
     id: number;
@@ -153,6 +154,7 @@ export default function PopularSection() {
                   downloads={page.downloads}
                   thumbnailUrl={page.thumbnailUrl}
                   categorySlug={page.categorySlug}
+                  slug={page.slug}
                   allPages={coloringPages}
                 />
               ))}

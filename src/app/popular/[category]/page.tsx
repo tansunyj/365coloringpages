@@ -1,24 +1,13 @@
-import PopularCategoryClient from './PopularCategoryClient';
+import PopularCategoryPageClient from './PopularCategoryPageClient';
 
-interface PageProps {
-  params: Promise<{
-    category: string;
-  }>;
+interface PopularCategoryPageProps {
+  params: Promise<{ category: string }>;
 }
 
-// 为静态导出生成路径
-export async function generateStaticParams() {
-  const categories = [
-    'animals', 'fantasy', 'ocean', 'space', 'nature', 'prehistoric', 
-    'superhero', 'farm', 'fairy-tale', 'holidays', 'all'
-  ];
+export default async function PopularCategoryPage({ params }: PopularCategoryPageProps) {
+  const { category } = await params;
   
-  return categories.map(category => ({
-    category
-  }));
+  return (
+    <PopularCategoryPageClient category={category} />
+  );
 }
-
-export default async function PopularCategoryPage({ params }: PageProps) {
-  const resolvedParams = await params;
-  return <PopularCategoryClient category={resolvedParams.category} />;
-} 

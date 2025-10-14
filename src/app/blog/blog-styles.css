@@ -1,0 +1,238 @@
+/* Blog Article Enhanced Styles - 基于优化的HTML设计 */
+
+/* 信息卡片样式 - 渐变背景卡片 */
+.prose .bg-gradient-to-r,
+.prose .bg-gradient-to-br {
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border-left: 5px solid;
+  transition: all 0.3s ease;
+  margin: 2.5rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.prose .bg-gradient-to-r::before,
+.prose .bg-gradient-to-br::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+.prose .bg-gradient-to-r:hover,
+.prose .bg-gradient-to-br:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 卡片内标题样式 */
+.prose .bg-gradient-to-r h3,
+.prose .bg-gradient-to-br h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0.75rem !important;
+  font-size: 1.3em !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 卡片内段落样式 */
+.prose .bg-gradient-to-r p,
+.prose .bg-gradient-to-br p {
+  margin-bottom: 0 !important;
+  line-height: 1.7;
+}
+
+/* 图片占位符样式增强 */
+.prose .my-12.p-8 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.prose .my-12.p-8:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* H2 标题悬停效果增强 */
+.prose h2 {
+  position: relative;
+  cursor: default;
+}
+
+.prose h2::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(to bottom, #ff6347, #ff8c00);
+  border-radius: 0 3px 3px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.prose h2:hover::before {
+  opacity: 1;
+}
+
+/* 段落首字母大写样式 - 已禁用以避免布局问题 */
+/* .prose > p:first-of-type::first-letter {
+  font-size: 3.5em;
+  line-height: 0.9;
+  float: left;
+  margin: 0.1em 0.1em 0 0;
+  color: #ff6347;
+  font-weight: bold;
+} */
+
+/* 列表项目增强 */
+.prose ul li {
+  position: relative;
+  padding-left: 0.5rem;
+}
+
+.prose ul li::marker {
+  color: #ff6347;
+  font-size: 1.2em;
+}
+
+/* 强调文本样式 */
+.prose strong {
+  background: linear-gradient(to right, transparent, rgba(255, 99, 71, 0.1), transparent);
+  padding: 0 0.2em;
+}
+
+/* 链接样式增强 */
+.prose a {
+  color: #007bff;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.prose a:hover {
+  color: #0056b3;
+  border-bottom-color: #0056b3;
+}
+
+/* 分隔线样式 */
+.prose hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #ddd, transparent);
+  margin: 3rem 0;
+}
+
+/* 引用块样式 */
+.prose blockquote {
+  border-left: 6px solid #ff1493;
+  background-color: #fff0f5;
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  border-radius: 0.5rem;
+  font-style: italic;
+  font-size: 1.15em;
+}
+
+/* 代码块样式（如果有） */
+.prose code {
+  background-color: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: #e83e8c;
+}
+
+/* 表格样式（如果有） */
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.prose th {
+  background-color: #007bff;
+  color: white;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.prose td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.prose tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* CTA 按钮样式 */
+.prose .inline-flex.items-center {
+  background: linear-gradient(135deg, #ff6347 0%, #ff8c00 100%);
+  box-shadow: 0 4px 15px rgba(255, 99, 71, 0.3);
+  transition: all 0.3s ease;
+}
+
+.prose .inline-flex.items-center:hover {
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+  transform: scale(1.05);
+}
+
+/* 列表样式优化 */
+.prose ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.prose ul li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #ff6347;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .prose .bg-gradient-to-r,
+  .prose .bg-gradient-to-br {
+    padding: 1.5rem;
+  }
+  
+  .prose h2 {
+    font-size: 1.75em !important;
+  }
+  
+  .prose h3 {
+    font-size: 1.25em !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .prose h2 {
+    font-size: 1.5em !important;
+    padding-left: 0.75rem !important;
+    border-left-width: 4px !important;
+  }
+  
+  .prose .bg-gradient-to-r,
+  .prose .bg-gradient-to-br {
+    padding: 1.25rem;
+    border-left-width: 3px;
+  }
+}
+

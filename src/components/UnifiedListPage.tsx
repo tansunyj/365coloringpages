@@ -32,6 +32,7 @@ interface ColoringPageItem {
   bookType?: string;
   themeParkName?: string;
   themeParkSlug?: string;
+  slug?: string; // 添加slug字段
   // 涂色书页面API返回的字段
   coloringBookId?: number;
   coloringBookName?: string;
@@ -359,8 +360,14 @@ export default function UnifiedListPage({
   // 获取URL参数
   const urlPage = parseInt(searchParams.get('page') || '1');
   const currentLimit = parseInt(searchParams.get('limit') || itemsPerPage.toString());
+  
+  // 对于categories、search、popular、theme-parks、first-coloring-book和latest页面，优先使用传入的category参数（来自URL路径）
+  // 对于其他页面，使用查询参数中的category
   const urlCategory = searchParams.get('category');
-  const currentCategory = urlCategory !== null ? urlCategory : (category || '');
+  const currentCategory = (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'first-coloring-book' || type === 'latest')
+    ? (category || '')  // categories、search、popular、theme-parks、first-coloring-book和latest页面使用路径参数
+    : (urlCategory !== null ? urlCategory : (category || ''));  // 其他页面使用查询参数
+  
   const currentSort = searchParams.get('sort') || defaultSort;
   const currentQuery = searchParams.get('q') || '';
   
@@ -415,8 +422,11 @@ export default function UnifiedListPage({
     
     Object.entries(params).forEach(([key, value]) => {
       if (key === 'category') {
-        // 对于category参数，即使是空字符串也要设置，以明确用户的选择
-        newSearchParams.set(key, value.toString());
+        // 对于categories、search、popular、theme-parks、first-coloring-book和latest页面，不将category参数添加到查询参数中
+        // 因为category信息已经在URL路径中了
+        if (type !== 'categories' && type !== 'search' && type !== 'popular' && type !== 'theme-parks' && type !== 'first-coloring-book' && type !== 'latest') {
+          newSearchParams.set(key, value.toString());
+        }
       } else if (value && value !== '' && value !== '0') {
         newSearchParams.set(key, value.toString());
       } else {
@@ -432,7 +442,7 @@ export default function UnifiedListPage({
     const newUrl = `${window.location.pathname}?${newSearchParams.toString()}`;
     // 使用 replace 而不是 push，避免整个页面刷新
     router.replace(newUrl, { scroll: false });
-  }, [router, searchParams]);
+  }, [router, searchParams, type]);
 
   /**
    * 加载数据
@@ -738,7 +748,34 @@ export default function UnifiedListPage({
 
   const handleCategoryChange = (categorySlug: string) => {
     setSelectedCategory(categorySlug);
-    updateUrl({ category: categorySlug, page: 1 });
+    
+    // 对于categories、search、popular、theme-parks、first-coloring-book和latest页面，跳转到新的URL路径
+    if (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'first-coloring-book' || type === 'latest') {
+      const basePath = type === 'categories' ? '/categories' : 
+                      type === 'search' ? '/search' : 
+                      type === 'popular' ? '/popular' : 
+                      type === 'theme-parks' ? '/theme-parks' : 
+                      type === 'first-coloring-book' ? '/first-coloring-book' : '/latest';
+      
+      if (categorySlug === 'all' || categorySlug === '') {
+        // 跳转到首页，保留当前查询参数
+        const currentParams = new URLSearchParams(searchParams);
+        currentParams.delete('category'); // 删除category参数，因为首页不需要
+        const queryString = currentParams.toString();
+        const newUrl = queryString ? `${basePath}?${queryString}` : basePath;
+        router.push(newUrl);
+      } else {
+        // 跳转到特定分类页面，保留当前查询参数
+        const currentParams = new URLSearchParams(searchParams);
+        currentParams.delete('category'); // 删除category参数，因为已经在路径中了
+        const queryString = currentParams.toString();
+        const newUrl = queryString ? `${basePath}/${categorySlug}?${queryString}` : `${basePath}/${categorySlug}`;
+        router.push(newUrl);
+      }
+    } else {
+      // 其他页面使用查询参数
+      updateUrl({ category: categorySlug, page: 1 });
+    }
   };
 
   const handleSortChange = (sort: string) => {
@@ -970,8 +1007,22 @@ export default function UnifiedListPage({
                    isFavorited={item.isFavorited}
                    linkType={type}
                    linkCategory={
-                    type === 'theme-parks' ? currentCategory || 'theme-park-adventures' :
-                    type === 'first-coloring-book' ? currentCategory || 'first-coloring-book' :
+                    type === 'theme-parks' ? (
+                      // 为 theme-parks 类型生成分类 slug
+                      currentCategory ||
+                      item.categorySlug ||
+                      getCategorySlugFromName(item.categoryName) ||
+                      category ||
+                      'theme-park-adventures'
+                    ) :
+                    type === 'first-coloring-book' ? (
+                      // 为 first-coloring-book 类型生成分类 slug
+                      currentCategory ||
+                      item.categorySlug ||
+                      getCategorySlugFromName(item.categoryName) ||
+                      category ||
+                      'first-coloring-book'
+                    ) :
                     type === 'latest' ? (
                       // 为 latest 类型生成分类 slug
                       item.categorySlug || 
@@ -987,6 +1038,14 @@ export default function UnifiedListPage({
                       category || 
                       'animals'
                     ) :
+                    type === 'search' ? (
+                      // 为 search 类型生成分类 slug
+                      currentCategory || 
+                      item.categorySlug || 
+                      getCategorySlugFromName(item.categoryName) || 
+                      category || 
+                      ''
+                    ) :
                     (item.categorySlug || category)
                   }
                    linkPark={park}
@@ -994,6 +1053,7 @@ export default function UnifiedListPage({
                    bookType={item.bookType}
                    themeParkName={item.themeParkName}
                    themeParkSlug={item.themeParkSlug}
+                   slug={item.slug}
                    searchParams={{
                      q: currentQuery,
                      page: currentPage.toString(),

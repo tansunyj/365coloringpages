@@ -21,8 +21,8 @@ export default function CategoryCard({ category }: CategoryCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    // 导航到主分类页面
-    router.push(`/categories`);
+    // 导航到特定分类页面
+    router.push(`/categories/${category.slug}`);
   };
 
   return (

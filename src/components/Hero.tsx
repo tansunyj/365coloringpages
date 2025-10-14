@@ -261,15 +261,16 @@ export default function Hero() {
   }, [isClient, bannerGroup?.images?.length, bannerGroup?.autoPlayInterval]);
   
   const handleCategoryClick = async (categorySlug: string) => {
-    // 跳转到搜索结果页面，使用分类过滤
+    // 跳转到搜索结果页面，使用新的URL路径结构
     const searchParams = new URLSearchParams({
       q: '',
       page: '1',
       limit: '12',
-      sort: '',
-      category: categorySlug
+      sort: ''
     });
-    router.push(`/search?${searchParams.toString()}`);
+    const queryString = searchParams.toString();
+    const newUrl = queryString ? `/search/${categorySlug}?${queryString}` : `/search/${categorySlug}`;
+    router.push(newUrl);
   };
 
   const handleKeywordClick = async (keyword: string) => {

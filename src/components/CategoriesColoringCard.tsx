@@ -16,6 +16,7 @@ interface ColoringPage {
   likes: number;
   downloads: number;
   isPremium: boolean;
+  slug?: string; // 添加slug字段
 }
 
 interface CategoriesColoringCardProps {
@@ -57,7 +58,9 @@ export default function CategoriesColoringCard({ page, allPages }: CategoriesCol
     }
     
     const categorySlug = getCategorySlug(displayCategory);
-    router.push(`/categories/${categorySlug}/${page.id}`);
+    // 使用新的slug-id格式
+    const pageSlug = page.slug || `page-${page.id}`;
+    router.push(`/categories/${categorySlug}/${pageSlug}-${page.id}`);
   };
 
   return (
