@@ -22,7 +22,7 @@ export interface SEOPageConfig {
   defaultTitleSuffix?: string;
   
   // 数据源类型
-  dataSource?: 'category' | 'coloringPage' | 'themePark' | 'none';
+  dataSource?: 'category' | 'coloringPage' | 'themePark' | 'coloringBook' | 'none';
   
   // 是否包含涂色页面属性关键词
   includeAttributes?: boolean;
@@ -287,54 +287,59 @@ export const SEO_CONFIGS: Record<PageType, Record<PageLevel, SEOPageConfig>> = {
     },
   },
 
-  // ==================== 第一本涂色书页面 ====================
-  // 基于 PUBLIC_PAGES_ANALYSIS.md (888-892行)
+  // ==================== Easy Coloring Book 页面 ====================
+  // 基于 CSV数据分析：easy coloring pages (18.1K), easy coloring book pages (390), simple coloring pages (12.1K), kids coloring pages (14.8K)
+  // 详见: FIRST_COLORING_BOOK_SEO_ANALYSIS.md
   firstColoringBook: {
     home: {
-      // 基于文档 888-892 行
+      // ✅ SEO优化：使用高搜索量关键词（Easy Coloring Book主题）
       baseKeywords: [
-        'first coloring book',
-        'easy coloring pages',
-        'simple coloring pages',
-        'kids coloring pages',
-        'abc coloring pages',
-        'alphabet coloring pages',
-        'number coloring pages',
-        'preschool coloring pages',
+        'easy coloring pages',           // ✅ 18,100搜索量（核心关键词）
+        'simple coloring pages',         // ✅ 12,100搜索量
+        'kids coloring pages',           // ✅ 14,800搜索量
+        'easy coloring book pages',      // ✅ 390搜索量（直接匹配）
+        'simple coloring book pages',    // ✅ 590搜索量（直接匹配）
+        'easy coloring pages for kids',  // ✅ 1,900搜索量
+        'preschool coloring pages',      // ✅ 3,600搜索量
+        'beginner coloring pages',       // ✅ 语义相关（初学者）
       ],
-      titleTemplate: 'First Coloring Book - Easy Coloring Pages for Beginners',
+      titleTemplate: 'Easy Coloring Book - Simple Pages for Kids & Beginners',
       defaultTitleSuffix: '', // 已包含在 titleTemplate 中
-      descriptionTemplate: 'Perfect first coloring book with easy, simple designs for young children. ABC, numbers, and basic shapes. Free printable pages.',
+      descriptionTemplate: 'Browse 1,000+ easy coloring book pages perfect for kids and beginners. Simple designs featuring animals, characters, ABC, numbers. Free printable downloads for toddlers, preschoolers, and all skill levels.',
       dataSource: 'none',
-      contextKeywords: ['first coloring book', 'beginner coloring pages'],
+      contextKeywords: ['easy coloring book', 'easy coloring pages', 'simple coloring pages', 'beginner coloring pages'],
       keywordsLimit: 12,
     },
     category: {
       baseKeywords: [
-        'first coloring book',
-        'beginner coloring pages',
-        'coloring pages',
+        'easy coloring pages',       // ✅ 核心关键词
+        'simple coloring pages',     // ✅ 核心关键词
+        'kids coloring pages',       // ✅ 核心关键词
+        'easy coloring book pages',  // ✅ 390搜索量（直接匹配）
+        'beginner coloring pages',   // ✅ 语义相关（初学者）
       ],
-      titleTemplate: 'First {categoryName} Coloring Book',
-      defaultTitleSuffix: 'Easy Designs',
-      descriptionTemplate: 'Simple {categoryName} coloring pages for beginners. {highlightPhrase} Perfect first coloring book. Free printable sheets for young children.',
-      dataSource: 'category',
-      contextKeywords: ['first coloring book', 'beginner coloring pages'],
+      titleTemplate: 'Easy {categoryName} Coloring Book for Kids',
+      defaultTitleSuffix: 'Simple Designs',
+      descriptionTemplate: 'Easy {categoryName} coloring book with simple designs for kids and beginners. {highlightPhrase} Large areas and clear outlines make these perfect for preschool, toddlers, and first-time colorists. Free printable.',
+      dataSource: 'coloringBook',
+      contextKeywords: ['easy coloring book', 'easy coloring pages', 'simple coloring pages'],
       keywordsLimit: 12,
     },
     detail: {
       baseKeywords: [
-        'first coloring book',
-        'beginner coloring pages',
-        'coloring pages',
+        'easy coloring pages',       // ✅ 核心关键词
+        'simple coloring pages',     // ✅ 核心关键词
+        'kids coloring pages',       // ✅ 核心关键词
+        'easy coloring book page',   // ✅ 语义匹配（单页）
+        'beginner coloring pages',   // ✅ 语义相关（初学者）
       ],
-      titleTemplate: '{title} - First Coloring Book',
-      defaultTitleSuffix: 'Easy Design',
-      descriptionTemplate: '{title} coloring page. {difficultyText}{ageText}. {styleThemeText} design. Perfect for your first coloring book. Free printable.',
+      titleTemplate: '{title} - Easy Coloring Book Page for Kids',
+      defaultTitleSuffix: 'Simple Design',
+      descriptionTemplate: '{title} from our easy coloring book collection. {difficultyText}{ageText}. Simple {styleThemeText} design perfect for kids, toddlers, and beginners. Free printable download.',
       descriptionPrefix: 'Easy: ',
       dataSource: 'coloringPage',
       includeAttributes: true,
-      contextKeywords: ['first coloring book', 'beginner coloring pages'],
+      contextKeywords: ['easy coloring book', 'easy coloring pages', 'simple coloring pages'],
       keywordsLimit: 12,
     },
   },

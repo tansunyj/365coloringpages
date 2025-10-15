@@ -75,7 +75,7 @@ export default function FirstColoringBookPageClient() {
         
         const { api } = await import('../../lib/apiClient');
         const response = await api.coloringBooks.pages({
-          book: 'first-coloring-book',
+          book: 'easy-coloring-book',
           page: 1,
           limit: 100
         });
@@ -182,13 +182,13 @@ export default function FirstColoringBookPageClient() {
             Home
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <span className="text-gray-900 font-medium">My First Coloring Book</span>
+          <span className="text-gray-900 font-medium">Easy Coloring Book</span>
         </nav>
 
         {/* 页面标题和描述 */}
         <div className="mb-12">
           <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-            My First Coloring Book
+            Easy Coloring Book
           </h1>
           <p className="text-xl text-gray-600 max-w-4xl leading-relaxed">
             Perfect beginner-friendly designs for young artists and coloring enthusiasts. Simple, fun, and educational!
@@ -254,7 +254,7 @@ export default function FirstColoringBookPageClient() {
               categoryColor={page.categoryColor || '#999'}
               isLiked={page.isLiked || false}
               isFavorited={page.isFavorited || false}
-              linkType="first-coloring-book"
+              linkType="easy-coloring-book"
               linkCategory={page.categorySlug || 'basic-shapes'}
               allPages={filteredPages}
             />

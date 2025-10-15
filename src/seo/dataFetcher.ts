@@ -44,6 +44,19 @@ export interface ThemeParkData {
   customTitleSuffix?: string;
 }
 
+export interface ColoringBookData {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  thumbnailUrl?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  additionalKeywords?: string[];
+  highlightPhrase?: string;
+  customTitleSuffix?: string;
+}
+
 /**
  * 数据获取器类
  */
@@ -152,12 +165,13 @@ export class SEODataFetcher {
 
   /**
    * 获取主题公园数据
+   * ✅ 从 /api/theme-parks 获取所有主题公园，然后根据 slug 查找
    */
   async fetchThemePark(slug: string): Promise<ThemeParkData | null> {
-    const apiUrl = `${this.apiBase}/api/theme-parks/${slug}`;
+    const apiUrl = `${this.apiBase}/api/theme-parks`;
     
     if (this.isDev) {
-      console.log(`[SEO Data] Fetching theme park: ${apiUrl}`);
+      console.log(`[SEO Data] Fetching theme parks list to find: ${slug}`);
     }
 
     try {
@@ -170,22 +184,114 @@ export class SEODataFetcher {
 
       if (response.ok) {
         const data = await response.json();
-        const themePark = data.data;
+        const themeParks = data.data || [];
+        
+        // ✅ 从列表中查找匹配的主题公园
+        const themePark = themeParks.find((park: any) => park.slug === slug);
         
         if (this.isDev) {
-          console.log(`[SEO Data] Theme park success: ${themePark?.name}`);
+          if (themePark) {
+            console.log(`[SEO Data] Theme park found: ${themePark.name}`);
+            console.log(`[SEO Data] SEO fields:`, {
+              seoTitle: themePark.seoTitle,
+              seoDescription: themePark.seoDescription,
+            });
+          } else {
+            console.warn(`[SEO Data] Theme park not found for slug: ${slug}`);
+          }
         }
         
-        return themePark;
+        return themePark || null;
       } else {
         if (this.isDev) {
-          console.warn(`[SEO Data] Theme park API returned ${response.status}`);
+          console.warn(`[SEO Data] Theme parks list API returned ${response.status}`);
         }
         return null;
       }
     } catch (error) {
       if (this.isDev) {
-        console.error(`[SEO Data] Theme park error:`, error);
+        console.error(`[SEO Data] Theme parks list error:`, error);
+      }
+      return null;
+    }
+  }
+
+  /**
+   * 获取涂色书数据
+   * ✅ 从 /api/coloring-books 获取所有涂色书，然后根据 slug 查找
+   */
+  async fetchColoringBook(slug: string): Promise<ColoringBookData | null> {
+    const apiUrl = `${this.apiBase}/api/coloring-books`;
+    
+    if (this.isDev) {
+      console.log(`[SEO Data] Fetching coloring books list to find: ${slug}`);
+    }
+
+    try {
+      // 开发环境不缓存，生产环境缓存1小时
+      const fetchOptions = this.isDev 
+        ? { cache: 'no-store' as RequestCache }
+        : { next: { revalidate: 3600 } };
+      
+      const response = await fetch(apiUrl, fetchOptions);
+
+      if (response.ok) {
+        const data = await response.json();
+        const coloringBooks = data.data?.books || data.data || [];
+        
+        // ✅ 从列表中查找匹配的涂色书
+        const rawBook = coloringBooks.find((book: any) => book.slug === slug);
+        
+        if (this.isDev) {
+          if (rawBook) {
+            console.log(`[SEO Data] Coloring book found: ${rawBook.title}`);
+            console.log(`[SEO Data] SEO fields:`, {
+              seoTitle: rawBook.seoTitle,
+              seoDescription: rawBook.seoDescription,
+            });
+          } else {
+            console.warn(`[SEO Data] Coloring book not found for slug: ${slug}`);
+            console.log(`[SEO Data] Available slugs:`, coloringBooks.map((b: any) => b.slug));
+          }
+        }
+        
+        // ✅ 映射API字段到接口字段
+        if (rawBook) {
+          const coloringBook: ColoringBookData = {
+            id: rawBook.id,
+            name: rawBook.title, // ✅ API返回title，映射为name
+            slug: rawBook.slug,
+            description: rawBook.description,
+            thumbnailUrl: rawBook.coverImage, // ✅ API返回coverImage，映射为thumbnailUrl
+            seoTitle: rawBook.seoTitle,
+            seoDescription: rawBook.seoDescription,
+            additionalKeywords: rawBook.additionalKeywords || [],
+            highlightPhrase: rawBook.highlightPhrase || rawBook.description,
+            customTitleSuffix: rawBook.customTitleSuffix,
+          };
+          
+          if (this.isDev) {
+            console.log(`[SEO Data] Mapped coloring book data:`, {
+              name: coloringBook.name,
+              slug: coloringBook.slug,
+              seoTitle: coloringBook.seoTitle,
+              seoDescription: coloringBook.seoDescription,
+            });
+          }
+          
+          return coloringBook;
+        }
+        
+        return null;
+      } else {
+        if (this.isDev) {
+          console.warn(`[SEO Data] Coloring books list API returned ${response.status}`);
+        }
+        return null;
+      }
+    } catch (error) {
+      if (this.isDev) {
+        console.error(`[SEO Data] Coloring books list error:`, error);
       }
       return null;
     }

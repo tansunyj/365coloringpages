@@ -1,11 +1,17 @@
 import { Suspense } from 'react';
 import UnifiedColoringDetail from '../../../../components/UnifiedColoringDetail';
+import { generateFirstColoringBookSEO } from '@/seo/generatePageSEO';
 
 interface FirstColoringBookDetailPageProps {
   params: Promise<{
     category: string;
     'slug-id': string;
   }>;
+}
+
+export async function generateMetadata({ params }: FirstColoringBookDetailPageProps) {
+  const { category, 'slug-id': slugId } = await params;
+  return await generateFirstColoringBookSEO('detail', { category, slugId });
 }
 
 // 生成静态参数 - 从API获取所有涂色书和涂色页面的组合
@@ -97,7 +103,7 @@ export default async function FirstColoringBookDetailPage({
     }>
       <UnifiedColoringDetail
         id={id}
-        type="first-coloring-book"
+        type="easy-coloring-book"
         category={category}
       />
     </Suspense>

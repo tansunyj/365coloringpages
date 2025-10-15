@@ -14,11 +14,11 @@ interface FirstColoringBookListClientProps {
 export default function FirstColoringBookListClient({ initialCategory }: FirstColoringBookListClientProps) {
   return (
     <UnifiedListPage
-      type="first-coloring-book"
+      type="easy-coloring-book"
       category={initialCategory}
-      title="我的第一本涂色书"
-      subtitle="适合初学者和年轻艺术家的涂色页面"
-      description="浏览我们为初学者精心设计的涂色页面合集，简单易上手，让每个人都能享受涂色的乐趣。"
+      title="Easy Coloring Book"
+      subtitle="简单易上手的涂色页面，适合儿童和初学者"
+      description="浏览我们专为儿童和初学者设计的Easy Coloring Book合集，简单大图形设计，让每个人都能享受涂色的乐趣。"
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

@@ -11,7 +11,7 @@ import UnifiedBreadcrumb from './UnifiedBreadcrumb';
 
 interface UnifiedColoringDetailProps {
   id: string;
-  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
+  type: 'popular' | 'latest' | 'easy-coloring-book' | 'theme-parks' | 'categories' | 'search';
   category?: string;
   park?: string;
   isDialog?: boolean; // 是否在Dialog中显示
@@ -334,7 +334,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       'latest': ['Modern Art Patterns', 'Geometric Mandala', 'Contemporary Flowers'],
       'theme-parks': ['Roller Coaster Adventure', 'Carousel Dreams', 'Ferris Wheel Fun'],
       'categories': ['Category Coloring Page', 'Beautiful Design', 'Creative Art'],
-      'first-coloring-book': ['Simple Circle Fun', 'Happy Square', 'Friendly Triangle'],
+      'easy-coloring-book': ['Simple Circle Fun', 'Happy Square', 'Friendly Triangle'],
       'search': ['Search Result Page', 'Found Design', 'Matching Art']
     };
 
@@ -394,12 +394,12 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           { name: 'Latest', href: '/latest' },
           { name: coloringPageData.title, href: '#' }
         ];
-      case 'first-coloring-book':
+      case 'easy-coloring-book':
         const categoryDisplay = category ? decodeURIComponent(category).replace(/-/g, ' ') : 'All';
         return [
           { name: 'Home', href: '/' },
-          { name: 'My First Coloring Book', href: '/first-coloring-book' },
-          { name: categoryDisplay, href: `/first-coloring-book/${category || ''}` },
+          { name: 'Easy Coloring Book', href: '/easy-coloring-book' },
+          { name: categoryDisplay, href: `/easy-coloring-book/${category || ''}` },
           { name: coloringPageData.title, href: '#' }
         ];
       case 'theme-parks':
@@ -479,7 +479,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     switch (type) {
       case 'popular': return 'bg-pink-500 hover:bg-pink-600';
       case 'latest': return 'bg-green-500 hover:bg-green-600';
-      case 'first-coloring-book': return 'bg-blue-500 hover:bg-blue-600';
+      case 'easy-coloring-book': return 'bg-blue-500 hover:bg-blue-600';
       case 'theme-parks': return 'bg-purple-500 hover:bg-purple-600';
       case 'categories': return 'bg-orange-500 hover:bg-orange-600';
       case 'search': return 'bg-indigo-500 hover:bg-indigo-600';
@@ -491,7 +491,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     switch (type) {
       case 'popular': return 'bg-pink-100 text-pink-800';
       case 'latest': return 'bg-green-100 text-green-800';
-      case 'first-coloring-book': return 'bg-blue-100 text-blue-800';
+      case 'easy-coloring-book': return 'bg-blue-100 text-blue-800';
       case 'theme-parks': return 'bg-purple-100 text-purple-800';
       case 'categories': return 'bg-orange-100 text-orange-800';
       case 'search': return 'bg-indigo-100 text-indigo-800';
@@ -1145,13 +1145,13 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                             targetUrl = `/latest/animals/${page.id}`;
                           }
                           break;
-                        case 'first-coloring-book':
-                          // 使用新的URL结构：/first-coloring-book/[category]/[slug-id]
+                        case 'easy-coloring-book':
+                          // 使用新的URL结构：/easy-coloring-book/[category]/[slug-id]
                           if (category && category !== 'all' && category !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
-                            targetUrl = `/first-coloring-book/${category}/${pageSlug}-${page.id}`;
+                            targetUrl = `/easy-coloring-book/${category}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/first-coloring-book/first-coloring-book/${page.id}`;
+                            targetUrl = `/easy-coloring-book/easy-coloring-book/${page.id}`;
                           }
                           break;
                         case 'theme-parks':

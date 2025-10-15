@@ -22,7 +22,7 @@ interface RichColoringCardProps {
   categoryColor: string;
   isLiked?: boolean;
   isFavorited?: boolean;
-  linkType: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
+  linkType: 'popular' | 'latest' | 'easy-coloring-book' | 'theme-parks' | 'categories' | 'search';
   linkCategory?: string;
   linkPark?: string;
   bookTitle?: string;
@@ -132,13 +132,13 @@ class LinkGenerator {
           return `/theme-parks/theme-park-adventures/${id}`;
         }
           
-      case 'first-coloring-book':
-        // 使用新的URL结构：/first-coloring-book/[category]/[slug-id]
+      case 'easy-coloring-book':
+        // 使用新的URL结构：/easy-coloring-book/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
-          return `/first-coloring-book/${linkCategory}/${pageSlug}-${id}`;
+          return `/easy-coloring-book/${linkCategory}/${pageSlug}-${id}`;
         } else {
-          return `/first-coloring-book/first-coloring-book/${id}`;
+          return `/easy-coloring-book/easy-coloring-book/${id}`;
         }
           
       case 'latest':
@@ -331,10 +331,10 @@ export default function RichColoringCard(props: RichColoringCardProps) {
               <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md">
                 {themeParkName}
               </span>
-            ) : linkType === 'first-coloring-book' ? (
+            ) : linkType === 'easy-coloring-book' ? (
               // 涂色书页面：优先显示涂色书名称，如果没有则显示"涂色书"
               <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md">
-                {bookTitle || 'My First Coloring Book'}
+                {bookTitle || 'Easy Coloring Book'}
               </span>
             ) : (
               // 其他页面：显示分类名称
@@ -380,7 +380,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors flex-1">
               {title}
             </h3>
-            {linkType === 'first-coloring-book' && bookType && (
+            {linkType === 'easy-coloring-book' && bookType && (
               <span className="bg-white/30 backdrop-blur-sm text-gray-800 px-2 py-1 text-xs font-bold rounded-full shadow-md ml-2 flex-shrink-0">
                 {bookType}
               </span>

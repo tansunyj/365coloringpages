@@ -42,11 +42,11 @@ export default function SimpleFirstColoringCard({
   const handleCardClick = () => {
     if (slug) {
       // 如果有slug，跳转到涂色书详情页
-      router.push(`/first-coloring-book/${slug}`);
+      router.push(`/easy-coloring-book/${slug}`);
     } else {
-      // 否则跳转到First Coloring Book列表页面，并预选对应的分类
+      // 否则跳转到Easy Coloring Book列表页面，并预选对应的分类
       const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
-      router.push(`/first-coloring-book?category=${encodeURIComponent(categorySlug)}`);
+      router.push(`/easy-coloring-book?category=${encodeURIComponent(categorySlug)}`);
     }
   };
 

@@ -65,6 +65,7 @@ export async function generatePageSEO(params: GeneratePageSEOParams): Promise<Me
   let categoryData = null;
   let coloringPageData = null;
   let themeParkData = null;
+  let coloringBookData = null;
   
   // 获取分类数据
   if (config.dataSource === 'category' && category) {
@@ -98,6 +99,11 @@ export async function generatePageSEO(params: GeneratePageSEOParams): Promise<Me
     }
   }
   
+  // 获取涂色书数据
+  if (config.dataSource === 'coloringBook' && category) {
+    coloringBookData = await dataFetcher.fetchColoringBook(category);
+  }
+  
   // 如果需要涂色页面数据但获取失败，返回错误元数据
   if (config.dataSource === 'coloringPage' && !coloringPageData) {
     return {
@@ -113,6 +119,7 @@ export async function generatePageSEO(params: GeneratePageSEOParams): Promise<Me
     categoryData,
     coloringPageData,
     themeParkData,
+    coloringBookData,
     baseUrl,
     siteUrl: 'https://365coloringpages.com',
   };
@@ -239,10 +246,10 @@ export async function generateFirstColoringBookSEO(
   params?: { category?: string; slugId?: string }
 ): Promise<Metadata> {
   const baseUrl = params?.slugId 
-    ? `/first-coloring-book/${params.category}/${params.slugId}`
+    ? `/easy-coloring-book/${params.category}/${params.slugId}`
     : params?.category
-    ? `/first-coloring-book/${params.category}`
-    : '/first-coloring-book';
+    ? `/easy-coloring-book/${params.category}`
+    : '/easy-coloring-book';
   
   return generatePageSEO({
     pageType: 'firstColoringBook',

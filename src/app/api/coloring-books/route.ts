@@ -59,7 +59,7 @@ async function getColoringBookPagesFromDatabase(): Promise<ColoringBookPage[]> {
   try {
     // 这里应该是真实的数据库查询
     // 例如: const pages = await db.coloringPages.findMany({
-    //   where: { type: 'first-coloring-book', status: 'published' },
+    //   where: { type: 'easy-coloring-book', status: 'published' },
     //   include: { coloringBook: true }
     // });
     
@@ -76,7 +76,7 @@ const exampleColoringBooks: ColoringBook[] = [
   {
     id: 1,
     title: "我的第一本涂色书",
-    slug: "first-coloring-book",
+    slug: "easy-coloring-book",
     description: "适合初学者的简单涂色页面",
     coverImage: "http://www.baidu.com",
     type: "first-coloring",
@@ -115,7 +115,7 @@ const exampleColoringBooks: ColoringBook[] = [
 ];
 
 const exampleColoringBookPages: ColoringBookPage[] = [
-  // first-coloring-book 涂色书的页面 - 模拟真实API格式
+  // easy-coloring-book 涂色书的页面 - 模拟真实API格式
   {
     id: 108,
     title: "森林里的小动物",
@@ -134,7 +134,7 @@ const exampleColoringBookPages: ColoringBookPage[] = [
     isFavorited: false,
     bookId: 1,
     bookTitle: "我的第一本涂色书",
-    bookSlug: "first-coloring-book",
+    bookSlug: "easy-coloring-book",
     bookType: "first-coloring"
   },
   {
@@ -155,7 +155,7 @@ const exampleColoringBookPages: ColoringBookPage[] = [
     isFavorited: false,
     bookId: 1,
     bookTitle: "我的第一本涂色书",
-    bookSlug: "first-coloring-book",
+    bookSlug: "easy-coloring-book",
     bookType: "first-coloring"
   },
   {

@@ -38,7 +38,7 @@ async function getColoringBookPagesFromDatabase(): Promise<ColoringBookPage[]> {
 
 // 示例涂色书页面数据 - 与真实API格式完全一致
 const exampleColoringBookPages: ColoringBookPage[] = [
-  // bookId: 1, bookSlug: "first-coloring-book" 的页面
+  // bookId: 1, bookSlug: "easy-coloring-book" 的页面
   {
     id: 108,
     title: "森林里的小动物",
@@ -57,7 +57,7 @@ const exampleColoringBookPages: ColoringBookPage[] = [
     isFavorited: false,
     bookId: 1,
     bookTitle: "我的第一本涂色书",
-    bookSlug: "first-coloring-book",
+    bookSlug: "easy-coloring-book",
     bookType: "first-coloring"
   },
   {
@@ -78,7 +78,7 @@ const exampleColoringBookPages: ColoringBookPage[] = [
     isFavorited: false,
     bookId: 1,
     bookTitle: "我的第一本涂色书",
-    bookSlug: "first-coloring-book",
+    bookSlug: "easy-coloring-book",
     bookType: "first-coloring"
   },
   // bookId: 2, bookSlug: "latest-pages" 的页面

@@ -5,7 +5,7 @@
 
 import { Metadata } from 'next';
 import { SEOPageConfig } from './seoConfig';
-import { CategoryData, ColoringPageData, ThemeParkData } from './dataFetcher';
+import { CategoryData, ColoringPageData, ThemeParkData, ColoringBookData } from './dataFetcher';
 import { buildKeywordsForPage } from './buildKeywords';
 
 export interface SEOGeneratorContext {
@@ -17,6 +17,7 @@ export interface SEOGeneratorContext {
   categoryData?: CategoryData | null;
   coloringPageData?: ColoringPageData | null;
   themeParkData?: ThemeParkData | null;
+  coloringBookData?: ColoringBookData | null;
   
   // 基础信息
   baseUrl?: string;
@@ -114,6 +115,17 @@ export class SEOGenerator {
       ];
     }
     
+    // 涂色书特定关键词
+    if (context.coloringBookData) {
+      // ✅ 使用 slug 格式化版本，而不是 name（SEO友好）
+      const coloringBookSlug = context.coloringBookData.slug;
+      const coloringBookName = this.formatSlugToName(coloringBookSlug);
+      categoryKeywords = [
+        `${coloringBookName.toLowerCase()} coloring book`,
+        `${coloringBookName.toLowerCase()} coloring pages`,
+      ];
+    }
+    
     // 属性关键词（从涂色页面数据）
     let attributeKeywords: string[] = [];
     if (config.includeAttributes && context.coloringPageData) {
@@ -144,16 +156,19 @@ export class SEOGenerator {
     // 后端额外关键词
     const additionalKeywords = context.categoryData?.additionalKeywords || 
                                context.themeParkData?.additionalKeywords || 
+                               context.coloringBookData?.additionalKeywords || 
                                [];
     
     // ✅ 从后端 seoTitle 和 seoDescription 中提取关键词
     const seoExtraKeywords: string[] = [];
-    const backendTitle = context.categoryData?.seoTitle || 
-                        context.coloringPageData?.seoTitle || 
-                        context.themeParkData?.seoTitle;
-    const backendDesc = context.categoryData?.seoDescription || 
-                       context.coloringPageData?.seoDescription || 
-                       context.themeParkData?.seoDescription;
+    const backendTitle = context.coloringPageData?.seoTitle || 
+                        context.categoryData?.seoTitle || 
+                        context.themeParkData?.seoTitle || 
+                        context.coloringBookData?.seoTitle;
+    const backendDesc = context.coloringPageData?.seoDescription || 
+                       context.categoryData?.seoDescription || 
+                       context.themeParkData?.seoDescription || 
+                       context.coloringBookData?.seoDescription;
     
     // 从 seoTitle 提取关键词（提取有意义的短语）
     if (backendTitle && backendTitle.trim()) {
@@ -201,9 +216,10 @@ export class SEOGenerator {
     }
     
     // ✅ 拼接后端提供的 seoTitle（如果有）
-    const backendTitle = context.categoryData?.seoTitle || 
-                        context.coloringPageData?.seoTitle || 
-                        context.themeParkData?.seoTitle;
+    const backendTitle = context.coloringPageData?.seoTitle || 
+                        context.categoryData?.seoTitle || 
+                        context.themeParkData?.seoTitle || 
+                        context.coloringBookData?.seoTitle;
     
     if (backendTitle && backendTitle.trim()) {
       // 如果后端标题与模板生成的不同，拼接进去
@@ -232,9 +248,10 @@ export class SEOGenerator {
     }
     
     // ✅ 拼接后端提供的 seoDescription（如果有）
-    const backendDesc = context.categoryData?.seoDescription || 
-                       context.coloringPageData?.seoDescription || 
-                       context.themeParkData?.seoDescription;
+    const backendDesc = context.coloringPageData?.seoDescription || 
+                       context.categoryData?.seoDescription || 
+                       context.themeParkData?.seoDescription || 
+                       context.coloringBookData?.seoDescription;
     
     if (backendDesc && backendDesc.trim()) {
       // 如果后端描述与模板生成的不同，拼接进去
@@ -284,6 +301,11 @@ export class SEOGenerator {
       return context.themeParkData.thumbnailUrl;
     }
     
+    // 涂色书使用缩略图
+    if (context.coloringBookData?.thumbnailUrl) {
+      return context.coloringBookData.thumbnailUrl;
+    }
+    
     return undefined;
   }
 
@@ -297,8 +319,12 @@ export class SEOGenerator {
     if (result.includes('{categoryName}')) {
       let categoryName = '';
       
-      // ✅ 优先使用后端数据的 slug 格式化版本（SEO友好）
-      if (context.categoryData && context.categoryData.slug) {
+      // ✅ 涂色书数据优先（用于 first-coloring-book）
+      if (context.coloringBookData && context.coloringBookData.slug) {
+        categoryName = this.formatSlugToName(context.coloringBookData.slug);
+      }
+      // ✅ 其次使用分类数据的 slug 格式化版本（SEO友好）
+      else if (context.categoryData && context.categoryData.slug) {
         categoryName = this.formatSlugToName(context.categoryData.slug);
       }
       // Fallback 1: 使用 context.category slug 转换
@@ -319,7 +345,8 @@ export class SEOGenerator {
       
       // 开发模式调试日志
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[SEO Generator] Category replacement: "${context.category}" (slug: ${context.categoryData?.slug}) -> "${categoryName}"`);
+        const sourceInfo = context.coloringBookData ? 'coloringBook' : context.categoryData ? 'category' : 'slug';
+        console.log(`[SEO Generator] Category replacement (${sourceInfo}): "${context.category}" -> "${categoryName}"`);
       }
     }
     

@@ -1,11 +1,17 @@
 import { Suspense } from 'react';
 import UnifiedColoringDetail from '../../../../components/UnifiedColoringDetail';
+import { generateLatestSEO } from '@/seo/generatePageSEO';
 
 interface LatestDetailPageProps {
   params: Promise<{
     category: string;
     'slug-id': string;
   }>;
+}
+
+export async function generateMetadata({ params }: LatestDetailPageProps) {
+  const { category, 'slug-id': slugId } = await params;
+  return await generateLatestSEO('detail', { category, slugId });
 }
 
 // 生成静态参数 - 从API获取所有最新涂色页面的组合

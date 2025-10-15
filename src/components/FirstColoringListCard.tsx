@@ -52,7 +52,7 @@ export default function FirstColoringListCard({
     }
     
     const categorySlug = getCategorySlug(category);
-    router.push(`/first-coloring-book/${categorySlug}/${id}`);
+    router.push(`/easy-coloring-book/${categorySlug}/${id}`);
   };
 
   return (

@@ -16,7 +16,7 @@ interface BreadcrumbItem {
  * 面包屑组件属性接口
  */
 interface UnifiedBreadcrumbProps {
-  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
+  type: 'popular' | 'latest' | 'easy-coloring-book' | 'theme-parks' | 'categories' | 'search';
   category?: string;
   park?: string;
   itemTitle?: string;
@@ -88,7 +88,7 @@ class BreadcrumbPathGenerator {
       case 'latest':
         return this.generateLatestPath(category, itemTitle);
       
-      case 'first-coloring-book':
+      case 'easy-coloring-book':
         return this.generateFirstColoringBookPath(category, itemTitle);
       
       case 'theme-parks':
@@ -152,17 +152,17 @@ class BreadcrumbPathGenerator {
   }
 
   /**
-   * 生成My First Coloring Book页面面包屑
+   * 生成Easy Coloring Book页面面包屑
    */
   private static generateFirstColoringBookPath(category?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
       { name: 'Home', href: '/' },
-      { name: 'My First Coloring Book', href: '/first-coloring-book' }
+      { name: 'Easy Coloring Book', href: '/easy-coloring-book' }
     ];
 
     if (category) {
       const categoryDisplay = CategoryNameMapper.getDisplayName(category);
-      basePath.push({ name: categoryDisplay, href: `/first-coloring-book/${category}` });
+      basePath.push({ name: categoryDisplay, href: `/easy-coloring-book/${category}` });
     }
 
     if (itemTitle) {
@@ -268,7 +268,7 @@ class BreadcrumbPathGenerator {
  * 根据页面类型和参数自动生成合适的面包屑导航路径，支持以下7种页面类型：
  * 1. popular - 热门页面
  * 2. latest - 最新页面  
- * 3. first-coloring-book - 我的第一本涂色书
+ * 3. easy-coloring-book - Easy Coloring Book
  * 4. theme-parks - 主题公园
  * 5. categories - 分类页面
  * 6. search - 搜索结果页面

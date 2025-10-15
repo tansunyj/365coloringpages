@@ -89,7 +89,7 @@ interface Category {
  * 统一列表页组件属性
  */
 interface UnifiedListPageProps {
-  type: 'popular' | 'latest' | 'first-coloring-book' | 'theme-parks' | 'categories' | 'search';
+  type: 'popular' | 'latest' | 'easy-coloring-book' | 'theme-parks' | 'categories' | 'search';
   category?: string;
   park?: string;
   title: string;
@@ -184,7 +184,7 @@ class ApiClientUtil {
         const { API_ENDPOINTS } = await import('../lib/apiConfig');
         return await apiClient.get<ApiResponse>(API_ENDPOINTS.PUBLIC.THEME_PARKS.LIST, themeParksParams) as ApiResponse;
         
-      case 'first-coloring-book':
+      case 'easy-coloring-book':
         // 调用新的涂色书页面API，通过book参数筛选
         const { apiClient: coloringBooksApiClient } = await import('../lib/apiClient');
         const coloringBooksParams = {
@@ -236,7 +236,7 @@ class ApiClientUtil {
           }));
         }
         return [];
-      } else if (type === 'first-coloring-book') {
+      } else if (type === 'easy-coloring-book') {
         // 获取涂色书列表
         interface ColoringBookApiResponse {
           success: boolean;
@@ -296,7 +296,7 @@ const SORT_OPTIONS = [
  * 统一的列表页组件，支持以下7种页面类型：
  * 1. popular - 热门页面
  * 2. latest - 最新页面  
- * 3. first-coloring-book - 我的第一本涂色书
+ * 3. easy-coloring-book - Easy Coloring Book
  * 4. theme-parks - 主题公园
  * 5. categories - 分类页面
  * 6. search - 搜索结果页面
@@ -361,11 +361,11 @@ export default function UnifiedListPage({
   const urlPage = parseInt(searchParams.get('page') || '1');
   const currentLimit = parseInt(searchParams.get('limit') || itemsPerPage.toString());
   
-  // 对于categories、search、popular、theme-parks、first-coloring-book和latest页面，优先使用传入的category参数（来自URL路径）
+  // 对于categories、search、popular、theme-parks、easy-coloring-book和latest页面，优先使用传入的category参数（来自URL路径）
   // 对于其他页面，使用查询参数中的category
   const urlCategory = searchParams.get('category');
-  const currentCategory = (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'first-coloring-book' || type === 'latest')
-    ? (category || '')  // categories、search、popular、theme-parks、first-coloring-book和latest页面使用路径参数
+  const currentCategory = (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'easy-coloring-book' || type === 'latest')
+    ? (category || '')  // categories、search、popular、theme-parks、easy-coloring-book和latest页面使用路径参数
     : (urlCategory !== null ? urlCategory : (category || ''));  // 其他页面使用查询参数
   
   const currentSort = searchParams.get('sort') || defaultSort;
@@ -422,9 +422,9 @@ export default function UnifiedListPage({
     
     Object.entries(params).forEach(([key, value]) => {
       if (key === 'category') {
-        // 对于categories、search、popular、theme-parks、first-coloring-book和latest页面，不将category参数添加到查询参数中
+        // 对于categories、search、popular、theme-parks、easy-coloring-book和latest页面，不将category参数添加到查询参数中
         // 因为category信息已经在URL路径中了
-        if (type !== 'categories' && type !== 'search' && type !== 'popular' && type !== 'theme-parks' && type !== 'first-coloring-book' && type !== 'latest') {
+        if (type !== 'categories' && type !== 'search' && type !== 'popular' && type !== 'theme-parks' && type !== 'easy-coloring-book' && type !== 'latest') {
           newSearchParams.set(key, value.toString());
         }
       } else if (value && value !== '' && value !== '0') {
@@ -508,7 +508,7 @@ export default function UnifiedListPage({
               isLiked: false,
               isFavorited: false
             }));
-          } else if (type === 'first-coloring-book') {
+          } else if (type === 'easy-coloring-book') {
             // 涂色书API直接返回数组 - 需要转换为涂色页面格式
             interface ColoringBookItem {
               id: number;
@@ -543,7 +543,7 @@ export default function UnifiedListPage({
           }
         } else {
           // 其他API返回对象格式
-          if (type === 'first-coloring-book' && 'books' in response.data && Array.isArray(response.data.books)) {
+          if (type === 'easy-coloring-book' && 'books' in response.data && Array.isArray(response.data.books)) {
             // 处理新的涂色书API格式
             interface ColoringBookItem {
               id: number;
@@ -571,7 +571,7 @@ export default function UnifiedListPage({
               isLiked: false,
               isFavorited: false
             }));
-          } else if (type === 'first-coloring-book' && 'pages' in response.data && Array.isArray(response.data.pages)) {
+          } else if (type === 'easy-coloring-book' && 'pages' in response.data && Array.isArray(response.data.pages)) {
             // 处理涂色书页面API格式 - 数据已经是标准格式，直接使用
             
             // 检查第一条数据的字段，帮助调试
@@ -749,13 +749,13 @@ export default function UnifiedListPage({
   const handleCategoryChange = (categorySlug: string) => {
     setSelectedCategory(categorySlug);
     
-    // 对于categories、search、popular、theme-parks、first-coloring-book和latest页面，跳转到新的URL路径
-    if (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'first-coloring-book' || type === 'latest') {
+    // 对于categories、search、popular、theme-parks、easy-coloring-book和latest页面，跳转到新的URL路径
+    if (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'easy-coloring-book' || type === 'latest') {
       const basePath = type === 'categories' ? '/categories' : 
                       type === 'search' ? '/search' : 
                       type === 'popular' ? '/popular' : 
                       type === 'theme-parks' ? '/theme-parks' : 
-                      type === 'first-coloring-book' ? '/first-coloring-book' : '/latest';
+                      type === 'easy-coloring-book' ? '/easy-coloring-book' : '/latest';
       
       if (categorySlug === 'all' || categorySlug === '') {
         // 跳转到首页，保留当前查询参数
@@ -788,8 +788,8 @@ export default function UnifiedListPage({
     switch (type) {
       case 'theme-parks':
         return '所有主题公园';
-      case 'first-coloring-book':
-        return '所有涂色书';
+      case 'easy-coloring-book':
+        return '所有Easy Coloring Book';
       default:
         return '所有分类';
     }
@@ -1015,13 +1015,13 @@ export default function UnifiedListPage({
                       category ||
                       'theme-park-adventures'
                     ) :
-                    type === 'first-coloring-book' ? (
-                      // 为 first-coloring-book 类型生成分类 slug
+                    type === 'easy-coloring-book' ? (
+                      // 为 easy-coloring-book 类型生成分类 slug
                       currentCategory ||
                       item.categorySlug ||
                       getCategorySlugFromName(item.categoryName) ||
                       category ||
-                      'first-coloring-book'
+                      'easy-coloring-book'
                     ) :
                     type === 'latest' ? (
                       // 为 latest 类型生成分类 slug

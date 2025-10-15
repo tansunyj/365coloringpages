@@ -1,5 +1,10 @@
 import { Suspense } from 'react';
 import FirstColoringBookListClient from './FirstColoringBookListClient';
+import { generateFirstColoringBookSEO } from '@/seo/generatePageSEO';
+
+export async function generateMetadata() {
+  return await generateFirstColoringBookSEO('home');
+}
 
 export default function FirstColoringBookPage() {
   return (
