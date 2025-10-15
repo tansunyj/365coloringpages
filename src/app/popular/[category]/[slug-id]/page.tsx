@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { generatePopularSEO } from '@/seo/generatePageSEO';
 import UnifiedColoringDetail from '../../../../components/UnifiedColoringDetail';
 
 interface PopularDetailPageProps {
@@ -6,6 +7,15 @@ interface PopularDetailPageProps {
     category: string;
     'slug-id': string;
   }>;
+}
+
+/**
+ * 受欢迎页面涂色卡片详情页
+ * 使用统一的 SEO 生成系统 - 一次编写，多处使用！
+ */
+export async function generateMetadata({ params }: PopularDetailPageProps) {
+  const { category, 'slug-id': slugId } = await params;
+  return await generatePopularSEO('detail', { category, slugId });
 }
 
 // 生成静态参数 - 从API获取所有分类和涂色页面的组合

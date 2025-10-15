@@ -13,21 +13,15 @@ import { HomePageJsonLd } from '@/components/JsonLd';
  * 使用静态 export 确保所有 meta 标签都在初始 HTML 的 <head> 中
  */
 export const metadata: Metadata = {
-  title: 'Free Printable Coloring Pages for Kids & Adults',
-  description: 'Browse 10,000+ free printable coloring pages: Halloween (49.5K), Fall, Hello Kitty (49.5K), Pokemon (33.1K), Animals, Disney characters, and more. Download high-quality sheets instantly.',
+  title: 'Free Printable Coloring Pages - Halloween, Animals & Disney',
+  description: 'Browse 10,000+ free high-quality printable coloring pages: Halloween, Hello Kitty, Pokemon, Animals, Disney, Christmas themes & more. For kids & adults. Download now!',
   keywords: [
     'coloring pages',
-    'free coloring pages', 
-    'printable coloring pages',
-    'coloring pages for kids',
-    'christmas coloring pages',
-    'halloween coloring pages',
-    'hello kitty coloring pages',
-    'cute coloring pages',
-    'easy coloring pages',
-    'animal coloring pages',
-    'disney coloring pages',
-    'free printable'
+    'free coloring pages',
+    'halloween coloring',
+    'animal coloring',
+    'disney coloring',
+    'christmas coloring'
   ],
   authors: [{ name: '365 Coloring Pages' }],
   creator: '365 Coloring Pages',
@@ -40,8 +34,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://365coloringpages.com/',
     siteName: '365 Coloring Pages',
-    title: 'Free Printable Coloring Pages for Kids & Adults',
-    description: 'Browse 10,000+ free printable coloring pages: Halloween (49.5K), Fall, Animals, Disney characters, and more. Download high-quality sheets instantly.',
+    title: 'Free Printable Coloring Pages - Halloween, Animals & Disney',
+    description: 'Browse 10,000+ free high-quality printable coloring pages: Halloween, Hello Kitty, Pokemon, Animals, Disney, Christmas themes & more. For kids & adults. Download now!',
     images: [
       {
         url: 'https://365coloringpages.com/og-home.jpg',
@@ -56,8 +50,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@365coloringpages',
     creator: '@365coloringpages',
-    title: 'Free Printable Coloring Pages for Kids & Adults',
-    description: '10,000+ free printable coloring pages: Animals, Characters, Holidays & More',
+    title: 'Free Printable Coloring Pages - Halloween, Animals & Disney',
+    description: '10,000+ free coloring pages: Halloween, Animals, Disney, Christmas & More',
     images: ['https://365coloringpages.com/og-home.jpg'],
   },
   robots: {

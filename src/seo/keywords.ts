@@ -12,6 +12,7 @@ export interface KeywordSource {
   education: string[];
   vehicles: string[];
   holidays: string[];
+  themeParks: string[];
   modifiers: string[];
 }
 
@@ -135,6 +136,16 @@ export const KEYWORD_SOURCE: KeywordSource = {
     'thanksgiving coloring pages',   // 27.1K
     'easter coloring pages',         // 22.2K
     'valentines day coloring pages', // 9.9K
+  ],
+
+  // Theme parks keywords (CSV data)
+  themeParks: [
+    'theme park coloring pages',     // 140
+    'park coloring pages',           // 320
+    'jurassic park coloring pages',  // 1000
+    'water park coloring pages',     // 210
+    'amusement park coloring pages', // 140
+    'national park coloring pages',  // 210
   ],
 
   // Modifiers (combine with any keyword)

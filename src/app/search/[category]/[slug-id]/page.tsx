@@ -49,10 +49,12 @@ export async function generateMetadata({ params }: SearchDetailPageProps): Promi
   
   try {
     const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const response = await fetch(`${API_BASE}/api/coloring-pages/${id}`, {
-      cache: 'no-store',
-      next: { revalidate: 3600 }
-    });
+    // 开发环境不缓存，生产环境缓存1小时
+    const fetchOptions = process.env.NODE_ENV === 'development'
+      ? { cache: 'no-store' as RequestCache }
+      : { next: { revalidate: 3600 } };
+    
+    const response = await fetch(`${API_BASE}/api/coloring-pages/${id}`, fetchOptions);
     
     if (response.ok) {
       const data = await response.json();
