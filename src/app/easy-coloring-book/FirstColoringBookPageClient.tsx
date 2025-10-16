@@ -182,13 +182,13 @@ export default function FirstColoringBookPageClient() {
             Home
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <span className="text-gray-900 font-medium">Easy Coloring Book</span>
+          <span className="text-gray-900 font-medium">Easy Coloring Pages</span>
         </nav>
 
         {/* 页面标题和描述 */}
         <div className="mb-12">
           <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-            Easy Coloring Book
+            Easy Coloring Pages
           </h1>
           <p className="text-xl text-gray-600 max-w-4xl leading-relaxed">
             Perfect beginner-friendly designs for young artists and coloring enthusiasts. Simple, fun, and educational!

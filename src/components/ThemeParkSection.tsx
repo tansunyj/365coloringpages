@@ -70,10 +70,10 @@ export default function ThemeParkSection() {
         {/* 标题和More按钮 */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-2">Theme Park Adventures</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">Disney & Characters</h2>
           </div>
           <Link 
-            href="/theme-parks"
+            href="/disney-characters"
             className="text-gray-600 hover:text-orange-500 text-sm font-medium transition-colors flex items-center"
           >
             More

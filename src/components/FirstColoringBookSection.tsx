@@ -88,11 +88,11 @@ export default function FirstColoringBookSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-2">Easy Coloring Book</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-2">Easy Coloring Pages</h2>
             <p className="text-lg text-gray-600">Simple designs perfect for kids and beginners</p>
           </div>
           <Link 
-            href="/easy-coloring-book"
+            href="/easy-coloring-pages"
             className="text-gray-600 hover:text-green-500 text-sm font-medium transition-colors flex items-center"
           >
             More

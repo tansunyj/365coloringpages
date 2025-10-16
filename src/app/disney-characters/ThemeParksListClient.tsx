@@ -8,8 +8,8 @@ interface ThemeParksListClientProps {
 }
 
 /**
- * 主题公园列表页面客户端组件
- * 使用统一的列表页组件显示主题公园涂色页面
+ * Disney & Characters 列表页面客户端组件
+ * 使用统一的列表页组件显示迪士尼角色涂色页面
  */
 export default function ThemeParksListClient({ initialCategory }: ThemeParksListClientProps) {
   return (
@@ -17,8 +17,8 @@ export default function ThemeParksListClient({ initialCategory }: ThemeParksList
       type="theme-parks"
       category={initialCategory}
       title="Disney & Characters"
-      subtitle="探索精彩的主题公园世界"
-      description="浏览我们收集的各种主题公园涂色页面，从迪士尼到环球影城，应有尽有。"
+      subtitle="探索精彩的迪士尼角色世界"
+      description="浏览我们收集的各种迪士尼角色涂色页面，从经典角色到最新动画，应有尽有。"
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}
@@ -26,4 +26,4 @@ export default function ThemeParksListClient({ initialCategory }: ThemeParksList
       itemsPerPage={40}
     />
   );
-} 
+}

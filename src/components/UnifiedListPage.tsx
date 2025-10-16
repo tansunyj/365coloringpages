@@ -753,9 +753,9 @@ export default function UnifiedListPage({
     if (type === 'categories' || type === 'search' || type === 'popular' || type === 'theme-parks' || type === 'easy-coloring-book' || type === 'latest') {
       const basePath = type === 'categories' ? '/categories' : 
                       type === 'search' ? '/search' : 
-                      type === 'popular' ? '/popular' : 
-                      type === 'theme-parks' ? '/theme-parks' : 
-                      type === 'easy-coloring-book' ? '/easy-coloring-book' : '/latest';
+                      type === 'popular' ? '/best-coloring-pages' : 
+                      type === 'theme-parks' ? '/disney-characters' : 
+                      type === 'easy-coloring-book' ? '/easy-coloring-pages' : '/new-coloring-pages';
       
       if (categorySlug === 'all' || categorySlug === '') {
         // 跳转到首页，保留当前查询参数

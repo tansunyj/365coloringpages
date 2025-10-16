@@ -46,20 +46,20 @@ export default function Footer() {
           <div className="relative pr-8">
             <h3 className="text-lg font-black mb-5 text-gray-900">Discover</h3>
             <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-              <Link href="/popular" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                Popular Pages
+              <Link href="/best-coloring-pages" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Best Coloring Pages
               </Link>
-              <Link href="/latest" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                Latest Uploads
+              <Link href="/new-coloring-pages" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                New Coloring Pages
               </Link>
               <Link href="/categories" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                 Categories
               </Link>
-                              <Link href="/theme-parks" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                Theme Park Adventures
+                              <Link href="/disney-characters" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Disney & Characters
               </Link>
-              <Link href="/easy-coloring-book" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                Easy Coloring Book
+              <Link href="/easy-coloring-pages" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                Easy Coloring Pages
               </Link>
               <Link href="/ai-generator" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
                 AI Generator

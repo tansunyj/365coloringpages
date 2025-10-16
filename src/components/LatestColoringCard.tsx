@@ -80,7 +80,7 @@ export default function LatestColoringCard({
     const catSlug = categorySlug || getCategorySlug(category);
     const pageSlug = slug || `page-${pageId}`;
     // 导航到Latest分类详情页面，使用新的slug-id格式
-    router.push(`/latest/${catSlug}/${pageSlug}-${pageId}`);
+    router.push(`/new-coloring-pages/${catSlug}/${pageSlug}-${pageId}`);
   };
 
   return (

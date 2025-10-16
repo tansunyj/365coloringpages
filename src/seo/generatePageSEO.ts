@@ -180,10 +180,10 @@ export async function generatePopularSEO(
   params?: { category?: string; slugId?: string }
 ): Promise<Metadata> {
   const baseUrl = params?.slugId 
-    ? `/popular/${params.category}/${params.slugId}`
+    ? `/best-coloring-pages/${params.category}/${params.slugId}`
     : params?.category
-    ? `/popular/${params.category}`
-    : '/popular';
+    ? `/best-coloring-pages/${params.category}`
+    : '/best-coloring-pages';
   
   return generatePageSEO({
     pageType: 'popular',
@@ -195,17 +195,17 @@ export async function generatePopularSEO(
 }
 
 /**
- * 快捷方法：生成主题公园页面 SEO
+ * 快捷方法：生成迪士尼角色页面 SEO
  */
 export async function generateThemeParksSEO(
   level: PageLevel,
   params?: { themePark?: string; slugId?: string }
 ): Promise<Metadata> {
   const baseUrl = params?.slugId 
-    ? `/theme-parks/${params.themePark}/${params.slugId}`
+    ? `/disney-characters/${params.themePark}/${params.slugId}`
     : params?.themePark
-    ? `/theme-parks/${params.themePark}`
-    : '/theme-parks';
+    ? `/disney-characters/${params.themePark}`
+    : '/disney-characters';
   
   return generatePageSEO({
     pageType: 'themeParks',
@@ -217,17 +217,17 @@ export async function generateThemeParksSEO(
 }
 
 /**
- * 快捷方法：生成最新页面 SEO
+ * 快捷方法：生成新涂色页面 SEO
  */
 export async function generateLatestSEO(
   level: PageLevel,
   params?: { category?: string; slugId?: string }
 ): Promise<Metadata> {
   const baseUrl = params?.slugId 
-    ? `/latest/${params.category}/${params.slugId}`
+    ? `/new-coloring-pages/${params.category}/${params.slugId}`
     : params?.category
-    ? `/latest/${params.category}`
-    : '/latest';
+    ? `/new-coloring-pages/${params.category}`
+    : '/new-coloring-pages';
   
   return generatePageSEO({
     pageType: 'latest',
@@ -246,10 +246,10 @@ export async function generateFirstColoringBookSEO(
   params?: { category?: string; slugId?: string }
 ): Promise<Metadata> {
   const baseUrl = params?.slugId 
-    ? `/easy-coloring-book/${params.category}/${params.slugId}`
+    ? `/easy-coloring-pages/${params.category}/${params.slugId}`
     : params?.category
-    ? `/easy-coloring-book/${params.category}`
-    : '/easy-coloring-book';
+    ? `/easy-coloring-pages/${params.category}`
+    : '/easy-coloring-pages';
   
   return generatePageSEO({
     pageType: 'firstColoringBook',

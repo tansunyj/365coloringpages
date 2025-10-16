@@ -64,7 +64,7 @@ export default function PopularColoringCard({
     // 导航到Popular分类详情页面，使用新的slug-id格式
     const catSlug = categorySlug || 'animals'; // 默认分类
     const pageSlug = slug || `page-${pageId}`;
-    router.push(`/popular/${catSlug}/${pageSlug}-${pageId}`);
+    router.push(`/best-coloring-pages/${catSlug}/${pageSlug}-${pageId}`);
   };
 
   return (

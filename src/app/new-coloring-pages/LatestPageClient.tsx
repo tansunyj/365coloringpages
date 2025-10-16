@@ -4,7 +4,7 @@ import React from 'react';
 import UnifiedListPage from '../../components/UnifiedListPage';
 
 /**
- * Latest页面客户端组件
+ * New Coloring Pages页面客户端组件
  * 使用统一的列表页组件显示最新涂色页面
  */
 export default function LatestPageClient() {
@@ -21,4 +21,4 @@ export default function LatestPageClient() {
       itemsPerPage={40}
     />
   );
-} 
+}

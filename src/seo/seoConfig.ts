@@ -140,149 +140,158 @@ export const SEO_CONFIGS: Record<PageType, Record<PageLevel, SEOPageConfig>> = {
     },
   },
 
-  // ==================== 受欢迎页面 ====================
-  // 基于 PUBLIC_PAGES_ANALYSIS.md (870-936行)
+  // ==================== 最佳涂色页面 ====================
+  // 基于 SEMRush 数据优化：best coloring pages (480/月), best free (170/月), top (110/月)
   popular: {
     home: {
-      // 基于文档 870-874 行
+      // 基于 CSV 数据的高流量关键词优化
       baseKeywords: [
-        'popular coloring pages',
-        'hello kitty coloring pages',
-        'pokemon coloring pages',
-        'bluey coloring pages',
-        'sonic coloring pages',
-        'disney coloring pages',
-        'trending coloring pages',
+        'best coloring pages',              // 480/月 - 核心关键词
+        'best free coloring pages',         // 170/月
+        'top coloring pages',               // 110/月
+        'hello kitty coloring pages',       // 49.5K/月 - 保留高流量角色
+        'pokemon coloring pages',           // 33.1K/月
+        'bluey coloring pages',             // 40.5K/月
+        'disney coloring pages',            // 18.1K/月
+        'best coloring pages for kids',     // 70/月
       ],
-      titleTemplate: 'Popular Coloring Pages - Most Downloaded Free Printables',
+      titleTemplate: 'Best Coloring Pages - Top Quality Free Printables',
       defaultTitleSuffix: '', // 已包含在 titleTemplate 中
-      descriptionTemplate: 'Browse the most popular coloring pages: Hello Kitty, Pokemon, Bluey, Disney characters, Animals and more. Top downloads updated daily.',
+      descriptionTemplate: 'Discover the best coloring pages featuring Hello Kitty (49.5K searches), Pokemon (33.1K), Bluey (40.5K), Disney characters and more. Top quality free printables for kids and adults.',
       dataSource: 'none',
-      contextKeywords: ['popular coloring pages', 'trending coloring pages'],
+      contextKeywords: ['best coloring pages', 'top coloring pages', 'best free coloring pages'],
       keywordsLimit: 12,
     },
     category: {
       baseKeywords: [
-        'popular coloring pages',
-        'trending coloring pages',
-        'coloring pages',
+        'best coloring pages',              // 480/月 - 核心关键词
+        'best free coloring pages',         // 170/月
+        'top coloring pages',               // 110/月
+        'coloring pages',                   // 368K/月 - 通用关键词
       ],
-      titleTemplate: 'Popular {categoryName} Coloring Pages',
-      defaultTitleSuffix: 'Most Popular Designs',
-      descriptionTemplate: 'Explore the most popular {categoryName} coloring pages. {highlightPhrase} Trending designs loved by thousands. Free printable sheets for kids and adults.',
+      titleTemplate: 'Best {categoryName} Coloring Pages',
+      defaultTitleSuffix: 'Top Quality Designs',
+      descriptionTemplate: 'Discover the best {categoryName} coloring pages. {highlightPhrase} Premium quality designs perfect for kids and adults. Free printable downloads.',
       dataSource: 'category',
-      contextKeywords: ['popular coloring pages', 'trending coloring pages'],
+      contextKeywords: ['best coloring pages', 'top coloring pages', 'best free coloring pages'],
       keywordsLimit: 12,
     },
     detail: {
       baseKeywords: [
-        'popular coloring pages',
-        'trending coloring pages',
-        'coloring pages',
+        'best coloring pages',              // 480/月 - 核心关键词
+        'best free coloring pages',         // 170/月
+        'top coloring pages',               // 110/月
+        'coloring pages',                   // 368K/月 - 通用关键词
       ],
-      titleTemplate: '{title} - Popular {categoryName} Coloring Page',
+      titleTemplate: '{title} - Best {categoryName} Coloring Page',
       defaultTitleSuffix: 'Free Printable',
-      descriptionTemplate: '{title} coloring page. {difficultyText}{ageText}. {styleThemeText} design. One of our most loved free printable coloring sheets.',
-      descriptionPrefix: 'Download this popular ',
+      descriptionTemplate: '{title} coloring page. {difficultyText}{ageText}. {styleThemeText} design. One of our best quality free printable coloring sheets.',
+      descriptionPrefix: 'Download this premium ',
       dataSource: 'coloringPage',
       includeAttributes: true,
-      contextKeywords: ['popular coloring pages', 'trending coloring pages'],
+      contextKeywords: ['best coloring pages', 'top coloring pages', 'best free coloring pages'],
       keywordsLimit: 12,
     },
   },
 
-  // ==================== 主题公园页面 ====================
-  // 基于 PUBLIC_PAGES_ANALYSIS.md (882-886行)
+  // ==================== 迪士尼角色页面 ====================
+  // 基于 SEMRush 数据优化：princess (22.2K/月), disney (18.1K/月), mickey mouse (9.9K/月)
   themeParks: {
     home: {
-      // 基于文档 882-886 行
+      // 基于 CSV 数据的高流量角色关键词优化
       baseKeywords: [
-        'theme park coloring pages',
-        'disney coloring pages',
-        'disney princess coloring pages',
-        'mickey mouse coloring pages',
-        'frozen coloring pages',
-        'moana coloring pages',
+        'princess coloring pages',          // 22.2K/月 - 最高流量
+        'disney coloring pages',            // 18.1K/月
+        'disney princess coloring pages',   // 9.9K/月
+        'mickey mouse coloring pages',      // 9.9K/月
+        'frozen coloring pages',            // 8.1K/月
+        'moana coloring pages',             // 8.1K/月
+        'disney characters coloring pages', // 语义相关
+        'coloring pages disney',            // 5.4K/月 - 反向关键词
       ],
-      titleTemplate: 'Theme Park Coloring Pages - Disney, Characters & More',
+      titleTemplate: 'Disney & Characters Coloring Pages - Princess, Mickey & More',
       defaultTitleSuffix: '', // 已包含在 titleTemplate 中
-      descriptionTemplate: 'Explore theme park coloring pages featuring Disney characters, Mickey Mouse, princesses, and popular attractions. Free printable downloads for kids.',
+      descriptionTemplate: 'Explore Disney & Characters coloring pages featuring Princess (22.2K searches), Disney characters (18.1K), Mickey Mouse (9.9K), Frozen, Moana and more. Free printable downloads for kids.',
       dataSource: 'none',
       keywordsLimit: 12,
     },
     category: {
       baseKeywords: [
-        'theme park coloring pages',
-        'park coloring pages',
-        'coloring pages',
+        'disney coloring pages',            // 18.1K/月 - 核心关键词
+        'princess coloring pages',          // 22.2K/月 - 最高流量
+        'disney characters coloring pages', // 语义相关
+        'coloring pages',                   // 368K/月 - 通用关键词
       ],
-      titleTemplate: '{themeParkName} Coloring Pages',
+      titleTemplate: '{themeParkName} Disney Characters Coloring Pages',
       defaultTitleSuffix: 'Free Printable Designs',
-      descriptionTemplate: 'Explore {themeParkName} themed coloring pages. {highlightPhrase} Free printable designs perfect for kids and adults who love theme parks.',
+      descriptionTemplate: 'Explore {themeParkName} Disney characters coloring pages. {highlightPhrase} Premium Disney designs perfect for kids who love princesses, Mickey Mouse and more.',
       dataSource: 'themePark',
       keywordsLimit: 12,
     },
     detail: {
       baseKeywords: [
-        'theme park coloring pages',
-        'park coloring pages',
-        'coloring pages',
+        'disney coloring pages',            // 18.1K/月 - 核心关键词
+        'princess coloring pages',          // 22.2K/月 - 最高流量
+        'disney characters coloring pages', // 语义相关
+        'coloring pages',                   // 368K/月 - 通用关键词
       ],
-      titleTemplate: '{title} - {themeParkName} Coloring Page',
+      titleTemplate: '{title} - Disney Character Coloring Page',
       defaultTitleSuffix: 'Free Printable',
-      descriptionTemplate: 'Download and print {title} coloring page from {themeParkName}. {difficultyText}{ageText}. {styleThemeText} design. Free high-quality printable coloring sheet.',
+      descriptionTemplate: 'Download and print {title} Disney character coloring page. {difficultyText}{ageText}. {styleThemeText} design featuring beloved Disney characters. Free high-quality printable.',
       dataSource: 'coloringPage',
       includeAttributes: true,
       keywordsLimit: 12,
     },
   },
 
-  // ==================== 最新页面 ====================
-  // 基于 PUBLIC_PAGES_ANALYSIS.md (876-881行)
+  // ==================== 新涂色页面 ====================
+  // 基于 SEMRush 数据优化：混合高流量通用词 + 功能准确性
   latest: {
     home: {
-      // 基于文档 876-881 行
+      // 混合策略：高流量通用词 + 新内容定位
       baseKeywords: [
-        'latest coloring pages',
-        'new coloring pages',
-        'newest printables',
-        'fresh coloring sheets',
-        'recently added',
-        'coloring pages for kids',
+        'coloring pages for kids',          // 60.5K/月 - 高流量目标用户
+        'kids coloring pages',              // 14.8K/月 - 高流量
+        'new coloring pages',               // 90/月 - 功能准确性
+        'coloring pages',                   // 368K/月 - 超高流量通用词
+        'free coloring pages',              // 40.5K/月 - 高流量
+        'printable coloring pages',         // 33.1K/月 - 高流量
       ],
-      titleTemplate: 'Latest Coloring Pages - New Free Printable Sheets',
+      titleTemplate: 'New Coloring Pages - Fresh Free Printables for Kids',
       defaultTitleSuffix: '', // 已包含在 titleTemplate 中
-      descriptionTemplate: 'Discover the newest coloring pages added daily. Fresh designs featuring animals, characters, holidays and more. Free printable downloads.',
+      descriptionTemplate: 'Discover new coloring pages added daily! Fresh designs for kids featuring animals, characters, holidays and more. Free printable downloads updated regularly.',
       dataSource: 'none',
-      contextKeywords: ['latest coloring pages', 'new coloring pages'],
+      contextKeywords: ['new coloring pages', 'coloring pages for kids', 'fresh designs'],
       keywordsLimit: 12,
     },
     category: {
       baseKeywords: [
-        'latest coloring pages',
-        'new coloring pages',
-        'coloring pages',
+        'coloring pages for kids',          // 60.5K/月 - 高流量目标用户
+        'new coloring pages',               // 90/月 - 功能准确性
+        'kids coloring pages',              // 14.8K/月
+        'coloring pages',                   // 368K/月 - 通用词
       ],
-      titleTemplate: 'Latest {categoryName} Coloring Pages',
-      defaultTitleSuffix: 'Newest Designs',
-      descriptionTemplate: 'Browse the latest {categoryName} coloring pages. {highlightPhrase} New designs added regularly. Free printable sheets for kids and adults.',
+      titleTemplate: 'New {categoryName} Coloring Pages for Kids',
+      defaultTitleSuffix: 'Fresh Designs',
+      descriptionTemplate: 'Browse new {categoryName} coloring pages for kids. {highlightPhrase} Fresh designs added regularly. Free printable sheets perfect for children.',
       dataSource: 'category',
-      contextKeywords: ['latest coloring pages', 'new coloring pages'],
+      contextKeywords: ['new coloring pages', 'coloring pages for kids', 'fresh designs'],
       keywordsLimit: 12,
     },
     detail: {
       baseKeywords: [
-        'latest coloring pages',
-        'new coloring pages',
-        'coloring pages',
+        'coloring pages for kids',          // 60.5K/月 - 高流量
+        'new coloring pages',               // 90/月 - 功能准确性
+        'kids coloring pages',              // 14.8K/月
+        'coloring pages',                   // 368K/月 - 通用词
       ],
-      titleTemplate: '{title} - Latest {categoryName} Coloring Page',
+      titleTemplate: '{title} - New {categoryName} Coloring Page for Kids',
       defaultTitleSuffix: 'Free Printable',
-      descriptionTemplate: '{title} coloring page. {difficultyText}{ageText}. {styleThemeText} design. Recently added free printable coloring sheet.',
+      descriptionTemplate: '{title} coloring page for kids. {difficultyText}{ageText}. {styleThemeText} design. Fresh addition to our free printable collection.',
       descriptionPrefix: 'New: ',
       dataSource: 'coloringPage',
       includeAttributes: true,
-      contextKeywords: ['latest coloring pages', 'new coloring pages'],
+      contextKeywords: ['new coloring pages', 'coloring pages for kids', 'fresh designs'],
       keywordsLimit: 12,
     },
   },

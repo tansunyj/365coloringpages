@@ -14,7 +14,7 @@ export default function LatestCategoryClient({ category }: LatestCategoryClientP
     <UnifiedListPage
       type="latest"
       category={category}
-      title="最新上传"
+      title="New Coloring Pages"
       subtitle="发现最新的涂色内容"
       description="浏览最新上传的涂色页面，第一时间体验最新的创意作品。"
       showSearch={true}

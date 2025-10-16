@@ -111,12 +111,12 @@ class BreadcrumbPathGenerator {
   private static generatePopularPath(category?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
       { name: 'Home', href: '/' },
-      { name: 'Popular', href: '/popular' }
+      { name: 'Best Coloring Pages', href: '/best-coloring-pages' }
     ];
 
     if (category) {
       const categoryDisplay = CategoryNameMapper.getDisplayName(category);
-      basePath.push({ name: categoryDisplay, href: `/popular?category=${category}` });
+      basePath.push({ name: categoryDisplay, href: `/best-coloring-pages?category=${category}` });
     }
 
     if (itemTitle) {
@@ -132,7 +132,7 @@ class BreadcrumbPathGenerator {
   private static generateLatestPath(category?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
       { name: 'Home', href: '/' },
-      { name: 'Latest', href: '/latest' }
+      { name: 'New Coloring Pages', href: '/new-coloring-pages' }
     ];
 
     if (category && itemTitle) {
@@ -140,7 +140,7 @@ class BreadcrumbPathGenerator {
       const categoryDisplay = CategoryNameMapper.getDisplayName(category);
       basePath.push({ 
         name: categoryDisplay, 
-        href: `/latest?category=${category}` // 跳转到主列表页并预选分类
+        href: `/new-coloring-pages?category=${category}` // 跳转到主列表页并预选分类
       });
       basePath.push({ name: itemTitle, href: '#' });
     } else if (itemTitle) {
@@ -157,12 +157,12 @@ class BreadcrumbPathGenerator {
   private static generateFirstColoringBookPath(category?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
       { name: 'Home', href: '/' },
-      { name: 'Easy Coloring Book', href: '/easy-coloring-book' }
+      { name: 'Easy Coloring Pages', href: '/easy-coloring-pages' }
     ];
 
     if (category) {
       const categoryDisplay = CategoryNameMapper.getDisplayName(category);
-      basePath.push({ name: categoryDisplay, href: `/easy-coloring-book/${category}` });
+      basePath.push({ name: categoryDisplay, href: `/easy-coloring-pages/${category}` });
     }
 
     if (itemTitle) {
@@ -178,12 +178,12 @@ class BreadcrumbPathGenerator {
   private static generateThemeParksPath(park?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
       { name: 'Home', href: '/' },
-      { name: 'Theme Parks', href: '/theme-parks' }
+      { name: 'Disney & Characters', href: '/disney-characters' }
     ];
 
     if (park) {
       const parkDisplay = park ? decodeURIComponent(park).replace(/-/g, ' ') : 'All Parks';
-      basePath.push({ name: parkDisplay, href: `/theme-parks/${park}` });
+      basePath.push({ name: parkDisplay, href: `/disney-characters/${park}` });
     }
 
     if (itemTitle) {

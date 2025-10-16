@@ -377,37 +377,37 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
           return [
             { name: 'Home', href: '/' },
-            { name: 'Popular', href: '/popular' },
-            { name: categoryDisplay, href: `/popular/${category}` },
+            { name: 'Best Coloring Pages', href: '/best-coloring-pages' },
+            { name: categoryDisplay, href: `/best-coloring-pages/${category}` },
             { name: coloringPageData.title, href: '#' }
           ];
         } else {
           return [
             { name: 'Home', href: '/' },
-            { name: 'Popular', href: '/popular' },
+            { name: 'Best Coloring Pages', href: '/best-coloring-pages' },
             { name: coloringPageData.title, href: '#' }
           ];
         }
       case 'latest':
         return [
           { name: 'Home', href: '/' },
-          { name: 'Latest', href: '/latest' },
+            { name: 'New Coloring Pages', href: '/new-coloring-pages' },
           { name: coloringPageData.title, href: '#' }
         ];
       case 'easy-coloring-book':
         const categoryDisplay = category ? decodeURIComponent(category).replace(/-/g, ' ') : 'All';
         return [
           { name: 'Home', href: '/' },
-          { name: 'Easy Coloring Book', href: '/easy-coloring-book' },
-          { name: categoryDisplay, href: `/easy-coloring-book/${category || ''}` },
+          { name: 'Easy Coloring Pages', href: '/easy-coloring-pages' },
+          { name: categoryDisplay, href: `/easy-coloring-pages/${category || ''}` },
           { name: coloringPageData.title, href: '#' }
         ];
       case 'theme-parks':
         const parkDisplay = park ? decodeURIComponent(park).replace(/-/g, ' ') : 'All Parks';
         return [
           { name: 'Home', href: '/' },
-          { name: 'Theme Parks', href: '/theme-parks' },
-          { name: parkDisplay, href: `/theme-parks/${park || ''}` },
+          { name: 'Disney & Characters', href: '/disney-characters' },
+          { name: parkDisplay, href: `/disney-characters/${park || ''}` },
           { name: coloringPageData.title, href: '#' }
         ];
       case 'categories':
@@ -1128,39 +1128,39 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                       let targetUrl = '';
                       switch (type) {
                         case 'popular':
-                          // 使用新的URL结构：/popular/[category]/[slug-id]
+                          // 使用新的URL结构：/best-coloring-pages/[category]/[slug-id]
                           if (category && category !== 'all') {
                             const pageSlug = page.slug || `page-${page.id}`;
-                            targetUrl = `/popular/${category}/${pageSlug}-${page.id}`;
+                            targetUrl = `/best-coloring-pages/${category}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/popular/all/${page.id}`;
+                            targetUrl = `/best-coloring-pages/all/${page.id}`;
                           }
                           break;
                         case 'latest':
-                          // 使用新的URL结构：/latest/[category]/[slug-id]
+                          // 使用新的URL结构：/new-coloring-pages/[category]/[slug-id]
                           if (category && category !== 'all' && category !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
-                            targetUrl = `/latest/${category}/${pageSlug}-${page.id}`;
+                            targetUrl = `/new-coloring-pages/${category}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/latest/animals/${page.id}`;
+                            targetUrl = `/new-coloring-pages/animals/${page.id}`;
                           }
                           break;
                         case 'easy-coloring-book':
-                          // 使用新的URL结构：/easy-coloring-book/[category]/[slug-id]
+                          // 使用新的URL结构：/easy-coloring-pages/[category]/[slug-id]
                           if (category && category !== 'all' && category !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
-                            targetUrl = `/easy-coloring-book/${category}/${pageSlug}-${page.id}`;
+                            targetUrl = `/easy-coloring-pages/${category}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/easy-coloring-book/easy-coloring-book/${page.id}`;
+                            targetUrl = `/easy-coloring-pages/easy-coloring-book/${page.id}`;
                           }
                           break;
                         case 'theme-parks':
-                          // 使用新的URL结构：/theme-parks/[category]/[slug-id]
+                          // 使用新的URL结构：/disney-characters/[category]/[slug-id]
                           if (park && park !== 'all' && park !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
-                            targetUrl = `/theme-parks/${park}/${pageSlug}-${page.id}`;
+                            targetUrl = `/disney-characters/${park}/${pageSlug}-${page.id}`;
                           } else {
-                            targetUrl = `/theme-parks/theme-park-adventures/${page.id}`;
+                            targetUrl = `/disney-characters/theme-park-adventures/${page.id}`;
                           }
                           break;
                         case 'categories':

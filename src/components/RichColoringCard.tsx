@@ -98,12 +98,12 @@ class LinkGenerator {
         return `/categories/${linkCategory}/${pageSlug}-${id}`;
         
       case 'popular':
-        // 使用新的URL结构：/popular/[category]/[slug-id]
+        // 使用新的URL结构：/best-coloring-pages/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
-          return `/popular/${linkCategory}/${pageSlug}-${id}`;
+          return `/best-coloring-pages/${linkCategory}/${pageSlug}-${id}`;
         } else {
-          return `/popular/all/${id}`;
+          return `/best-coloring-pages/all/${id}`;
         }
           
       case 'search':
@@ -124,30 +124,30 @@ class LinkGenerator {
         }
         
       case 'theme-parks':
-        // 使用新的URL结构：/theme-parks/[category]/[slug-id]
+        // 使用新的URL结构：/disney-characters/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
-          return `/theme-parks/${linkCategory}/${pageSlug}-${id}`;
+          return `/disney-characters/${linkCategory}/${pageSlug}-${id}`;
         } else {
-          return `/theme-parks/theme-park-adventures/${id}`;
+          return `/disney-characters/theme-park-adventures/${id}`;
         }
           
       case 'easy-coloring-book':
-        // 使用新的URL结构：/easy-coloring-book/[category]/[slug-id]
+        // 使用新的URL结构：/easy-coloring-pages/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
-          return `/easy-coloring-book/${linkCategory}/${pageSlug}-${id}`;
+          return `/easy-coloring-pages/${linkCategory}/${pageSlug}-${id}`;
         } else {
-          return `/easy-coloring-book/easy-coloring-book/${id}`;
+          return `/easy-coloring-pages/easy-coloring-book/${id}`;
         }
           
       case 'latest':
-        // 使用新的URL结构：/latest/[category]/[slug-id]
+        // 使用新的URL结构：/new-coloring-pages/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
-          return `/latest/${linkCategory}/${pageSlug}-${id}`;
+          return `/new-coloring-pages/${linkCategory}/${pageSlug}-${id}`;
         } else {
-          return `/latest/animals/${id}`; // 默认分类
+          return `/new-coloring-pages/animals/${id}`; // 默认分类
         }
         
       default:

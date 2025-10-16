@@ -661,7 +661,7 @@ export default function AdminKeywords() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
                 <Tag className="h-7 w-7 mr-3 text-orange-600" />
-                热门关键词管理
+                关键词管理
               </h1>
               <p className="mt-1 text-sm text-gray-600">
                 管理首页搜索框上方显示的热门关键词，引导用户搜索
