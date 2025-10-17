@@ -226,7 +226,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
         setError(result.error || 'Login failed');
         
         // 如果验证码错误，刷新验证码
-        if (result.error && result.error.includes('验证码')) {
+        if (result.error && (result.error.includes('验证码') || result.error.toLowerCase().includes('captcha') || result.error.toLowerCase().includes('verification'))) {
           await generateCaptcha(email);
           setCaptchaCode('');
         }

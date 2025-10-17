@@ -163,13 +163,13 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
     if (file) {
       // 验证文件类型
       if (!file.type.startsWith('image/')) {
-        showToast('请选择图片文件！', 'warning');
+        showToast('Please select an image file!', 'warning');
         return;
       }
 
       // 验证文件大小（限制为5MB）
       if (file.size > 5 * 1024 * 1024) {
-        showToast('图片文件大小不能超过5MB！', 'warning');
+        showToast('Image file size cannot exceed 5MB!', 'warning');
         return;
       }
 
@@ -551,13 +551,13 @@ const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
 
   const handleSave = () => {
     if (!currentPassword || !newPassword) {
-      showToast('请填写完整的密码信息', 'warning');
+      showToast('Please fill in complete password information', 'warning');
       return;
     }
     
     // 密码复杂性验证
     if (newPassword.length < 8) {
-      showToast('新密码长度至少8位', 'warning');
+      showToast('New password must be at least 8 characters', 'warning');
       return;
     }
     
@@ -567,7 +567,7 @@ const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
     const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword);
     
     if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-      showToast('新密码必须包含大写字母、小写字母、数字和特殊字符', 'warning');
+      showToast('New password must contain uppercase, lowercase, numbers and special characters', 'warning');
       return;
     }
     
@@ -957,16 +957,16 @@ export default function ProfilePage() {
         console.log('   → Header组件已通知');
         console.log('📝 ===== 用户资料更新完成 =====\n');
         
-        showToast('个人资料更新成功', 'success');
+        showToast('Profile updated successfully', 'success');
         return true;
       } else {
         console.error('❌ 用户资料更新失败:', result.error);
-        showToast(result.error || '更新失败', 'error');
+        showToast(result.error || 'Update failed', 'error');
         return false;
       }
     } catch (error) {
       console.error('❌ 更新个人资料异常:', error);
-      showToast('更新失败，请重试', 'error');
+      showToast('Update failed, please try again', 'error');
       return false;
     }
   };
@@ -978,7 +978,7 @@ export default function ProfilePage() {
       const token = localStorage.getItem('authToken') || localStorage.getItem('token');
       
       if (!token) {
-        showToast('未找到登录信息，请先登录', 'error');
+        showToast('Login information not found, please login first', 'error');
         return false;
       }
 
@@ -999,20 +999,20 @@ export default function ProfilePage() {
       
       if (response.status === 401) {
         // 当前密码错误，不清除登录信息
-        showToast('当前密码错误，请检查后重试', 'error');
+        showToast('Current password is incorrect, please check and try again', 'error');
         return false;
       }
       
       if (result.success) {
-        showToast('密码修改成功！', 'success');
+        showToast('Password changed successfully!', 'success');
         return true;
       } else {
-        showToast(result.error || '密码修改失败', 'error');
+        showToast(result.error || 'Password change failed', 'error');
         return false;
       }
     } catch (error) {
       console.error('❌ 修改密码异常:', error);
-      showToast('修改失败，请重试', 'error');
+      showToast('Change failed, please try again', 'error');
       return false;
     }
   };
@@ -1106,17 +1106,17 @@ export default function ProfilePage() {
           console.log('📝 昵称已更改，调用API更新');
           const success = await updateProfile(userInfo.nickname);
           if (!success) {
-            showToast('昵称更新失败，请重试', 'error');
+            showToast('Nickname update failed, please try again', 'error');
             return;
           }
-          showToast('昵称更新成功！', 'success');
+          showToast('Nickname updated successfully!', 'success');
         } else {
-          showToast('没有需要保存的更改', 'info');
+          showToast('No changes to save', 'info');
         }
       }
     } catch (error) {
       console.error('❌ 保存失败:', error);
-      showToast('保存失败，请重试', 'error');
+      showToast('Save failed, please try again', 'error');
     }
   };
 
@@ -1132,13 +1132,13 @@ export default function ProfilePage() {
     if (file) {
       // 验证文件类型
       if (!file.type.startsWith('image/')) {
-        showToast('请选择图片文件！', 'warning');
+        showToast('Please select an image file!', 'warning');
         return;
       }
 
       // 验证文件大小（限制为5MB）
       if (file.size > 5 * 1024 * 1024) {
-        showToast('图片文件大小不能超过5MB！', 'warning');
+        showToast('Image file size cannot exceed 5MB!', 'warning');
         return;
       }
 
@@ -1185,7 +1185,7 @@ export default function ProfilePage() {
 
       if (!token) {
         console.error('❌ 没有找到 token，无法上传图片');
-        showToast('请先登录后再上传图片', 'warning');
+        showToast('Please login before uploading images', 'warning');
         return null;
       }
 
@@ -1216,7 +1216,7 @@ export default function ProfilePage() {
         if (!imageUrl) {
           console.error('❌ 响应中未找到图片URL');
           console.error('响应数据:', result.data);
-          showToast('图片上传失败：未获取到图片URL', 'error');
+          showToast('Image upload failed: URL not received', 'error');
           return null;
         }
         
@@ -1230,12 +1230,12 @@ export default function ProfilePage() {
         return imageUrl;
       } else {
         console.error('❌ 图片上传失败:', result.error || '未知错误');
-        showToast(result.error || '图片上传失败', 'error');
+        showToast(result.error || 'Image upload failed', 'error');
         return null;
       }
     } catch (error) {
       console.error('❌ 图片上传异常:', error);
-      showToast('图片上传失败，请重试', 'error');
+      showToast('Image upload failed, please try again', 'error');
       return null;
     }
   };
@@ -1270,7 +1270,7 @@ export default function ProfilePage() {
       
       if (!imageUrl) {
         console.error('❌ 步骤3失败：未获取到图片URL');
-        showToast('头像上传失败，请重试', 'error');
+        showToast('Avatar upload failed, please try again', 'error');
         // 恢复原头像
         fetchUserInfo();
         return;
@@ -1299,7 +1299,7 @@ export default function ProfilePage() {
     } catch (error) {
       console.error('❌ 头像更新流程异常:', error);
       console.log('❌ ========== 头像更新流程异常终止 ==========\n');
-      showToast('头像更新失败，请重试', 'error');
+      showToast('Avatar update failed, please try again', 'error');
       fetchUserInfo();
     }
   };
@@ -1895,7 +1895,7 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem('authToken') || localStorage.getItem('token');
       if (!token) {
-        showToast('请先登录', 'warning');
+        showToast('Please login first', 'warning');
         return;
       }
 
@@ -1917,11 +1917,11 @@ export default function ProfilePage() {
           fetchFavorites(favoritesCurrentPage);
         }
       } else {
-        showToast(result.error || '操作失败', 'error');
+        showToast(result.error || 'Operation failed', 'error');
       }
     } catch (error) {
       console.error('❌ 点赞操作失败:', error);
-      showToast('操作失败，请重试', 'error');
+      showToast('Operation failed, please try again', 'error');
     }
   };
 
@@ -1932,7 +1932,7 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem('authToken') || localStorage.getItem('token');
       if (!token) {
-        showToast('请先登录', 'warning');
+        showToast('Please login first', 'warning');
         return;
       }
 
@@ -1960,7 +1960,7 @@ export default function ProfilePage() {
             fetchFavorites(favoritesCurrentPage);
           }
         } else {
-          showToast(result.error || '操作失败', 'error');
+          showToast(result.error || 'Operation failed', 'error');
         }
       } else {
         // 添加收藏 - 使用旧的API
@@ -1983,12 +1983,12 @@ export default function ProfilePage() {
             fetchFavorites(favoritesCurrentPage);
           }
         } else {
-          showToast(result.error || '操作失败', 'error');
+          showToast(result.error || 'Operation failed', 'error');
         }
       }
     } catch (error) {
       console.error('❌ 收藏操作失败:', error);
-      showToast('操作失败，请重试', 'error');
+      showToast('Operation failed, please try again', 'error');
     }
   };
 
