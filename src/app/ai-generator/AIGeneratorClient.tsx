@@ -36,7 +36,7 @@ function formatDateTime(timestamp: Date | string): string {
   
   // 检查日期是否有效
   if (isNaN(date.getTime())) {
-    return '无效时间';
+    return 'Invalid time';
   }
   
   const year = date.getFullYear();
@@ -120,7 +120,7 @@ export default function AIGeneratorClient() {
       }
     } catch (err) {
       console.error('加载初始数据失败:', err);
-      showToast('加载数据失败，请刷新页面重试', 'error');
+      showToast('Failed to load data, please refresh the page', 'error');
     } finally {
       setIsLoadingHistory(false);
       setIsLoadingRemaining(false);
@@ -371,25 +371,25 @@ export default function AIGeneratorClient() {
     // 检查登录状态 - 如果未登录，打开登录对话框
     if (!isAuthenticated()) {
       setIsLoginDialogOpen(true);
-      showToast('请先登录或注册账号以使用 AI 生成功能', 'warning');
+      showToast('Please login or register to use AI generation', 'warning');
       return;
     }
 
     // Validate prompt
     if (!prompt.trim()) {
-      showToast('请输入提示词', 'warning');
+      showToast('Please enter a prompt', 'warning');
       return;
     }
 
     // 图生图模式需要有当前图片
     if (generationMode === 'image-to-image' && !currentImage) {
-      showToast('请先选择一张图片', 'warning');
+      showToast('Please select an image first', 'warning');
       return;
     }
 
     // 检查剩余次数
     if (generationsRemaining <= 0) {
-      showToast('今日生成次数已用完，请明天再试', 'warning');
+      showToast('Daily generation limit reached, please try again tomorrow', 'warning');
       return;
     }
 
@@ -438,7 +438,7 @@ export default function AIGeneratorClient() {
       await refreshRemaining();
       
       // 显示成功提示
-      showToast(generationMode === 'image-to-image' ? '图片编辑成功！' : '图片生成成功！', 'success');
+      showToast(generationMode === 'image-to-image' ? 'Image edited successfully!' : 'Image generated successfully!', 'success');
       
     } catch (err) {
       console.error('生成图片失败:', err);
@@ -462,7 +462,7 @@ export default function AIGeneratorClient() {
   const handleLoginSuccess = () => {
     // 重新加载初始数据（剩余次数和历史记录）
     loadInitialData();
-    showToast('登录成功！欢迎回来 🎨', 'success');
+    showToast('Login successful! Welcome back 🎨', 'success');
   };
 
   /**
@@ -529,7 +529,7 @@ export default function AIGeneratorClient() {
     if (!currentImage?.imageUrl) return;
 
     try {
-      showToast('正在准备下载...', 'info');
+      showToast('Preparing download...', 'info');
       
       // 使用代理 API 获取图片
       const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(currentImage.imageUrl)}`;
@@ -553,10 +553,10 @@ export default function AIGeneratorClient() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
       
-      showToast('图片下载成功！', 'success');
+      showToast('Image downloaded successfully!', 'success');
     } catch (error) {
       console.error('Download failed:', error);
-      showToast('下载失败，请稍后重试', 'error');
+      showToast('Download failed, please try again later', 'error');
     }
   };
 
@@ -567,7 +567,7 @@ export default function AIGeneratorClient() {
     if (!currentImage?.imageUrl) return;
 
     try {
-      showToast('正在准备打印...', 'info');
+      showToast('Preparing to print...', 'info');
       
       // 使用代理 API 获取图片
       const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(currentImage.imageUrl)}`;
@@ -582,7 +582,7 @@ export default function AIGeneratorClient() {
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
-        showToast('请允许弹出窗口以便打印', 'warning');
+        showToast('Please allow pop-ups to print', 'warning');
         window.URL.revokeObjectURL(blobUrl);
         return;
       }
@@ -634,7 +634,7 @@ export default function AIGeneratorClient() {
       }, 5000);
     } catch (error) {
       console.error('Print failed:', error);
-      showToast('打印准备失败，请稍后重试', 'error');
+      showToast('Print preparation failed, please try again later', 'error');
     }
   };
 
@@ -927,14 +927,14 @@ export default function AIGeneratorClient() {
               >
                 <div className="flex items-center gap-2 mb-4 flex-shrink-0">
                   <History className="h-4 w-4 text-gray-400" />
-                  <h3 className="text-sm font-semibold text-gray-700">历史记录</h3>
+                  <h3 className="text-sm font-semibold text-gray-700">History</h3>
                 </div>
                 
                 {isLoadingHistory ? (
                   <div className="flex-1 flex items-center justify-center">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
-                      <p className="text-xs text-gray-500">加载中...</p>
+                      <p className="text-xs text-gray-500">Loading...</p>
                     </div>
                   </div>
                 ) : (
@@ -969,7 +969,7 @@ export default function AIGeneratorClient() {
                               <div className="absolute inset-0 flex items-center justify-center bg-blue-50">
                                 <div className="text-center">
                                   <Loader2 className="h-8 w-8 text-blue-500 animate-spin mx-auto mb-2" />
-                                  <p className="text-xs text-blue-600 font-medium">生成中...</p>
+                                  <p className="text-xs text-blue-600 font-medium">Generating...</p>
                                 </div>
                               </div>
                             )}
@@ -979,7 +979,7 @@ export default function AIGeneratorClient() {
                               <div className="absolute inset-0 flex items-center justify-center bg-red-50">
                                 <div className="text-center px-2">
                                   <AlertTriangle className="h-8 w-8 text-red-500 mx-auto mb-2" />
-                                  <p className="text-xs text-red-600 font-medium">生成失败</p>
+                                  <p className="text-xs text-red-600 font-medium">Failed</p>
                                 </div>
                               </div>
                             )}
@@ -1047,7 +1047,7 @@ export default function AIGeneratorClient() {
                       {/* 没有更多数据提示 */}
                       {!hasMoreHistory && history.length > 0 && (
                         <div className="text-center py-2">
-                          <p className="text-xs text-gray-400">没有更多记录了</p>
+                          <p className="text-xs text-gray-400">No more records</p>
                         </div>
                       )}
 
@@ -1062,7 +1062,7 @@ export default function AIGeneratorClient() {
                             <History className="h-6 w-6 text-gray-300" />
                           </div>
                           <p className="text-gray-500 text-xs leading-relaxed">
-                            暂无记录
+                            No records yet
                           </p>
                         </div>
                       </div>

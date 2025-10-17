@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { X, Download, Printer, Heart, Share2, Star } from 'lucide-react';
+import Toast from './Toast';
 
 interface ColoringDetailModalProps {
   isOpen: boolean;
@@ -40,6 +41,14 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
+  
+  // Toast状态
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
+  
+  // 显示Toast提示
+  const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+    setToast({ message, type });
+  };
   
   // 防止重复加载 - 记录上一次加载的ID和打开状态
   const lastLoadedId = useRef<number>(0);
@@ -103,7 +112,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
     // 检查是否登录
     const token = localStorage.getItem('authToken');
     if (!token) {
-      alert('请先登录才能点赞');
+      showToast('Please login to like', 'warning');
       return;
     }
     
@@ -122,7 +131,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
       setIsLiked(wasLiked);
       setLikeCount(previousCount);
       if (error instanceof Error) {
-        alert(error.message);
+        showToast(error.message, 'error');
       }
     }
   };
@@ -130,7 +139,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
   const handleFavorite = async () => {
     const token = localStorage.getItem('authToken');
     if (!token) {
-      alert('请先登录');
+      showToast('Please login to add to favorites', 'warning');
       return;
     }
     
@@ -144,15 +153,29 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
     } catch (error) {
       setIsFavorited(wasFavorited);
       if (error instanceof Error) {
-        alert(error.message);
+        showToast(error.message, 'error');
       }
     }
   };
 
-  const handleDownload = () => {
-    if (coloringPageData?.originalFileUrl) {
-      window.open(coloringPageData.originalFileUrl, '_blank');
+  const handleDownload = async () => {
+    if (!coloringPageData?.originalFileUrl) return;
+    
+    // 先调用下载统计API
+    try {
+      const response = await fetch(`http://localhost:3001/api/coloring/${coloringPageId}/download`, {
+        method: 'POST',
+      });
+      
+      if (response.ok) {
+        console.log('✅ 下载次数统计成功');
+      }
+    } catch (error) {
+      console.warn('⚠️ 下载次数统计失败:', error);
     }
+    
+    // 继续下载
+    window.open(coloringPageData.originalFileUrl, '_blank');
   };
 
   const handlePrint = () => {
@@ -169,7 +192,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
       });
     } else {
       navigator.clipboard.writeText(url);
-      alert('链接已复制到剪贴板！');
+      showToast('Link copied to clipboard!', 'success');
     }
   };
 
@@ -393,6 +416,15 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
           )}
         </div>
       </div>
+      
+      {/* Toast提示 */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

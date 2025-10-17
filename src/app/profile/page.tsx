@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Settings, Palette, Heart, Download, User, Mail, Lock, Camera, Save, X, Eye, EyeOff, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, ZoomOut, Star, Edit3, Plus, Trash2, ImageIcon, FileEdit, Upload } from 'lucide-react';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -30,7 +31,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
   if (!token) {
     console.error('❌ 未找到 token，请先登录');
-    alert('未找到登录信息，请先登录');
+    // 直接跳转到首页，不需要alert
     window.location.href = '/';
     throw new Error('未找到 token');
   }
@@ -55,7 +56,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     localStorage.removeItem('token');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userInfo');
-    alert('登录已过期，请重新登录');
+    // 直接跳转到首页，不需要alert
     window.location.href = '/';
     throw new Error('Token 已失效，请重新登录');
   }
@@ -671,6 +672,7 @@ const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
 };
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('account-settings');
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
@@ -1346,15 +1348,6 @@ export default function ProfilePage() {
     <div className="bg-white rounded-lg p-8">
       <h2 className="text-2xl font-semibold text-gray-900 mb-6">Account Settings</h2>
 
-      {/* 隐藏的文件输入元素 */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-      />
-
       {/* 表单区域 */}
       <div className="space-y-6">
         <div>
@@ -1635,8 +1628,8 @@ export default function ProfilePage() {
       imageUrl: image.imageUrl,
       prompt: image.prompt
     }));
-    // 跳转到 AI Generator
-    window.location.href = '/ai-generator';
+    // 使用 Next.js 路由进行客户端导航（更快，无整页刷新）
+    router.push('/ai-generator');
   };
 
   const renderMyCreations = () => {
@@ -2094,6 +2087,15 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      
+      {/* 隐藏的文件输入元素 - 放在顶层以便在所有标签页都能访问 */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        className="hidden"
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">

@@ -8,6 +8,7 @@ import { Download, Printer, Heart, Share2, Star, Copy } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 import UnifiedBreadcrumb from './UnifiedBreadcrumb';
+import Toast from './Toast';
 
 interface UnifiedColoringDetailProps {
   id: string;
@@ -98,6 +99,14 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
   const [isFavorited, setIsFavorited] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [relatedPages, setRelatedPages] = useState<any[]>([]);
+  
+  // Toast状态
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
+  
+  // 显示Toast提示
+  const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+    setToast({ message, type });
+  };
   
   // 防止重复加载 - 记录上一次加载的ID
   const lastLoadedId = useRef<string>('');
@@ -563,11 +572,34 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
     try {
       console.log('📥 开始下载，ID:', id);
       
+      // 0. 先调用下载统计API（增加下载次数）
+      try {
+        const { API_ENDPOINTS } = await import('../lib/apiConfig');
+        const statsResponse = await fetch(API_ENDPOINTS.PUBLIC.COLORING.DOWNLOAD(id), {
+          method: 'POST',
+        });
+        
+        if (statsResponse.ok) {
+          console.log('✅ 下载次数统计成功');
+          // 更新本地显示的下载次数
+          if (coloringPageData) {
+            setColoringPageData({
+              ...coloringPageData,
+              downloads: (coloringPageData.downloads || 0) + 1
+            });
+          }
+        } else {
+          console.warn('⚠️ 下载次数统计失败，但继续下载');
+        }
+      } catch (statsError) {
+        console.warn('⚠️ 下载次数统计出错，但继续下载:', statsError);
+      }
+      
       // 1. 调用 API 获取原始图片 URL
       const originalImageUrl = await getOriginalImageUrl();
       
       if (!originalImageUrl) {
-        alert('Sorry, unable to get the high-resolution image. Please try again later.');
+        showToast('Sorry, unable to get the high-resolution image. Please try again later.', 'error');
         return;
       }
       
@@ -603,9 +635,10 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       }, 100);
       
       console.log('✅ 下载完成');
+      showToast('Download started successfully!', 'success');
     } catch (error) {
       console.error('❌ 下载失败:', error);
-      alert('Download failed. Please try again later.');
+      showToast('Download failed. Please try again later.', 'error');
     }
   };
 
@@ -617,7 +650,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       const originalImageUrl = await getOriginalImageUrl();
       
       if (!originalImageUrl) {
-        alert('Sorry, unable to get the high-resolution image. Please try again later.');
+        showToast('Sorry, unable to get the high-resolution image. Please try again later.', 'error');
         return;
       }
       
@@ -812,12 +845,12 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         console.log('✅ 打印对话框已打开');
       } else {
         console.warn('⚠️ 无法创建打印iframe');
-        alert('Print failed. Please try again.');
+        showToast('Print failed. Please try again.', 'error');
         document.body.removeChild(printFrame);
       }
     } catch (error) {
       console.error('❌ 打印失败:', error);
-      alert('Print failed. Please try again.');
+      showToast('Print failed. Please try again.', 'error');
     }
   };
 
@@ -835,16 +868,16 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       } else {
         // 桌面端：复制到剪贴板
         await navigator.clipboard.writeText(currentUrl);
-        alert('链接已复制到剪贴板！');
+        showToast('Link copied to clipboard!', 'success');
       }
     } catch (error) {
       // 如果原生分享失败，尝试复制到剪贴板
       try {
         await navigator.clipboard.writeText(currentUrl);
-        alert('链接已复制到剪贴板！');
+        showToast('Link copied to clipboard!', 'success');
       } catch (clipboardError) {
         console.error('复制失败:', clipboardError);
-        alert('复制失败，请手动复制链接');
+        showToast('Failed to copy link', 'error');
       }
     }
   };
@@ -1010,7 +1043,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(coloringPageData.aiPrompt || '');
-                      alert('Prompt copied to clipboard!');
+                      showToast('Prompt copied to clipboard!', 'success');
                     }}
                     className="flex-shrink-0 p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
                     title="Copy prompt"
@@ -1245,6 +1278,15 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       </main>
 
       {!isDialog && <Footer />}
+      
+      {/* Toast提示 */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 } 
