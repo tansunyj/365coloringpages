@@ -84,20 +84,45 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${article.title} | 365 Coloring Pages Blog`,
+    title: article.title, // Layout template会自动添加 "| 365 Coloring Pages"
     description: article.description,
-    keywords: article.keywords,
+    keywords: article.keywords.join(', '),
     openGraph: {
       title: article.title,
       description: article.description,
       type: 'article',
+      url: `https://365coloringpages.com/blog/${article.slug}`,
+      siteName: '365 Coloring Pages',
       publishedTime: article.publishDate,
       authors: [article.author],
+      images: [
+        {
+          url: `https://365coloringpages.com/images/blog/${article.slug}-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
       description: article.description,
+      images: [`https://365coloringpages.com/images/blog/${article.slug}-twitter.jpg`],
+    },
+    alternates: {
+      canonical: `https://365coloringpages.com/blog/${article.slug}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   };
 }

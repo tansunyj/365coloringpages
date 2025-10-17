@@ -11,7 +11,7 @@ export default function ThemeParksCategoryPageClient({ category }: ThemeParksCat
   return (
     <UnifiedListPage
       type="theme-parks"
-      park={category}
+      category={category}
       title="Disney & Characters"
       subtitle="探索精彩的迪士尼角色世界"
       description="浏览我们收集的各种迪士尼角色涂色页面。"

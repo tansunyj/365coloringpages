@@ -11,15 +11,13 @@ export default function ChristmasColoringPages() {
         December can be hectic—shopping, decorating, party planning. Coloring provides peaceful moments amid chaos. For children, it channels excitement productively. For adults, it offers mindful breaks from holiday stress.
       </p>
 
-      {/* Image Placeholder 1 */}
-      <div className="my-12 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm font-medium">Image Placeholder 1</p>
-          <p className="text-xs mt-1">Suggested: Festive Christmas scenes with Santa and decorations</p>
-        </div>
+      {/* Image 1: Festive Christmas scenes with Santa and decorations */}
+      <div className="my-12">
+        <img 
+          src="/images/blog/blog2-01.jpeg" 
+          alt="Festive Christmas scenes with Santa and decorations" 
+          className="w-full h-auto rounded-xl shadow-lg"
+        />
       </div>
 
       <h2>Popular Christmas Themes</h2>
@@ -56,15 +54,13 @@ export default function ChristmasColoringPages() {
         Snowy scenes benefit from strategic white space. Leave snow uncolored, or use white gel pens to add highlights, creating that fresh-fallen-snow feeling.
       </p>
 
-      {/* Image Placeholder 2 */}
-      <div className="my-12 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm font-medium">Image Placeholder 2</p>
-          <p className="text-xs mt-1">Suggested: Christmas ornaments and decorations closeup</p>
-        </div>
+      {/* Image 2: Christmas ornaments and decorations closeup */}
+      <div className="my-12">
+        <img 
+          src="/images/blog/blog2-02.jpeg" 
+          alt="Christmas ornaments and decorations closeup" 
+          className="w-full h-auto rounded-xl shadow-lg"
+        />
       </div>
 
       <h2>Creative Christmas Projects</h2>
@@ -98,15 +94,13 @@ export default function ChristmasColoringPages() {
 
       <p><strong>Teens and Adults:</strong> Intricate winter landscapes, elaborate ornament patterns, complex nativity scenes.</p>
 
-      {/* Image Placeholder 3 */}
-      <div className="my-12 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm font-medium">Image Placeholder 3</p>
-          <p className="text-xs mt-1">Suggested: Family enjoying Christmas coloring together</p>
-        </div>
+      {/* Image 3: Family enjoying Christmas coloring together */}
+      <div className="my-12">
+        <img 
+          src="/images/blog/blog2-03.jpeg" 
+          alt="Family enjoying Christmas coloring together" 
+          className="w-full h-auto rounded-xl shadow-lg"
+        />
       </div>
 
       <h2>Managing Holiday Stress</h2>

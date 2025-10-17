@@ -385,6 +385,7 @@ export default function UnifiedListPage({
   useEffect(() => {
     // 只在组件首次挂载时同步URL参数到搜索框
     if (isInitialMount.current) {
+      console.log('🎯 Initial mount - setting state:', { currentCategory, currentQuery, currentSort });
       setSearchQuery(currentQuery);
       setSelectedCategory(currentCategory);
       setSelectedSort(currentSort);
@@ -395,6 +396,7 @@ export default function UnifiedListPage({
     
     // 对于分类和排序，始终同步（因为用户不会手动输入这些）
     if (selectedCategory !== currentCategory) {
+      console.log('🔄 Category sync:', { from: selectedCategory, to: currentCategory });
       setSelectedCategory(currentCategory);
     }
     if (selectedSort !== currentSort) {
@@ -687,7 +689,9 @@ export default function UnifiedListPage({
   useEffect(() => {
     const loadCategories = async () => {
       if (showCategoryFilter) {
+        console.log('📂 Loading categories for type:', type);
         const categoryData = await ApiClientUtil.fetchCategories(type);
+        console.log('📂 Categories loaded:', categoryData.map(c => ({ name: c.name, slug: c.slug })));
         setCategories(categoryData);
       }
     };
@@ -747,6 +751,7 @@ export default function UnifiedListPage({
   };
 
   const handleCategoryChange = (categorySlug: string) => {
+    console.log('🔄 Category changed:', { type, categorySlug, currentCategory });
     setSelectedCategory(categorySlug);
     
     // 对于categories、search、popular、theme-parks、easy-coloring-book和latest页面，跳转到新的URL路径
@@ -763,6 +768,7 @@ export default function UnifiedListPage({
         currentParams.delete('category'); // 删除category参数，因为首页不需要
         const queryString = currentParams.toString();
         const newUrl = queryString ? `${basePath}?${queryString}` : basePath;
+        console.log('📍 Navigating to home:', newUrl);
         router.push(newUrl);
       } else {
         // 跳转到特定分类页面，保留当前查询参数
@@ -770,6 +776,7 @@ export default function UnifiedListPage({
         currentParams.delete('category'); // 删除category参数，因为已经在路径中了
         const queryString = currentParams.toString();
         const newUrl = queryString ? `${basePath}/${categorySlug}?${queryString}` : `${basePath}/${categorySlug}`;
+        console.log('📍 Navigating to category:', newUrl);
         router.push(newUrl);
       }
     } else {

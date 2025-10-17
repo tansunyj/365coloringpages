@@ -21,15 +21,13 @@ export default function ColoringPagesGuide() {
         Those small fingers gripping crayons are developing fine motor control, focus, and decision-making. Coloring gives kids control—their choices matter, their creativity leads, and their finished product is entirely their own.
       </p>
 
-      {/* Image Placeholder 1 */}
-      <div className="my-12 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm font-medium">Image Placeholder 1</p>
-          <p className="text-xs mt-1">Suggested: Various coloring pages and art supplies on a table</p>
-        </div>
+      {/* Image 1: Various coloring pages and art supplies */}
+      <div className="my-12">
+        <img 
+          src="/images/blog/blog1-01.jpeg" 
+          alt="Various coloring pages and art supplies on a table" 
+          className="w-full h-auto rounded-xl shadow-lg"
+        />
       </div>
 
       <h2>The Endless Variety</h2>
@@ -78,15 +76,13 @@ export default function ColoringPagesGuide() {
         <li><strong>Color Theory:</strong> Experiment with complementary or analogous colors</li>
       </ul>
 
-      {/* Image Placeholder 2 */}
-      <div className="my-12 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm font-medium">Image Placeholder 2</p>
-          <p className="text-xs mt-1">Suggested: People of different ages enjoying coloring together</p>
-        </div>
+      {/* Image 2: People enjoying coloring together */}
+      <div className="my-12">
+        <img 
+          src="/images/blog/blog1-02.jpeg" 
+          alt="People of different ages enjoying coloring together" 
+          className="w-full h-auto rounded-xl shadow-lg"
+        />
       </div>
 
       <h2>The Science of Coloring Benefits</h2>
@@ -116,15 +112,13 @@ export default function ColoringPagesGuide() {
         Coloring works beautifully as both solo relaxation and social activity. Color with children to bond without pressure. Join adult coloring groups to combine creativity with community. Frame finished pieces to celebrate your work.
       </p>
 
-      {/* Image Placeholder 3 */}
-      <div className="my-12 p-8 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm font-medium">Image Placeholder 3</p>
-          <p className="text-xs mt-1">Suggested: Beautifully colored finished artworks displayed</p>
-        </div>
+      {/* Image 3: Finished coloring artworks displayed */}
+      <div className="my-12">
+        <img 
+          src="/images/blog/blog1-03.jpeg" 
+          alt="Beautifully colored finished artworks displayed" 
+          className="w-full h-auto rounded-xl shadow-lg"
+        />
       </div>
 
       <h2>Getting Started Today</h2>

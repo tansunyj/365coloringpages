@@ -758,26 +758,38 @@ export default function AIGeneratorClient() {
                     </div>
                     <div className="flex items-center gap-4">
                       {!isPromptExpanded && prompt.trim() && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleGenerate();
-                          }}
-                          disabled={!prompt.trim() || generationsRemaining <= 0 || isGenerating}
-                          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold py-2 px-6 rounded-xl transition-all duration-300 flex items-center gap-2"
-                        >
-                          {isGenerating ? (
-                            <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                              <span>Generating...</span>
-                            </>
-                          ) : (
-                            <>
-                              <Sparkles className="h-4 w-4" />
-                              <span>Generate</span>
-                            </>
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isAuthenticated()) {
+                                setIsLoginDialogOpen(true);
+                              } else {
+                                handleGenerate();
+                              }
+                            }}
+                            disabled={!prompt.trim() || (isAuthenticated() && generationsRemaining <= 0) || isGenerating}
+                            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-semibold py-2 px-6 rounded-xl transition-all duration-300 flex items-center gap-2"
+                          >
+                            {isGenerating ? (
+                              <>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                <span>Generating...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Sparkles className="h-4 w-4" />
+                                <span>Generate</span>
+                              </>
+                            )}
+                          </button>
+                          {!isAuthenticated() && (
+                            <span className="text-xs text-orange-600 flex items-center gap-1">
+                              <AlertTriangle className="h-3 w-3" />
+                              Login required
+                            </span>
                           )}
-                        </button>
+                        </>
                       )}
                       <div className="text-gray-400">
                         {isPromptExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
@@ -852,16 +864,21 @@ export default function AIGeneratorClient() {
                     </div>
 
                     <div className="flex items-center justify-between mt-5">
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm">
                         {isLoadingRemaining ? (
-                          <span className="flex items-center gap-2">
+                          <span className="flex items-center gap-2 text-gray-500">
                             <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
                             Loading...
                           </span>
+                        ) : !isAuthenticated() ? (
+                          <div className="flex items-center gap-2 text-orange-600">
+                            <AlertTriangle className="h-4 w-4" />
+                            <span>Please <button onClick={() => setIsLoginDialogOpen(true)} className="font-semibold underline hover:text-orange-700">login or register</button> to generate images</span>
+                          </div>
                         ) : (
-                          <>
+                          <span className="text-gray-500">
                             Remaining generations today: <span className={`font-semibold ${generationsRemaining > 0 ? 'text-blue-600' : 'text-red-600'}`}>{generationsRemaining}</span>
-                          </>
+                          </span>
                         )}
                       </div>
                       
@@ -873,8 +890,14 @@ export default function AIGeneratorClient() {
                           Collapse
                         </button>
                         <button
-                          onClick={handleGenerate}
-                          disabled={!prompt.trim() || generationsRemaining <= 0 || isGenerating}
+                          onClick={() => {
+                            if (!isAuthenticated()) {
+                              setIsLoginDialogOpen(true);
+                            } else {
+                              handleGenerate();
+                            }
+                          }}
+                          disabled={!prompt.trim() || (isAuthenticated() && generationsRemaining <= 0) || isGenerating}
                           className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-bold py-2.5 px-6 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                         >
                           {isGenerating ? (
