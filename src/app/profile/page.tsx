@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Settings, Palette, Heart, Download, User, Mail, Lock, Camera, Save, X, Eye, EyeOff, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, ZoomOut, Star } from 'lucide-react';
+import { Settings, Palette, Heart, Download, User, Mail, Lock, Camera, Save, X, Eye, EyeOff, ChevronLeft, ChevronRight, RotateCcw, ZoomIn, ZoomOut, Star, Edit3, Plus, Trash2, ImageIcon, FileEdit, Upload } from 'lucide-react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -685,6 +685,52 @@ export default function ProfilePage() {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [selectedDetailId, setSelectedDetailId] = useState<string>('');
   
+  // My Creations Tab 状态
+  const [creationsTab, setCreationsTab] = useState<'images' | 'coloring-pages'>('images');
+  
+  // 涂色卡片状态
+  const [userColoringPages, setUserColoringPages] = useState<any[]>([]);
+  const [coloringPagesLoading, setColoringPagesLoading] = useState(false);
+  const [coloringPagesPagination, setColoringPagesPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0
+  });
+  const [showColoringPageDialog, setShowColoringPageDialog] = useState(false);
+  const [isReadOnlyMode, setIsReadOnlyMode] = useState(false); // 只读模式标志
+  const [editingColoringPage, setEditingColoringPage] = useState<any>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletingPageId, setDeletingPageId] = useState<number | null>(null);
+  const [coloringPageFormData, setColoringPageFormData] = useState({
+    title: '',
+    slug: '',
+    description: '',
+    thumbnailUrl: '',
+    previewUrl: '',
+    originalFileUrl: '',
+    difficulty: 'easy',
+    ageRange: '3-5',
+    theme: '',
+    style: '',
+    size: 'A4',
+    seoTitle: '',
+    seoDescription: '',
+    aiPrompt: ''
+  });
+
+  // 元数据状态
+  const [metadata, setMetadata] = useState<{
+    difficulty: any[];
+    size: any[];
+    style: any[];
+    theme: any[];
+  }>({
+    difficulty: [],
+    size: [],
+    style: [],
+    theme: []
+  });
+  
   // Toast状态管理
   const [toast, setToast] = useState<{
     show: boolean;
@@ -815,9 +861,41 @@ export default function ProfilePage() {
     }
   };
 
-  // 组件加载时获取用户信息
+  // 获取元数据
+  const fetchMetadata = async () => {
+    try {
+      console.log('🔄 开始获取元数据...');
+      const response = await fetch('http://localhost:3001/api/metadata');
+      const result = await response.json();
+      
+      console.log('📊 元数据API响应:', result);
+      
+      if (result.success && result.data) {
+        const metadataMap: any = {
+          difficulty: [],
+          size: [],
+          style: [],
+          theme: []
+        };
+        
+        result.data.forEach((group: any) => {
+          if (group.type && group.items) {
+            metadataMap[group.type] = group.items;
+          }
+        });
+        
+        console.log('✅ 元数据已设置:', metadataMap);
+        setMetadata(metadataMap);
+      }
+    } catch (error) {
+      console.error('❌ 获取元数据失败:', error);
+    }
+  };
+
+  // 组件加载时获取用户信息和元数据
   useEffect(() => {
     fetchUserInfo();
+    fetchMetadata();
   }, []);
 
   // 更新个人资料
@@ -1243,7 +1321,6 @@ export default function ProfilePage() {
     // 失败的情况已经在changePassword中显示了Toast
   };
 
-
   const menuItems = [
     {
       id: 'account-settings',
@@ -1351,77 +1428,462 @@ export default function ProfilePage() {
     </div>
   );
 
+  // 获取用户涂色卡列表
+  const fetchUserColoringPages = async (page = 1) => {
+    try {
+      setColoringPagesLoading(true);
+      const response = await fetchWithAuth(
+        `http://localhost:3001/api/coloring-pages/user/my-pages?page=${page}&limit=10&sort=newest`
+      );
+      const result = await response.json();
+      
+      console.log('📊 用户涂色卡API响应:', result);
+      
+      if (result.success && result.data) {
+        // API返回的是 coloringPages 字段
+        const pages = Array.isArray(result.data.coloringPages) ? result.data.coloringPages : [];
+        setUserColoringPages(pages);
+        
+        // 确保pagination字段存在
+        if (result.data.pagination) {
+          setColoringPagesPagination({
+            currentPage: result.data.pagination.currentPage || 1,
+            totalPages: result.data.pagination.totalPages || 1,
+            totalCount: result.data.pagination.totalCount || 0
+          });
+        }
+      } else {
+        // 如果API返回不成功，设置为空数组
+        setUserColoringPages([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user coloring pages:', error);
+      showToast('Failed to load coloring pages', 'error');
+      // 确保出错时也设置为空数组
+      setUserColoringPages([]);
+    } finally {
+      setColoringPagesLoading(false);
+    }
+  };
+
+  // 创建/更新涂色卡片
+  const saveColoringPage = async () => {
+    try {
+      const url = editingColoringPage
+        ? `http://localhost:3001/api/coloring-pages/user/${editingColoringPage.id}`
+        : 'http://localhost:3001/api/coloring-pages/user/create';
+      
+      // 转换camelCase为snake_case格式
+      const requestData = {
+        title: coloringPageFormData.title,
+        slug: coloringPageFormData.slug,
+        description: coloringPageFormData.description,
+        thumbnail_url: coloringPageFormData.thumbnailUrl,
+        preview_url: coloringPageFormData.previewUrl,
+        original_file_url: coloringPageFormData.originalFileUrl,
+        difficulty: coloringPageFormData.difficulty,
+        age_range: coloringPageFormData.ageRange,
+        theme: coloringPageFormData.theme,
+        style: coloringPageFormData.style,
+        size: coloringPageFormData.size,
+        ai_prompt: coloringPageFormData.aiPrompt,
+        seo_title: coloringPageFormData.seoTitle,
+        seo_description: coloringPageFormData.seoDescription
+      };
+      
+      console.log('💾 保存数据:', requestData);
+      
+      const response = await fetchWithAuth(url, {
+        method: editingColoringPage ? 'PUT' : 'POST',
+        body: JSON.stringify(requestData)
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        showToast(editingColoringPage ? 'Coloring page updated!' : 'Coloring page created!', 'success');
+        setShowColoringPageDialog(false);
+        fetchUserColoringPages(coloringPagesPagination.currentPage);
+      } else {
+        showToast(result.message || 'Failed to save', 'error');
+      }
+    } catch (error) {
+      console.error('Failed to save coloring page:', error);
+      showToast('Failed to save', 'error');
+    }
+  };
+
+  // 打开删除确认对话框
+  const openDeleteConfirm = (id: number) => {
+    setDeletingPageId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  // 确认删除涂色卡片
+  const confirmDeleteColoringPage = async () => {
+    if (!deletingPageId) return;
+    
+    try {
+      const response = await fetchWithAuth(
+        `http://localhost:3001/api/coloring-pages/user/${deletingPageId}`,
+        { method: 'DELETE' }
+      );
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        showToast('Coloring page deleted', 'success');
+        fetchUserColoringPages(coloringPagesPagination.currentPage);
+      } else {
+        showToast(result.message || 'Failed to delete', 'error');
+      }
+    } catch (error) {
+      console.error('Failed to delete coloring page:', error);
+      showToast('Failed to delete', 'error');
+    } finally {
+      setShowDeleteConfirm(false);
+      setDeletingPageId(null);
+    }
+  };
+
+  // 打开新建涂色卡片对话框（从AI生成的图片）
+  const openCreateColoringPageDialog = (aiImage: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingColoringPage(null);
+    setColoringPageFormData({
+      title: aiImage.prompt || '',
+      slug: `coloring-page-${Date.now()}`,
+      description: '',
+      thumbnailUrl: aiImage.imageUrl,
+      previewUrl: aiImage.imageUrl,
+      originalFileUrl: aiImage.imageUrl,
+      difficulty: 'easy',
+      ageRange: '3-5岁',
+      theme: '动物',
+      style: 'Line Art',
+      size: 'A4',
+      seoTitle: aiImage.prompt || '',
+      seoDescription: '',
+      aiPrompt: aiImage.prompt || ''
+    });
+    setShowColoringPageDialog(true);
+  };
+
+  // 打开查看涂色卡片对话框（只读模式）
+  const openViewColoringPageDialog = (page: any) => {
+    console.log('👁️ 查看涂色卡片 - 原始数据:', page);
+    
+    const formData = {
+      title: page.title || '',
+      slug: page.slug || '',
+      description: page.description || '',
+      thumbnailUrl: page.thumbnail_url || page.thumbnailUrl || '',
+      previewUrl: page.preview_url || page.previewUrl || '',
+      originalFileUrl: page.original_file_url || page.originalFileUrl || page.imageUrl || '',
+      difficulty: page.difficulty || 'easy',
+      ageRange: page.age_range || page.ageRange || '3-5',
+      theme: page.theme || '',
+      style: page.style || '',
+      size: page.size || 'A4',
+      seoTitle: page.seo_title || page.seoTitle || '',
+      seoDescription: page.seo_description || page.seoDescription || '',
+      aiPrompt: page.ai_prompt || page.aiPrompt || ''
+    };
+    
+    setEditingColoringPage(page);
+    setColoringPageFormData(formData);
+    setIsReadOnlyMode(true); // 设置为只读模式
+    setShowColoringPageDialog(true);
+  };
+
+  // 打开编辑涂色卡片对话框
+  const openEditColoringPageDialog = (page: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    console.log('📝 编辑涂色卡片 - 原始数据:', page);
+    
+    const formData = {
+      title: page.title || '',
+      slug: page.slug || '',
+      description: page.description || '',
+      thumbnailUrl: page.thumbnail_url || page.thumbnailUrl || '',
+      previewUrl: page.preview_url || page.previewUrl || '',
+      originalFileUrl: page.original_file_url || page.originalFileUrl || page.imageUrl || '',
+      difficulty: page.difficulty || 'easy',
+      ageRange: page.age_range || page.ageRange || '3-5',
+      theme: page.theme || '',
+      style: page.style || '',
+      size: page.size || 'A4',
+      seoTitle: page.seo_title || page.seoTitle || '',
+      seoDescription: page.seo_description || page.seoDescription || '',
+      aiPrompt: page.ai_prompt || page.aiPrompt || ''
+    };
+    
+    console.log('📋 映射后的表单数据:', formData);
+    
+    setEditingColoringPage(page);
+    setColoringPageFormData(formData);
+    setIsReadOnlyMode(false); // 设置为编辑模式
+    setShowColoringPageDialog(true);
+  };
+
+  // 编辑AI生成的图片（跳转到AI Generator）
+  const editAIImage = (image: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    // 保存到 localStorage
+    localStorage.setItem('editingAIImage', JSON.stringify({
+      imageUrl: image.imageUrl,
+      prompt: image.prompt
+    }));
+    // 跳转到 AI Generator
+    window.location.href = '/ai-generator';
+  };
+
   const renderMyCreations = () => {
     return (
       <div className="bg-white rounded-lg p-8">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">My Creations</h2>
-        
-        {listLoading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
-          </div>
-        ) : creations.length > 0 ? (
-          <>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {creations.map((creation) => (
-            <div key={creation.id} className="group cursor-pointer" onClick={() => handleViewDetail(creation.id)}>
-              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
-                <Image
-                      src={creation.thumbnailUrl || creation.imageUrl}
-                  alt={creation.title}
-                  width={300}
-                  height={300}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
-                  unoptimized
-                />
-                {/* 点赞和收藏按钮 - 右上角 */}
-                <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
-                  {/* 点赞按钮（上方） */}
-                  <button
-                    onClick={(e) => handleLike(creation.id, creation.isLiked || false, e)}
-                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
-                      creation.isLiked
-                        ? 'bg-red-500 text-white' 
-                        : 'bg-white/90 hover:bg-white text-gray-600 hover:text-red-500'
-                    }`}
-                    title={creation.isLiked ? '已点赞' : '点赞'}
-                  >
-                    <Heart className={`h-5 w-5 ${creation.isLiked ? 'fill-current' : ''}`} />
-                  </button>
-                  
-                  {/* 收藏按钮（下方） */}
-                  <button
-                    onClick={(e) => handleFavorite(creation.id, creation.isFavorited || false, e)}
-                    className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
-                      creation.isFavorited
-                        ? 'bg-yellow-500 text-white' 
-                        : 'bg-white/90 hover:bg-white text-gray-600 hover:text-yellow-500'
-                    }`}
-                    title={creation.isFavorited ? '已收藏' : '收藏'}
-                  >
-                    <Star className={`h-5 w-5 ${creation.isFavorited ? 'fill-current' : ''}`} />
-                  </button>
+        {/* Tab 切换 */}
+        <div className="mb-6">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              <button
+                onClick={() => setCreationsTab('images')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  creationsTab === 'images'
+                    ? 'border-orange-500 text-orange-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <ImageIcon className="h-5 w-5" />
+                  <span>AI Generated Images</span>
+                  {creations.length > 0 && (
+                    <span className="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
+                      {creationsPagination.totalCount}
+                    </span>
+                  )}
                 </div>
-              </div>
-              <h3 className="font-medium text-gray-900">{creation.title}</h3>
-                  <p className="text-sm text-gray-500">Created on {new Date(creation.createdAt).toLocaleDateString()}</p>
-            </div>
-          ))}
+              </button>
+              <button
+                onClick={() => {
+                  setCreationsTab('coloring-pages');
+                  if (!userColoringPages || userColoringPages.length === 0) {
+                    fetchUserColoringPages(1);
+                  }
+                }}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  creationsTab === 'coloring-pages'
+                    ? 'border-orange-500 text-orange-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Palette className="h-5 w-5" />
+                  <span>My Coloring Pages</span>
+                  {userColoringPages && userColoringPages.length > 0 && (
+                    <span className="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">
+                      {coloringPagesPagination.totalCount}
+                    </span>
+                  )}
+                </div>
+              </button>
+            </nav>
+          </div>
         </div>
 
-        {/* 分页组件 */}
-            {creationsPagination.totalPages > 1 && (
-        <Pagination
-                currentPage={creationsPagination.currentPage}
-                totalPages={creationsPagination.totalPages}
-          onPageChange={setCreationsCurrentPage}
-        />
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          {creationsTab === 'images' ? 'AI Generated Images' : 'My Coloring Pages'}
+        </h2>
+        
+        {/* AI Generated Images Tab */}
+        {creationsTab === 'images' && (
+          <>
+            {listLoading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
+              </div>
+            ) : creations.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {creations.map((creation) => (
+                    <div key={creation.id} className="group cursor-pointer relative" onClick={() => handleViewDetail(creation.id)}>
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
+                        <Image
+                          src={creation.thumbnailUrl || creation.imageUrl}
+                          alt={creation.title}
+                          width={300}
+                          height={300}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                          unoptimized
+                        />
+                        
+                        {/* 悬停操作按钮 */}
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-3">
+                          <button
+                            onClick={(e) => editAIImage(creation, e)}
+                            className="bg-white/90 hover:bg-white text-gray-800 px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-lg"
+                            title="Edit in AI Generator"
+                          >
+                            <FileEdit className="h-4 w-4" />
+                            <span className="text-sm font-medium">Edit Image</span>
+                          </button>
+                          <button
+                            onClick={(e) => openCreateColoringPageDialog(creation, e)}
+                            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-lg"
+                            title="Create Coloring Page"
+                          >
+                            <Plus className="h-4 w-4" />
+                            <span className="text-sm font-medium">Create Page</span>
+                          </button>
+                        </div>
+                      </div>
+                      <h3 className="font-medium text-gray-900">{creation.title}</h3>
+                      <p className="text-sm text-gray-500">Created on {new Date(creation.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 分页组件 */}
+                {creationsPagination.totalPages > 1 && (
+                  <Pagination
+                    currentPage={creationsPagination.currentPage}
+                    totalPages={creationsPagination.totalPages}
+                    onPageChange={setCreationsCurrentPage}
+                  />
+                )}
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <ImageIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">You haven't created any AI images yet.</p>
+                <a href="/ai-generator" className="mt-4 inline-block text-orange-500 hover:text-orange-600">
+                  Go to AI Generator →
+                </a>
+              </div>
             )}
           </>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500">You haven't created any coloring pages yet.</p>
-          </div>
+        )}
+
+        {/* My Coloring Pages Tab */}
+        {creationsTab === 'coloring-pages' && (
+          <>
+            {coloringPagesLoading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent"></div>
+              </div>
+            ) : userColoringPages && userColoringPages.length > 0 ? (
+              <>
+                {/* Table Layout */}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white border border-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image & Title</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Theme</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Style</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age Range</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created Date</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {userColoringPages.map((page) => (
+                        <tr 
+                          key={page.id} 
+                          className="hover:bg-gray-50 transition-colors cursor-pointer"
+                          onClick={() => openViewColoringPageDialog(page)}
+                        >
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">#{page.id}</td>
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="h-12 w-12 flex-shrink-0 relative rounded overflow-hidden">
+                                <Image
+                                  src={page.thumbnail_url || page.preview_url}
+                                  alt={page.title}
+                                  fill
+                                  className="object-cover"
+                                  unoptimized
+                                />
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">{page.title}</div>
+                                <div className="text-xs text-gray-500">{page.slug}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{page.theme || '-'}</td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{page.style || '-'}</td>
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              page.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
+                              page.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {page.difficulty}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{page.age_range}</td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {new Date(page.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              page.status === 'published' ? 'bg-green-100 text-green-800' :
+                              page.status === 'draft' ? 'bg-gray-100 text-gray-800' :
+                              'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {page.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex items-center gap-4">
+                              <button
+                                onClick={(e) => openEditColoringPageDialog(page, e)}
+                                className="text-orange-600 hover:text-orange-900 transition-colors"
+                                title="Edit"
+                              >
+                                <Edit3 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openDeleteConfirm(page.id);
+                                }}
+                                className="text-red-600 hover:text-red-900 transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* 分页组件 */}
+                {coloringPagesPagination.totalPages > 1 && (
+                  <div className="mt-6">
+                    <Pagination
+                      currentPage={coloringPagesPagination.currentPage}
+                      totalPages={coloringPagesPagination.totalPages}
+                      onPageChange={(page) => fetchUserColoringPages(page)}
+                    />
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <Palette className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">You haven't created any coloring pages yet.</p>
+                <p className="text-sm text-gray-400 mt-2">Create from your AI generated images!</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -1712,6 +2174,314 @@ export default function ProfilePage() {
                   category="General"
                   isDialog={true}
                 />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Coloring Page Dialog */}
+      {showColoringPageDialog && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h3 className="text-lg font-medium text-gray-900">
+                {isReadOnlyMode ? 'View Coloring Page' : editingColoringPage ? 'Edit Coloring Page' : 'Add Coloring Page'}
+              </h3>
+              <button
+                onClick={() => setShowColoringPageDialog(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="grid grid-cols-2 gap-6 p-6">
+                {/* Left: Image Preview */}
+                <div className="flex flex-col">
+                  <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-orange-500 transition-colors flex flex-col relative">
+                    {coloringPageFormData.thumbnailUrl ? (
+                      <div className="relative group flex-1 flex flex-col bg-gray-100 rounded-lg overflow-hidden">
+                        {/* Image Container */}
+                        <div className="flex-1 w-full h-full">
+                          <Image
+                            src={coloringPageFormData.thumbnailUrl}
+                            alt="Preview"
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex flex-col items-center justify-center text-center">
+                        <ImageIcon className="h-12 w-12 text-gray-400 mb-3" />
+                        <span className="text-sm text-gray-600 mb-1">No Image</span>
+                        <span className="text-xs text-gray-400">Please create from AI generated image</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right: Form Fields */}
+                <div className="aspect-square flex flex-col space-y-1 overflow-y-auto pr-2">
+                  {/* Title and Slug */}
+                  <div className="grid grid-cols-2 gap-1">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Title *
+                      </label>
+                      <input
+                        type="text"
+                        value={coloringPageFormData.title}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, title: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        placeholder="Enter coloring page title"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Slug *
+                      </label>
+                      <input
+                        type="text"
+                        value={coloringPageFormData.slug}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, slug: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        placeholder="coloring-page-slug"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                      Description
+                    </label>
+                    <textarea
+                      value={coloringPageFormData.description}
+                      onChange={(e) => setColoringPageFormData(prev => ({ ...prev, description: e.target.value }))}
+                      disabled={isReadOnlyMode}
+                      rows={2}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder="Enter description"
+                    />
+                  </div>
+
+                  {/* Difficulty, Age Range, Size */}
+                  <div className="grid grid-cols-3 gap-1">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Difficulty
+                      </label>
+                      <select
+                        value={coloringPageFormData.difficulty}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, difficulty: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      >
+                        {metadata.difficulty.length > 0 ? (
+                          metadata.difficulty.map((item: any) => (
+                            <option key={item.value} value={item.value}>
+                              {item.label}
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Age Range
+                      </label>
+                      <input
+                        type="text"
+                        value={coloringPageFormData.ageRange}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, ageRange: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        placeholder="3-5"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Size
+                      </label>
+                      <select
+                        value={coloringPageFormData.size}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, size: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      >
+                        {metadata.size.length > 0 ? (
+                          metadata.size.map((item: any) => (
+                            <option key={item.value} value={item.value}>
+                              {item.label}
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="A4">A4 (210x297mm)</option>
+                            <option value="Letter">Letter (8.5x11in)</option>
+                            <option value="Original">Original</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Theme and Style */}
+                  <div className="grid grid-cols-2 gap-1">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Theme
+                      </label>
+                      <select
+                        value={coloringPageFormData.theme}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, theme: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      >
+                        <option value="">Select theme</option>
+                        {metadata.theme.length > 0 && metadata.theme.map((item: any) => (
+                          <option key={item.value} value={item.value}>
+                            {item.icon && `${item.icon} `}{item.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                        Style
+                      </label>
+                      <select
+                        value={coloringPageFormData.style}
+                        onChange={(e) => setColoringPageFormData(prev => ({ ...prev, style: e.target.value }))}
+                        disabled={isReadOnlyMode}
+                        className="w-full px-2 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      >
+                        <option value="">Select style</option>
+                        {metadata.style.length > 0 && metadata.style.map((item: any) => (
+                          <option key={item.value} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* AI Prompt */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                      AI Prompt
+                    </label>
+                    <textarea
+                      value={coloringPageFormData.aiPrompt}
+                      onChange={(e) => setColoringPageFormData(prev => ({ ...prev, aiPrompt: e.target.value }))}
+                      disabled={isReadOnlyMode}
+                      rows={3}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder="AI generation prompt"
+                    />
+                  </div>
+
+                  {/* SEO 字段已隐藏 - 但数据仍会在后台保存 */}
+                  {/* SEO Title */}
+                  {/* <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                      SEO Title
+                    </label>
+                    <input
+                      type="text"
+                      value={coloringPageFormData.seoTitle}
+                      onChange={(e) => setColoringPageFormData(prev => ({ ...prev, seoTitle: e.target.value }))}
+                      disabled={isReadOnlyMode}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder="Title for search engine optimization"
+                    />
+                  </div> */}
+
+                  {/* SEO Description */}
+                  {/* <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-0.5">
+                      SEO Description
+                    </label>
+                    <textarea
+                      value={coloringPageFormData.seoDescription}
+                      onChange={(e) => setColoringPageFormData(prev => ({ ...prev, seoDescription: e.target.value }))}
+                      disabled={isReadOnlyMode}
+                      rows={2}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder="Description for search engine optimization"
+                    />
+                  </div> */}
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Buttons */}
+            <div className="border-t border-gray-200 p-6 bg-gray-50">
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setShowColoringPageDialog(false)}
+                  className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  {isReadOnlyMode ? 'Close' : 'Cancel'}
+                </button>
+                {!isReadOnlyMode && (
+                  <button
+                    onClick={saveColoringPage}
+                    className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    Save
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-[30vh]">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 animate-in fade-in duration-200">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Confirm Delete
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete this coloring page? This action cannot be undone.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeletingPageId(null);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDeleteColoringPage}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>

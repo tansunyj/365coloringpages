@@ -22,15 +22,25 @@ export async function GET(request: NextRequest) {
       const url = new URL(imageUrl);
       const allowedDomains = [
         'image.365coloringpages.com',
-        '365coloringpages.com'
+        '365coloringpages.com',
+        // AI 图片生成服务域名
+        'pfst.cf2.poecdn.net',                          // Poe AI
+        'oaidalleapiprodscus.blob.core.windows.net',   // OpenAI DALL-E
+        'replicate.delivery',                           // Replicate
+        'temp-storage.ai.com',                          // 临时AI存储
+        'cdn.openai.com',                               // OpenAI CDN
+        'imagedelivery.net',                            // Cloudflare Images
       ];
       
       if (!allowedDomains.some(domain => url.hostname.endsWith(domain))) {
+        console.warn('⚠️ 不允许的图片域名:', url.hostname);
         return NextResponse.json(
-          { error: '不允许的图片域名' },
+          { error: `不允许的图片域名: ${url.hostname}` },
           { status: 403 }
         );
       }
+      
+      console.log('✅ 允许代理图片:', url.hostname);
     } catch (urlError) {
       return NextResponse.json(
         { error: '无效的图片 URL' },

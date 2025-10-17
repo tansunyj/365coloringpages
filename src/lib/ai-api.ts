@@ -19,7 +19,24 @@ export interface AIGenerateRequest {
   prompt: string;
 }
 
+export interface AIEditRequest {
+  image: string;
+  prompt: string;
+}
+
 export interface AIGenerateResponse {
+  success: boolean;
+  data: {
+    images: Array<{
+      url: string;
+    }>;
+    created: number;
+    prompt: string;
+  };
+  message: string;
+}
+
+export interface AIEditResponse {
   success: boolean;
   data: {
     images: Array<{
@@ -158,7 +175,7 @@ async function apiFetch<T>(
 // ==================== API函数 ====================
 
 /**
- * 生成AI图片
+ * 生成AI图片（文生图）
  */
 export async function generateAIImage(
   prompt: string
@@ -183,6 +200,45 @@ export async function generateAIImage(
     prompt: response.data.prompt,
     imageUrl: imageUrl,
     timestamp: new Date(response.data.created * 1000),
+    status: 'completed',
+  };
+}
+
+/**
+ * 编辑AI图片（图生图）
+ */
+export async function editAIImage(
+  imageUrl: string,
+  prompt: string
+): Promise<GeneratedImage> {
+  if (!imageUrl.trim()) {
+    throw new AIApiError('图片URL不能为空');
+  }
+  
+  if (!prompt.trim()) {
+    throw new AIApiError('提示词不能为空');
+  }
+
+  const response = await apiFetch<AIEditResponse>('/api/ai/edit', {
+    method: 'POST',
+    body: JSON.stringify({ 
+      image: imageUrl,
+      prompt: prompt.trim() 
+    }),
+  });
+
+  // 转换为前端使用的格式
+  const newImageUrl = response.data.images[0]?.url;
+  if (!newImageUrl) {
+    throw new AIApiError('编辑后的图片URL为空');
+  }
+
+  return {
+    id: Date.now().toString(),
+    prompt: response.data.prompt,
+    imageUrl: newImageUrl,
+    timestamp: new Date(response.data.created * 1000),
+    status: 'completed',
   };
 }
 

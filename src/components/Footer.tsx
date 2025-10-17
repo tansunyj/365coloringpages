@@ -98,28 +98,23 @@ export default function Footer() {
             <h3 className="text-lg font-black mb-5 text-gray-900">Friendly Links</h3>
             <ul className="space-y-3">
               <li>
-                <a href="https://coloringpages.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Coloring Pages
+                <a href="https://www.baixarvideoyoutube.video/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Baixar Video Youtube
                 </a>
               </li>
               <li>
-                <a href="https://printablecoloringpages.net" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Printable Coloring
+                <a href="https://www.chinesename.us/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Chinese Name Tools
                 </a>
               </li>
               <li>
-                <a href="https://kidsprintables.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Kids Printables
+                <a href="https://www.j10c.net/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  J10C Network
                 </a>
               </li>
               <li>
-                <a href="https://arttherapycoloring.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Art Therapy
-                </a>
-              </li>
-              <li>
-                <a href="https://creativekids.org" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
-                  Creative Kids
+                <a href="https://toolkit-hub-liard.vercel.app/#/" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-orange-500 transition-colors text-sm leading-relaxed">
+                  Toolkit Hub
                 </a>
               </li>
             </ul>

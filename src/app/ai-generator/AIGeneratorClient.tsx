@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { Wand2, History, Sparkles, ChevronUp, ChevronDown, AlertTriangle, Loader2, CheckCircle2, XCircle, Edit3, Download, Printer } from 'lucide-react';
+import { Wand2, History, Sparkles, ChevronUp, ChevronDown, AlertTriangle, Loader2, CheckCircle2, XCircle, Download, Printer, Image as ImageIcon } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Toast from '../../components/Toast';
 import LoginDialog from '../../components/LoginDialog';
-import ImageEditor from '../../components/ImageEditor';
 import {
   generateAIImage,
+  editAIImage,
   getRemainingGenerations,
   getMyCreations,
   formatErrorMessage,
@@ -64,8 +64,9 @@ export default function AIGeneratorClient() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [showPromptTooltip, setShowPromptTooltip] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ top: number; right: number } | null>(null);
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [editingImage, setEditingImage] = useState<string | null>(null);
+  
+  // 生成模式：文生图 or 图生图
+  const [generationMode, setGenerationMode] = useState<'text-to-image' | 'image-to-image'>('text-to-image');
   
   // 防止重复调用的标志位（解决 React Strict Mode 导致的重复挂载问题）
   const isInitializedRef = useRef(false);
@@ -376,7 +377,13 @@ export default function AIGeneratorClient() {
 
     // Validate prompt
     if (!prompt.trim()) {
-      showToast('Please enter a prompt', 'warning');
+      showToast('请输入提示词', 'warning');
+      return;
+    }
+
+    // 图生图模式需要有当前图片
+    if (generationMode === 'image-to-image' && !currentImage) {
+      showToast('请先选择一张图片', 'warning');
       return;
     }
 
@@ -406,8 +413,16 @@ export default function AIGeneratorClient() {
     setHistory(prev => [pendingImage, ...prev]);
     
     try {
-      // 调用API生成图片
-      const newImage = await generateAIImage(currentPrompt);
+      let newImage: GeneratedImage;
+      
+      // 根据模式调用不同的API
+      if (generationMode === 'image-to-image' && currentImage) {
+        // 图生图
+        newImage = await editAIImage(currentImage.imageUrl, currentPrompt);
+      } else {
+        // 文生图
+        newImage = await generateAIImage(currentPrompt);
+      }
       
       // 更新当前图片
       setCurrentImage(newImage);
@@ -423,7 +438,7 @@ export default function AIGeneratorClient() {
       await refreshRemaining();
       
       // 显示成功提示
-      showToast('图片生成成功！', 'success');
+      showToast(generationMode === 'image-to-image' ? '图片编辑成功！' : '图片生成成功！', 'success');
       
     } catch (err) {
       console.error('生成图片失败:', err);
@@ -505,16 +520,6 @@ export default function AIGeneratorClient() {
   const closePromptTooltip = () => {
     setShowPromptTooltip(null);
     setTooltipPosition(null);
-  };
-
-  /**
-   * 打开图片编辑器
-   */
-  const openEditor = () => {
-    if (currentImage?.imageUrl) {
-      setEditingImage(currentImage.imageUrl);
-      setIsEditorOpen(true);
-    }
   };
 
   /**
@@ -633,15 +638,6 @@ export default function AIGeneratorClient() {
     }
   };
 
-  /**
-   * 保存编辑后的图片
-   */
-  const handleSaveEditedImage = (editedImageUrl: string) => {
-    setCurrentImage(prev => prev ? { ...prev, imageUrl: editedImageUrl } : null);
-    setIsEditorOpen(false);
-    showToast('Image saved successfully!', 'success');
-  };
-
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fcfcf8' }}>
       <Header />
@@ -672,20 +668,11 @@ export default function AIGeneratorClient() {
                               
                               {/* 图片操作按钮 - 右上角 */}
                               <div className="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {/* 编辑按钮 */}
-                                <button
-                                  onClick={openEditor}
-                                  className="p-3 bg-white/90 hover:bg-white backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group/btn"
-                                  title="Edit Image"
-                                >
-                                  <Edit3 className="h-5 w-5 text-blue-600 group-hover/btn:scale-110 transition-transform" />
-                                </button>
-                                
                                 {/* 下载按钮 */}
                                 <button
                                   onClick={handleDownloadImage}
                                   className="p-3 bg-white/90 hover:bg-white backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group/btn"
-                                  title="Download Image"
+                                  title="下载图片"
                                 >
                                   <Download className="h-5 w-5 text-green-600 group-hover/btn:scale-110 transition-transform" />
                                 </button>
@@ -694,7 +681,7 @@ export default function AIGeneratorClient() {
                                 <button
                                   onClick={handlePrintImage}
                                   className="p-3 bg-white/90 hover:bg-white backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group/btn"
-                                  title="Print Image"
+                                  title="打印图片"
                                 >
                                   <Printer className="h-5 w-5 text-purple-600 group-hover/btn:scale-110 transition-transform" />
                                 </button>
@@ -757,7 +744,7 @@ export default function AIGeneratorClient() {
                             type="text"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="输入你的创意，AI将为你生成独一无二的涂色页... (点击展开详细编辑)"
+                            placeholder="Enter your creative idea, AI will generate a unique coloring page... (Click to expand)"
                             className="w-full text-lg border-none bg-transparent focus:outline-none placeholder-gray-400"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -765,7 +752,7 @@ export default function AIGeneratorClient() {
                             }}
                           />
                         ) : (
-                          <h3 className="text-lg font-semibold text-gray-900">创建你的涂色页面</h3>
+                          <h3 className="text-lg font-semibold text-gray-900">Create Your Coloring Page</h3>
                         )}
                       </div>
                     </div>
@@ -782,12 +769,12 @@ export default function AIGeneratorClient() {
                           {isGenerating ? (
                             <>
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                              <span>生成中...</span>
+                              <span>Generating...</span>
                             </>
                           ) : (
                             <>
                               <Sparkles className="h-4 w-4" />
-                              <span>生成</span>
+                              <span>Generate</span>
                             </>
                           )}
                         </button>
@@ -802,16 +789,64 @@ export default function AIGeneratorClient() {
                 {/* 展开内容 - 多行编辑模式 */}
                 {isPromptExpanded && (
                   <div className="px-5 pb-5 border-t border-gray-100">
+                    {/* 生成模式选择 */}
+                    <div className="mt-4">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Generation Mode
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setGenerationMode('text-to-image')}
+                          className={`flex-1 py-2.5 px-4 rounded-xl font-medium transition-all duration-200 ${
+                            generationMode === 'text-to-image'
+                              ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            <Sparkles className="h-4 w-4" />
+                            <span>Text to Image</span>
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => setGenerationMode('image-to-image')}
+                          disabled={!currentImage}
+                          className={`flex-1 py-2.5 px-4 rounded-xl font-medium transition-all duration-200 ${
+                            generationMode === 'image-to-image'
+                              ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          } ${!currentImage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            <ImageIcon className="h-4 w-4" />
+                            <span>Image to Image</span>
+                          </div>
+                        </button>
+                      </div>
+                      {generationMode === 'image-to-image' && !currentImage && (
+                        <p className="text-xs text-amber-600 mt-2 flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3" />
+                          Please select an image from history first
+                        </p>
+                      )}
+                      {generationMode === 'image-to-image' && currentImage && (
+                        <p className="text-xs text-blue-600 mt-2 flex items-center gap-1">
+                          <CheckCircle2 className="h-3 w-3" />
+                          Image selected, enter prompt to edit
+                        </p>
+                      )}
+                    </div>
+                    
                     <div className="mt-4">
                       <label className="block text-sm font-semibold text-gray-700 mb-3">
-                        详细描述你的理想涂色页面
+                        Describe Your Ideal Coloring Page
                       </label>
                       <textarea
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="输入你的创意，AI将为你生成独一无二的涂色页……
-
-例如：一个神奇的森林，里面有会说话的动物和发光的蘑菇。或者描述你想要的场景、角色、风格等等。"
+                        placeholder={generationMode === 'image-to-image' 
+                          ? "Describe how you want to modify the image...\n\nFor example: Add a red hat on the dog, or change the background color, etc." 
+                          : "Enter your creative idea, AI will generate a unique coloring page...\n\nFor example: A magical forest with talking animals and glowing mushrooms. Or describe the scene, characters, style you want, etc."}
                         className="w-full h-32 p-4 border-2 border-gray-200 rounded-2xl resize-none focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all duration-300 text-base leading-relaxed placeholder-gray-400"
                       />
                     </div>
@@ -821,11 +856,11 @@ export default function AIGeneratorClient() {
                         {isLoadingRemaining ? (
                           <span className="flex items-center gap-2">
                             <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
-                            加载中...
+                            Loading...
                           </span>
                         ) : (
                           <>
-                            今日剩余生成次数: <span className={`font-semibold ${generationsRemaining > 0 ? 'text-blue-600' : 'text-red-600'}`}>{generationsRemaining}</span>
+                            Remaining generations today: <span className={`font-semibold ${generationsRemaining > 0 ? 'text-blue-600' : 'text-red-600'}`}>{generationsRemaining}</span>
                           </>
                         )}
                       </div>
@@ -835,7 +870,7 @@ export default function AIGeneratorClient() {
                           onClick={() => setIsPromptExpanded(false)}
                           className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
                         >
-                          收起
+                          Collapse
                         </button>
                         <button
                           onClick={handleGenerate}
@@ -869,7 +904,7 @@ export default function AIGeneratorClient() {
               >
                 <div className="flex items-center gap-2 mb-4 flex-shrink-0">
                   <History className="h-4 w-4 text-gray-400" />
-                  <h3 className="text-sm font-semibold text-gray-700">Recent</h3>
+                  <h3 className="text-sm font-semibold text-gray-700">历史记录</h3>
                 </div>
                 
                 {isLoadingHistory ? (
@@ -1084,15 +1119,6 @@ export default function AIGeneratorClient() {
             </div>
           </div>
         </>
-      )}
-      
-      {/* 图片编辑器 */}
-      {isEditorOpen && editingImage && (
-        <ImageEditor
-          imageUrl={editingImage}
-          onClose={() => setIsEditorOpen(false)}
-          onSave={handleSaveEditedImage}
-        />
       )}
     </div>
   );
