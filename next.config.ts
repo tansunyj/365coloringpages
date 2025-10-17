@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
   // 修复 Next.js 15 开发模式下 meta 标签在 body 中的问题
   // 参考: https://stackoverflow.com/questions/79585863/meta-tags-are-moving-to-body-tag-instead-of-head-tag
   experimental: {
-    // @ts-ignore - Next.js 15 的实验性配置
+    // @ts-expect-error - Next.js 15 的实验性配置
     htmlLimitedBots: /.*/,
   },
 };

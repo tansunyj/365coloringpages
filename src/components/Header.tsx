@@ -270,8 +270,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-            <Palette className="h-8 w-8 text-yellow-400" />
-            <span className="ml-2 text-xl font-bold text-gray-900">
+            <img src="/images/logo.png" alt="365 Coloring Pages Logo" className="h-24 w-24 rounded-md" />
+            <span className="ml-3 text-3xl font-bold text-gray-900">
               Coloring Pages
             </span>
           </Link>

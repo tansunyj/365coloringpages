@@ -28,7 +28,7 @@ export function HomePageJsonLd() {
     '@type': 'Organization',
     name: '365 Coloring Pages',
     url: site,
-    logo: `${site}/logo.png`,
+    logo: `${site}/images/logo.jpeg`,
     description: 'Free printable coloring pages for kids and adults. Browse 10,000+ high-quality coloring sheets featuring animals, characters, holidays and more.',
     sameAs: [
       'https://twitter.com/365coloringpages',
@@ -144,7 +144,7 @@ export function CreativeWorkJsonLd({
       name: '365 Coloring Pages',
       logo: {
         '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://365coloringpages.com'}/logo.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://365coloringpages.com'}/images/logo.jpeg`,
       },
     },
     ...(datePublished && { datePublished }),

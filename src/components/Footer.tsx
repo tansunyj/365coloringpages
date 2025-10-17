@@ -12,8 +12,8 @@ export default function Footer() {
           {/* 网站简介 */}
           <div className="lg:col-span-1 relative pr-8">
             <Link href="/" className="flex items-center mb-5 hover:opacity-80 transition-opacity">
-              <Palette className="h-8 w-8 text-yellow-400" />
-              <span className="ml-2 text-xl font-bold">Coloring Pages</span>
+              <img src="/images/logo.png" alt="365 Coloring Pages Logo" className="h-24 w-24 rounded-md" />
+              <span className="ml-3 text-3xl font-bold">Coloring Pages</span>
             </Link>
             <p className="text-gray-600 mb-6 leading-relaxed text-sm">
               Unleash your creativity with thousands of beautiful, free coloring pages. Perfect for kids and adults alike.
