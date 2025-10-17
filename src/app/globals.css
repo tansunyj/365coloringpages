@@ -98,3 +98,23 @@ body {
 .animate-fadeInScale {
   animation: fadeInScale 0.3s ease-out;
 }
+
+/* 自定义滚动条样式 - WebKit浏览器 */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgb(209, 213, 219);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgb(156, 163, 175);
+}
