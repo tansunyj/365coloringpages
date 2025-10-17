@@ -1,0 +1,25 @@
+{
+  "name": "365 Coloring Pages",
+  "short_name": "Coloring Pages",
+  "description": "Browse 10,000+ free printable coloring pages for kids and adults",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ea580c",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait-primary",
+  "categories": ["education", "entertainment", "kids"]
+}
+
