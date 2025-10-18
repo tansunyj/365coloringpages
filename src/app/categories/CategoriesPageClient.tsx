@@ -11,9 +11,9 @@ export default function CategoriesPageClient() {
   return (
     <UnifiedListPage
       type="categories"
-      title="分类涂色页面"
-      subtitle="探索各种精彩的涂色内容"
-      description="浏览我们完整的涂色页面分类集合，找到适合您创意之旅的完美设计！"
+      title="Category Coloring Pages"
+      subtitle="Explore Various Exciting Coloring Content"
+      description="Browse our complete collection of coloring page categories and find the perfect design for your creative journey!"
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

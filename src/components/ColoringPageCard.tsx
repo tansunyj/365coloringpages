@@ -29,8 +29,8 @@ export default function ColoringPageCard({ page, allPages }: ColoringPageCardPro
   const [likeCount, setLikeCount] = useState(page.likes);
   const router = useRouter();
   
-  // 标准化分类名称，如果为空则显示"其他"
-  const displayCategory = !page.category || page.category.trim() === '' ? '其他' : page.category;
+  // 标准化分类名称，如果为空则显示"Other"
+  const displayCategory = !page.category || page.category.trim() === '' ? 'Other' : page.category;
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();

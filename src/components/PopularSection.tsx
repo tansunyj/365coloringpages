@@ -149,7 +149,7 @@ export default function PopularSection() {
                   key={`popular-${page.id}-${index}`}
                   id={page.id}
                   title={page.title}
-                  category={page.categoryName || '其他'}
+                  category={page.categoryName || 'Other'}
                   likes={page.likes}
                   downloads={page.downloads}
                   thumbnailUrl={page.thumbnailUrl}

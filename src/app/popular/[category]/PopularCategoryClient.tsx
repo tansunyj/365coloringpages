@@ -185,11 +185,11 @@ export default function PopularCategoryClient({ category }: PopularCategoryClien
         description={item.description}
         thumbnailUrl={item.thumbnailUrl}
         difficulty={item.difficulty || 'medium'}
-        ageRange={item.ageRange || '3-12岁'}
+        ageRange={item.ageRange || '3-12 years'}
         views={item.views || 0}
         likes={item.likes || 0}
         downloads={item.downloads || 0}
-        categoryName={item.categoryName || item.category || '其他'}
+        categoryName={item.categoryName || item.category || 'Other'}
         categoryColor={item.categoryColor || '#999'}
         isLiked={item.isLiked || false}
         isFavorited={item.isFavorited || false}

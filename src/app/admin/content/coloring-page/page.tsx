@@ -240,6 +240,13 @@ export default function AdminColoringPages() {
     return item ? item.labelZh : value;
   };
 
+  // 清理年龄范围字符串，去掉"岁"字
+  const cleanAgeRange = (ageRange: string | null | undefined): string => {
+    if (!ageRange) return '-';
+    // 去掉"岁"字
+    return ageRange.replace(/岁/g, '').trim();
+  };
+
   // 从API加载涂色卡数据
   const loadColoringPages = async (page = 1, search = '', status = '', difficulty = '', theme = '', style = '') => {
     setIsLoading(true);
@@ -384,12 +391,12 @@ export default function AdminColoringPages() {
       
       // 构建年龄范围字符串
       const ageRange = formData.ageRangeMin && formData.ageRangeMax 
-        ? `${formData.ageRangeMin}-${formData.ageRangeMax}岁`
-        : formData.ageRangeMin 
-        ? `${formData.ageRangeMin}岁以上`
+        ? `${formData.ageRangeMin}-${formData.ageRangeMax} years`
+        : formData.ageRangeMin
+        ? `${formData.ageRangeMin}+ years`
         : formData.ageRangeMax
-        ? `${formData.ageRangeMax}岁以下`
-        : '全年龄';
+        ? `Under ${formData.ageRangeMax} years`
+        : 'All ages';
       
       const response = await fetch('http://localhost:3001/api/admin/coloring-pages', {
         method: 'POST',
@@ -446,12 +453,12 @@ export default function AdminColoringPages() {
       
       // 构建年龄范围字符串
       const ageRange = formData.ageRangeMin && formData.ageRangeMax 
-        ? `${formData.ageRangeMin}-${formData.ageRangeMax}岁`
-        : formData.ageRangeMin 
-        ? `${formData.ageRangeMin}岁以上`
+        ? `${formData.ageRangeMin}-${formData.ageRangeMax} years`
+        : formData.ageRangeMin
+        ? `${formData.ageRangeMin}+ years`
         : formData.ageRangeMax
-        ? `${formData.ageRangeMax}岁以下`
-        : '全年龄';
+        ? `Under ${formData.ageRangeMax} years`
+        : 'All ages';
       
       const response = await fetch(`http://localhost:3001/api/admin/coloring-pages/${editingPage.id}`, {
         method: 'PUT',
@@ -868,7 +875,7 @@ export default function AdminColoringPages() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-900">{page.ageRange || '-'}</span>
+                          <span className="text-sm text-gray-900">{cleanAgeRange(page.ageRange)}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(page.createdAt).toLocaleDateString()}
@@ -1736,7 +1743,7 @@ function ColoringPageDetailModal({ page, onClose, getDifficultyText, getDifficul
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-0.5">年龄范围</label>
                   <div className="px-2 py-1 text-sm bg-gray-50 border border-gray-200 rounded-md text-gray-900">
-                    {page.ageRange || '-'}
+                    {cleanAgeRange(page.ageRange)}
                   </div>
                 </div>
                 <div>

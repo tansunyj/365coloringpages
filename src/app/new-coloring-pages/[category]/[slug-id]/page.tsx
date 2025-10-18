@@ -79,8 +79,8 @@ export default async function NewColoringPagesDetailPage({
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">页面未找到</h1>
-          <p className="text-gray-600">无效的涂色页面ID</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h1>
+          <p className="text-gray-600">Invalid coloring page ID</p>
         </div>
       </div>
     );
@@ -91,7 +91,7 @@ export default async function NewColoringPagesDetailPage({
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">加载中...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     }>

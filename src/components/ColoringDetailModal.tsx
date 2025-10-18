@@ -207,12 +207,12 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
         {/* 关闭按钮 */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
           <h2 className="text-2xl font-bold text-gray-900">
-            {loading ? '加载中...' : coloringPageData?.title || '涂色卡片详情'}
+            {loading ? 'Loading...' : coloringPageData?.title || 'Coloring Page Details'}
           </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            title="关闭"
+            title="Close"
           >
             <X className="h-6 w-6 text-gray-600" />
           </button>
@@ -251,14 +251,14 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
                       className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium text-sm"
                     >
                       <Download className="h-4 w-4 mr-2" />
-                      下载
+                      Download
                     </button>
                     <button
                       onClick={handlePrint}
                       className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
                     >
                       <Printer className="h-4 w-4 mr-2" />
-                      打印
+                      Print
                     </button>
                   </div>
                   
@@ -271,7 +271,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
                           ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
-                      title={isLiked ? '取消点赞' : '点赞'}
+                      title={isLiked ? 'Unlike' : 'Like'}
                     >
                       <Heart 
                         className={`h-4 w-4 mr-1 transition-all duration-200`}
@@ -289,7 +289,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
                           ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
-                      title={isFavorited ? '取消收藏' : '收藏'}
+                      title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
                     >
                       <Star 
                         className={`h-4 w-4 transition-all duration-200`}
@@ -302,7 +302,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
                     <button
                       onClick={handleShare}
                       className="flex items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                      title="分享"
+                      title="Share"
                     >
                       <Share2 className="h-4 w-4" />
                     </button>
@@ -335,66 +335,66 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
                   </div>
                 </div>
 
-                {/* 详细信息 */}
+                {/* Details */}
                 <div className="bg-gray-50 rounded-xl p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">详细信息</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Details</h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">作者:</span>
+                      <span className="text-gray-600">Author:</span>
                       <span className="font-medium text-gray-900">{coloringPageData.author}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">难度:</span>
+                      <span className="text-gray-600">Difficulty:</span>
                       <span className="font-medium text-gray-900">{coloringPageData.difficulty}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">适合年龄:</span>
+                      <span className="text-gray-600">Age Range:</span>
                       <span className="font-medium text-gray-900">{coloringPageData.ageRange}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">浏览量:</span>
+                      <span className="text-gray-600">Views:</span>
                       <span className="font-medium text-gray-900">{coloringPageData.views?.toLocaleString() || 'N/A'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">下载量:</span>
+                      <span className="text-gray-600">Downloads:</span>
                       <span className="font-medium text-gray-900">{coloringPageData.downloads?.toLocaleString() || 'N/A'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">创建时间:</span>
+                      <span className="text-gray-600">Created:</span>
                       <span className="font-medium text-gray-900">
-                        {coloringPageData.createdAt ? new Date(coloringPageData.createdAt).toLocaleDateString('zh-CN') : 'N/A'}
+                        {coloringPageData.createdAt ? new Date(coloringPageData.createdAt).toLocaleDateString('en-US') : 'N/A'}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* 使用指南 */}
+                {/* Usage Guide */}
                 <div className="bg-blue-50 rounded-xl p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">使用指南</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">How to Use</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start">
                       <span className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
-                      点击 "下载" 按钮保存涂色卡片到您的设备
+                      Click "Download" button to save the coloring page to your device
                     </li>
                     <li className="flex items-start">
                       <span className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
-                      使用标准 A4 纸张打印以获得最佳效果
+                      Print on standard A4 paper for best results
                     </li>
                     <li className="flex items-start">
                       <span className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
-                      使用蜡笔、彩色铅笔或马克笔进行涂色
+                      Use crayons, colored pencils, or markers for coloring
                     </li>
                     <li className="flex items-start">
                       <span className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 mr-3 flex-shrink-0"></span>
-                      与朋友和家人分享您的精彩作品！
+                      Share your wonderful creations with friends and family!
                     </li>
                   </ul>
                 </div>
 
-                {/* 标签 */}
+                {/* Tags */}
                 {coloringPageData.tags && coloringPageData.tags.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-900 mb-2">标签</h3>
+                    <h3 className="text-sm font-semibold text-gray-900 mb-2">Tags</h3>
                     <div className="flex flex-wrap gap-2">
                       {coloringPageData.tags.map((tag, index) => (
                         <span

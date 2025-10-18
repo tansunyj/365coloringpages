@@ -17,8 +17,8 @@ export default function ThemeParksListClient({ initialCategory }: ThemeParksList
       type="theme-parks"
       category={initialCategory}
       title="Disney & Characters"
-      subtitle="探索精彩的迪士尼角色世界"
-      description="浏览我们收集的各种迪士尼角色涂色页面，从经典角色到最新动画，应有尽有。"
+      subtitle="Explore the Wonderful World of Disney Characters"
+      description="Browse our collection of various Disney character coloring pages, from classic characters to the latest animations."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

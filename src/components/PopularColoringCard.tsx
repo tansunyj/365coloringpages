@@ -28,8 +28,8 @@ export default function PopularColoringCard({
   slug,
   allPages
 }: PopularColoringCardProps) {
-  // 标准化分类名称，如果为空则显示"其他"
-  const displayCategory = !category || category.trim() === '' ? '其他' : category;
+  // 标准化分类名称，如果为空则显示"Other"
+  const displayCategory = !category || category.trim() === '' ? 'Other' : category;
   
   // 使用useEffect来设置随机数，避免水合错误
   const [likeCount, setLikeCount] = useState(0);

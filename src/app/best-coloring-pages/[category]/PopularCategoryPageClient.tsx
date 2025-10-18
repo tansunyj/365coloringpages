@@ -18,8 +18,8 @@ export default function PopularCategoryPageClient({ category }: PopularCategoryP
       type="popular"
       category={category}
       title="Best Coloring Pages"
-      subtitle="探索最优秀的涂色内容"
-      description="浏览社区中最受欢迎、质量最高的涂色页面，发现最佳的涂色体验。"
+      subtitle="Explore the Best Coloring Content"
+      description="Browse the most popular and highest quality coloring pages in the community and discover the best coloring experience."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

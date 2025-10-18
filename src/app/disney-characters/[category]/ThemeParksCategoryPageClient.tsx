@@ -13,8 +13,8 @@ export default function ThemeParksCategoryPageClient({ category }: ThemeParksCat
       type="theme-parks"
       category={category}
       title="Disney & Characters"
-      subtitle="探索精彩的迪士尼角色世界"
-      description="浏览我们收集的各种迪士尼角色涂色页面。"
+      subtitle="Explore the Wonderful World of Disney Characters"
+      description="Browse our collection of various Disney character coloring pages."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

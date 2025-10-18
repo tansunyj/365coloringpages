@@ -11,9 +11,9 @@ export default function SearchPageClient() {
   return (
     <UnifiedListPage
       type="search"
-      title="搜索结果"
-      subtitle="找到您需要的涂色页面"
-      description="通过关键词搜索，快速找到心仪的涂色页面。"
+      title="Search Results"
+      subtitle="Find the Coloring Pages You Need"
+      description="Search by keywords to quickly find your favorite coloring pages."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

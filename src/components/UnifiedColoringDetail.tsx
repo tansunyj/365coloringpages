@@ -210,7 +210,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             style: pageData.style || 'N/A',
             size: pageData.size || 'N/A',
             difficulty: pageData.difficulty || 'medium',
-            ageRange: pageData.ageRange || '3-12岁',
+            ageRange: pageData.ageRange || '3-12 years',
             views: pageData.views || 0, // 从API读取views，如果没有则为0
             likes: pageData.likes || 0, // 从API读取likes，如果没有则为0
             downloads: pageData.downloads || 0, // 从API读取downloads，如果没有则为0
@@ -365,7 +365,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       style: 'Cartoon',
       size: 'A4',
       difficulty: 'medium',
-      ageRange: '3-12岁',
+      ageRange: '3-12 years',
       views: Math.floor(Math.random() * 1000) + 100,
       likes: Math.floor(Math.random() * 100) + 10,
       downloads: Math.floor(Math.random() * 500) + 50,
@@ -424,22 +424,22 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           const categoryDisplay = category === 'all' ? 'All Categories' : 
             category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
           
-          // 中文分类名称映射
+          // 英文分类名称映射
           const categoryNameMap: Record<string, string> = {
-            'animals': '动物',
-            'fairy-tale': '童话',
-            'fantasy': '幻想',
-            'vehicles': '交通工具',
-            'nature': '自然',
-            'prehistoric': '史前动物',
-            'space': '太空',
-            'ocean': '海洋',
-            'holidays': '节日',
-            'superhero': '超级英雄',
-            'food': '食物',
-            'magic': '魔法',
-            'farm': '农场',
-            'celebration': '庆祝'
+            'animals': 'Animals',
+            'fairy-tale': 'Fairy Tale',
+            'fantasy': 'Fantasy',
+            'vehicles': 'Vehicles',
+            'nature': 'Nature',
+            'prehistoric': 'Prehistoric',
+            'space': 'Space',
+            'ocean': 'Ocean',
+            'holidays': 'Holidays',
+            'superhero': 'Superhero',
+            'food': 'Food',
+            'magic': 'Magic',
+            'farm': 'Farm',
+            'celebration': 'Celebration'
           };
           
           const displayName = categoryNameMap[category] || categoryDisplay;
@@ -944,7 +944,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                         ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
-                    title={isLiked ? '已点赞' : '点赞'}
+                    title={isLiked ? 'Liked' : 'Like'}
                   >
                     <Heart 
                       className={`h-4 w-4 mr-1.5 transition-all duration-200`}
@@ -960,7 +960,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                         ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
-                    title={isFavorited ? '已收藏' : '收藏'}
+                    title={isFavorited ? 'Favorited' : 'Favorite'}
                   >
                     <Star 
                       className={`h-4 w-4 transition-all duration-200`}

@@ -8,8 +8,8 @@ export default function FirstColoringBookPageClient() {
     <UnifiedListPage
       type="easy-coloring-book"
       title="Easy Coloring Pages"
-      subtitle="适合初学者的简单涂色页面"
-      description="浏览适合孩子和初学者的简单涂色设计，轻松开始您的涂色之旅。"
+      subtitle="Simple Coloring Pages for Beginners"
+      description="Browse simple coloring designs suitable for children and beginners, easily start your coloring journey."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

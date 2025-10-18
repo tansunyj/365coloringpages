@@ -59,23 +59,23 @@ class CategoryColorUtil {
     '魔法': 'bg-violet-500',
     '农场': 'bg-lime-500',
     '庆祝': 'bg-rose-500',
-    '其他': 'bg-gray-500'
+    'Other': 'bg-gray-500'
   };
 
   static getBackgroundColor(categoryName: string): string {
-    // 如果分类名称为空或未定义，使用"其他"的颜色
+    // 如果分类名称为空或未定义，使用"Other"的颜色
     if (!categoryName || categoryName.trim() === '') {
-      return this.colorMap['其他'];
+      return this.colorMap['Other'];
     }
     return this.colorMap[categoryName] || 'bg-gray-500';
   }
   
   /**
-   * 标准化分类名称，如果为空则返回"其他"
+   * 标准化分类名称，如果为空则返回"Other"
    */
   static normalizeCategoryName(categoryName?: string | null): string {
     if (!categoryName || categoryName.trim() === '') {
-      return '其他';
+      return 'Other';
     }
     return categoryName;
   }
@@ -169,7 +169,7 @@ class LinkGenerator {
  *   title="可爱小狗涂色页"
  *   thumbnailUrl="https://example.com/image.jpg"
  *   difficulty="easy"
- *   ageRange="3-8岁"
+ *   ageRange="3-8 years"
  *   views={7}
  *   likes={0}
  *   downloads={0}
@@ -218,9 +218,9 @@ export default function RichColoringCard(props: RichColoringCardProps) {
   // 获取难度显示
   const getDifficultyDisplay = (difficulty: string) => {
     const difficultyMap = {
-      'easy': { text: '简单', color: 'text-green-600', stars: 1 },
-      'medium': { text: '中等', color: 'text-yellow-600', stars: 2 },
-      'hard': { text: '困难', color: 'text-red-600', stars: 3 }
+      'easy': { text: 'Easy', color: 'text-green-600', stars: 1 },
+      'medium': { text: 'Medium', color: 'text-yellow-600', stars: 2 },
+      'hard': { text: 'Hard', color: 'text-red-600', stars: 3 }
     };
     return difficultyMap[difficulty as keyof typeof difficultyMap] || difficultyMap.easy;
   };
@@ -354,7 +354,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
                   ? 'bg-red-500 text-white' 
                   : 'bg-white/90 hover:bg-white text-gray-600 hover:text-red-500'
               }`}
-              title={liked ? '已点赞' : '点赞'}
+              title={liked ? 'Liked' : 'Like'}
             >
               <Heart className={`h-5 w-5 ${liked ? 'fill-current' : ''}`} />
             </button>
@@ -367,7 +367,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
                   ? 'bg-yellow-500 text-white' 
                   : 'bg-white/90 hover:bg-white text-gray-600 hover:text-yellow-500'
               }`}
-              title={favorited ? '已收藏' : '收藏'}
+              title={favorited ? 'Favorited' : 'Favorite'}
             >
               <Star className={`h-5 w-5 ${favorited ? 'fill-current' : ''}`} />
             </button>
@@ -396,7 +396,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
           {/* 年龄范围和难度 */}
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              适合年龄: {ageRange}
+              Age: {ageRange}
             </span>
             <div className="flex items-center space-x-1 text-xs">
               {Array.from({ length: difficultyInfo.stars }).map((_, index) => (

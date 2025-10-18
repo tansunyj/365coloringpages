@@ -13,8 +13,8 @@ export default function FirstColoringBookCategoryPageClient({ category }: FirstC
       type="easy-coloring-book"
       category={category}
       title="Easy Coloring Pages"
-      subtitle="适合初学者的简单涂色页面"
-      description="浏览适合孩子和初学者的简单涂色设计。"
+      subtitle="Simple Coloring Pages for Beginners"
+      description="Browse simple coloring designs suitable for children and beginners."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

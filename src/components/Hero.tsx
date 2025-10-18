@@ -218,7 +218,7 @@ export default function Hero() {
           setHotKeywords(sortedKeywords);
         } else {
           // 使用默认关键词作为fallback
-          const fallbackKeywords = ['小狗', '公主', '独角兽', '汽车', '花朵', '恐龙', '超级英雄', '魔法'];
+          const fallbackKeywords = ['Dog', 'Princess', 'Unicorn', 'Car', 'Flower', 'Dinosaur', 'Superhero', 'Magic'];
           setHotKeywords(fallbackKeywords.map(keyword => ({ keyword, clickCount: 0 })));
         }
       } catch (error) {
@@ -231,7 +231,7 @@ export default function Hero() {
           stack: error instanceof Error ? error.stack : undefined
         });
         // 使用默认关键词作为fallback
-        const fallbackKeywords = ['小狗', '公主', '独角兽', '汽车', '花朵', '恐龙', '超级英雄', '魔法'];
+        const fallbackKeywords = ['Dog', 'Princess', 'Unicorn', 'Car', 'Flower', 'Dinosaur', 'Superhero', 'Magic'];
         setHotKeywords(fallbackKeywords.map(keyword => ({ keyword, clickCount: 0 })));
       } finally {
         if (isMounted) {

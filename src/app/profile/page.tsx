@@ -18,6 +18,31 @@ const generateDefaultAvatar = (email: string, name?: string) => {
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=f59e0b&color=fff&size=200&bold=true&length=1`;
 };
 
+// 格式化时间为 yyyy-MM-dd HH:mm:ss
+const formatDateTime = (dateString: string | null | undefined): string => {
+  if (!dateString) return 'Invalid Date';
+  
+  try {
+    const date = new Date(dateString);
+    
+    // 检查日期是否有效
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  } catch (error) {
+    return 'Invalid Date';
+  }
+};
+
 // API 请求工具函数
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('authToken') || localStorage.getItem('token');
@@ -1392,7 +1417,7 @@ export default function ProfilePage() {
       </div>
 
       {/* 保存按钮 */}
-      <div className="flex justify-end mt-8">
+      <div className="flex justify-center mt-8">
         <button
           onClick={handleSave}
           className="px-6 py-3 rounded-lg transition-colors flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
@@ -1551,7 +1576,7 @@ export default function ProfilePage() {
       previewUrl: aiImage.imageUrl,
       originalFileUrl: aiImage.imageUrl,
       difficulty: 'easy',
-      ageRange: '3-5岁',
+      ageRange: '3-5 years',
       theme: '动物',
       style: 'Line Art',
       size: 'A4',
@@ -1699,7 +1724,7 @@ export default function ProfilePage() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {creations.map((creation) => (
-                    <div key={creation.id} className="group cursor-pointer relative" onClick={() => handleViewDetail(creation.id)}>
+                    <div key={creation.id} className="group relative">
                       <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3 relative">
                         <Image
                           src={creation.thumbnailUrl || creation.imageUrl}
@@ -1730,8 +1755,8 @@ export default function ProfilePage() {
                           </button>
                         </div>
                       </div>
-                      <h3 className="font-medium text-gray-900">{creation.title}</h3>
-                      <p className="text-sm text-gray-500">Created on {new Date(creation.createdAt).toLocaleDateString()}</p>
+                      <h3 className="font-medium text-gray-900 truncate" title={creation.title || creation.prompt}>{creation.title || creation.prompt}</h3>
+                      <p className="text-sm text-gray-500">Created on {formatDateTime(creation.generationTime || creation.createdAt)}</p>
                     </div>
                   ))}
                 </div>
@@ -2032,7 +2057,7 @@ export default function ProfilePage() {
                         ? 'bg-red-500 text-white' 
                         : 'bg-white/90 hover:bg-white text-gray-600 hover:text-red-500'
                     }`}
-                    title={favorite.isLiked ? '已点赞' : '点赞'}
+                    title={favorite.isLiked ? 'Liked' : 'Like'}
                   >
                     <Heart className={`h-5 w-5 ${favorite.isLiked ? 'fill-current' : ''}`} />
                   </button>
@@ -2041,7 +2066,7 @@ export default function ProfilePage() {
                   <button
                     onClick={(e) => handleFavorite(favorite.id, true, e)}
                     className="p-2 rounded-full shadow-lg transition-all duration-200 bg-yellow-500 text-white"
-                    title="已收藏"
+                    title="Favorited"
                   >
                     <Star className="h-5 w-5 fill-current" />
                   </button>

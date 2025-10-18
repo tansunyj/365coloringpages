@@ -100,7 +100,7 @@ export default function FirstColoringBookPageClient() {
             views: page.views || 0,
             thumbnailUrl: page.thumbnailUrl,
             difficulty: page.difficulty || 'easy',
-            ageRange: page.ageRange || '3-6岁',
+            ageRange: page.ageRange || '3-6 years',
             isLiked: page.isLiked || false,
             isFavorited: page.isFavorited || false
           }));
@@ -246,7 +246,7 @@ export default function FirstColoringBookPageClient() {
               description={page.description || ''}
               thumbnailUrl={page.thumbnailUrl || ''}
               difficulty={(page.difficulty as 'easy' | 'medium' | 'hard') || 'easy'}
-              ageRange={page.ageRange || '3-6岁'}
+              ageRange={page.ageRange || '3-6 years'}
               views={page.views || 0}
               likes={page.likes}
               downloads={page.downloads}

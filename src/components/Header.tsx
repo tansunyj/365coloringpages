@@ -294,8 +294,8 @@ export default function Header() {
 
           {/* 右侧按钮 */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* 语言选择器 */}
-            <div className="relative" ref={languageMenuRef}>
+            {/* 语言选择器 - 暂时注释，不实现国际化 */}
+            {/* <div className="relative" ref={languageMenuRef}>
               <button
                 onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
                 className="flex items-center text-gray-600 text-sm hover:text-gray-900 transition-colors"
@@ -311,7 +311,6 @@ export default function Header() {
                 <ChevronDown className="h-3 w-3 ml-1" />
               </button>
 
-              {/* 语言下拉菜单 */}
               {isLanguageMenuOpen && (
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   {locales.map((locale) => (
@@ -340,7 +339,7 @@ export default function Header() {
                   ))}
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* 用户头像 */}
             <div className="relative" ref={userMenuRef}>

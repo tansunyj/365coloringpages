@@ -147,11 +147,11 @@ export default function LatestUploadsSection() {
                   key={page.id}
                   id={page.id}
                   title={page.title}
-                  category={page.categoryName || '其他'}
+                  category={page.categoryName || 'Other'}
                   likes={page.likes}
                   downloads={page.downloads}
                   thumbnailUrl={page.thumbnailUrl}
-                  categorySlug={getCategorySlug(page.categoryName || '其他')}
+                  categorySlug={getCategorySlug(page.categoryName || 'Other')}
                   slug={page.slug}
                   allPages={coloringPages}
                 />

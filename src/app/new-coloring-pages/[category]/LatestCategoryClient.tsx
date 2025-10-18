@@ -15,8 +15,8 @@ export default function LatestCategoryClient({ category }: LatestCategoryClientP
       type="latest"
       category={category}
       title="New Coloring Pages"
-      subtitle="发现最新的涂色内容"
-      description="浏览最新上传的涂色页面，第一时间体验最新的创意作品。"
+      subtitle="Discover the Latest Coloring Content"
+      description="Browse the latest uploaded coloring pages and experience the newest creative works."
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

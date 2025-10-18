@@ -18,23 +18,23 @@ export default function SearchCategoryPageClient({ category }: SearchCategoryPag
   // 根据分类生成页面标题
   const getCategoryDisplayName = (categorySlug: string): string => {
     const categoryNameMap: Record<string, string> = {
-      'animals': '动物',
-      'fairy-tale': '童话',
-      'fantasy': '幻想',
-      'vehicles': '交通工具',
-      'nature': '自然',
-      'prehistoric': '史前动物',
-      'space': '太空',
-      'ocean': '海洋',
-      'holidays': '节日',
-      'superhero': '超级英雄',
-      'food': '食物',
-      'magic': '魔法',
-      'farm': '农场',
-      'celebration': '庆祝',
-      'phone-slug': '手机',
-      'fruite-slug': '水果',
-      'cat': '猫'
+      'animals': 'Animals',
+      'fairy-tale': 'Fairy Tale',
+      'fantasy': 'Fantasy',
+      'vehicles': 'Vehicles',
+      'nature': 'Nature',
+      'prehistoric': 'Prehistoric',
+      'space': 'Space',
+      'ocean': 'Ocean',
+      'holidays': 'Holidays',
+      'superhero': 'Superhero',
+      'food': 'Food',
+      'magic': 'Magic',
+      'farm': 'Farm',
+      'celebration': 'Celebration',
+      'phone-slug': 'Phone',
+      'fruite-slug': 'Fruit',
+      'cat': 'Cat'
     };
     
     return categoryNameMap[categorySlug] || 
@@ -49,9 +49,9 @@ export default function SearchCategoryPageClient({ category }: SearchCategoryPag
     <UnifiedListPage
       type="search"
       category={category}
-      title={`${displayName}搜索结果`}
-      subtitle={`在${displayName}分类中搜索涂色页面`}
-      description={`搜索${displayName}主题的精美涂色页面，找到适合您创意之旅的完美设计！`}
+      title={`${displayName} Search Results`}
+      subtitle={`Search Coloring Pages in ${displayName} Category`}
+      description={`Search for beautiful ${displayName} themed coloring pages and find the perfect design for your creative journey!`}
       showSearch={true}
       showCategoryFilter={true}
       showSortFilter={true}

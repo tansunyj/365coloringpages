@@ -282,11 +282,11 @@ class ApiClientUtil {
  * 统一的排序选项配置
  */
 const SORT_OPTIONS = [
-  { value: 'newest', label: '最新发布', icon: '🆕' },
-  { value: 'popular', label: '最受欢迎', icon: '🔥' },
-  { value: 'downloads', label: '下载最多', icon: '⬇️' },
-  { value: 'likes', label: '点赞最多', icon: '❤️' },
-  { value: 'views', label: '浏览最多', icon: '👁️' },
+  { value: 'newest', label: 'Newest', icon: '🆕' },
+  { value: 'popular', label: 'Most Popular', icon: '🔥' },
+  { value: 'downloads', label: 'Most Downloaded', icon: '⬇️' },
+  { value: 'likes', label: 'Most Liked', icon: '❤️' },
+  { value: 'views', label: 'Most Viewed', icon: '👁️' },
 ];
 
 /**
@@ -794,11 +794,11 @@ export default function UnifiedListPage({
   const getCategoryFilterLabel = () => {
     switch (type) {
       case 'theme-parks':
-        return '所有主题公园';
+        return 'All Theme Parks';
       case 'easy-coloring-book':
-        return '所有Easy Coloring Book';
+        return 'All Easy Coloring Books';
       default:
-        return '所有分类';
+        return 'All Categories';
     }
   };
 
@@ -960,7 +960,7 @@ export default function UnifiedListPage({
               Found {pagination.totalCount} results
             </p>
             <p className="text-sm text-gray-600">
-              第 {pagination.currentPage} 页，共 {pagination.totalPages} 页
+              Page {pagination.currentPage} of {pagination.totalPages}
             </p>
           </div>
         )}
@@ -973,13 +973,13 @@ export default function UnifiedListPage({
               onClick={() => loadData()}
               className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
             >
-              重新加载
+              Reload
             </button>
           </div>
         ) : items.length === 0 && !loading ? (
           <div className="text-center py-16">
-            <p className="text-gray-500 mb-4">没有找到相关的涂色页面</p>
-            <p className="text-sm text-gray-400">尝试调整搜索条件或浏览其他分类</p>
+            <p className="text-gray-500 mb-4">No coloring pages found</p>
+            <p className="text-sm text-gray-400">Try adjusting search criteria or browse other categories</p>
           </div>
         ) : (
           <div className="relative">
@@ -987,7 +987,7 @@ export default function UnifiedListPage({
             {loading && (
               <div className="fixed top-24 right-8 z-50 bg-white shadow-lg rounded-lg px-4 py-3 flex items-center space-x-3 border border-gray-200">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-600"></div>
-                <span className="text-sm text-gray-700 font-medium">加载中...</span>
+                <span className="text-sm text-gray-700 font-medium">Loading...</span>
               </div>
             )}
 
@@ -1008,7 +1008,7 @@ export default function UnifiedListPage({
                    views={item.views}
                    likes={item.likes}
                    downloads={item.downloads}
-                   categoryName={item.categoryName || '其他'}
+                   categoryName={item.categoryName || 'Other'}
                    categoryColor={item.categoryColor}
                    isLiked={item.isLiked}
                    isFavorited={item.isFavorited}
@@ -1078,12 +1078,12 @@ export default function UnifiedListPage({
               {loadingMore && (
                 <div className="flex items-center space-x-2">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600"></div>
-                  <span className="text-gray-600">正在加载更多...</span>
+                  <span className="text-gray-600">Loading more...</span>
                 </div>
               )}
               {!hasMore && items.length > 0 && (
                 <div className="text-gray-500 text-center">
-                  <p>已加载全部内容</p>
+                  <p>All content loaded</p>
                 </div>
               )}
             </div>
