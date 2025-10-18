@@ -488,6 +488,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: {
   onPageChange: (page: number) => void;
 }) => {
   const getVisiblePages = () => {
+    // 如果只有一页，直接返回
+    if (totalPages === 1) {
+      return [1];
+    }
+
     const delta = 2;
     const range = [];
     const rangeWithDots = [];
@@ -506,15 +511,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: {
 
     if (currentPage + delta < totalPages - 1) {
       rangeWithDots.push('...', totalPages);
-    } else {
+    } else if (totalPages > 1) {
       rangeWithDots.push(totalPages);
     }
 
     return rangeWithDots;
   };
 
-  if (totalPages <= 1) return null;
-
+  // 总是显示分页信息，即使只有一页
   return (
     <div className="flex items-center justify-center gap-2 mt-8">
       {/* 上一页按钮 */}
@@ -1709,9 +1713,12 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-          {creationsTab === 'images' ? 'AI Generated Images' : 'My Coloring Pages'}
-        </h2>
+        {/* AI Generated Images Tab - 只在AI图片标签下显示标题 */}
+        {creationsTab === 'images' && (
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+            AI Generated Images
+          </h2>
+        )}
         
         {/* AI Generated Images Tab */}
         {creationsTab === 'images' && (
@@ -1883,9 +1890,9 @@ export default function ProfilePage() {
                   </table>
                 </div>
 
-                {/* 分页组件 */}
-                {coloringPagesPagination.totalPages > 1 && (
-                  <div className="mt-6">
+                {/* 分页组件 - 始终显示，即使只有一页 */}
+                {coloringPagesPagination.totalPages >= 1 && (
+                  <div className="mt-8">
                     <Pagination
                       currentPage={coloringPagesPagination.currentPage}
                       totalPages={coloringPagesPagination.totalPages}
