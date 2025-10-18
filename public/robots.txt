@@ -1,0 +1,188 @@
+# robots.txt for 365 Coloring Pages
+# Website: https://365coloringpages.com
+
+# ==================== 通用爬虫规则 ====================
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /oauth/
+Disallow: /test-*
+Disallow: /debug-*
+Disallow: /*?*sort=*
+Disallow: /*?*page=*
+Disallow: /*?*limit=*
+
+# ==================== Google 爬虫 ====================
+User-agent: Googlebot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /best-coloring-pages/
+Allow: /new-coloring-pages/
+Allow: /disney-characters/
+Allow: /easy-coloring-pages/
+Allow: /ai-generator
+Allow: /search/
+Allow: /coloring/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /oauth/
+Disallow: /test-*
+Disallow: /debug-*
+Crawl-delay: 0
+
+# ==================== Google 图片爬虫 ====================
+User-agent: Googlebot-Image
+Allow: /
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.png
+Allow: /*.gif
+Allow: /*.webp
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+
+# ==================== Bing 爬虫 ====================
+User-agent: Bingbot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /best-coloring-pages/
+Allow: /new-coloring-pages/
+Allow: /disney-characters/
+Allow: /easy-coloring-pages/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 1
+
+# ==================== Yandex 爬虫 ====================
+User-agent: Yandex
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /coloring/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Disallow: /test-*
+Disallow: /debug-*
+Crawl-delay: 2
+
+# ==================== Baidu 爬虫 ====================
+User-agent: Baiduspider
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /coloring/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 2
+
+# ==================== DuckDuckGo 爬虫 ====================
+User-agent: DuckDuckBot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 2
+
+# ==================== SEO 工具爬虫（允许访问） ====================
+# Ahrefs SEO 工具
+User-agent: AhrefsBot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /best-coloring-pages/
+Allow: /new-coloring-pages/
+Allow: /disney-characters/
+Allow: /easy-coloring-pages/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 2
+
+# Semrush SEO 工具
+User-agent: SemrushBot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /best-coloring-pages/
+Allow: /new-coloring-pages/
+Allow: /disney-characters/
+Allow: /easy-coloring-pages/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 2
+
+# Majestic SEO 工具
+User-agent: MJ12bot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /best-coloring-pages/
+Allow: /new-coloring-pages/
+Allow: /disney-characters/
+Allow: /easy-coloring-pages/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 2
+
+# Moz SEO 工具
+User-agent: DotBot
+Allow: /
+Allow: /blog/
+Allow: /categories/
+Allow: /best-coloring-pages/
+Allow: /new-coloring-pages/
+Allow: /disney-characters/
+Allow: /easy-coloring-pages/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+Disallow: /oauth/
+Crawl-delay: 2
+
+# ==================== Sitemap 引用 ====================
+Sitemap: https://365coloringpages.com/sitemap.xml
+
