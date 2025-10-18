@@ -11,6 +11,8 @@ interface ApiBannerImage {
   description?: string;
   clickUrl?: string;
   click_url?: string;
+  linkTarget?: string; // 新增：API返回的跳转目标
+  linkType?: string;   // 新增：API返回的链接类型
   order?: number;
 }
 
@@ -168,7 +170,7 @@ export const getActiveBannerGroup = async (): Promise<BannerGroup | null> => {
           title: img.title || `Banner ${index + 1}`,
           subtitle: img.subtitle || '',
           description: img.description || '',
-          clickUrl: img.clickUrl || img.click_url || '',
+          clickUrl: img.linkTarget || img.clickUrl || img.click_url || '', // 优先使用linkTarget
           order: img.order || index + 1
         })) : []
       };

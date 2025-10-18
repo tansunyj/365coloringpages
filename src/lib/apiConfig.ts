@@ -103,6 +103,8 @@ export const API_ENDPOINTS = {
       GOOGLE_CALLBACK: `${API_BASE_URL}/api/auth/google/callback`,
       GITHUB: `${API_BASE_URL}/api/auth/github`,
       GITHUB_CALLBACK: `${API_BASE_URL}/api/auth/github/callback`,
+      FORGOT_PASSWORD: `${API_BASE_URL}/api/auth/forgot-password`, // 请求重置密码
+      RESET_PASSWORD: `${API_BASE_URL}/api/auth/reset-password`, // 重置密码
     },
     
     // 验证码接口
@@ -149,7 +151,7 @@ export const API_ENDPOINTS = {
       DELETE: `${API_BASE_URL}/api/admin/categories`,
     },
     
-    // 主题公园管理
+    // Disney & Characters管理
     THEME_PARKS: {
       LIST: `${API_BASE_URL}/api/admin/theme-parks`,
       CREATE: `${API_BASE_URL}/api/admin/theme-parks`,
@@ -157,7 +159,7 @@ export const API_ENDPOINTS = {
       DELETE: `${API_BASE_URL}/api/admin/theme-parks`,
     },
     
-    // 涂色书管理
+    // Easy Coloring Pages管理
     COLORING_BOOKS: {
       LIST: `${API_BASE_URL}/api/admin/coloring-books`,
       CREATE: `${API_BASE_URL}/api/admin/coloring-books`,

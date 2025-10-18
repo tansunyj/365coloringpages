@@ -286,17 +286,10 @@ export default function Hero() {
     router.push(`/search?${searchParams.toString()}`);
   };
   
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      // 跳转到搜索结果页面，使用用户输入的关键词
-      const searchParams = new URLSearchParams({
-        q: searchQuery.trim(),
-        page: '1',
-        limit: '12',
-        sort: '',
-        category: ''
-      });
-      router.push(`/search?${searchParams.toString()}`);
+  const handleBannerClick = (clickUrl: string) => {
+    if (clickUrl) {
+      // 使用Next.js router进行页面跳转
+      router.push(clickUrl);
     }
   };
 
@@ -343,8 +336,9 @@ export default function Hero() {
             <div
               key={image.id}
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
+                index === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              } ${image.clickUrl ? 'cursor-pointer' : ''}`}
+              onClick={image.clickUrl && index === currentSlide ? () => handleBannerClick(image.clickUrl!) : undefined}
             >
               <Image
                 src={image.imageUrl}
@@ -361,10 +355,9 @@ export default function Hero() {
         </div>
         
         {/* 悬浮的内容层 */}
-        <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8">
-          {/* 标题和副标题区域 - 可点击（如果有clickUrl） */}
-          <div className={`${currentImage.clickUrl ? 'cursor-pointer' : ''}`}
-               onClick={currentImage.clickUrl ? () => window.open(currentImage.clickUrl, '_self') : undefined}>
+        <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 pointer-events-none">
+          {/* 标题和副标题区域 */}
+          <div className="pointer-events-auto">
             {/* 主标题 - 使用当前图片标题或默认标题 */}
             <h1 className={`text-4xl md:text-6xl font-bold mb-4 ${textColorClass} ${textShadowClass} leading-tight`}>
               {currentImage.title || 'Unleash Your Creativity'}
@@ -377,7 +370,7 @@ export default function Hero() {
           </div>
 
           {/* 搜索框容器 - 统一宽度和左对齐，独立区域不受Link影响 */}
-          <div className="max-w-2xl mx-auto w-full mb-8">
+          <div className="max-w-2xl mx-auto w-full mb-8 pointer-events-auto">
             {/* 动态关键词标签 - 搜索框上方，左对齐 */}
             <div className="flex flex-wrap gap-2 mb-6">
               {currentCategories.map((category, index) => (

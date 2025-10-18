@@ -65,8 +65,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { name: '内容管理', href: '/admin/content', icon: FolderOpen, children: [
       { name: '涂色卡管理', href: '/admin/content/coloring-page', icon: ImageIcon },
       { name: '分类管理', href: '/admin/content/categories', icon: FolderOpen },
-      { name: '主题公园管理', href: '/admin/content/theme-parks', icon: Palette },
-      { name: '涂色书管理', href: '/admin/content/first-coloring', icon: BookOpen },
+      { name: 'Disney & Characters管理', href: '/admin/content/theme-parks', icon: Palette },
+      { name: 'Easy Coloring Pages管理', href: '/admin/content/first-coloring', icon: BookOpen },
       { name: 'banner管理', href: '/admin/content/banners', icon: ImageIcon },
       { name: '关键词管理', href: '/admin/content/keywords', icon: Flag },
     ]},

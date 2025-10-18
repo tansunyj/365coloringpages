@@ -457,10 +457,10 @@ export default function AdminThemeParks() {
               <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
                 <Users className="h-7 w-7 mr-3 text-orange-600" />
-                主题公园管理
+                Disney & Characters管理
               </h1>
               <p className="mt-1 text-sm text-gray-600">
-                管理主题公园列表，包括各种主题公园的涂色页面
+                管理迪士尼和角色主题列表，包括各种主题的涂色页面
               </p>
               </div>
             <div className="flex gap-3">

@@ -1153,7 +1153,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
   
   // 直接使用image.linkType，不使用本地状态
   // 这样可以确保每个组件都使用自己的props，避免状态污染
-  const linkType = (image.linkType as 'categories' | 'theme-parks' | 'coloring-books') || 'categories';
+  const linkType = (image.linkType as 'categories' | 'disney-characters' | 'easy-coloring-pages') || 'categories';
 
   // 初始化时设置默认跳转链接（仅在linkType改变时）
   useEffect(() => {
@@ -1163,7 +1163,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
   }, [image.id]); // 添加image.id作为依赖，确保每个组件独立
 
   // 根据linkType更新跳转链接前缀
-  const handleLinkTypeChange = (type: 'categories' | 'theme-parks' | 'coloring-books') => {
+  const handleLinkTypeChange = (type: 'categories' | 'disney-characters' | 'easy-coloring-pages') => {
     
     // 更新linkType字段
     onChange(image.id, 'linkType', type);
@@ -1173,14 +1173,40 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
       case 'categories':
         prefix = '/categories/';
         break;
-      case 'theme-parks':
-        prefix = '/theme-parks/';
+      case 'disney-characters':
+        prefix = '/disney-characters/';
         break;
-      case 'coloring-books':
-        prefix = '/coloring-books/';
+      case 'easy-coloring-pages':
+        prefix = '/easy-coloring-pages/';
         break;
     }
     onChange(image.id, 'linkTarget', prefix);
+  };
+
+  // 处理目标地址输入，确保符合linkType
+  const handleLinkTargetChange = (value: string) => {
+    let processedValue = value;
+    
+    // 根据linkType验证和修正输入值
+    switch (linkType) {
+      case 'categories':
+        if (!value.startsWith('/categories/')) {
+          processedValue = '/categories/' + value.replace(/^\/+/, '');
+        }
+        break;
+      case 'disney-characters':
+        if (!value.startsWith('/disney-characters/')) {
+          processedValue = '/disney-characters/' + value.replace(/^\/+/, '');
+        }
+        break;
+      case 'easy-coloring-pages':
+        if (!value.startsWith('/easy-coloring-pages/')) {
+          processedValue = '/easy-coloring-pages/' + value.replace(/^\/+/, '');
+        }
+        break;
+    }
+    
+    onChange(image.id, 'linkTarget', processedValue);
   };
 
   const handleFileSelect = async (file: File) => {
@@ -1358,7 +1384,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                     name={`linkType-${image.id}`}
                     value="categories"
                     checked={linkType === 'categories'}
-                    onChange={(e) => handleLinkTypeChange(e.target.value as 'categories' | 'theme-parks' | 'coloring-books')}
+                    onChange={(e) => handleLinkTypeChange(e.target.value as 'categories' | 'disney-characters' | 'easy-coloring-pages')}
                     className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                   />
                   <span className="ml-2 text-sm text-gray-700">分类</span>
@@ -1367,23 +1393,23 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                   <input
                     type="radio"
                     name={`linkType-${image.id}`}
-                    value="theme-parks"
-                    checked={linkType === 'theme-parks'}
-                    onChange={(e) => handleLinkTypeChange(e.target.value as 'categories' | 'theme-parks' | 'coloring-books')}
+                    value="disney-characters"
+                    checked={linkType === 'disney-characters'}
+                    onChange={(e) => handleLinkTypeChange(e.target.value as 'categories' | 'disney-characters' | 'easy-coloring-pages')}
                     className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                   />
-                  <span className="ml-2 text-sm text-gray-700">主题公园</span>
+                  <span className="ml-2 text-sm text-gray-700">Disney & Characters</span>
                 </label>
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name={`linkType-${image.id}`}
-                    value="coloring-books"
-                    checked={linkType === 'coloring-books'}
-                    onChange={(e) => handleLinkTypeChange(e.target.value as 'categories' | 'theme-parks' | 'coloring-books')}
+                    value="easy-coloring-pages"
+                    checked={linkType === 'easy-coloring-pages'}
+                    onChange={(e) => handleLinkTypeChange(e.target.value as 'categories' | 'disney-characters' | 'easy-coloring-pages')}
                     className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                   />
-                  <span className="ml-2 text-sm text-gray-700">涂色书</span>
+                  <span className="ml-2 text-sm text-gray-700">Easy Coloring Pages</span>
                 </label>
             </div>
 
@@ -1395,12 +1421,12 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                   <input
                               type="text"
                   value={image.linkTarget || ''}
-                  onChange={(e) => onChange(image.id, 'linkTarget', e.target.value)}
+                  onChange={(e) => handleLinkTargetChange(e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                   placeholder={
                     linkType === 'categories' ? '/categories/christmas' :
-                    linkType === 'theme-parks' ? '/theme-parks/disney' :
-                    '/coloring-books/first-book'
+                    linkType === 'disney-characters' ? '/disney-characters/disney' :
+                    '/easy-coloring-pages/first-book'
                   }
                             />
               </div>
@@ -1582,23 +1608,23 @@ function BannerDetailModal({ group, onClose }: BannerDetailModalProps) {
                             <input
                               type="radio"
                               name={`detail-linkType-${index}`}
-                              value="theme-parks"
-                              checked={image.linkType === 'theme-parks'}
+                              value="disney-characters"
+                              checked={image.linkType === 'disney-characters' || image.linkType === 'theme-parks'}
                               readOnly
                               className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                             />
-                            <span className="ml-2 text-sm text-gray-700">主题公园</span>
+                            <span className="ml-2 text-sm text-gray-700">Disney & Characters</span>
                           </label>
                           <label className="flex items-center cursor-pointer">
                             <input
                               type="radio"
                               name={`detail-linkType-${index}`}
-                              value="coloring-books"
-                              checked={image.linkType === 'coloring-books'}
+                              value="easy-coloring-pages"
+                              checked={image.linkType === 'easy-coloring-pages' || image.linkType === 'coloring-books'}
                               readOnly
                               className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                             />
-                            <span className="ml-2 text-sm text-gray-700">涂色书</span>
+                            <span className="ml-2 text-sm text-gray-700">Easy Coloring Pages</span>
                           </label>
                         </div>
                       </div>
