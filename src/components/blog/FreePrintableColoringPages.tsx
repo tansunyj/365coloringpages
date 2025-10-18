@@ -2,7 +2,7 @@ export default function FreePrintableColoringPages() {
   return (
     <>
       <p className="text-xl leading-relaxed font-medium mb-8 text-gray-700 dark:text-gray-300">
-        Quality creative activities shouldn't require spending money. Free printable coloring pages democratize art, making creativity accessible to everyone with internet access and a printer. This guide helps you find, choose, and use free pages effectively.
+        Quality creative activities shouldn&apos;t require spending money. Free printable coloring pages democratize art, making creativity accessible to everyone with internet access and a printer. This guide helps you find, choose, and use free pages effectively.
       </p>
 
       <h2>Why Free Matters</h2>
@@ -85,26 +85,26 @@ export default function FreePrintableColoringPages() {
 
       <h3>Printer Settings</h3>
       <p>
-        Print in "high quality" or "best" mode for crisp lines. "Draft" mode saves ink but produces inferior results.
+        Print in &quot;high quality&quot; or &quot;best&quot; mode for crisp lines. &quot;Draft&quot; mode saves ink but produces inferior results.
       </p>
 
       <h3>Grayscale vs Color</h3>
       <p>
-        Most coloring pages are black and white, so select "grayscale" printing, saving expensive color ink.
+        Most coloring pages are black and white, so select &quot;grayscale&quot; printing, saving expensive color ink.
       </p>
 
       <h3>Paper Size</h3>
       <p>
-        Standard letter size (8.5×11") is most common, but some pages look better enlarged. Experiment with scaling for best results.
+        Standard letter size (8.5×11) is most common, but some pages look better enlarged. Experiment with scaling for best results.
       </p>
 
       <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-gray-700 dark:to-gray-600 p-6 rounded-xl my-8 border border-blue-100 dark:border-gray-600">
         <h3 className="mt-0 text-blue-900 dark:text-blue-200 flex items-center gap-2">
-          <span>🖨️</span>
+          <span>/</span>
           Smart Printing Tips
         </h3>
         <p className="mb-0">
-          Use "high quality" printer settings for crisp lines. Select "grayscale" to save color ink. Print on heavier cardstock for markers. Test one page before mass printing—ensure quality before using expensive supplies!
+          Use &quot;high quality&quot; printer settings for crisp lines. Select &quot;grayscale&quot; to save color ink. Print on heavier cardstock for markers. Test one page before mass printing—ensure quality before using expensive supplies!
         </p>
       </div>
 
@@ -176,23 +176,23 @@ export default function FreePrintableColoringPages() {
       <p>Therapists, hospitals, waiting rooms—print pages for anxiety reduction, distraction during procedures, or general wellbeing.</p>
 
       <h3>Travel Entertainment</h3>
-      <p>Print pages before trips. They're lightweight, quiet, require minimal supplies, and keep children occupied during transit.</p>
+      <p>Print pages before trips. They&apos;re lightweight, quiet, require minimal supplies, and keep children occupied during transit.</p>
 
       <h2>Ethical Considerations</h2>
 
       <h3>Respecting Copyright</h3>
       <p>
-        "Free" doesn't mean "steal." Use pages marked as free for personal use, respect creators' terms, avoid redistributing or selling others' work.
+        &quot;Free&quot; doesn&apos;t mean &quot;steal.&quot; Use pages marked as free for personal use, respect creators&apos; terms, avoid redistributing or selling others&apos; work.
       </p>
 
       <h3>Supporting Artists</h3>
       <p>
-        If you love an artist's free pages, consider purchasing their paid products, sharing their work, or simply saying thanks. Free doesn't mean valueless.
+        If you love an artist&apos;s free pages, consider purchasing their paid products, sharing their work, or simply saying thanks. Free doesn&apos;t mean valueless.
       </p>
 
       <h3>Personal Use Only</h3>
       <p>
-        Most free pages allow personal/classroom use but prohibit commercial use. Don't sell colored versions or use in business contexts without permission.
+        Most free pages allow personal/classroom use but prohibit commercial use. Don&apos;t sell colored versions or use in business contexts without permission.
       </p>
 
       <h2>Quality vs Quantity</h2>
@@ -201,7 +201,7 @@ export default function FreePrintableColoringPages() {
         Unlimited free pages tempt us to print everything. Resist. Thoughtfully chosen pages get used; random mass-printing wastes paper and ink while overwhelming users.
       </p>
 
-      <h3>Curate Don't Hoard</h3>
+      <h3>Curate Don&apos;t Hoard</h3>
       <p>
         Download extensively if desired, but print selectively based on current interests and likely actual use.
       </p>
@@ -210,7 +210,7 @@ export default function FreePrintableColoringPages() {
 
       <h3>Accessibility</h3>
       <p>
-        For those with visual impairments, print pages enlarged with thicker lines. Many sites offer "simple" versions with bold outlines perfect for accessibility needs.
+        For those with visual impairments, print pages enlarged with thicker lines. Many sites offer &quot;simple&quot; versions with bold outlines perfect for accessibility needs.
       </p>
 
       <h3>Fine Motor Development</h3>
@@ -222,7 +222,7 @@ export default function FreePrintableColoringPages() {
 
       <h3>Sustainable Printing</h3>
       <p>
-        Print double-sided when possible, use recycled paper, recycle finished pages. Free doesn't mean wasteful.
+        Print double-sided when possible, use recycled paper, recycle finished pages. Free doesn&apos;t mean wasteful.
       </p>
 
       <h3>Digital Coloring</h3>

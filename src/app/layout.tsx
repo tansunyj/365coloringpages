@@ -53,22 +53,12 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {/* 
-          重要提示：
-          由于 Next.js 15 + Turbopack 在开发模式下的 bug，
-          我们在这里只放置基础标签。
-          页面级的 SEO meta 标签由 page.tsx 的 metadata 对象提供。
-          
-          如果在开发模式下 meta 标签仍在 body 中，
-          请测试生产构建：npm run build && npm start
-          生产环境中 meta 标签会正确出现在 <head> 中。
-        */}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-        {/* 客户端修复：确保 meta 标签在 <head> 中 */}
+        {/* 客户端修复：确保 meta 标签�?<head> �?*/}
         <ClientMetaFix />
         {children}
       </body>

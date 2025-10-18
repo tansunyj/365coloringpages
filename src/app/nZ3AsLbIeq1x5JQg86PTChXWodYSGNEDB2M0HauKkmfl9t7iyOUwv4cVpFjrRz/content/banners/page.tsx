@@ -97,7 +97,7 @@ export default function AdminBannerManagement() {
     if (response.status === 401) {
       showToast('error', '登录已过期，请重新登录');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
@@ -134,7 +134,7 @@ export default function AdminBannerManagement() {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         showToast('error', '请先登录');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -158,7 +158,7 @@ export default function AdminBannerManagement() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -177,7 +177,7 @@ export default function AdminBannerManagement() {
         handleApiError(response, result, '加载Banner组列表失败');
       }
     } catch (error) {
-      console.error('加载Banner组失败:', error);
+      console.error('加载Banner组失败', error);
       showToast('error', '加载Banner组失败');
     } finally {
       setIsLoading(false);
@@ -193,13 +193,13 @@ export default function AdminBannerManagement() {
     loadBannerGroups();
   }, [currentPage]);
 
-  // 新增Banner组
+  // 新增Banner�?
   const handleAddGroup = async (groupData: any) => {
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         showToast('error', '请先登录');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -215,7 +215,7 @@ export default function AdminBannerManagement() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -230,7 +230,7 @@ export default function AdminBannerManagement() {
         return false;
       }
     } catch (error) {
-      console.error('添加Banner组失败:', error);
+      console.error('添加Banner组失败', error);
       showToast('error', '网络错误，添加失败');
       return false;
     }
@@ -242,7 +242,7 @@ export default function AdminBannerManagement() {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         showToast('error', '请先登录');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       return;
     }
     
@@ -258,7 +258,7 @@ export default function AdminBannerManagement() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -273,7 +273,7 @@ export default function AdminBannerManagement() {
         return false;
       }
     } catch (error) {
-      console.error('更新Banner组失败:', error);
+      console.error('更新Banner组失败', error);
       showToast('error', '网络错误，更新失败');
       return false;
     }
@@ -297,7 +297,7 @@ export default function AdminBannerManagement() {
     loadBannerGroupsWithParams(1, '', statusFilter);
   };
 
-  // 处理状态筛选
+  // 处理状态筛�?
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
     setCurrentPage(1); // 重置到第一页
@@ -335,7 +335,7 @@ export default function AdminBannerManagement() {
         const token = localStorage.getItem('adminToken');
         if (!token) {
           showToast('error', '请先登录');
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
           return;
         }
 
@@ -350,7 +350,7 @@ export default function AdminBannerManagement() {
         if (response.status === 401) {
           showToast('error', '登录已过期，请重新登录');
           localStorage.removeItem('adminToken');
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
           return;
         }
 
@@ -360,13 +360,13 @@ export default function AdminBannerManagement() {
           // 从本地状态中移除已删除的项目
           setBannerGroups(prev => prev.filter(g => g.id !== deleteGroupId));
           showToast('success', 'Banner组删除成功');
-          // 重新加载数据以确保数据同步
+          // 重新加载数据以确保数据同�?
           loadBannerGroups();
         } else {
           handleApiError(response, result, 'Banner组删除失败');
         }
       } catch (error) {
-        console.error('删除Banner组失败:', error);
+        console.error('删除Banner组失败', error);
         showToast('error', '网络错误，删除失败');
       } finally {
         setShowDeleteConfirm(false);
@@ -381,7 +381,7 @@ export default function AdminBannerManagement() {
     setDeleteGroupId(null);
   };
 
-  // 处理激活/停用
+  // 处理激活停用
   const handleToggleActive = async (id: number) => {
     const group = bannerGroups.find(g => g.id === id);
     if (!group) return;
@@ -394,7 +394,7 @@ export default function AdminBannerManagement() {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         showToast('error', '请先登录');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -415,7 +415,7 @@ export default function AdminBannerManagement() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -423,7 +423,7 @@ export default function AdminBannerManagement() {
 
       if (response.ok && result.success) {
         showToast('success', newStatus === 'active' ? 'Banner组已激活' : 'Banner组已停用');
-        // 重新加载数据以确保数据同步
+        // 重新加载数据以确保数据一致
         loadBannerGroups();
       } else {
         // 如果API调用失败，恢复原来的状态
@@ -475,7 +475,7 @@ export default function AdminBannerManagement() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                     <input
                       type="text"
-                  placeholder="搜索Banner组..."
+                  placeholder="搜索Banner组.."
                       value={searchTerm}
                   onChange={handleSearchInput}
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -515,11 +515,11 @@ export default function AdminBannerManagement() {
                 <span className="font-semibold text-gray-900">{pagination.totalCount}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-gray-500">当前页:</span>
+                <span className="text-gray-500">当前页</span>
                 <span className="font-semibold text-gray-900">{pagination.currentPage}</span>
             </div>
               <div className="flex items-center gap-2">
-                <span className="text-gray-500">已激活:</span>
+                <span className="text-gray-500">已激活</span>
                 <span className="font-semibold text-green-600">{bannerGroups.filter(g => g.status === 'active').length}</span>
           </div>
               <div className="flex items-center gap-2">
@@ -535,7 +535,7 @@ export default function AdminBannerManagement() {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">加载中...</p>
+              <p className="mt-4 text-gray-600">加载中..</p>
             </div>
             </div>
           ) : (
@@ -597,7 +597,7 @@ export default function AdminBannerManagement() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center text-sm text-gray-900">
                           <ImageIcon className="h-4 w-4 text-blue-500 mr-1" />
-                          {group.images.length} 张
+                          {group.images.length} 图片
                     </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -694,7 +694,7 @@ export default function AdminBannerManagement() {
                 <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                   <div>
                     <p className="text-sm text-gray-700">
-                      显示第 {pagination.currentPage} 页，共 {pagination.totalCount} 条
+                      显示{pagination.currentPage} 页，{pagination.totalCount} 条
                     </p>
                   </div>
                   <div>
@@ -775,7 +775,7 @@ export default function AdminBannerManagement() {
                 </div>
                 <div className="mb-6">
                   <p className="text-sm text-gray-500">
-                    确定要删除这个Banner组吗？此操作不可撤销。
+                    确定要删除这个Banner组吗？此操作不可撤销
                   </p>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -856,7 +856,7 @@ export default function AdminBannerManagement() {
   );
 }
 
-// Banner Group Modal Component
+// Banner组模态框组件
 interface BannerGroupModalProps {
   group: BannerGroup | null;
   onClose: () => void; 
@@ -865,7 +865,7 @@ interface BannerGroupModalProps {
 }
 
 function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModalProps) {
-  // 格式化日期为 yyyy-MM-dd HH:mm:ss 格式
+  // 格式化日期为 yyyy-MM-dd HH:mm:ss 格式，用于输入框
   const formatDateForInput = (dateString?: string) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -878,7 +878,7 @@ function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModa
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
-  // 格式化输入日期为 yyyy-MM-dd HH:mm:ss 格式
+  // 格式化输入日期为 yyyy-MM-dd HH:mm:ss 格式，用于API请求 （数据库中是datetime类型）
   const formatInputToAPI = (inputValue: string) => {
     if (!inputValue) return null;
     // 如果输入的是日期格式 (yyyy-MM-dd)，则添加时间部分
@@ -932,7 +932,7 @@ function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModa
       images: formData.images.map(img => ({
         title: img.title,
         imageUrl: img.imageUrl,
-        linkType: img.linkType, // 使用实际的linkType值
+        linkType: img.linkType, // 使用实际的linkType
         subtitle: img.subtitle || '',
         linkTarget: img.linkTarget || ''
       }))
@@ -1003,7 +1003,7 @@ function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModa
             <div className="space-y-4 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Banner组名称 <span className="text-red-500">*</span>
+                  Banner组名称<span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -1107,7 +1107,7 @@ function BannerGroupModal({ group, onClose, onSave, showToast }: BannerGroupModa
                 {formData.images.length === 0 && (
                   <div className="text-center py-12 text-gray-500 text-sm border-2 border-dashed border-gray-300 rounded-lg">
                     <ImagePlus className="h-12 w-12 mx-auto mb-3 text-gray-400" />
-                    <p>暂无图片，点击&ldquo;添加图片&rdquo;按钮添加Banner图片</p>
+                    <p>暂无图片，点击“添加图片”按钮添加Banner图片</p>
               </div>
             )}
                           </div>
@@ -1187,7 +1187,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
   const handleLinkTargetChange = (value: string) => {
     let processedValue = value;
     
-    // 根据linkType验证和修正输入值
+    // 根据linkType验证和修正输入�?
     switch (linkType) {
       case 'categories':
         if (!value.startsWith('/categories/')) {
@@ -1230,7 +1230,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -1250,12 +1250,12 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
 
       if (result.success && result.data?.thumbnailUrl) {
         onImageUrlChange(image.id, result.data.thumbnailUrl);
-        showToast('success', '图片上传成功！');
+        showToast('success', '图片上传成功');
       } else {
         showToast('error', result.message || '上传失败');
       }
     } catch (error) {
-      console.error('❌ 上传失败:', error);
+      console.error('图片上传失败:', error);
       showToast('error', '上传失败，请重试');
     } finally {
       setIsUploading(false);
@@ -1282,7 +1282,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
 
       {/* 左右布局：左侧图片，右侧字段 */}
       <div className="grid grid-cols-5 gap-4">
-        {/* 左侧：图片上传区域 */}
+        {/* 左侧：图片上传区*/}
         <div className="col-span-2 flex flex-col">
                 <input
             ref={fileInputRef}
@@ -1320,7 +1320,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="text-center text-white">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-                      <span className="text-sm">上传中...</span>
+                      <span className="text-sm">上传中..</span>
                         </div>
                   </div>
                 )}
@@ -1335,7 +1335,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
           </div>
         </div>
 
-        {/* 右侧：表单字段 */}
+        {/* 右侧：表单字段*/}
         <div className="col-span-3 space-y-3">
               <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -1350,7 +1350,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                     onChange(image.id, 'title', e.target.value);
                   }}
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                  placeholder="圣诞主题涂色页"
+                  placeholder="圣诞主题涂色卡"
                 />
               </div>
 
@@ -1373,7 +1373,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
 
             <div>
             <label className="block text-xs font-medium text-gray-700 mb-2">
-              跳转到
+              跳转链接
               </label>
             <div className="space-y-3">
               {/* Radio Group */}
@@ -1413,7 +1413,7 @@ function BannerImageItem({ image, onRemove, onChange, onImageUrlChange, showToas
                 </label>
             </div>
 
-              {/* 跳转链接输入框 */}
+              {/* 跳转链接输入框*/}
             <div>
                 <label className="block text-xs text-gray-600 mb-1">
                   目标地址
@@ -1513,7 +1513,7 @@ function BannerDetailModal({ group, onClose }: BannerDetailModalProps) {
               </div>
             </div>
 
-            {/* 状态信息 */}
+            {/* 状态信息*/}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 状态
@@ -1551,7 +1551,7 @@ function BannerDetailModal({ group, onClose }: BannerDetailModalProps) {
                   </div>
 
                   <div className="grid grid-cols-5 gap-4">
-                    {/* 左侧：图片预览 */}
+                    {/* 左侧：图片预览*/}
                     <div className="col-span-2">
                       <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300">
                         {image.imageUrl ? (
@@ -1568,7 +1568,7 @@ function BannerDetailModal({ group, onClose }: BannerDetailModalProps) {
                         </div>
                     </div>
 
-                    {/* 右侧：图片信息 */}
+                    {/* 右侧：图片信息*/}
                     <div className="col-span-3 space-y-3">
                           <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -1590,7 +1590,7 @@ function BannerDetailModal({ group, onClose }: BannerDetailModalProps) {
 
                           <div>
                         <label className="block text-xs font-medium text-gray-700 mb-1">
-                          跳转类型
+                          跳转链接类型
                         </label>
                         <div className="flex gap-4">
                           <label className="flex items-center cursor-pointer">

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../../components/UnifiedListPageWrapper';
 
 interface FirstColoringBookCategoryPageClientProps {
   category: string;
@@ -14,7 +14,7 @@ interface FirstColoringBookCategoryPageClientProps {
  */
 export default function FirstColoringBookCategoryPageClient({ category }: FirstColoringBookCategoryPageClientProps) {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="easy-coloring-book"
       category={category}
       title="Easy Coloring Pages"

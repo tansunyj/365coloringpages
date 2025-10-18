@@ -65,7 +65,7 @@ export default function SimpleFirstColoringCard({
           unoptimized
         />
         
-        {/* 在图片上方添加彩色点缀 */}
+        {/* 在图片上方添加彩色标题*/}
         <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full opacity-90">
           {title}
         </div>

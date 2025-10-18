@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../../components/UnifiedListPageWrapper';
 
 interface LatestCategoryClientProps {
   category: string;
@@ -11,7 +11,7 @@ export default function LatestCategoryClient({ category }: LatestCategoryClientP
   // 调试信息
   
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="latest"
       category={category}
       title="New Coloring Pages"

@@ -43,7 +43,7 @@ export function ThemeSection({ section }: ThemeSectionProps) {
 
         {/* 白色卡片容器 */}
         <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          {/* 卡片网格 - 2行5列 */}
+          {/* 卡片网格 - 2行3列*/}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {section.data.map((page) => (
               <SimpleColoringCard
@@ -119,7 +119,7 @@ export default function Hero() {
         }
       } catch (error) {
         console.error('Error loading banner group:', error);
-        // Keep default banner group on error
+        // 保持默认banner组数据
       } finally {
         setIsLoading(false);
       }
@@ -151,7 +151,7 @@ export default function Hero() {
         if (!isMounted) return;
         
         if (response.success && response.data) {
-          // 过滤活跃的分类并按sortOrder排序，取前6个
+          // 过滤活跃的分类并按sortOrder排序，取前6条
           const activeCategories = (response.data as Category[])
             .filter((cat: Category) => cat.isActive === 1)
             .sort((a: Category, b: Category) => a.sortOrder - b.sortOrder)
@@ -165,7 +165,7 @@ export default function Hero() {
         // 检查组件是否仍然挂载
         if (!isMounted) return;
         
-        console.error('❌ Error loading categories:', error);
+        console.error('Error loading categories:', error);
         console.error('错误详情:', {
           message: error instanceof Error ? error.message : 'Unknown error',
           stack: error instanceof Error ? error.stack : undefined
@@ -181,7 +181,7 @@ export default function Hero() {
 
     loadCategories();
     
-    // 清理函数：组件卸载时设置标志位
+    // 清理函数：组件卸载时设置标志
     return () => {
       isMounted = false;
     };
@@ -225,7 +225,7 @@ export default function Hero() {
         // 检查组件是否仍然挂载
         if (!isMounted) return;
         
-        console.error('❌ Error loading keywords:', error);
+        console.error('Error loading keywords:', error);
         console.error('错误详情:', {
           message: error instanceof Error ? error.message : 'Unknown error',
           stack: error instanceof Error ? error.stack : undefined
@@ -242,7 +242,7 @@ export default function Hero() {
 
     loadKeywords();
     
-    // 清理函数：组件卸载时设置标志位
+    // 清理函数：组件卸载时设置标志
     return () => {
       isMounted = false;
     };
@@ -297,15 +297,15 @@ export default function Hero() {
   const currentImage = bannerGroup?.images?.[currentSlide] || bannerGroup?.images?.[0];
   
   // 根据图片判断是否为深色背景（简单实现）
-  const isDarkBackground = true; // 默认使用深色遮罩以确保文字可读性
+  const isDarkBackground = true; // 默认使用深色遮罩以确保文字可读
   
-  // 根据背景亮度动态设置样式类名
+  // 根据背景亮度动态设置样式类
   const textColorClass = isDarkBackground ? 'text-white' : 'text-gray-900';
   const textShadowClass = isDarkBackground ? 'drop-shadow-lg' : 'drop-shadow-sm';
   const subtitleColorClass = isDarkBackground ? 'text-white/90' : 'text-gray-700';
   const overlayClass = isDarkBackground ? 'bg-black/40' : 'bg-white/20';
 
-  // 获取当前显示的分类 - 使用useMemo缓存计算结果
+  // 获取当前显示的分类- 使用useMemo缓存计算结果
   const currentCategories = useMemo(() => {
     // 在服务端渲染时，始终显示默认分类以避免hydration mismatch
     if (!isClient) {
@@ -348,7 +348,7 @@ export default function Hero() {
                 unoptimized
                 priority={index === 0}
               />
-              {/* 半透明遮罩确保文字可读性 */}
+              {/* 半透明遮罩确保文字可读*/}
               <div className={`absolute inset-0 ${overlayClass}`}></div>
             </div>
           ))}
@@ -358,20 +358,20 @@ export default function Hero() {
         <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 pointer-events-none">
           {/* 标题和副标题区域 */}
           <div className="pointer-events-auto">
-            {/* 主标题 - 使用当前图片标题或默认标题 */}
+            {/* 主标题- 使用当前图片标题或默认标题*/}
             <h1 className={`text-4xl md:text-6xl font-bold mb-4 ${textColorClass} ${textShadowClass} leading-tight`}>
               {currentImage.title || 'Unleash Your Creativity'}
             </h1>
             
-            {/* 副标题 - 使用当前图片副标题或描述 */}
+            {/* 副标题- 使用当前图片副标题或描述 */}
             <p className={`text-lg md:text-xl mb-8 ${subtitleColorClass} max-w-2xl mx-auto font-medium ${textShadowClass}`}>
               {currentImage.subtitle || currentImage.description || 'Find, print, and download coloring pages. Or create your own with AI.'}
             </p>
           </div>
 
-          {/* 搜索框容器 - 统一宽度和左对齐，独立区域不受Link影响 */}
+          {/* 搜索框容器- 统一宽度和左对齐，独立区域不受Link影响 */}
           <div className="max-w-2xl mx-auto w-full mb-8 pointer-events-auto">
-            {/* 动态关键词标签 - 搜索框上方，左对齐 */}
+            {/* 动态关键词标签 - 搜索框上方，左对齐*/}
             <div className="flex flex-wrap gap-2 mb-6">
               {currentCategories.map((category, index) => (
                 <button
@@ -390,7 +390,7 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* 悬浮搜索框 */}
+            {/* 悬浮搜索框*/}
             <form className="relative mb-6" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-gray-400" />
@@ -416,7 +416,7 @@ export default function Hero() {
               </button>
             </form>
 
-            {/* 热门关键词标签 - 搜索框下方，左对齐 */}
+            {/* 热门关键词标签- 搜索框下方，左对齐*/}
             {!keywordsLoading && hotKeywords.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {hotKeywords.map((item, index) => (
@@ -440,7 +440,7 @@ export default function Hero() {
 
           </div>
 
-          {/* 轮播指示器 - 只有多张图片时显示 */}
+          {/* 轮播指示器- 只有多张图片时显示*/}
           {bannerGroup?.images && bannerGroup.images.length > 1 && (
             <div className="flex space-x-2 mt-8">
               {bannerGroup.images.map((_, index) => (

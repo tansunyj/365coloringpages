@@ -21,7 +21,7 @@ export default function FirstColoringBookPageClient() {
     'Animals', 'Shapes', 'Fun', 'Colors', 'Numbers', 'Letters'
   ];
 
-  // 将URL slug转换为显示名称
+  // 将URL slug转换为显示名�?
   const getDisplayNameFromSlug = (slug: string) => {
     const slugToName: { [key: string]: string } = {
       'basic-shapes': 'Basic Shapes',
@@ -38,7 +38,7 @@ export default function FirstColoringBookPageClient() {
     return slugToName[slug] || slug;
   };
 
-  // 处理URL参数，设置初始选中的分类
+  // 处理URL参数，设置初始选中的分�?
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) {
@@ -49,7 +49,7 @@ export default function FirstColoringBookPageClient() {
     }
   }, [searchParams]);
 
-  // 涂色页面数据状态 - 使用API数据
+  // 涂色页面数据状�?- 使用API数据
   const [allColoringPages, setAllColoringPages] = useState<Array<{
     id: number;
     title: string;
@@ -68,7 +68,7 @@ export default function FirstColoringBookPageClient() {
     isFavorited?: boolean;
   }>>([]);
 
-  // 获取涂色书页面数据
+  // 获取涂色书页面数�?
   useEffect(() => {
     const fetchColoringBookPages = async () => {
       try {
@@ -117,7 +117,7 @@ export default function FirstColoringBookPageClient() {
     fetchColoringBookPages();
   }, []);
 
-  // 静态数据已完全移除，现在全部使用API动态数据
+  // 静态数据已完全移除，现在全部使用API动态数�?
 
   // 分类选择处理
   const handleCategoryChange = (category: string) => {
@@ -143,7 +143,7 @@ export default function FirstColoringBookPageClient() {
     return matchesSearch && matchesCategory;
   });
 
-  // 分页显示的数据
+  // 分页显示的数�?
   const displayedPages = filteredPages.slice(0, displayedItems);
   const hasMore = displayedItems < filteredPages.length;
 
@@ -176,7 +176,7 @@ export default function FirstColoringBookPageClient() {
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* 面包屑导航 */}
+        {/* 面包屑导�?*/}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
           <Link href="/" className="hover:text-green-600 transition-colors">
             Home
@@ -185,7 +185,7 @@ export default function FirstColoringBookPageClient() {
           <span className="text-gray-900 font-medium">Easy Coloring Pages</span>
         </nav>
 
-        {/* 页面标题和描述 */}
+        {/* 页面标题和描�?*/}
         <div className="mb-12">
           <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
             Easy Coloring Pages
@@ -195,7 +195,7 @@ export default function FirstColoringBookPageClient() {
           </p>
         </div>
 
-        {/* 搜索框 */}
+        {/* 搜索�?*/}
         <div className="mb-8">
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -209,7 +209,7 @@ export default function FirstColoringBookPageClient() {
           </div>
         </div>
 
-        {/* 分类筛选 */}
+        {/* 分类筛�?*/}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
           <div className="flex flex-wrap items-center gap-4">
             <span className="text-gray-800 font-bold whitespace-nowrap">Categories:</span>

@@ -85,7 +85,7 @@ export default function ThemeParkSection() {
 
         {/* 白色卡片容器 */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          {/* 加载状态 */}
+          {/* 加载状态*/}
           {isLoading && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {Array.from({ length: 10 }).map((_, index) => (
@@ -98,7 +98,7 @@ export default function ThemeParkSection() {
             </div>
           )}
 
-          {/* 错误状态 */}
+          {/* 错误状态*/}
           {error && !isLoading && (
             <div className="text-center py-8">
               <div className="text-red-500 mb-4">
@@ -129,7 +129,7 @@ export default function ThemeParkSection() {
             </div>
           )}
 
-          {/* 空状态 */}
+          {/* 空状态*/}
           {!isLoading && !error && themeParks.length === 0 && (
             <div className="text-center py-8">
               <p className="text-gray-500">No theme parks available at the moment.</p>

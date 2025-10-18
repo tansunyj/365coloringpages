@@ -57,11 +57,11 @@ export default function PrivacyPolicy() {
               </div>
               <p className="text-gray-600 mb-3">We may collect the following personal information:</p>
               <ul className="text-gray-600 space-y-2 ml-4">
-                <li>• Email address (when you create an account or subscribe to our newsletter)</li>
-                <li>• Name or username (when you create an account)</li>
-                <li>• Profile information (avatar, preferences)</li>
-                <li>• Communication data (when you contact us)</li>
-                <li>• Social media account information (when using social login)</li>
+                <li>Email address (when you create an account or subscribe to our newsletter)</li>
+                <li>Name or username (when you create an account)</li>
+                <li>Profile information (avatar, preferences)</li>
+                <li>Communication data (when you contact us)</li>
+                <li>Social media account information (when using social login)</li>
               </ul>
             </div>
 
@@ -72,12 +72,12 @@ export default function PrivacyPolicy() {
               </div>
               <p className="text-gray-600 mb-3">We automatically collect certain information about your use of our services:</p>
               <ul className="text-gray-600 space-y-2 ml-4">
-                <li>• IP address and location data</li>
-                <li>• Browser type and version</li>
-                <li>• Operating system</li>
-                <li>• Pages visited and time spent on our website</li>
-                <li>• Referring website addresses</li>
-                <li>• Search queries and interactions with our content</li>
+                <li>IP address and location data</li>
+                <li>Browser type and version</li>
+                <li>Operating system</li>
+                <li>Pages visited and time spent on our website</li>
+                <li>Referring website addresses</li>
+                <li>Search queries and interactions with our content</li>
               </ul>
             </div>
 
@@ -88,11 +88,11 @@ export default function PrivacyPolicy() {
               </div>
               <p className="text-gray-600 mb-3">We use cookies and similar technologies to:</p>
               <ul className="text-gray-600 space-y-2 ml-4">
-                <li>• Remember your preferences and settings</li>
-                <li>• Analyze website traffic and usage patterns</li>
-                <li>• Provide personalized content and advertisements</li>
-                <li>• Maintain your login session</li>
-                <li>• Improve our website functionality</li>
+                <li>Remember your preferences and settings</li>
+                <li>Analyze website traffic and usage patterns</li>
+                <li>Provide personalized content and advertisements</li>
+                <li>Maintain your login session</li>
+                <li>Improve our website functionality</li>
               </ul>
             </div>
           </div>
@@ -109,40 +109,40 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Service Provision</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• Provide access to coloring pages and features</li>
-                  <li>• Maintain user accounts and preferences</li>
-                  <li>• Process downloads and favorites</li>
-                  <li>• Generate AI-powered coloring pages</li>
+                  <li>Provide access to coloring pages and features</li>
+                  <li>Maintain user accounts and preferences</li>
+                  <li>Process downloads and favorites</li>
+                  <li>Generate AI-powered coloring pages</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Communication</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• Send account-related notifications</li>
-                  <li>• Respond to customer support inquiries</li>
-                  <li>• Send newsletters and updates (with consent)</li>
-                  <li>• Notify about service changes</li>
+                  <li>Send account-related notifications</li>
+                  <li>Respond to customer support inquiries</li>
+                  <li>Send newsletters and updates (with consent)</li>
+                  <li>Notify about service changes</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Improvement</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• Analyze usage patterns and trends</li>
-                  <li>• Improve website functionality</li>
-                  <li>• Develop new features and content</li>
-                  <li>• Optimize user experience</li>
+                  <li>Analyze usage patterns and trends</li>
+                  <li>Improve website functionality</li>
+                  <li>Develop new features and content</li>
+                  <li>Optimize user experience</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Legal Compliance</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• Comply with legal obligations</li>
-                  <li>• Protect against fraud and abuse</li>
-                  <li>• Enforce our terms of service</li>
-                  <li>• Respond to legal requests</li>
+                  <li>Comply with legal obligations</li>
+                  <li>Protect against fraud and abuse</li>
+                  <li>Enforce our terms of service</li>
+                  <li>Respond to legal requests</li>
                 </ul>
               </div>
             </div>
@@ -194,16 +194,16 @@ export default function PrivacyPolicy() {
             
             <div className="grid md:grid-cols-2 gap-6">
               <ul className="text-gray-600 space-y-3">
-                <li>• <strong>Encryption:</strong> Data transmission using SSL/TLS encryption</li>
-                <li>• <strong>Access Controls:</strong> Limited access to personal information</li>
-                <li>• <strong>Regular Updates:</strong> Security patches and system updates</li>
-                <li>• <strong>Monitoring:</strong> Continuous security monitoring and auditing</li>
+                <li><strong>Encryption:</strong> Data transmission using SSL/TLS encryption</li>
+                <li><strong>Access Controls:</strong> Limited access to personal information</li>
+                <li><strong>Regular Updates:</strong> Security patches and system updates</li>
+                <li><strong>Monitoring:</strong> Continuous security monitoring and auditing</li>
               </ul>
               <ul className="text-gray-600 space-y-3">
-                <li>• <strong>Data Minimization:</strong> Collecting only necessary information</li>
-                <li>• <strong>Secure Storage:</strong> Protected databases and servers</li>
-                <li>• <strong>Employee Training:</strong> Staff education on data protection</li>
-                <li>• <strong>Incident Response:</strong> Procedures for security breaches</li>
+                <li><strong>Data Minimization:</strong> Collecting only necessary information</li>
+                <li><strong>Secure Storage:</strong> Protected databases and servers</li>
+                <li><strong>Employee Training:</strong> Staff education on data protection</li>
+                <li><strong>Incident Response:</strong> Procedures for security breaches</li>
               </ul>
             </div>
             
@@ -226,20 +226,20 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Access and Control</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• <strong>Access:</strong> Request a copy of your personal data</li>
-                  <li>• <strong>Correction:</strong> Update or correct inaccurate information</li>
-                  <li>• <strong>Deletion:</strong> Request deletion of your personal data</li>
-                  <li>• <strong>Portability:</strong> Receive your data in a portable format</li>
+                  <li><strong>Access:</strong> Request a copy of your personal data</li>
+                  <li><strong>Correction:</strong> Update or correct inaccurate information</li>
+                  <li><strong>Deletion:</strong> Request deletion of your personal data</li>
+                  <li><strong>Portability:</strong> Receive your data in a portable format</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Processing Rights</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• <strong>Restriction:</strong> Limit how we process your data</li>
-                  <li>• <strong>Objection:</strong> Object to certain data processing</li>
-                  <li>• <strong>Withdrawal:</strong> Withdraw consent at any time</li>
-                  <li>• <strong>Complaint:</strong> File complaints with supervisory authorities</li>
+                  <li><strong>Restriction:</strong> Limit how we process your data</li>
+                  <li><strong>Objection:</strong> Object to certain data processing</li>
+                  <li><strong>Withdrawal:</strong> Withdraw consent at any time</li>
+                  <li><strong>Complaint:</strong> File complaints with supervisory authorities</li>
                 </ul>
               </div>
             </div>
@@ -265,20 +265,20 @@ export default function PrivacyPolicy() {
                              <div>
                  <h3 className="font-semibold text-gray-900 mb-2">For Children Under 13:</h3>
                  <ul className="text-gray-600 space-y-2 ml-4">
-                   <li>• No account creation without parental consent</li>
-                   <li>• Limited data collection (only necessary for service provision)</li>
-                   <li>• No targeted advertising</li>
-                   <li>• Parental right to review and delete child&apos;s information</li>
+                   <li>No account creation without parental consent</li>
+                   <li>Limited data collection (only necessary for service provision)</li>
+                   <li>No targeted advertising</li>
+                   <li>Parental right to review and delete child&apos;s information</li>
                  </ul>
                </div>
                
                <div>
                  <h3 className="font-semibold text-gray-900 mb-2">For Parents:</h3>
                  <ul className="text-gray-600 space-y-2 ml-4">
-                   <li>• Review your child&apos;s personal information</li>
-                   <li>• Request deletion of your child&apos;s account</li>
-                   <li>• Refuse further collection of your child&apos;s information</li>
-                   <li>• Contact us with any concerns about your child&apos;s privacy</li>
+                   <li>Review your child&apos;s personal information</li>
+                   <li>Request deletion of your child&apos;s account</li>
+                   <li>Refuse further collection of your child&apos;s information</li>
+                   <li>Contact us with any concerns about your child&apos;s privacy</li>
                  </ul>
                </div>
             </div>
@@ -301,10 +301,10 @@ export default function PrivacyPolicy() {
             <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Safeguards Include:</h3>
               <ul className="text-gray-600 space-y-2">
-                <li>• Adequacy decisions by relevant authorities</li>
-                <li>• Standard contractual clauses</li>
-                <li>• Binding corporate rules</li>
-                <li>• Certification schemes and codes of conduct</li>
+                <li>Adequacy decisions by relevant authorities</li>
+                <li>Standard contractual clauses</li>
+                <li>Binding corporate rules</li>
+                <li>Certification schemes and codes of conduct</li>
               </ul>
             </div>
           </div>

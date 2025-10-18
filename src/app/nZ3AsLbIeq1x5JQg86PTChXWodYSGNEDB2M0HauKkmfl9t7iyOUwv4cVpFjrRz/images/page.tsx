@@ -55,7 +55,7 @@ export default function AdminImageManagement() {
   const [images, setImages] = useState<ColoringImage[]>([]);
   const [filteredImages, setFilteredImages] = useState<ColoringImage[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [uploaderFilter, setUploaderFilter] = useState<string>('all'); // 新增上传者筛选
+  const [uploaderFilter, setUploaderFilter] = useState<string>('all'); // 新增上传者筛�?
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -86,19 +86,19 @@ export default function AdminImageManagement() {
       // 生成50张图片的模拟数据
       const mockImages: ColoringImage[] = Array.from({ length: 50 }, (_, index) => {
         const statuses: ('pending' | 'approved' | 'rejected')[] = ['pending', 'approved', 'rejected'];
-        const categories = ['动物', '自然', '幻想', '交通工具', '食物', '节日', '图案', '花朵'];
+        const categories = ['动物', '自然', '幻想', '交通工�?, '食物', '节日', '图案', '花朵'];
         const uploaderTypes: ('admin' | 'user')[] = ['admin', 'user'];
-        const uploaders = ['管理员', 'Alice Johnson', 'Bob Smith', 'Charlie Brown', 'Diana Wilson'];
+        const uploaders = ['管理�?, 'Alice Johnson', 'Bob Smith', 'Charlie Brown', 'Diana Wilson'];
         
         const id = index + 1;
         const status = statuses[index % statuses.length];
         const category = categories[index % categories.length];
         const uploaderType = uploaderTypes[index % uploaderTypes.length];
-        const uploader = uploaderType === 'admin' ? '管理员' : uploaders[1 + (index % 4)];
+        const uploader = uploaderType === 'admin' ? '管理�? : uploaders[1 + (index % 4)];
         
         return {
           id,
-          title: `涂色页 ${id} - ${category}主题`,
+          title: `涂色�?${id} - ${category}主题`,
           category,
           imageUrl: `/api/placeholder/300/400?id=${id}`,
           status,
@@ -108,7 +108,7 @@ export default function AdminImageManagement() {
           views: Math.floor(Math.random() * 5000) + 100,
           downloads: Math.floor(Math.random() * 1000) + 10,
           reports: status === 'rejected' ? Math.floor(Math.random() * 5) + 1 : Math.floor(Math.random() * 2),
-          description: `这是一个${category}主题的涂色页，适合各个年龄段的用户使用。`,
+          description: `这是一�?{category}主题的涂色页，适合各个年龄段的用户使用。`,
           tags: [category, '线稿', '涂色']
         };
       });
@@ -121,16 +121,16 @@ export default function AdminImageManagement() {
     loadImages();
   }, []);
 
-  // 过滤和搜索
+  // 过滤和搜�?
   useEffect(() => {
     let filtered = images;
 
-    // 状态筛选
+    // 状态筛�?
     if (statusFilter !== 'all') {
       filtered = filtered.filter(image => image.status === statusFilter);
     }
 
-    // 上传者类型筛选
+    // 上传者类型筛�?
     if (uploaderFilter !== 'all') {
       filtered = filtered.filter(image => image.uploaderType === uploaderFilter);
     }
@@ -152,7 +152,7 @@ export default function AdminImageManagement() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedImages = filteredImages.slice(startIndex, startIndex + itemsPerPage);
 
-  // 搜索或筛选时重置到第一页
+  // 搜索或筛选时重置到第一�?
   useEffect(() => {
     setCurrentPage(1);
   }, [statusFilter, uploaderFilter, searchTerm]);
@@ -177,7 +177,7 @@ export default function AdminImageManagement() {
   };
 
   const handleBatchDelete = () => {
-    if (confirm('确定要删除选中的图片吗？此操作不可恢复。')) {
+    if (confirm('确定要删除选中的图片吗？此操作不可恢复�?)) {
       setImages(images.filter(image => !selectedImages.includes(image.id)));
       setSelectedImages([]);
     }
@@ -197,7 +197,7 @@ export default function AdminImageManagement() {
   };
 
   const handleDelete = (imageId: number) => {
-    if (confirm('确定要删除这张图片吗？此操作不可恢复。')) {
+    if (confirm('确定要删除这张图片吗？此操作不可恢复�?)) {
       setImages(images.filter(image => image.id !== imageId));
     }
   };
@@ -209,9 +209,9 @@ export default function AdminImageManagement() {
 
   const getStatusBadge = (status: string) => {
     const badges = {
-      pending: <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">待审核</span>,
+      pending: <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">待审�?/span>,
       approved: <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">已通过</span>,
-      rejected: <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">已拒绝</span>
+      rejected: <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">已拒�?/span>
     };
     return badges[status as keyof typeof badges];
   };
@@ -220,7 +220,7 @@ export default function AdminImageManagement() {
     return uploaderType === 'admin' ? (
       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
         <Crown className="w-3 h-3 mr-1" />
-        管理员
+        管理�?
       </span>
     ) : (
       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -267,7 +267,7 @@ export default function AdminImageManagement() {
                     </div>
                     <input
                       type="text"
-                      placeholder="搜索图片标题、分类或上传者..."
+                      placeholder="搜索图片标题、分类或上传�?.."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
@@ -282,10 +282,10 @@ export default function AdminImageManagement() {
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 rounded-md"
                   >
-                    <option value="all">所有状态</option>
-                    <option value="pending">待审核</option>
+                    <option value="all">所有状�?/option>
+                    <option value="pending">待审�?/option>
                     <option value="approved">已通过</option>
-                    <option value="rejected">已拒绝</option>
+                    <option value="rejected">已拒�?/option>
                   </select>
 
                   <select
@@ -293,8 +293,8 @@ export default function AdminImageManagement() {
                     onChange={(e) => setUploaderFilter(e.target.value)}
                     className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 rounded-md"
                   >
-                    <option value="all">所有上传者</option>
-                    <option value="admin">管理员上传</option>
+                    <option value="all">所有上传�?/option>
+                    <option value="admin">管理员上�?/option>
                     <option value="user">用户上传</option>
                   </select>
                 </div>
@@ -304,7 +304,7 @@ export default function AdminImageManagement() {
               {selectedImages.length > 0 && (
                 <div className="mt-4 flex items-center space-x-4">
                   <span className="text-sm text-gray-700">
-                    已选择 {selectedImages.length} 项
+                    已选择 {selectedImages.length} �?
                   </span>
                   <div className="flex space-x-2">
                     <button
@@ -338,7 +338,7 @@ export default function AdminImageManagement() {
           <div className="mb-6 flex justify-between items-center">
             <div className="text-sm text-gray-600">
               显示 {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredImages.length)} 条，
-              共 {filteredImages.length} 条记录
+              �?{filteredImages.length} 条记�?
             </div>
             <div className="flex space-x-2">
               <button
@@ -509,16 +509,16 @@ export default function AdminImageManagement() {
                             </div>
                             <div className="flex items-center">
                               <Eye className="h-4 w-4 mr-1" />
-                              <span>{image.views} 次浏览</span>
+                              <span>{image.views} 次浏�?/span>
                             </div>
                             <div className="flex items-center">
                               <Download className="h-4 w-4 mr-1" />
-                              <span>{image.downloads} 次下载</span>
+                              <span>{image.downloads} 次下�?/span>
                             </div>
                             {image.reports && image.reports > 0 && (
                               <div className="flex items-center text-red-600">
                                 <Flag className="h-4 w-4 mr-1" />
-                                <span>{image.reports} 次举报</span>
+                                <span>{image.reports} 次举�?/span>
                               </div>
                             )}
                           </div>
@@ -566,7 +566,7 @@ export default function AdminImageManagement() {
             <div className="mt-8 flex items-center justify-between">
               <div className="text-sm text-gray-700">
                 显示 {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredImages.length)} 条，
-                共 {filteredImages.length} 条记录
+                �?{filteredImages.length} 条记�?
               </div>
               <div className="flex space-x-2">
                 <button
@@ -574,7 +574,7 @@ export default function AdminImageManagement() {
                   disabled={currentPage === 1}
                   className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  上一页
+                  上一�?
                 </button>
                 
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
@@ -596,7 +596,7 @@ export default function AdminImageManagement() {
                   disabled={currentPage === totalPages}
                   className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  下一页
+                  下一�?
                 </button>
               </div>
             </div>
@@ -703,7 +703,7 @@ function UploadModal({ onClose, onUpload }: {
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [isUploading, setIsUploading] = useState(false);
 
-  const categories = ['动物', '自然', '幻想', '交通工具', '食物', '节日', '图案', '花朵'];
+  const categories = ['动物', '自然', '幻想', '交通工�?, '食物', '节日', '图案', '花朵'];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -734,7 +734,7 @@ function UploadModal({ onClose, onUpload }: {
       tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
       imageUrl: previewUrl,
       status: 'approved', // 管理员上传直接通过
-      uploader: '管理员',
+      uploader: '管理�?,
       uploaderType: 'admin',
       uploadDate: new Date().toISOString().split('T')[0],
       views: 0,
@@ -751,7 +751,7 @@ function UploadModal({ onClose, onUpload }: {
       <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
         <div className="mt-3">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">上传新图片</h3>
+            <h3 className="text-lg font-medium text-gray-900">上传新图�?/h3>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
@@ -823,13 +823,13 @@ function UploadModal({ onClose, onUpload }: {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                标签（用逗号分隔）
+                标签（用逗号分隔�?
               </label>
               <input
                 type="text"
                 value={formData.tags}
                 onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                placeholder="例如：动物,卡通,儿童"
+                placeholder="例如：动�?卡�?儿童"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
@@ -847,7 +847,7 @@ function UploadModal({ onClose, onUpload }: {
                 disabled={isUploading}
                 className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50"
               >
-                {isUploading ? '上传中...' : '上传'}
+                {isUploading ? '上传�?..' : '上传'}
               </button>
             </div>
           </form>
@@ -871,7 +871,7 @@ function EditModal({ image, onClose, onSave }: {
     status: image.status
   });
 
-  const categories = ['动物', '自然', '幻想', '交通工具', '食物', '节日', '图案', '花朵'];
+  const categories = ['动物', '自然', '幻想', '交通工�?, '食物', '节日', '图案', '花朵'];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -938,16 +938,16 @@ function EditModal({ image, onClose, onSave }: {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                状态
+                状�?
               </label>
               <select
                 value={formData.status}
                                  onChange={(e) => setFormData({ ...formData, status: e.target.value as 'pending' | 'approved' | 'rejected' })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
-                <option value="pending">待审核</option>
+                <option value="pending">待审�?/option>
                 <option value="approved">已通过</option>
-                <option value="rejected">已拒绝</option>
+                <option value="rejected">已拒�?/option>
               </select>
             </div>
 
@@ -965,7 +965,7 @@ function EditModal({ image, onClose, onSave }: {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                标签（用逗号分隔）
+                标签（用逗号分隔�?
               </label>
               <input
                 type="text"

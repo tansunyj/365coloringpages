@@ -75,7 +75,7 @@ export default function UnicornColoringPages() {
       <p><strong>Castles and Kingdoms:</strong> Fantasy architecture providing storybook settings for magical creatures.</p>
 
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 p-6 rounded-xl my-8 border border-purple-100 dark:border-gray-600">
-        <h3 className="mt-0 text-purple-900 dark:text-purple-200">✨ Enhancing the Magic</h3>
+        <h3 className="mt-0 text-purple-900 dark:text-purple-200"><span>/</span>Enhancing the Magic</h3>
         <p className="mb-0">
           Add glitter, sequins, or stickers to finished unicorn pages for extra sparkle. This mixed-media approach turns coloring into craft project, creating truly magical results children can treasure.
         </p>
@@ -102,7 +102,7 @@ export default function UnicornColoringPages() {
 
       <h2>Creative Projects</h2>
 
-      <p><strong>Unicorn Room Décor:</strong> Color multiple unicorns, create magical wall display for children's rooms.</p>
+      <p><strong>Unicorn Room Décor:</strong> Color multiple unicorns, create magical wall display for children&apos;s rooms.</p>
 
       <p><strong>Birthday Party Activity:</strong> Print unicorn pages for party guests—fun activity doubling as take-home favor.</p>
 
@@ -117,7 +117,7 @@ export default function UnicornColoringPages() {
       <h2>Beyond Reality</h2>
 
       <p>
-        Because unicorns don't exist, there's complete creative freedom. No "correct" colors means pure imagination rules. Purple unicorns with green manes? Blue unicorns with pink stars? All perfectly acceptable in magical realms where unicorns roam!
+        Because unicorns don&apos;t exist, there&apos;s complete creative freedom. No &quot;correct&quot; colors means pure imagination rules. Purple unicorns with green manes? Blue unicorns with pink stars? All perfectly acceptable in magical realms where unicorns roam!
       </p>
 
       <p className="text-lg font-semibold mt-8">

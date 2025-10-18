@@ -110,7 +110,7 @@ export default function PopularSection() {
 
         {/* 白色卡片容器 */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          {/* 加载状态 */}
+          {/* 加载状态*/}
           {isLoading && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {Array.from({ length: 10 }).map((_, index) => (
@@ -123,7 +123,7 @@ export default function PopularSection() {
             </div>
           )}
 
-          {/* 错误状态 */}
+          {/* 错误状态*/}
           {error && !isLoading && (
             <div className="text-center py-12">
               <div className="text-red-500 mb-4">
@@ -141,7 +141,7 @@ export default function PopularSection() {
             </div>
           )}
 
-          {/* 卡片网格 - 2行5列 */}
+          {/* 卡片网格 - 2行3列*/}
           {!isLoading && !error && coloringPages.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {coloringPages.map((page, index) => (
@@ -161,7 +161,7 @@ export default function PopularSection() {
             </div>
           )}
 
-          {/* 空状态 */}
+          {/* 空状态*/}
           {!isLoading && !error && coloringPages.length === 0 && (
             <div className="text-center py-12">
               <div className="text-gray-500 mb-4">

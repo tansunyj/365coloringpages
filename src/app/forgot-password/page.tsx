@@ -14,7 +14,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    // 模拟发送重置密码邮件
+    // 模拟发送重置密码邮�?
     setTimeout(() => {
       setIsLoading(false);
       setIsSubmitted(true);
@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
 
             {/* 重置密码表单 */}
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* 邮箱输入框 */}
+              {/* 邮箱输入�?*/}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
                 />
               </div>
 
-              {/* 发送重置链接按钮 */}
+              {/* 发送重置链接按�?*/}
               <button
                 type="submit"
                 disabled={isLoading}

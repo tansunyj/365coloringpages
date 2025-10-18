@@ -28,7 +28,7 @@ export default function TestBannerPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        signal: AbortSignal.timeout(10000), // 10秒超时
+        signal: AbortSignal.timeout(10000), // 10秒超�?
       });
 
       const responseTime = Date.now() - startTime;
@@ -61,7 +61,7 @@ export default function TestBannerPage() {
   };
 
   useEffect(() => {
-    // 页面加载时自动测试
+    // 页面加载时自动测�?
     testBannerAPI();
   }, []);
 
@@ -81,7 +81,7 @@ export default function TestBannerPage() {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
-            {testing ? '测试中...' : '重新测试'}
+            {testing ? '测试�?..' : '重新测试'}
           </button>
         </div>
 
@@ -107,13 +107,13 @@ export default function TestBannerPage() {
             </div>
 
             <div>
-              <strong>连接状态:</strong>
+              <strong>连接状�?</strong>
               <span className={`ml-2 px-3 py-1 rounded text-sm font-medium ${
                 testResult.success 
                   ? 'bg-green-200 text-green-800' 
                   : 'bg-red-200 text-red-800'
               }`}>
-                {testResult.success ? '✅ 成功' : '❌ 失败'}
+                {testResult.success ? '�?成功' : '�?失败'}
               </span>
             </div>
 
@@ -141,14 +141,14 @@ export default function TestBannerPage() {
       <div className="bg-blue-50 p-6 rounded-lg">
         <h3 className="font-semibold text-blue-800 mb-2">💡 使用说明:</h3>
         <ul className="text-blue-700 space-y-1 list-disc list-inside">
-          <li>此页面测试后端 Banner API 是否可以正常访问</li>
+          <li>此页面测试后�?Banner API 是否可以正常访问</li>
           <li>API地址自动使用环境变量 NEXT_PUBLIC_API_BASE_URL</li>
           <li>成功的话，首页Hero部分就能正常加载后端的背景图数据</li>
           <li>如果失败，请检查：
             <ul className="ml-4 mt-1 space-y-1">
-              <li>• 后端服务是否在运行</li>
-              <li>• API地址是否正确</li>
-              <li>• 是否存在CORS问题</li>
+              <li>�?后端服务是否在运�?/li>
+              <li>�?API地址是否正确</li>
+              <li>�?是否存在CORS问题</li>
             </ul>
           </li>
         </ul>

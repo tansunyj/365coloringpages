@@ -48,7 +48,7 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
     };
   }, [isOpen, onClose]);
 
-  // 重置状态
+  // 重置状�?
   useEffect(() => {
     if (!isOpen) {
       setEmail('');
@@ -81,17 +81,17 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.message || '发送重置邮件失败');
+        throw new Error(data.message || '发送重置邮件失�?);
       }
 
-      setSuccessMessage(data.message || '重置密码链接已发送到您的邮箱，有效期3天');
+      setSuccessMessage(data.message || '重置密码链接已发送到您的邮箱，有效期3�?);
       
-      // 3秒后关闭对话框
+      // 3秒后关闭对话�?
       setTimeout(() => {
         onClose();
       }, 3000);
     } catch (err) {
-      setError((err as Error).message || '发送重置邮件失败，请重试');
+      setError((err as Error).message || '发送重置邮件失败，请重�?);
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +107,7 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
         onClick={onClose}
       />
       
-      {/* 对话框容器 */}
+      {/* 对话框容�?*/}
       <div className="flex min-h-full items-start justify-center p-4 pt-36">
         <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-auto transform transition-all border border-gray-300">
           {/* 关闭按钮 */}
@@ -118,7 +118,7 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
             <X className="h-6 w-6" />
           </button>
 
-          {/* 对话框内容 */}
+          {/* 对话框内�?*/}
           <div className="p-8">
             {/* 标题部分 */}
             <div className="text-center mb-6">
@@ -130,7 +130,7 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
               </p>
             </div>
 
-            {/* 错误和成功消息 */}
+            {/* 错误和成功消�?*/}
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start">
                 <span className="text-red-600 text-sm">{error}</span>
@@ -144,7 +144,7 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
 
             {/* 表单 */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* 邮箱输入框 */}
+              {/* 邮箱输入�?*/}
               <div>
                 <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-1.5">
                   Email Address
@@ -173,7 +173,7 @@ export default function ForgotPasswordDialog({ isOpen, onClose }: ForgotPassword
                     Sending...
                   </>
                 ) : successMessage ? (
-                  'Email Sent ✓'
+                  'Email Sent �?
                 ) : (
                   'Send Reset Link'
                 )}

@@ -3,9 +3,9 @@
 import { useEffect } from 'react';
 
 /**
- * 客户端 Head Meta 组件
- * 用于在客户端确保 meta 标签正确插入到 <head> 中
- * 这是为了解决 Next.js 15 + Turbopack 开发模式下 metadata 可能在 body 中的问题
+ * 客户�?Head Meta 组件
+ * 用于在客户端确保 meta 标签正确插入�?<head> �?
+ * 这是为了解决 Next.js 15 + Turbopack 开发模式下 metadata 可能�?body 中的问题
  */
 export function HeadMeta({
   title,
@@ -38,7 +38,7 @@ export function HeadMeta({
       document.title = title;
     }
 
-    // 设置或更新 meta 标签
+    // 设置或更�?meta 标签
     const setMetaTag = (name: string, content: string, isProperty = false) => {
       if (!content) return;
       

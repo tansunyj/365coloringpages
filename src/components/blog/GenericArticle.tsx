@@ -59,7 +59,7 @@ export default function GenericArticle({ title, content, ctaText = "Browse Color
           href={ctaLink} 
           className="inline-block bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors"
         >
-          {ctaText} â†’
+          {ctaText} â†?
         </a>
       </div>
     </div>

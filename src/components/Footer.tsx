@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* 主要内容区域 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-          {/* 网站简介 */}
+          {/* 网站简介*/}
           <div className="lg:col-span-1 relative pr-8">
             <Link href="/" className="flex items-center mb-5 hover:opacity-80 transition-opacity">
               <img src="/images/logo.png" alt="365 Coloring Pages Logo" className="h-24 w-24 rounded-md" />
@@ -121,7 +121,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 分割线 */}
+        {/* 分割线*/}
         <div className="border-t border-orange-200 mt-12 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <p className="text-gray-500 text-sm">

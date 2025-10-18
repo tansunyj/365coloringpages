@@ -29,7 +29,7 @@ export default function ThemeParkColoringCard({ page, allPages }: ThemeParkColor
       sessionStorage.setItem('relatedColoringPages', JSON.stringify(selectedPages));
     }
     
-    // 将主题公园名称转换为URL友好的格式
+    // 将主题公园名称转换为URL友好的格�?
     const parkSlug = page.park.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
     router.push(`/theme-park/${parkSlug}/${page.id}`);
   };
@@ -49,7 +49,7 @@ export default function ThemeParkColoringCard({ page, allPages }: ThemeParkColor
       onClick={handleCardClick}
       className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
     >
-      {/* 图片占位符 */}
+      {/* 图片占位�?*/}
       <div className="aspect-[4/3] bg-gradient-to-br from-yellow-100 to-orange-100 relative overflow-hidden">
         {/* 模拟涂色页面图片 */}
         <div className="absolute inset-0 flex items-center justify-center">

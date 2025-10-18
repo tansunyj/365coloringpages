@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../../components/UnifiedListPageWrapper';
 
 interface PopularCategoryPageClientProps {
   category: string;
@@ -14,7 +14,7 @@ interface PopularCategoryPageClientProps {
  */
 export default function PopularCategoryPageClient({ category }: PopularCategoryPageClientProps) {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="popular"
       category={category}
       title="Popular Coloring Pages"

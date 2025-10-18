@@ -8,9 +8,9 @@ export default function DebugHomepage() {
   const [testing, setTesting] = useState(false);
 
   useEffect(() => {
-    // 检查环境变量
+    // 检查环境变�?
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    setEnvCheck(apiUrl || '未设置');
+    setEnvCheck(apiUrl || '未设�?);
   }, []);
 
   const runFullTest = async () => {
@@ -125,17 +125,17 @@ export default function DebugHomepage() {
       <div className="bg-yellow-50 p-4 rounded-lg mb-6 border border-yellow-200">
         <h2 className="font-semibold text-yellow-800 mb-2">📝 问题描述</h2>
         <p className="text-yellow-700">
-          首页Hero部分显示的是默认英文关键词(Animals, Fantasy, Nature, Holidays)，
+          首页Hero部分显示的是默认英文关键�?Animals, Fantasy, Nature, Holidays)�?
           而不是从后端API获取的中文关键词(小狗, 公主, 独角兽等)
         </p>
       </div>
 
       <div className="bg-gray-100 p-6 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-4">🔧 环境检查</h2>
+        <h2 className="text-lg font-semibold mb-4">🔧 环境检�?/h2>
         <div className="bg-white p-3 rounded">
           <strong>NEXT_PUBLIC_API_BASE_URL:</strong>
           <span className={`ml-2 px-2 py-1 rounded text-sm ${
-            envCheck && envCheck !== '未设置' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+            envCheck && envCheck !== '未设�? ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
           }`}>
             {envCheck}
           </span>
@@ -154,7 +154,7 @@ export default function DebugHomepage() {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
-            {testing ? '测试中...' : '重新测试'}
+            {testing ? '测试�?..' : '重新测试'}
           </button>
         </div>
 
@@ -166,7 +166,7 @@ export default function DebugHomepage() {
                 <span className={`px-2 py-1 rounded text-sm ${
                   test.success ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
                 }`}>
-                  {test.success ? '✅ 成功' : '❌ 失败'}
+                  {test.success ? '�?成功' : '�?失败'}
                 </span>
               </div>
               
@@ -192,7 +192,7 @@ export default function DebugHomepage() {
                   <div className="font-mono text-xs mt-1 max-h-32 overflow-auto">
                     {test.test === 'Hero Logic Simulation' && test.data.processedKeywords ? (
                       <div>
-                        <div><strong>处理后的关键词:</strong> {JSON.stringify(test.data.processedKeywords)}</div>
+                        <div><strong>处理后的关键�?</strong> {JSON.stringify(test.data.processedKeywords)}</div>
                         <div className="mt-2"><strong>原始响应:</strong> {JSON.stringify(test.data.rawResponse, null, 2)}</div>
                       </div>
                     ) : (
@@ -209,11 +209,11 @@ export default function DebugHomepage() {
       <div className="bg-blue-50 p-6 rounded-lg">
         <h3 className="font-semibold text-blue-800 mb-2">🔍 排查建议</h3>
         <ol className="text-blue-700 space-y-1 list-decimal list-inside">
-          <li>检查后端服务是否在 {envCheck} 上正常运行</li>
-          <li>确认 /api/keywords 端点返回正确的数据格式</li>
+          <li>检查后端服务是否在 {envCheck} 上正常运�?/li>
+          <li>确认 /api/keywords 端点返回正确的数据格�?/li>
           <li>查看浏览器开发者工具的Console日志</li>
           <li>检查Network标签页是否有CORS错误</li>
-          <li>如果API调用成功但Hero还是显示默认关键词，可能是组件渲染问题</li>
+          <li>如果API调用成功但Hero还是显示默认关键词，可能是组件渲染问�?/li>
         </ol>
       </div>
     </div>

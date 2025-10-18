@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../../components/UnifiedListPageWrapper';
 
 /**
  * 搜索分类页面客户端组件属性
@@ -46,7 +46,7 @@ export default function SearchCategoryPageClient({ category }: SearchCategoryPag
   const displayName = getCategoryDisplayName(category);
 
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="search"
       category={category}
       title={`${displayName} Search Results`}

@@ -508,21 +508,37 @@ export const api = {
         ),
     },
 
+    // 假设这是您的 API_ENDPOINTS 和 ApiResponse 类型定义
+    // declare const API_ENDPOINTS: any;
+    // declare const adminApiClient: any;
+    // declare const buildUrlWithParams: any;
+    // type ApiResponse = any; 
+
     categories: {
       list: (params?: string | {
         page?: number;
         limit?: number;
         search?: string;
-        isActive?: string;
+        isActive?: string | boolean; // 允许 boolean 类型，以更好地匹配 Record<string, ...>
       }) => {
-        const queryParams = typeof params === 'string' ? params : (params || {});
+        // 如果 params 是字符串，我们假设它已经是查询字符串（例如 "page=1&limit=10"）
+        if (typeof params === 'string') {
+          return adminApiClient.get<ApiResponse>(
+            `${API_ENDPOINTS.ADMIN.CATEGORIES.LIST}?${params}`
+          );
+        }
+
+        // 如果 params 是对象或 undefined，我们将其作为第二个参数传递
+        const queryParams = params || {};
+        
+        // 使用类型断言 'as Record<string, any>' 告诉 TypeScript 这是一个有效的参数对象
+        // 这解决了类型不兼容的报错 (TS2345)
         return adminApiClient.get<ApiResponse>(
-          typeof params === 'string' 
-            ? `${API_ENDPOINTS.ADMIN.CATEGORIES.LIST}?${params}`
-            : API_ENDPOINTS.ADMIN.CATEGORIES.LIST,
-          typeof params === 'string' ? undefined : queryParams
+          API_ENDPOINTS.ADMIN.CATEGORIES.LIST,
+          queryParams as Record<string, any>
         );
       },
+      
       create: (data: {
         name: string;
         slug: string;
@@ -533,6 +549,7 @@ export const api = {
         sortOrder?: number;
         isActive?: boolean;
       }) => adminApiClient.post<ApiResponse>(API_ENDPOINTS.ADMIN.CATEGORIES.CREATE, data),
+      
       update: (data: {
         id: number;
         name?: string;
@@ -544,6 +561,7 @@ export const api = {
         sortOrder?: number;
         isActive?: boolean;
       }) => adminApiClient.put<ApiResponse>(API_ENDPOINTS.ADMIN.CATEGORIES.UPDATE, data),
+      
       delete: (id: number) => adminApiClient.delete<ApiResponse>(
         buildUrlWithParams(API_ENDPOINTS.ADMIN.CATEGORIES.DELETE, { id })
       ),

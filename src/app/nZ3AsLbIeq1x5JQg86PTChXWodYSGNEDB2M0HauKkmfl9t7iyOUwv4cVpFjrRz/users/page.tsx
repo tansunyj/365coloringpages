@@ -102,7 +102,7 @@ export default function AdminUsers() {
     if (response.status === 401) {
       showToast('error', '登录已过期，请重新登录');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
@@ -139,7 +139,7 @@ export default function AdminUsers() {
       const token = localStorage.getItem('adminToken');
       
       if (!token) {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -155,8 +155,8 @@ export default function AdminUsers() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
-        }, 1500);
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
+        }, 1500); 
         return;
       }
 
@@ -175,7 +175,7 @@ export default function AdminUsers() {
         handleApiError(response, data, '加载用户列表失败');
       }
     } catch (error) {
-      console.error('❌ 加载用户失败:', error);
+      console.error('加载用户失败:', error);
       showToast('error', '加载失败，请重试');
     } finally {
       setIsLoading(false);
@@ -204,7 +204,7 @@ export default function AdminUsers() {
     loadUsers(1, searchTerm, status);
   };
 
-  // 清空搜索框
+  // 清空搜索
   const handleClearSearch = () => {
     setSearchTerm('');
     setCurrentPage(1);
@@ -226,7 +226,7 @@ export default function AdminUsers() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -245,7 +245,7 @@ export default function AdminUsers() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -253,7 +253,7 @@ export default function AdminUsers() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '用户添加成功！');
+        showToast('success', '用户添加成功');
         setShowAddModal(false);
         // 重新加载列表
         loadUsers(currentPage, searchTerm, statusFilter);
@@ -261,7 +261,7 @@ export default function AdminUsers() {
         handleApiError(response, data, '用户添加失败');
       }
     } catch (error) {
-      console.error('❌ 添加用户失败:', error);
+      console.error('添加用户失败:', error);
       showToast('error', '添加失败，请重试');
     }
   };
@@ -274,7 +274,7 @@ export default function AdminUsers() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -291,9 +291,9 @@ export default function AdminUsers() {
 
 
       if (response.status === 401) {
-        showToast('error', '登录已过期，请重新登录');
+        showToast('error', '登录已过期，请重新登录'); 
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -301,7 +301,7 @@ export default function AdminUsers() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '用户更新成功！');
+        showToast('success', '用户更新成功');
         setEditingUser(null);
         setShowAddModal(false);
         // 重新加载列表
@@ -310,7 +310,7 @@ export default function AdminUsers() {
         handleApiError(response, data, '用户更新失败');
       }
     } catch (error) {
-      console.error('❌ 编辑用户失败:', error);
+      console.error('编辑用户失败:', error);
       showToast('error', '更新失败，请重试');
     }
   };
@@ -330,7 +330,7 @@ export default function AdminUsers() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -347,7 +347,7 @@ export default function AdminUsers() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -355,14 +355,14 @@ export default function AdminUsers() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '用户删除成功！');
+        showToast('success', '用户删除成功');
         // 重新加载列表
         loadUsers(currentPage, searchTerm, statusFilter);
       } else {
         handleApiError(response, data, '用户删除失败');
       }
     } catch (error) {
-      console.error('❌ 删除用户失败:', error);
+      console.error('删除用户失败:', error);
       showToast('error', '删除失败，请重试');
     } finally {
       // 关闭确认 dialog
@@ -390,7 +390,7 @@ export default function AdminUsers() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -415,7 +415,7 @@ export default function AdminUsers() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -424,7 +424,7 @@ export default function AdminUsers() {
 
       if (response.ok && data.success) {
         showToast('success', user.isActive ? '用户已冻结' : '用户已解冻');
-        // 只更新当前行的状态，不重新加载整个列表
+        // 只更新当前行的状态，不重新加载整个列�?
         setUsers(prev => prev.map(u => 
           u.id === userId ? { ...u, isActive: !u.isActive } : u
         ));
@@ -432,7 +432,7 @@ export default function AdminUsers() {
         handleApiError(response, data, '状态更新失败');
       }
     } catch (error) {
-      console.error('❌ 切换冻结状态失败:', error);
+      console.error('切换冻结状态失败:', error);
       showToast('error', '状态更新失败，请重试');
     }
   };
@@ -498,7 +498,7 @@ export default function AdminUsers() {
           </div>
           </div>
 
-        {/* 搜索和统计 */}
+        {/* 搜索和统计*/}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex flex-col gap-4">
             {/* 搜索和筛选行 */}
@@ -545,10 +545,10 @@ export default function AdminUsers() {
                 搜索
                   </button>
                 </div>
-            {/* 统计信息行 */}
+            {/* 统计信息*/}
             <div className="flex gap-4 text-sm text-gray-600">
               <span>总计: <strong>{pagination.totalCount}</strong></span>
-              <span>当前页: <strong>{users.length}</strong></span>
+              <span>当前: <strong>{users.length}</strong></span>
               <span>正常: <strong>{users.filter(u => u.isActive).length}</strong></span>
               <span>冻结: <strong>{users.filter(u => !u.isActive).length}</strong></span>
             </div>
@@ -695,7 +695,7 @@ export default function AdminUsers() {
                   <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm text-gray-700">
-                        显示{pagination.currentPage}页,共{pagination.totalCount}条
+                        显示{pagination.currentPage}页，共{pagination.totalCount}页
                       </p>
             </div>
                     <div>
@@ -779,7 +779,7 @@ export default function AdminUsers() {
                 </div>
                 <div className="mb-6">
                   <p className="text-sm text-gray-500">
-                    确定要删除这个用户吗？此操作不可撤销。
+                    确定要删除这个用户吗？此操作不可撤销
                   </p>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -872,7 +872,7 @@ function UserModal({ user, onClose, onSave, showToast }: UserModalProps) {
       return;
     }
 
-    // 如果是编辑模式，需要包含 ID
+    // 如果是编辑模式，需要包含ID
     if (user) {
       onSave({
         ...formData,
@@ -1059,12 +1059,12 @@ function UserDetailModal({ user, onClose }: UserDetailModalProps) {
                   最后登录时间
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
-                  {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : '从未登录'}
+                  {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : '从未登录时间'}
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  注册时间
+                  注册时间：
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {new Date(user.createdAt).toLocaleString()}
@@ -1074,7 +1074,7 @@ function UserDetailModal({ user, onClose }: UserDetailModalProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                更新时间
+                更新时间：
               </label>
               <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                 {new Date(user.updatedAt).toLocaleString()}

@@ -10,7 +10,7 @@ interface SimpleColoringCardProps {
   category: string;
   likes?: number;
   downloads?: number;
-  id?: number; // 添加ID属性
+  id?: number; // 添加ID属性 
 }
 
 export default function SimpleColoringCard({ 
@@ -60,7 +60,7 @@ export default function SimpleColoringCard({
           {category}
         </div>
         
-        {/* 右上角快速操作按钮 */}
+        {/* 右上角快速操作按钮*/}
         <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleLike}
@@ -80,7 +80,7 @@ export default function SimpleColoringCard({
           </button>
         </div>
         
-        {/* 增强的悬浮叠加层 - 显示标题和统计信息 */}
+        {/* 增强的悬浮叠加层 - 显示标题和统计信息*/}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
           <div className="w-full p-4 text-white">
             <h3 className="text-sm font-bold truncate mb-2">{title}</h3>

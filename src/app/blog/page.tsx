@@ -88,7 +88,7 @@ export default function BlogListPage() {
                     </div>
                     <span>{article.author}</span>
                   </div>
-                  <span>•</span>
+                  <span>/</span>
                   <span>{new Date(article.publishDate).toLocaleDateString('en-US', { 
                     year: 'numeric', 
                     month: 'short',

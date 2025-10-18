@@ -30,7 +30,7 @@ interface UnifiedBreadcrumbProps {
 }
 
 /**
- * 分类名称映射工具类
+ * 分类名称映射工具
  */
 class CategoryNameMapper {
   private static readonly categoryNameMap: Record<string, string> = {
@@ -173,7 +173,7 @@ class BreadcrumbPathGenerator {
   }
 
   /**
-   * 生成Theme Parks页面面包屑
+  * 生成Theme Parks页面面包屑
    */
   private static generateThemeParksPath(park?: string, itemTitle?: string): BreadcrumbItem[] {
     const basePath = [
@@ -267,7 +267,7 @@ class BreadcrumbPathGenerator {
  * @description 
  * 根据页面类型和参数自动生成合适的面包屑导航路径，支持以下7种页面类型：
  * 1. popular - 热门页面
- * 2. latest - 最新页面  
+ * 2. latest - 最新页面
  * 3. easy-coloring-book - Easy Coloring Book
  * 4. theme-parks - 主题公园
  * 5. categories - 分类页面
@@ -278,7 +278,7 @@ class BreadcrumbPathGenerator {
  * <UnifiedBreadcrumb 
  *   type="categories" 
  *   category="animals" 
- *   itemTitle="可爱小狗涂色页" 
+ *   itemTitle="可爱小狗涂色页面" 
  * />
  * 
  * // 搜索结果页面包屑

@@ -48,7 +48,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
   });
   const lastPos = useRef<{ x: number; y: number } | null>(null);
 
-  // 初始化画布
+  // 初始化画�?
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -89,7 +89,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
         };
         img.onerror = () => {
           console.error('Failed to load image');
-          // 如果 blob 方式失败，尝试直接加载
+          // 如果 blob 方式失败，尝试直接加�?
           const directImg = new Image();
           directImg.crossOrigin = 'anonymous';
           directImg.onload = () => {
@@ -105,7 +105,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
         img.src = objectUrl;
       } catch (error) {
         console.error('Error loading image:', error);
-        // 降级：直接尝试加载图片
+        // 降级：直接尝试加载图�?
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
@@ -123,7 +123,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
     loadImage();
   }, [imageUrl]);
 
-  // 保存到历史记录
+  // 保存到历史记�?
   const saveToHistory = () => {
     const canvas = canvasRef.current;
     const ctx = context;
@@ -170,9 +170,9 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
     };
   };
 
-  // 开始绘制
+  // 开始绘�?
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    // 如果是文本工具，显示文本输入框
+    // 如果是文本工具，显示文本输入�?
     if (activeTool === 'text') {
       const pos = getMousePos(e);
       if (!pos) return;
@@ -196,7 +196,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
     lastPos.current = pos;
   };
 
-  // 绘制中
+  // 绘制�?
   const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing || !context || !lastPos.current) return;
 
@@ -233,7 +233,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
     setActiveTool('pen');
   };
 
-  // 启用橡皮擦
+  // 启用橡皮�?
   const enableEraser = () => {
     setActiveTool('eraser');
   };
@@ -243,7 +243,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
     setActiveTool('text');
   };
   
-  // 添加文字到画布
+  // 添加文字到画�?
   const addTextToCanvas = (text: string, x: number, y: number) => {
     const canvas = canvasRef.current;
     const ctx = context;
@@ -271,7 +271,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
       const canvas = canvasRef.current;
       if (!ctx || !canvas) return;
 
-      // 恢复到第一个状态（原始图片）
+      // 恢复到第一个状态（原始图片�?
       ctx.putImageData(history[0], 0, 0);
       setHistoryStep(0);
       setHistory(prev => [prev[0]]);
@@ -296,7 +296,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
   return (
     <div className="fixed inset-0 bg-black/80 z-[10000] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col">
-        {/* 头部工具栏 */}
+        {/* 头部工具�?*/}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h2 className="text-xl font-bold text-gray-900">Image Editor</h2>
           <button
@@ -307,7 +307,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
           </button>
         </div>
 
-        {/* 工具栏 */}
+        {/* 工具�?*/}
         <div className="flex items-center gap-2 p-4 border-b border-gray-200 overflow-x-auto overflow-y-visible">
           {/* 画笔 */}
           <button
@@ -322,7 +322,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
             <span className="text-sm">Pen</span>
           </button>
 
-          {/* 橡皮擦 */}
+          {/* 橡皮�?*/}
           <button
             onClick={enableEraser}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
@@ -350,7 +350,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
 
           <div className="w-px h-8 bg-gray-300 mx-2" />
 
-          {/* 颜色选择器 */}
+          {/* 颜色选择�?*/}
           <div className="relative">
             <button
               ref={colorButtonRef}
@@ -399,7 +399,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50'
                 : 'bg-blue-100 text-blue-600 hover:bg-blue-200 hover:scale-105 shadow-sm'
             }`}
-            title={historyStep <= 0 ? 'No actions to undo' : 'Undo (撤销上一步操作)'}
+            title={historyStep <= 0 ? 'No actions to undo' : 'Undo (撤销上一步操�?'}
           >
             <Undo className="h-4 w-4" />
           </button>
@@ -411,7 +411,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50'
                 : 'bg-blue-100 text-blue-600 hover:bg-blue-200 hover:scale-105 shadow-sm'
             }`}
-            title={historyStep >= history.length - 1 ? 'No actions to redo' : 'Redo (重做上一步操作)'}
+            title={historyStep >= history.length - 1 ? 'No actions to redo' : 'Redo (重做上一步操�?'}
           >
             <Redo className="h-4 w-4" />
           </button>
@@ -453,7 +453,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
             <div className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg z-20 animate-bounce">
               <div className="flex items-center gap-2">
                 <Pencil className="h-5 w-5" />
-                <span className="font-medium">💡 点击"Pen"工具，然后在图片上绘制，即可使用撤销/重做功能！</span>
+                <span className="font-medium">💡 点击"Pen"工具，然后在图片上绘制，即可使用撤销/重做功能�?/span>
               </div>
             </div>
           )}
@@ -468,7 +468,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
               className="cursor-crosshair"
             />
             
-            {/* 文本输入框 - 在画布上显示 */}
+            {/* 文本输入�?- 在画布上显示 */}
             {textInput.show && (
               <div
                 className="absolute bg-white border-2 border-blue-500 rounded-lg shadow-lg p-2"
@@ -509,7 +509,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
                       取消
                     </button>
                   </div>
-                  <p className="text-xs text-gray-500">💡 按 Enter 添加，Esc 取消</p>
+                  <p className="text-xs text-gray-500">💡 �?Enter 添加，Esc 取消</p>
                 </div>
               </div>
             )}

@@ -38,15 +38,15 @@ export default function AdminLogin() {
       const data = await api.admin.auth.login({ email, password });
 
 
-      // 类型断言来访问响应字段
+      // 类型断言来访问响应字�?
       const loginResponse = data as LoginResponse;
 
       if (data.success && loginResponse.data) {
-        // 设置管理员登录状态
+        // 设置管理员登录状�?
         localStorage.setItem('adminToken', loginResponse.data.token);
         localStorage.setItem('adminUser', JSON.stringify(loginResponse.data.user));
         
-        router.push('/admin/dashboard');
+        router.push('/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/dashboard');
       } else {
         setError(data.error || '登录失败');
       }
@@ -65,7 +65,7 @@ export default function AdminLogin() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
             <Shield className="h-8 w-8 text-orange-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">管理员登录</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">管理员登陆</h1>
           <p className="text-gray-600">365 Coloring Pages 管理系统</p>
         </div>
 

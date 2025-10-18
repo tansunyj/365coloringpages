@@ -9,9 +9,8 @@ import Footer from '@/components/Footer';
 import { HomePageJsonLd } from '@/components/JsonLd';
 
 /**
- * 首页静态 SEO Metadata
- * 使用静态 export 确保所有 meta 标签都在初始 HTML 的 <head> 中
- */
+ * 首页静态SEO Metadata 
+ * 使用静态export 确保所有meta 标签都在初始 HTML <head> 中 */
 export const metadata: Metadata = {
   title: 'Free Printable Coloring Pages - Halloween, Animals & Disney',
   description: 'Browse 10,000+ free high-quality printable coloring pages: Halloween, Hello Kitty, Pokemon, Animals, Disney, Christmas themes & more. For kids & adults. Download now!',

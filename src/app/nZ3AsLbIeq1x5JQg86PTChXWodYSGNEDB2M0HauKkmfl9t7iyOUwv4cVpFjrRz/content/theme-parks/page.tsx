@@ -96,7 +96,7 @@ export default function AdminThemeParks() {
     if (response.status === 401) {
       showToast('error', '登录已过期，请重新登录');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
@@ -133,7 +133,7 @@ export default function AdminThemeParks() {
       const token = localStorage.getItem('adminToken');
       
       if (!token) {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -149,7 +149,7 @@ export default function AdminThemeParks() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -169,7 +169,7 @@ export default function AdminThemeParks() {
         handleApiError(response, data, '加载主题公园列表失败');
       }
     } catch (error) {
-      console.error('❌ 加载主题公园失败:', error);
+      console.error('加载主题公园失败:', error);
       showToast('error', '加载失败，请重试');
     } finally {
       setIsLoading(false);
@@ -198,7 +198,7 @@ export default function AdminThemeParks() {
     loadThemeParks(1, searchTerm, status);
   };
 
-  // 清空搜索框
+  // 清空搜索
   const handleClearSearch = () => {
     setSearchTerm('');
     setCurrentPage(1);
@@ -220,7 +220,7 @@ export default function AdminThemeParks() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -228,7 +228,7 @@ export default function AdminThemeParks() {
 
       const response = await fetch('http://localhost:3001/api/admin/theme-parks', {
         method: 'POST',
-        headers: {
+        headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
@@ -239,7 +239,7 @@ export default function AdminThemeParks() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -247,7 +247,7 @@ export default function AdminThemeParks() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '主题公园添加成功！');
+        showToast('success', '主题公园添加成功');
         setIsModalOpen(false);
         // 重新加载列表
         loadThemeParks(currentPage, searchTerm, statusFilter);
@@ -255,7 +255,7 @@ export default function AdminThemeParks() {
         handleApiError(response, data, '主题公园添加失败');
       }
     } catch (error) {
-      console.error('❌ 添加主题公园失败:', error);
+      console.error('添加主题公园失败:', error);
       showToast('error', '添加失败，请重试');
     }
   };
@@ -268,7 +268,7 @@ export default function AdminThemeParks() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -287,7 +287,7 @@ export default function AdminThemeParks() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -295,7 +295,7 @@ export default function AdminThemeParks() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '主题公园更新成功！');
+        showToast('success', '主题公园更新成功');
         setEditingPark(null);
         setIsModalOpen(false);
         // 重新加载列表
@@ -304,7 +304,7 @@ export default function AdminThemeParks() {
         handleApiError(response, data, '主题公园更新失败');
       }
     } catch (error) {
-      console.error('❌ 编辑主题公园失败:', error);
+      console.error('编辑主题公园失败:', error);
       showToast('error', '更新失败，请重试');
     }
   };
@@ -324,7 +324,7 @@ export default function AdminThemeParks() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -341,7 +341,7 @@ export default function AdminThemeParks() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -349,14 +349,14 @@ export default function AdminThemeParks() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '主题公园删除成功！');
+        showToast('success', '主题公园删除成功');
         // 重新加载列表
         loadThemeParks(currentPage, searchTerm, statusFilter);
       } else {
         handleApiError(response, data, '主题公园删除失败');
       }
     } catch (error) {
-      console.error('❌ 删除主题公园失败:', error);
+      console.error('删除主题公园失败:', error);
       showToast('error', '删除失败，请重试');
     } finally {
       // 关闭确认 dialog
@@ -384,7 +384,7 @@ export default function AdminThemeParks() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -409,7 +409,7 @@ export default function AdminThemeParks() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -418,7 +418,7 @@ export default function AdminThemeParks() {
 
       if (response.ok && data.success) {
         showToast('success', park.isActive ? '已停用主题公园' : '已激活主题公园');
-        // 只更新当前行的状态，不重新加载整个列表
+        // 只更新当前行的状态，不重新加载整个列�?
         setThemeParks(prev => prev.map(p => 
           p.id === parkId ? { ...p, isActive: !p.isActive } : p
         ));
@@ -426,7 +426,7 @@ export default function AdminThemeParks() {
         handleApiError(response, data, '状态更新失败');
       }
     } catch (error) {
-      console.error('❌ 切换状态失败:', error);
+      console.error('切换状态失败:', error);
       showToast('error', '状态更新失败，请重试');
     }
   };
@@ -475,7 +475,7 @@ export default function AdminThemeParks() {
             </div>
           </div>
 
-        {/* 搜索和统计 */}
+        {/* 搜索和统计*/}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex flex-col gap-4">
             {/* 搜索和筛选行 */}
@@ -522,7 +522,7 @@ export default function AdminThemeParks() {
                 搜索
               </button>
             </div>
-            {/* 统计信息行 */}
+            {/* 统计信息*/}
             <div className="flex gap-4 text-sm text-gray-600">
               <span>总计: <strong>{pagination.totalCount}</strong></span>
               <span>当前页: <strong>{themeParks.length}</strong></span>
@@ -630,7 +630,7 @@ export default function AdminThemeParks() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              {park.coloringPageCount || 0} 个
+                              {park.coloringPageCount || 0} 涂色卡
                             </span>
                           </div>
                         </td>
@@ -730,7 +730,7 @@ export default function AdminThemeParks() {
                   <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm text-gray-700">
-                        显示{pagination.currentPage}页,共{pagination.totalCount}条
+                        显示{pagination.currentPage}页，共{pagination.totalCount}条
                       </p>
                     </div>
                     <div>
@@ -814,7 +814,7 @@ export default function AdminThemeParks() {
                 </div>
                 <div className="mb-6">
                   <p className="text-sm text-gray-500">
-                    确定要删除这个主题公园吗？此操作不可撤销。
+                    确定要删除这个主题公园吗？此操作不可撤销
                   </p>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -926,18 +926,18 @@ function ThemeParkModal({ park, onClose, onSave, showToast }: ThemeParkModalProp
     e.preventDefault();
     
     if (!formData.name.trim() || !formData.slug.trim()) {
-      showToast('warning', '请填写主题公园名称和标识符');
+      showToast('warning', '请填写主题公园名称和标识(slug)');
       return;
     }
 
-    // 如果是编辑模式，需要包含 ID
+    // 如果是编辑模式，需要包含ID
     if (park) {
       onSave({
         ...formData,
         id: park.id,
         createdAt: park.createdAt,
         updatedAt: park.updatedAt,
-        pageCount: park.pageCount,
+        coloringPageCount: park.coloringPageCount,
         createdByAdmin: park.createdByAdmin,
       });
     } else {
@@ -951,8 +951,7 @@ function ThemeParkModal({ park, onClose, onSave, showToast }: ThemeParkModalProp
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-medium text-gray-900">
-            {park ? '编辑主题公园' : '添加主题公园'}
-            </h3>
+            {park ? '编辑主题公园' : '添加主题公园'}    </h3>
           <button
             onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -977,8 +976,7 @@ function ThemeParkModal({ park, onClose, onSave, showToast }: ThemeParkModalProp
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              标识符 (slug) *
-            </label>
+              标识(slug) *
             <input
               type="text"
               value={formData.slug}
@@ -986,6 +984,7 @@ function ThemeParkModal({ park, onClose, onSave, showToast }: ThemeParkModalProp
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               required
             />
+            </label>
               </div>
           </div>
 
@@ -1150,7 +1149,7 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -1159,12 +1158,12 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
 
       if (result.success && result.data?.thumbnailUrl) {
         onImageChange(result.data.thumbnailUrl);
-        showToast('success', '图片上传成功！');
+        showToast('success', '图片上传成功');
       } else {
         showToast('error', result.message || '上传失败');
       }
     } catch (error) {
-      console.error('❌ 图片上传失败:', error);
+      console.error('图片上传失败:', error);
       showToast('error', '上传失败，请重试');
     } finally {
       setIsUploading(false);
@@ -1203,11 +1202,12 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
             <Upload className="mx-auto h-12 w-12 text-gray-400" />
             <div className="mt-2">
               <p className="text-sm text-gray-600">
-                {isUploading ? '上传中...' : '点击上传图片'}
+                {isUploading ? '上传�?..' : '点击上传图片'}
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                支持 JPG、PNG 格式，最大 5MB
+                支持 JPG、PNG 格式，最5MB
               </p>
+
             </div>
           </div>
         )}
@@ -1264,7 +1264,7 @@ function ThemeParkDetailModal({ park, onClose }: ThemeParkDetailModalProps) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  标识符 (slug)
+                  标识(slug)
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {park.slug}
@@ -1397,6 +1397,7 @@ function ThemeParkDetailModal({ park, onClose }: ThemeParkDetailModalProps) {
               <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900 min-h-[80px]">
                 {park.seoDescription || '未设置'}
               </div>
+              </div>
             </div>
           </div>
 
@@ -1410,6 +1411,5 @@ function ThemeParkDetailModal({ park, onClose }: ThemeParkDetailModalProps) {
           </div>
         </div>
       </div>
-    </div>
   );
 } 

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../components/UnifiedListPageWrapper';
 
 /**
  * New Coloring Pages页面客户端组件
@@ -9,7 +9,7 @@ import UnifiedListPage from '../../components/UnifiedListPage';
  */
 export default function LatestPageClient() {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="latest"
       title="New Coloring Pages"
       subtitle="Discover the Latest Coloring Content"

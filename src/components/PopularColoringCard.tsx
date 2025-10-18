@@ -57,7 +57,7 @@ export default function PopularColoringCard({
   const handleCardClick = () => {
     // 存储完整的列表数据到sessionStorage（不筛选，详情页会处理）
     if (allPages && allPages.length > 0) {
-      console.log('💾 PopularColoringCard 存储完整数据池:', allPages.length, '条');
+      console.log('💾 PopularColoringCard 存储完整数据?', allPages.length, '条');
       sessionStorage.setItem('listPageAllData', JSON.stringify(allPages));
     }
     
@@ -82,7 +82,7 @@ export default function PopularColoringCard({
           unoptimized
         />
         
-        {/* 左上角显示涂色卡片标题 */}
+        {/* 左上角显示涂色卡片标题*/}
         <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full opacity-90">
           {title}
         </div>

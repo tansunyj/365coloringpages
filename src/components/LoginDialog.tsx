@@ -11,7 +11,7 @@ interface LoginDialogProps {
   onLoginSuccess: () => void;
 }
 
-// 生成默认头像URL（基于用户邮箱或名称）
+// 生成默认头像URL（基于用户邮箱或名称）  
 const generateDefaultAvatar = (email: string, name?: string) => {
   // 使用UI Avatars服务生成漂亮的字母头像
   const displayName = name || email.split('@')[0];
@@ -116,7 +116,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
     return emailRegex.test(email);
   };
 
-  // 验证密码复杂性
+  // 验证密码复杂度
   const validatePassword = (password: string): { isValid: boolean; message: string } => {
     if (password.length < 8) {
       return { isValid: false, message: 'Password must be at least 8 characters' };
@@ -170,7 +170,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
       return;
     }
     
-    // 验证密码复杂性
+    // 验证密码复杂度
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
       setError(passwordValidation.message);
@@ -199,7 +199,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
       const result = await response.json();
 
       if (result.success) {
-        // 保存 token（使用 authToken 作为key，与OAuth登录保持一致）
+        // 保存 token（使用authToken 作为key，与OAuth登录保持一致）
         localStorage.setItem('authToken', result.data.token);
         localStorage.setItem('token', result.data.token);
         
@@ -215,7 +215,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
             avatar: avatarUrl  // 使用生成的头像URL
           };
           
-          console.log('💾 登录/注册成功，保存用户信息:', userInfo);
+          console.log('💾 登录/注册成功，保存用户信息?', userInfo);
           localStorage.setItem('userInfo', JSON.stringify(userInfo));
         }
         
@@ -226,7 +226,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
         setError(result.error || 'Login failed');
         
         // 如果验证码错误，刷新验证码
-        if (result.error && (result.error.includes('验证码') || result.error.toLowerCase().includes('captcha') || result.error.toLowerCase().includes('verification'))) {
+        if (result.error && (result.error.includes('验证码错误') || result.error.toLowerCase().includes('captcha') || result.error.toLowerCase().includes('verification'))) {
           await generateCaptcha(email);
           setCaptchaCode('');
         }
@@ -265,7 +265,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
         onClick={handleClose}
       />
       
-      {/* 对话框容器 */}
+      {/* 对话框容器*/}
       <div className="flex min-h-full items-start justify-center pt-48 p-4">
         <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-auto transform transition-all">
           {/* 关闭按钮 */}
@@ -276,7 +276,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
             <X className="h-5 w-5" />
           </button>
 
-          {/* 对话框内容 */}
+          {/* 对话框内容*/}
           <div className="p-6">
             {/* 标题部分 */}
             <div className="text-center mb-5">
@@ -323,7 +323,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
               </button>
             </div>
 
-            {/* 分隔线 */}
+            {/* 分隔线*/}
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200" />
@@ -335,7 +335,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
 
             {/* 登录/注册表单 */}
             <form onSubmit={handleSubmit} className="space-y-3">
-              {/* 邮箱输入框 */}
+              {/* 邮箱输入框*/}
               <div>
                 <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1.5">
                   Email Address
@@ -352,7 +352,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
                 />
               </div>
 
-              {/* 密码输入框 */}
+              {/* 密码输入框*/}
               <div>
                 <label htmlFor="password" className="block text-xs font-medium text-gray-700 mb-1.5">
                   Password
@@ -387,13 +387,13 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
                 </p>
               </div>
 
-              {/* 验证码 - 始终显示UI，但只有输入邮箱后才加载图片 */}
+              {/* 验证码- 始终显示UI，但只有输入邮箱后才加载图片 */}
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1.5">
                   Verification Code
                 </label>
                 <div className="grid grid-cols-2 gap-3">
-                  {/* 验证码图片 - 占50%宽度 */}
+                  {/* 验证码图片- 50%宽度 */}
                   <div 
                     className="h-10 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border border-gray-300 cursor-pointer"
                     onClick={handleRefreshCaptcha}
@@ -405,7 +405,7 @@ export default function LoginDialog({ isOpen, onClose, onLoginSuccess }: LoginDi
                       <span className="text-xs text-gray-400">Enter email first</span>
                     )}
                   </div>
-                  {/* 输入框 - 占50%宽度 */}
+                  {/* 输入框- 50%宽度 */}
                   <input
                     type="text"
                     required

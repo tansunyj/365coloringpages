@@ -111,11 +111,11 @@ export default function EasyColoringPages() {
 
       <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 p-6 rounded-xl my-8 border border-green-100 dark:border-gray-600">
         <h3 className="mt-0 text-green-900 dark:text-green-200 flex items-center gap-2">
-          <span>✨</span>
-          Easy Isn't Inferior
+          <span>/</span>  
+          Easy Isn&apos;t Inferior
         </h3>
         <p className="mb-0">
-          "Easy" means appropriate, not lesser. The right difficulty level creates success, builds confidence, and maintains joy. Sometimes simple is exactly what you need—honoring that choice shows wisdom, not weakness.
+          &quot;Easy&quot; means appropriate, not lesser. The right difficulty level creates success, builds confidence, and maintains joy. Sometimes simple is exactly what you need—honoring that choice shows wisdom, not weakness.
         </p>
       </div>
 
@@ -136,18 +136,18 @@ export default function EasyColoringPages() {
       <p>Quick, easy pages work well as rewards—completable during short free time, providing satisfaction without interrupting schedules.</p>
 
       <h3>Following Directions</h3>
-      <p>Easy pages can include simple instructions: "Color the sun yellow" or "Use three different colors." This builds direction-following skills.</p>
+      <p>Easy pages can include simple instructions: &quot;Color the sun yellow&quot; or &quot;Use three different colors.&quot; This builds direction-following skills.</p>
 
       <h3>Color Recognition</h3>
-      <p>Simple subjects help teach color names. "Find your red crayon and color the apple red."</p>
+      <p>Simple subjects help teach color names. &quot;Find your red crayon and color the apple red.&quot;</p>
 
       <h3>Counting Practice</h3>
-      <p>Pages with multiple simple objects enable counting. "How many stars? Color each one a different color."</p>
+      <p>Pages with multiple simple objects enable counting. &quot;How many stars? Color each one a different color.&quot;</p>
 
       <h2>Avoiding Boredom</h2>
 
       <p>
-        Easy doesn't mean boring. Well-designed simple pages engage fully while remaining accessible. Look for appealing subjects, clean designs, and age-appropriate themes.
+        Easy doesn&apos;t mean boring. Well-designed simple pages engage fully while remaining accessible. Look for appealing subjects, clean designs, and age-appropriate themes.
       </p>
 
       <h3>Variety Within Simplicity</h3>
@@ -174,7 +174,7 @@ export default function EasyColoringPages() {
 
       <h3>Permission to Choose Easy</h3>
       <p>
-        There's no shame in easy coloring as an adult. If it relaxes you, brings joy, or fits your current capacity, it's exactly right.
+        There&apos;s no shame in easy coloring as an adult. If it relaxes you, brings joy, or fits your current capacity, it&apos;s exactly right.
       </p>
 
       <h2>Therapeutic Uses</h2>
@@ -208,7 +208,7 @@ export default function EasyColoringPages() {
       <h2>Creating Easy Pages</h2>
 
       <p>
-        If you're creating coloring pages for others, remember: easy pages require thoughtful design. Clear outlines, appropriate subjects, good contrast—these choices determine whether simple pages succeed or bore.
+        If you&apos;re creating coloring pages for others, remember: easy pages require thoughtful design. Clear outlines, appropriate subjects, good contrast—these choices determine whether simple pages succeed or bore.
       </p>
 
       <p className="text-lg font-semibold mt-8">

@@ -21,7 +21,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    // 导航到特定分类页面
+    // 导航到特定分类页�?
     router.push(`/categories/${category.slug}`);
   };
 
@@ -32,7 +32,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       onMouseLeave={() => setIsHovered(false)}
       className="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:border-gray-200 transition-all duration-300 transform hover:-translate-y-2 hover:scale-[1.02]"
     >
-      {/* 图片容器 - 1:1比例（正方形） */}
+      {/* 图片容器 - 1:1比例（正方形�?*/}
       <div className="relative overflow-hidden" style={{ aspectRatio: '1/1' }}>
         {!imageError ? (
           <Image
@@ -53,7 +53,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
           </div>
         )}
         
-        {/* 悬浮时的轻微覆盖层 */}
+        {/* 悬浮时的轻微覆盖�?*/}
         <div className={`absolute inset-0 bg-black/10 transition-opacity duration-300 ${
           isHovered ? 'opacity-100' : 'opacity-0'
         }`} />

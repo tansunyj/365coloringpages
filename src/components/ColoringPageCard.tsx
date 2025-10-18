@@ -29,7 +29,7 @@ export default function ColoringPageCard({ page, allPages }: ColoringPageCardPro
   const [likeCount, setLikeCount] = useState(page.likes);
   const router = useRouter();
   
-  // 标准化分类名称，如果为空则显示"Other"
+  // 标准化分类名称，如果为空则显�?Other"
   const displayCategory = !page.category || page.category.trim() === '' ? 'Other' : page.category;
 
   const handleLike = (e: React.MouseEvent) => {
@@ -89,7 +89,7 @@ export default function ColoringPageCard({ page, allPages }: ColoringPageCardPro
           </div>
         )}
         
-        {/* 右上角快速操作按钮 - 调整位置适应Premium标签 */}
+        {/* 右上角快速操作按�?- 调整位置适应Premium标签 */}
         <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleLike}
@@ -109,7 +109,7 @@ export default function ColoringPageCard({ page, allPages }: ColoringPageCardPro
           </button>
         </div>
         
-        {/* 悬浮时的信息覆盖层 - 优化设计 */}
+        {/* 悬浮时的信息覆盖�?- 优化设计 */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
           <div className="w-full p-4 text-white">
             <h3 className="text-sm font-bold truncate mb-2 drop-shadow-sm">{page.title}</h3>

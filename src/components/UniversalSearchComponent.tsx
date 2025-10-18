@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Search, Filter, SortAsc, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 
-// 通用搜索结果项接口
+// 通用搜索结果项接�?
 export interface SearchResultItem {
   id: number;
   title: string;
@@ -23,7 +23,7 @@ export interface SearchResultItem {
   ageRange?: string;
   createdAt?: string;
   updatedAt?: string;
-  [key: string]: unknown; // 允许额外的字段
+  [key: string]: unknown; // 允许额外的字�?
 }
 
 // 搜索API响应接口
@@ -51,13 +51,13 @@ export interface FilterOption {
 
 // Checkbox 筛选组接口
 export interface CheckboxFilterGroup {
-  key: string; // 筛选键名，如 'tags', 'difficulty', 'ageRange'
+  key: string; // 筛选键名，�?'tags', 'difficulty', 'ageRange'
   title: string; // 显示标题
   options: FilterOption[];
   multiple?: boolean; // 是否支持多选，默认 true
   collapsible?: boolean; // 是否可折叠，默认 true
-  defaultExpanded?: boolean; // 默认是否展开，默认 true
-  showCount?: boolean; // 是否显示选项计数，默认 false
+  defaultExpanded?: boolean; // 默认是否展开，默�?true
+  showCount?: boolean; // 是否显示选项计数，默�?false
 }
 
 // 页面标题配置接口
@@ -66,7 +66,7 @@ export interface TitleConfig {
   subtitle?: string;
   description?: string;
   centerTitle?: boolean;
-  customTitleComponent?: React.ReactNode; // 自定义标题组件
+  customTitleComponent?: React.ReactNode; // 自定义标题组�?
 }
 
 // 搜索配置接口
@@ -86,7 +86,7 @@ export interface SearchConfig {
   ageRangeOptions?: FilterOption[];
   customFilters?: { [key: string]: FilterOption[] }; // 自定义筛选项
   
-  // 左侧 Checkbox 筛选
+  // 左侧 Checkbox 筛�?
   checkboxFilters?: CheckboxFilterGroup[];
   
   // 显示配置
@@ -95,7 +95,7 @@ export interface SearchConfig {
   showSortFilter?: boolean;
   showDifficultyFilter?: boolean;
   showAgeRangeFilter?: boolean;
-  showCheckboxFilters?: boolean; // 是否显示左侧筛选
+  showCheckboxFilters?: boolean; // 是否显示左侧筛�?
   autoLoadOnMount?: boolean; // 是否在组件挂载时自动加载数据
   
   // 布局配置
@@ -105,7 +105,7 @@ export interface SearchConfig {
   // 页面标题配置
   titleConfig?: TitleConfig;
   
-  // 自定义组件
+  // 自定义组�?
   renderItem?: (item: SearchResultItem, searchQuery?: string, searchParams?: URLSearchParams, allItems?: SearchResultItem[]) => React.ReactNode;
   
   // 兼容性：保留旧的标题字段
@@ -141,41 +141,41 @@ export default function UniversalSearchComponent({
   const searchParams = useSearchParams();
   const [isClient, setIsClient] = useState(false);
   
-  // 搜索状态
+  // 搜索状�?
   const [items, setItems] = useState<SearchResultItem[]>([]);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState('');
   
-  // 分页状态
+  // 分页状�?
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
   
-  // 筛选状态
+  // 筛选状�?
   const [sortBy, setSortBy] = useState(config.defaultSort || 'relevance');
   const [categoryFilter, setCategoryFilter] = useState(config.defaultCategory || 'all');
   const [difficultyFilter, setDifficultyFilter] = useState('');
   const [ageRangeFilter, setAgeRangeFilter] = useState('');
   
-  // Checkbox 筛选状态
+  // Checkbox 筛选状�?
   const [checkboxFilters, setCheckboxFilters] = useState<{ [key: string]: string[] }>({});
   const [expandedFilters, setExpandedFilters] = useState<{ [key: string]: boolean }>({});
   
-  // 自定义筛选状态
+  // 自定义筛选状�?
   const [customFilters, setCustomFilters] = useState<{ [key: string]: string }>({});
   
   // 无限滚动
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // 客户端检测
+  // 客户端检�?
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // 初始化 checkbox 筛选状态
+  // 初始�?checkbox 筛选状�?
   useEffect(() => {
     if (config.checkboxFilters) {
       const initialCheckboxFilters: { [key: string]: string[] } = {};
@@ -191,7 +191,7 @@ export default function UniversalSearchComponent({
     }
   }, [config.checkboxFilters]);
 
-  // 从URL参数初始化状态
+  // 从URL参数初始化状�?
   useEffect(() => {
     if (isClient && searchParams) {
       const query = searchParams.get('q') || initialQuery;
@@ -208,7 +208,7 @@ export default function UniversalSearchComponent({
       setAgeRangeFilter(ageRange);
       setCurrentPage(page);
       
-      // 从URL初始化 checkbox 筛选
+      // 从URL初始�?checkbox 筛�?
       if (config.checkboxFilters) {
         const urlCheckboxFilters: { [key: string]: string[] } = {};
         config.checkboxFilters.forEach(group => {
@@ -218,7 +218,7 @@ export default function UniversalSearchComponent({
         setCheckboxFilters(urlCheckboxFilters);
       }
       
-      // 从URL初始化自定义筛选
+      // 从URL初始化自定义筛�?
       if (config.customFilters) {
         const urlCustomFilters: { [key: string]: string } = {};
         Object.keys(config.customFilters).forEach(key => {
@@ -243,27 +243,27 @@ export default function UniversalSearchComponent({
         q: query || undefined,
         page,
         limit: config.pageSize || 12,
-        sort: undefined, // 搜索接口不需要 sort 参数
+        sort: undefined, // 搜索接口不需�?sort 参数
         category: categoryFilter !== 'all' ? categoryFilter : undefined,
         difficulty: difficultyFilter || undefined,
         ageRange: ageRangeFilter || undefined,
       };
 
-      // 添加 checkbox 筛选参数
+      // 添加 checkbox 筛选参�?
       Object.entries(checkboxFilters).forEach(([key, values]) => {
         if (values.length > 0) {
           params[key] = values.join(',');
         }
       });
 
-      // 添加自定义筛选参数
+      // 添加自定义筛选参�?
       Object.entries(customFilters).forEach(([key, value]) => {
         if (value) {
           params[key] = value;
         }
       });
 
-      // 过滤掉空值
+      // 过滤掉空�?
       const filteredParams = Object.fromEntries(
         Object.entries(params).filter(([_, value]) => value !== undefined && value !== '')
       );
@@ -274,7 +274,7 @@ export default function UniversalSearchComponent({
         throw new Error('Search failed');
       }
 
-      // 处理不同的响应数据结构
+      // 处理不同的响应数据结�?
       let itemsArray: SearchResultItem[] = [];
       if (response.data.items) {
         itemsArray = response.data.items;
@@ -320,14 +320,14 @@ export default function UniversalSearchComponent({
     }
   }, [sortBy, categoryFilter, difficultyFilter, ageRangeFilter, checkboxFilters, customFilters, isClient, searchQuery, searchItems, config.autoLoadOnMount]);
 
-  // 处理 checkbox 筛选变化
+  // 处理 checkbox 筛选变�?
   const handleCheckboxChange = (groupKey: string, optionValue: string, checked: boolean) => {
     setCheckboxFilters(prev => {
       const group = config.checkboxFilters?.find(g => g.key === groupKey);
       const isMultiple = group?.multiple !== false;
       
       if (isMultiple) {
-        // 多选模式
+        // 多选模�?
         const currentValues = prev[groupKey] || [];
         if (checked) {
           return {
@@ -341,7 +341,7 @@ export default function UniversalSearchComponent({
           };
         }
       } else {
-        // 单选模式
+        // 单选模�?
         return {
           ...prev,
           [groupKey]: checked ? [optionValue] : []
@@ -350,7 +350,7 @@ export default function UniversalSearchComponent({
     });
   };
 
-  // 切换筛选组展开状态
+  // 切换筛选组展开状�?
   const toggleFilterExpanded = (groupKey: string) => {
     setExpandedFilters(prev => ({
       ...prev,
@@ -358,7 +358,7 @@ export default function UniversalSearchComponent({
     }));
   };
 
-  // 清除所有筛选
+  // 清除所有筛�?
   const clearAllFilters = () => {
     setCheckboxFilters({});
     setCategoryFilter(config.defaultCategory || 'all');
@@ -401,7 +401,7 @@ export default function UniversalSearchComponent({
     };
   }, [hasNextPage, isLoadingMore, loadMore]);
 
-  // 获取最终的标题配置（优先使用新配置，兼容旧配置）
+  // 获取最终的标题配置（优先使用新配置，兼容旧配置�?
   const finalTitleConfig = config.titleConfig || {
     title: config.title,
     description: config.description,
@@ -417,7 +417,7 @@ export default function UniversalSearchComponent({
     return (
       <div className="w-64 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-fit">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">筛选条件</h3>
+          <h3 className="font-semibold text-gray-900">筛选条�?/h3>
           <button
             onClick={clearAllFilters}
             className="text-sm text-orange-600 hover:text-orange-700"
@@ -497,9 +497,9 @@ export default function UniversalSearchComponent({
         </div>
       )}
 
-      {/* 搜索和筛选区域 */}
+      {/* 搜索和筛选区�?*/}
       <div className="mb-6 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        {/* 搜索框 */}
+        {/* 搜索�?*/}
         {config.showSearch !== false && (
           <form onSubmit={handleSearch} className="mb-4">
             <div className="relative w-full">
@@ -523,7 +523,7 @@ export default function UniversalSearchComponent({
 
         {/* 结果信息和筛选选项 */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          {/* 左侧：结果信息 */}
+          {/* 左侧：结果信�?*/}
           <div className="text-gray-600">
             {isLoading ? (
               <span>{t('search.searching')}</span>
@@ -539,7 +539,7 @@ export default function UniversalSearchComponent({
           
           {/* 右侧：筛选选项 */}
           <div className="flex flex-wrap gap-4">
-          {/* 分类筛选 */}
+          {/* 分类筛�?*/}
           {config.showCategoryFilter !== false && config.categoryOptions && (
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-gray-500" />
@@ -575,7 +575,7 @@ export default function UniversalSearchComponent({
             </div>
           )}
 
-          {/* 难度筛选 */}
+          {/* 难度筛�?*/}
           {config.showDifficultyFilter && config.difficultyOptions && (
             <select
               value={difficultyFilter}
@@ -590,7 +590,7 @@ export default function UniversalSearchComponent({
             </select>
           )}
 
-          {/* 年龄范围筛选 */}
+          {/* 年龄范围筛�?*/}
           {config.showAgeRangeFilter && config.ageRangeOptions && (
             <select
               value={ageRangeFilter}
@@ -605,7 +605,7 @@ export default function UniversalSearchComponent({
             </select>
           )}
 
-          {/* 自定义筛选 */}
+          {/* 自定义筛�?*/}
           {config.customFilters && Object.entries(config.customFilters).map(([key, options]) => (
             <select
               key={key}
@@ -625,7 +625,7 @@ export default function UniversalSearchComponent({
         </div>
       </div>
 
-        {/* 主内容区域 */}
+        {/* 主内容区�?*/}
         <div className={`mt-6 ${config.useLeftSidebar ? 'flex gap-8' : ''}`}>
         {/* 左侧筛选栏 */}
         {config.useLeftSidebar && renderLeftSidebar()}
@@ -681,7 +681,7 @@ export default function UniversalSearchComponent({
                 })}
               </div>
 
-              {/* 加载更多触发器 */}
+              {/* 加载更多触发�?*/}
               <div ref={loadMoreRef} className="mt-8 text-center">
                 {isLoadingMore && (
                   <div className="py-8">

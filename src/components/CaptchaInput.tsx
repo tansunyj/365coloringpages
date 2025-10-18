@@ -25,7 +25,7 @@ interface CaptchaData {
 const API_BASE_URL = 'http://localhost:3001';
 
 /**
- * 图形验证码输入组件
+ * 图形验证码输入组�?
  * 集成验证码生成、刷新和输入功能
  */
 export default function CaptchaInput({
@@ -40,7 +40,7 @@ export default function CaptchaInput({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 生成验证码
+  // 生成验证�?
   const generateCaptcha = async () => {
     if (!email) {
       setError('请先输入邮箱地址');
@@ -60,7 +60,7 @@ export default function CaptchaInput({
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.message || '生成验证码失败');
+        throw new Error(data.message || '生成验证码失�?);
       }
 
       setCaptchaData(data.data);
@@ -74,7 +74,7 @@ export default function CaptchaInput({
       if (data.data.rateLimit) {
       }
     } catch (err) {
-      setError((err as Error).message || '生成验证码失败');
+      setError((err as Error).message || '生成验证码失�?);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +87,7 @@ export default function CaptchaInput({
     }
   }, [email]);
 
-  // 刷新验证码
+  // 刷新验证�?
   const handleRefresh = () => {
     onChange(''); // 清空输入
     generateCaptcha();
@@ -95,13 +95,13 @@ export default function CaptchaInput({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      {/* 验证码图片 */}
+      {/* 验证码图�?*/}
       <div className="flex items-center gap-2">
         <div className="flex-1 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative border border-gray-300">
           {isLoading ? (
             <div className="flex items-center gap-2 text-gray-500">
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent"></div>
-              <span className="text-sm">加载中...</span>
+              <span className="text-sm">加载�?..</span>
             </div>
           ) : error ? (
             <span className="text-xs text-red-500 px-2">{error}</span>
@@ -121,7 +121,7 @@ export default function CaptchaInput({
           onClick={handleRefresh}
           disabled={isLoading || !email || disabled}
           className="p-3 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          title="刷新验证码"
+          title="刷新验证�?
         >
           <RefreshCw className={`h-4 w-4 text-gray-600 ${isLoading ? 'animate-spin' : ''}`} />
         </button>

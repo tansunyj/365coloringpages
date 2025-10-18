@@ -103,13 +103,13 @@ export default function TestKeywordsPage() {
   };
 
   useEffect(() => {
-    // 页面加载时自动测试
+    // 页面加载时自动测�?
     testKeywordsAPI();
   }, []);
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-2xl font-bold mb-6">🏷️ Keywords API 测试页面</h1>
+      <h1 className="text-2xl font-bold mb-6">🏷�?Keywords API 测试页面</h1>
       
       <div className="bg-gray-100 p-6 rounded-lg mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -124,7 +124,7 @@ export default function TestKeywordsPage() {
                   : 'bg-blue-500 hover:bg-blue-600 text-white'
               }`}
             >
-              {testing ? '测试中...' : '使用ApiClient测试'}
+              {testing ? '测试�?..' : '使用ApiClient测试'}
             </button>
             <button
               onClick={testDirectAPI}
@@ -135,7 +135,7 @@ export default function TestKeywordsPage() {
                   : 'bg-green-500 hover:bg-green-600 text-white'
               }`}
             >
-              {testing ? '测试中...' : '直接Fetch测试'}
+              {testing ? '测试�?..' : '直接Fetch测试'}
             </button>
           </div>
         </div>
@@ -162,13 +162,13 @@ export default function TestKeywordsPage() {
             </div>
 
             <div>
-              <strong>连接状态:</strong>
+              <strong>连接状�?</strong>
               <span className={`ml-2 px-3 py-1 rounded text-sm font-medium ${
                 testResult.success 
                   ? 'bg-green-200 text-green-800' 
                   : 'bg-red-200 text-red-800'
               }`}>
-                {testResult.success ? '✅ 成功' : '❌ 失败'}
+                {testResult.success ? '�?成功' : '�?失败'}
               </span>
             </div>
 
@@ -183,7 +183,7 @@ export default function TestKeywordsPage() {
 
             {testResult.success && testResult.data && (
               <div className="bg-green-50 p-4 rounded border border-green-200">
-                <strong className="text-green-800">Keywords数据 (前10个):</strong>
+                <strong className="text-green-800">Keywords数据 (�?0�?:</strong>
                 <div className="mt-3 space-y-2">
                   {testResult.data.slice(0, 10).map((keyword, index) => (
                     <div key={index} className="flex justify-between items-center bg-white p-2 rounded">
@@ -213,9 +213,9 @@ export default function TestKeywordsPage() {
       <div className="bg-blue-50 p-6 rounded-lg">
         <h3 className="font-semibold text-blue-800 mb-2">💡 说明:</h3>
         <ul className="text-blue-700 space-y-1 list-disc list-inside">
-          <li>此页面测试 Keywords API 是否可以正常访问</li>
+          <li>此页面测�?Keywords API 是否可以正常访问</li>
           <li>成功获取数据后，这些关键词会显示在首页Hero部分的搜索框上方</li>
-          <li>期望的API响应格式：</li>
+          <li>期望的API响应格式�?/li>
         </ul>
         <div className="mt-2 bg-white p-3 rounded font-mono text-xs">
           <pre>{`{

@@ -133,9 +133,9 @@ class ApiClientUtil {
         }) as ApiResponse;
         
       case 'categories':
-        // 如果没有指定具体分类，获取所有分类下的涂色卡片
+        // 如果没有指定具体分类，获取所有分类下的涂色卡
         if (!params.category || params.category === 'all' || params.category === '') {
-          // 调用 /api/categories?page=1&limit=20&sort=newest 获取所有涂色卡片
+          // 调用 /api/categories?page=1&limit=20&sort=newest 获取所有涂色卡
           const { apiClient } = await import('../lib/apiClient');
           const { API_ENDPOINTS } = await import('../lib/apiConfig');
           
@@ -167,7 +167,7 @@ class ApiClientUtil {
           q: params.q || '',
           page: params.page,
           limit: params.limit,
-          sort: params.sort || '', // 搜索接口不需要 sort 参数值
+          sort: params.sort || '', // 搜索接口不需sort 参数
           category: params.category !== 'all' ? params.category : ''
         }) as ApiResponse;
         
@@ -286,7 +286,7 @@ const SORT_OPTIONS = [
   { value: 'popular', label: 'Most Popular', icon: '🔥' },
   { value: 'downloads', label: 'Most Downloaded', icon: '⬇️' },
   { value: 'likes', label: 'Most Liked', icon: '❤️' },
-  { value: 'views', label: 'Most Viewed', icon: '👁️' },
+  { value: 'views', label: 'Most Viewed', icon: '👁' },
 ];
 
 /**
@@ -295,7 +295,7 @@ const SORT_OPTIONS = [
  * @description 
  * 统一的列表页组件，支持以下7种页面类型：
  * 1. popular - 热门页面
- * 2. latest - 最新页面  
+ * 2. latest - 最新页面 
  * 3. easy-coloring-book - Easy Coloring Book
  * 4. theme-parks - 主题公园
  * 5. categories - 分类页面
@@ -350,7 +350,7 @@ export default function UnifiedListPage({
   // 滚动检测
   const observerRef = useRef<HTMLDivElement>(null);
   
-  // 防止重复加载的标记 - 记录上一次的查询参数
+  // 防止重复加载的标记- 记录上一次的查询参数
   const lastQueryRef = useRef<string>('');
   
   // 路由和搜索参数
@@ -378,10 +378,10 @@ export default function UnifiedListPage({
   
   // 用于标记是否是首次加载，避免URL参数覆盖用户输入
   const isInitialMount = useRef(true);
-  // 记录上一次的URL查询词，用于检测外部导航
+  // 记录上一次的URL查询词，用于检测外部导出
   const lastUrlQuery = useRef(currentQuery);
   
-  // 同步URL参数到状态 - 只在初始化或外部导航时更新
+  // 同步URL参数到状态- 只在初始化或外部导航时更新
   useEffect(() => {
     // 只在组件首次挂载时同步URL参数到搜索框
     if (isInitialMount.current) {
@@ -408,9 +408,9 @@ export default function UnifiedListPage({
     // 1. 用户点击了搜索按钮（updateUrl被调用）
     // 2. 用户使用了浏览器后退/前进按钮
     // 3. 用户从外部链接进入
-    // 但不会在用户正在输入时同步，保护用户的输入体验
+    // 但不会在用户正在输入时同步，保护用户的输入内容
     if (currentQuery !== lastUrlQuery.current) {
-      console.log('🔄 URL搜索词已变化，同步到搜索框:', currentQuery);
+      console.log('🔄 URL搜索词已变化，同步到搜索框', currentQuery);
       setSearchQuery(currentQuery);
       lastUrlQuery.current = currentQuery;
     }
@@ -424,7 +424,7 @@ export default function UnifiedListPage({
     
     Object.entries(params).forEach(([key, value]) => {
       if (key === 'category') {
-        // 对于categories、search、popular、theme-parks、easy-coloring-book和latest页面，不将category参数添加到查询参数中
+        // 对于categories、search、popular、theme-parks、easy-coloring-book和latest页面，不将category参数添加到查询参数中，
         // 因为category信息已经在URL路径中了
         if (type !== 'categories' && type !== 'search' && type !== 'popular' && type !== 'theme-parks' && type !== 'easy-coloring-book' && type !== 'latest') {
           newSearchParams.set(key, value.toString());
@@ -436,13 +436,13 @@ export default function UnifiedListPage({
       }
     });
     
-    // 页面变化时重置到第1页
+    // 页面变化时重置到第一页
     if ('category' in params || 'sort' in params || 'q' in params) {
       newSearchParams.set('page', '1');
     }
     
     const newUrl = `${window.location.pathname}?${newSearchParams.toString()}`;
-    // 使用 replace 而不是 push，避免整个页面刷新
+    // 使用 replace 而不push，避免整个页面刷新
     router.replace(newUrl, { scroll: false });
   }, [router, searchParams, type]);
 
@@ -532,7 +532,7 @@ export default function UnifiedListPage({
               ageRange: 'all',
               views: 0, // 默认值，因为涂色书数据没有这些统计信息
               likes: 0,
-              downloads: book.pageCount || 0, // 使用页面数量作为下载数
+              downloads: book.pageCount || 0, // 使用页面数量作为下载数量
               categoryName: book.title,
               categorySlug: book.slug,
               categoryColor: '#34D399', // 绿色主题
@@ -710,15 +710,15 @@ export default function UnifiedListPage({
       return;
     }
     
-    console.log('🔄 查询参数已变化，开始加载数据:', currentQueryKey);
+    console.log('🔄 查询参数已变化，开始加载数�?', currentQueryKey);
     lastQueryRef.current = currentQueryKey;
     
-    loadData(false); // 明确传递 false，表示不是加载更多，而是重新加载
-    // 注意：不要把 loadData 作为依赖项，避免因函数重新创建导致重复调用
+    loadData(false); // 明确传�?false，表示不是加载更多，而是重新加载
+    // 注意：不要把 loadData 作为依赖项，避免因函数重新创建导致重复调�?
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLimit, currentCategory, currentSort, currentQuery, type, park]);
 
-  // 无限滚动检测
+  // 无限滚动检�?
   useEffect(() => {
     if (!observerRef.current) return;
 
@@ -765,7 +765,7 @@ export default function UnifiedListPage({
       if (categorySlug === 'all' || categorySlug === '') {
         // 跳转到首页，保留当前查询参数
         const currentParams = new URLSearchParams(searchParams);
-        currentParams.delete('category'); // 删除category参数，因为首页不需要
+        currentParams.delete('category'); // 删除category参数，因为首页不需�?
         const queryString = currentParams.toString();
         const newUrl = queryString ? `${basePath}?${queryString}` : basePath;
         console.log('📍 Navigating to home:', newUrl);
@@ -807,7 +807,7 @@ export default function UnifiedListPage({
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 面包屑导航 */}
+        {/* 面包屑导�?*/}
         <UnifiedBreadcrumb
           type={type}
           category={category}
@@ -822,13 +822,13 @@ export default function UnifiedListPage({
         />
 
 
-        {/* 搜索和筛选区域 - 响应式布局 */}
+        {/* 搜索和筛选区�?- 响应式布局 */}
         {(showSearch || showCategoryFilter || showSortFilter) && (
           <div className="mb-6">
             {showSearch ? (
-              // 搜索框和筛选器在同一行
+              // 搜索框和筛选器在同一�?
               <div className="flex items-center gap-4">
-                {/* 搜索框 - 占据大部分空间 */}
+                {/* 搜索�?- 占据大部分空�?*/}
                 <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -849,9 +849,9 @@ export default function UnifiedListPage({
                   </div>
                 </div>
 
-                {/* 筛选器组 - 固定宽度 */}
+                {/* 筛选器�?- 固定宽度 */}
                 <div className="flex items-center gap-3 flex-shrink-0">
-                  {/* 分类筛选 */}
+                  {/* 分类筛�?*/}
                   {showCategoryFilter && (
                     <div className="relative">
                       <select
@@ -866,7 +866,7 @@ export default function UnifiedListPage({
                           </option>
                         ))}
                       </select>
-                      {/* 自定义下拉箭头 */}
+                      {/* 自定义下拉箭�?*/}
                       <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -875,7 +875,7 @@ export default function UnifiedListPage({
                     </div>
                   )}
 
-                  {/* 排序筛选 */}
+                  {/* 排序筛�?*/}
                   {showSortFilter && (
                     <div className="relative">
                       <select
@@ -889,7 +889,7 @@ export default function UnifiedListPage({
                           </option>
                         ))}
                       </select>
-                      {/* 自定义下拉箭头 */}
+                      {/* 自定义下拉箭�?*/}
                       <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -902,7 +902,7 @@ export default function UnifiedListPage({
             ) : (
               // 仅筛选器时的右对齐布局
               <div className="flex justify-end items-center gap-3">
-                {/* 分类筛选 */}
+                {/* 分类筛选器*/}
                 {showCategoryFilter && (
                   <div className="relative">
                     <select
@@ -917,7 +917,7 @@ export default function UnifiedListPage({
                         </option>
                       ))}
                     </select>
-                    {/* 自定义下拉箭头 */}
+                    {/* 自定义下拉箭头*/}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                       <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -926,7 +926,7 @@ export default function UnifiedListPage({
                   </div>
                 )}
 
-                {/* 排序筛选 */}
+                {/* 排序筛选器*/}
                 {showSortFilter && (
                   <div className="relative">
                     <select
@@ -940,7 +940,7 @@ export default function UnifiedListPage({
                         </option>
                       ))}
                     </select>
-                    {/* 自定义下拉箭头 */}
+                    {/* 自定义下拉箭头*/}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                       <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -953,7 +953,7 @@ export default function UnifiedListPage({
           </div>
         )}
 
-        {/* 结果统计 - 简洁样式 */}
+        {/* 结果统计 - 简洁样式*/}
         {pagination && (
           <div className="flex justify-between items-center mb-6">
             <p className="text-sm text-gray-600">
@@ -983,7 +983,7 @@ export default function UnifiedListPage({
           </div>
         ) : (
           <div className="relative">
-            {/* 小型加载指示器 - 固定在右上角 */}
+            {/* 小型加载指示器- 固定在右上角 */}
             {loading && (
               <div className="fixed top-24 right-8 z-50 bg-white shadow-lg rounded-lg px-4 py-3 flex items-center space-x-3 border border-gray-200">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-orange-600"></div>
@@ -991,7 +991,7 @@ export default function UnifiedListPage({
               </div>
             )}
 
-            {/* 涂色卡片网格 - 使用 key 强制重新渲染以避免闪烁 */}
+            {/* 涂色卡片网格 - 使用 key 强制重新渲染以避免闪烁*/}
             <div 
               key={`${currentCategory}-${currentSort}-${currentQuery}`}
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 animate-fadeIn"
@@ -1015,7 +1015,7 @@ export default function UnifiedListPage({
                    linkType={type}
                    linkCategory={
                     type === 'theme-parks' ? (
-                      // 为 theme-parks 类型生成分类 slug
+                      // theme-parks 类型生成分类 slug
                       currentCategory ||
                       item.categorySlug ||
                       getCategorySlugFromName(item.categoryName) ||
@@ -1023,7 +1023,7 @@ export default function UnifiedListPage({
                       'theme-park-adventures'
                     ) :
                     type === 'easy-coloring-book' ? (
-                      // 为 easy-coloring-book 类型生成分类 slug
+                      // easy-coloring-book 类型生成分类 slug
                       currentCategory ||
                       item.categorySlug ||
                       getCategorySlugFromName(item.categoryName) ||
@@ -1031,14 +1031,14 @@ export default function UnifiedListPage({
                       'easy-coloring-book'
                     ) :
                     type === 'latest' ? (
-                      // 为 latest 类型生成分类 slug
+                      // latest 类型生成分类 slug
                       item.categorySlug || 
                       getCategorySlugFromName(item.categoryName) || 
                       category || 
                       'animals'
                     ) :
                     type === 'categories' ? (
-                      // 为 categories 类型生成分类 slug
+                      // categories 类型生成分类 slug
                       item.categorySlug || 
                       getCategorySlugFromName(item.categoryName) || 
                       currentCategory ||
@@ -1046,7 +1046,7 @@ export default function UnifiedListPage({
                       'animals'
                     ) :
                     type === 'search' ? (
-                      // 为 search 类型生成分类 slug
+                      // search 类型生成分类 slug
                       currentCategory || 
                       item.categorySlug || 
                       getCategorySlugFromName(item.categoryName) || 
@@ -1073,7 +1073,7 @@ export default function UnifiedListPage({
                ))}
             </div>
 
-            {/* 无限滚动加载指示器 */}
+            {/* 无限滚动加载指示器*/}
             <div ref={observerRef} className="flex justify-center items-center py-8">
               {loadingMore && (
                 <div className="flex items-center space-x-2">

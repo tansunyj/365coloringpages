@@ -4,7 +4,7 @@ import { generateThemeParksSEO } from '@/seo/generatePageSEO';
 
 /**
  * Disney & Characters 首页 SEO 元数据
- * 使用统一的 SEO 系统
+ * 使用统一的SEO 系统
  */
 export async function generateMetadata() {
   return await generateThemeParksSEO('home');

@@ -15,7 +15,7 @@ export async function generateStaticParams() {
   
   try {
     const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const response = await fetch(`${API_BASE}/api/admin/coloring-pages?limit=1000`, {
+    const response = await fetch(`${API_BASE}/api/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/coloring-pages?limit=1000`, {
       cache: 'no-store'
     });
     

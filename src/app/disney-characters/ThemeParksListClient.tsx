@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../components/UnifiedListPageWrapper';
 
 interface ThemeParksListClientProps {
   initialCategory?: string;
@@ -13,7 +13,7 @@ interface ThemeParksListClientProps {
  */
 export default function ThemeParksListClient({ initialCategory }: ThemeParksListClientProps) {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="theme-parks"
       category={initialCategory}
       title="Disney & Characters"

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../components/UnifiedListPageWrapper';
 
 /**
  * Categories页面客户端组件
@@ -9,7 +9,7 @@ import UnifiedListPage from '../../components/UnifiedListPage';
  */
 export default function CategoriesPageClient() {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="categories"
       title="Category Coloring Pages"
       subtitle="Explore Various Exciting Coloring Content"

@@ -114,13 +114,13 @@ export default function AdminColoringPages() {
   const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   const [imagePreview, setImagePreview] = useState('');
   
-  // 筛选相关状态
+  // 筛选相关状�?
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('');
   const [themeFilter, setThemeFilter] = useState<string>('');
   const [styleFilter, setStyleFilter] = useState<string>('');
   
-  // 元数据状态
+  // 元数据状�?
   const [metadata, setMetadata] = useState<{
     difficulty: MetadataItem[];
     size: MetadataItem[];
@@ -133,7 +133,7 @@ export default function AdminColoringPages() {
     theme: []
   });
   
-  // 分页相关状态
+  // 分页相关状�?
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [pagination, setPagination] = useState<PaginationInfo>({
@@ -165,9 +165,9 @@ export default function AdminColoringPages() {
   // 统一错误处理函数
   const handleApiError = (response: Response, data: any, defaultMessage: string) => {
     if (response.status === 401) {
-      showToast('error', '登录已过期，请重新登录');
+      showToast('error', '登录已过期，请重新登陆');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
@@ -196,7 +196,7 @@ export default function AdminColoringPages() {
     showToast(toastType, errorMessage);
   };
 
-  // 加载元数据
+  // 加载元数�?
   const loadMetadata = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/metadata');
@@ -220,11 +220,11 @@ export default function AdminColoringPages() {
       } else {
       }
     } catch (error) {
-      console.error('加载元数据失败:', error);
+      console.error('加载元数据失败', error);
     }
   };
 
-  // 获取 metadata 的 labelZh 值
+  // 获取 metadata �?labelZh �?
   const getThemeLabel = (value: string) => {
     const item = metadata.theme.find(item => item.value === value);
     return item ? item.labelZh : value;
@@ -240,14 +240,14 @@ export default function AdminColoringPages() {
     return item ? item.labelZh : value;
   };
 
-  // 清理年龄范围字符串，去掉"岁"字
+  // 清理年龄范围字符串，去掉"�?�?
   const cleanAgeRange = (ageRange: string | null | undefined): string => {
     if (!ageRange) return '-';
-    // 去掉"岁"字
-    return ageRange.replace(/岁/g, '').trim();
+    // 去掉"�?�?
+    return ageRange.replace(/years/, '').trim();
   };
 
-  // 从API加载涂色卡数据
+  // 从API加载涂色卡数�?
   const loadColoringPages = async (page = 1, search = '', status = '', difficulty = '', theme = '', style = '') => {
     setIsLoading(true);
     try {
@@ -283,7 +283,7 @@ export default function AdminColoringPages() {
         showToast('error', data.message || '加载涂色卡列表失败');
       }
     } catch (error) {
-      console.error('加载涂色卡失败:', error);
+      console.error('加载涂色卡失败', error);
       showToast('error', '加载失败，请重试');
     } finally {
       setIsLoading(false);
@@ -291,7 +291,7 @@ export default function AdminColoringPages() {
   };
 
   useEffect(() => {
-    loadMetadata(); // 加载元数据
+    loadMetadata(); // 加载元数�?
     loadColoringPages(currentPage, searchTerm, statusFilter, difficultyFilter, themeFilter, styleFilter);
   }, [currentPage]);
 
@@ -306,42 +306,42 @@ export default function AdminColoringPages() {
     loadColoringPages(1, searchTerm, statusFilter, difficultyFilter, themeFilter, styleFilter);
   };
 
-  // 处理状态筛选
+  // 处理状态筛�?
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
     setCurrentPage(1);
     loadColoringPages(1, searchTerm, status, difficultyFilter, themeFilter, styleFilter);
   };
 
-  // 处理难度筛选
+  // 处理难度筛�?
   const handleDifficultyFilter = (difficulty: string) => {
     setDifficultyFilter(difficulty);
     setCurrentPage(1);
     loadColoringPages(1, searchTerm, statusFilter, difficulty, themeFilter, styleFilter);
   };
 
-  // 处理主题筛选
+  // 处理主题筛�?
   const handleThemeFilter = (theme: string) => {
     setThemeFilter(theme);
     setCurrentPage(1);
     loadColoringPages(1, searchTerm, statusFilter, difficultyFilter, theme, styleFilter);
   };
 
-  // 处理风格筛选
+  // 处理风格筛�?
   const handleStyleFilter = (style: string) => {
     setStyleFilter(style);
     setCurrentPage(1);
     loadColoringPages(1, searchTerm, statusFilter, difficultyFilter, themeFilter, style);
   };
 
-  // 清空搜索框
+  // 清空搜索�?
   const handleClearSearch = () => {
     setSearchTerm('');
     setCurrentPage(1);
     loadColoringPages(1, '', statusFilter, difficultyFilter, themeFilter, styleFilter);
   };
 
-  // 重置所有筛选条件
+  // 重置所有筛选条�?
   const handleResetFilters = () => {
     setSearchTerm('');
     setStatusFilter('');
@@ -376,20 +376,20 @@ export default function AdminColoringPages() {
       .replace(/^-+|-+$/g, '');
   };
 
-  // 处理行点击
+  // 处理行点�?
   const handleRowClick = (page: ColoringPage) => {
     setDetailPage(page);
     setShowDetailModal(true);
   };
 
-  // 添加涂色卡
+  // 添加涂色�?
   const handleAdd = async () => {
     if (!validateForm()) return;
 
     try {
       const token = localStorage.getItem('adminToken');
       
-      // 构建年龄范围字符串
+      // 构建年龄范围字符�?
       const ageRange = formData.ageRangeMin && formData.ageRangeMax 
         ? `${formData.ageRangeMin}-${formData.ageRangeMax} years`
         : formData.ageRangeMin
@@ -439,19 +439,19 @@ export default function AdminColoringPages() {
         handleApiError(response, data, '涂色卡添加失败');
       }
     } catch (error) {
-      console.error('添加涂色卡失败:', error);
+      console.error('添加涂色卡失败', error);
       showToast('error', '添加失败，请重试');
     }
   };
 
-  // 编辑涂色卡
+  // 编辑涂色�?
   const handleUpdate = async () => {
     if (!validateForm() || !editingPage) return;
 
     try {
       const token = localStorage.getItem('adminToken');
       
-      // 构建年龄范围字符串
+      // 构建年龄范围字符�?
       const ageRange = formData.ageRangeMin && formData.ageRangeMax 
         ? `${formData.ageRangeMin}-${formData.ageRangeMax} years`
         : formData.ageRangeMin
@@ -502,12 +502,12 @@ export default function AdminColoringPages() {
         handleApiError(response, data, '涂色卡更新失败');
       }
     } catch (error) {
-      console.error('更新涂色卡失败:', error);
+      console.error('更新涂色卡失败', error);
       showToast('error', '更新失败，请重试');
     }
   };
 
-  // 删除涂色卡
+  // 删除涂色�?
   const handleDelete = (pageId: number) => {
     setDeletePageId(pageId);
     setShowDeleteConfirm(true);
@@ -534,7 +534,7 @@ export default function AdminColoringPages() {
         handleApiError(response, data, '涂色卡删除失败');
       }
     } catch (error) {
-      console.error('删除涂色卡失败:', error);
+      console.error('删除涂色卡失败', error);
       showToast('error', '删除失败，请重试');
     } finally {
       setShowDeleteConfirm(false);
@@ -554,13 +554,13 @@ export default function AdminColoringPages() {
       const page = coloringPages.find(p => p.id === pageId);
       if (!page) return;
 
-      // 根据目标状态或当前状态确定要执行的操作
+      // 根据目标状态或当前状态确定要执行的操�?
       let action: 'publish' | 'unpublish' | 'freeze' | 'unfreeze';
       let newStatus: string;
       let successMessage: string;
 
       if (targetStatus) {
-        // 根据目标状态确定操作
+        // 根据目标状态确定操�?
         switch (targetStatus) {
           case 'published':
             action = 'publish';
@@ -581,7 +581,7 @@ export default function AdminColoringPages() {
             return;
         }
       } else {
-        // 根据当前状态确定要执行的操作（向后兼容）
+        // 根据当前状态确定要执行的操作（向后兼容�?
         switch (page.status) {
           case 'draft':
             action = 'publish';
@@ -621,7 +621,7 @@ export default function AdminColoringPages() {
         showToast('error', data.message || '状态切换失败');
       }
     } catch (error) {
-      console.error('切换状态失败:', error);
+      console.error('切换状态失败', error);
       showToast('error', '状态切换失败，请重试');
     }
   };
@@ -692,7 +692,7 @@ export default function AdminColoringPages() {
           </div>
         </div>
 
-        {/* 搜索和统计 */}
+        {/* 搜索和统�?*/}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex flex-col gap-4">
             {/* 搜索和筛选行 */}
@@ -701,7 +701,7 @@ export default function AdminColoringPages() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type="text"
-                  placeholder="搜索涂色卡..."
+                  placeholder="搜索涂色卡.."
                   className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   value={searchTerm}
                   onChange={(e) => handleSearchInput(e.target.value)}
@@ -766,7 +766,7 @@ export default function AdminColoringPages() {
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center"
                 title="重置筛选条件"
               >
-                <X className="h-4 w-4 mr-2" />
+                <X className= "h-4 w-4 mr-2" />
                 重置
               </button>
               <button
@@ -778,23 +778,23 @@ export default function AdminColoringPages() {
                 搜索
               </button>
             </div>
-            {/* 统计信息行 */}
+            {/* 统计信息�?*/}
             <div className="flex gap-4 text-sm text-gray-600">
               <span>总计: <strong>{pagination.totalCount}</strong></span>
-              <span>当前页: <strong>{coloringPages.length}</strong></span>
-              <span>已发布: <strong>{coloringPages.filter(p => p.status === 'published').length}</strong></span>
+              <span>当前共 <strong>{coloringPages.length}</strong></span>
+              <span>已发布 <strong>{coloringPages.filter(p => p.status === 'published').length}</strong></span>
               <span>草稿: <strong>{coloringPages.filter(p => p.status === 'draft').length}</strong></span>
               <span>冻结: <strong>{coloringPages.filter(p => p.status === 'frozen').length}</strong></span>
             </div>
           </div>
         </div>
 
-        {/* 涂色卡列表 */}
+        {/* 涂色卡列�?*/}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600">加载中...</p>
+              <p className="mt-2 text-gray-600">加载中..</p>
             </div>
           ) : (
             <>
@@ -807,7 +807,7 @@ export default function AdminColoringPages() {
                         ID
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        涂色卡
+                        涂色卡标题
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         主题
@@ -900,7 +900,7 @@ export default function AdminColoringPages() {
                               草稿
                             </button>
                             
-                            {/* 已发布标签 */}
+                            {/* 已发布标�?*/}
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -1016,20 +1016,20 @@ export default function AdminColoringPages() {
                       disabled={!pagination.hasPrevPage}
                       className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      上一页
+                      上一�?
                     </button>
                     <button
                       onClick={() => setCurrentPage(Math.min(pagination.totalPages, currentPage + 1))}
                       disabled={!pagination.hasNextPage}
                       className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      下一页
+                      下一�?
                     </button>
                   </div>
                   <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm text-gray-700">
-                        显示第 {pagination.startRecord} 到 {pagination.endRecord} 条，共 {pagination.totalCount} 条
+                        显示�?{pagination.startRecord} �?{pagination.endRecord} 条，�?{pagination.totalCount} �?
                       </p>
                     </div>
                     <div>
@@ -1111,7 +1111,6 @@ export default function AdminColoringPages() {
                 style: [] as string[],
                 size: 'A4',
                 prompt: '',
-                isActive: false,
                 seoTitle: '',
                 seoDescription: ''
               });
@@ -1157,7 +1156,7 @@ export default function AdminColoringPages() {
                 </div>
                 <div className="mb-6">
                   <p className="text-sm text-gray-500">
-                    确定要删除这个涂色卡吗？此操作不可撤销。
+                    确定要删除这个涂色卡吗？此操作不可撤销�?
                   </p>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -1249,7 +1248,7 @@ interface ColoringPageModalProps {
 function ColoringPageModal({ page, formData, setFormData, imagePreview, setImagePreview, onClose, onSave, showToast, generateSlug, metadata }: ColoringPageModalProps) {
   const [isUploading, setIsUploading] = useState(false);
 
-  // 调试：监控 imagePreview 变化
+  // 调试：监�?imagePreview 变化
   useEffect(() => {
   }, [imagePreview]);
 
@@ -1274,7 +1273,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
       return;
     }
 
-    // 验证文件大小（最大5MB）
+    // 验证文件大小（最�?MB�?
     if (file.size > 5 * 1024 * 1024) {
       showToast('error', '图片大小不能超过5MB');
       return;
@@ -1313,7 +1312,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
           originalFileUrl: originalUrl,
         });
         
-        // 再次确认 imagePreview 已设置
+        // 再次确认 imagePreview 已设�?
         setTimeout(() => {
         }, 1000);
         
@@ -1341,10 +1340,10 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
-        {/* 标题栏 */}
+        {/* 标题�?*/}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">
-            {page ? '编辑涂色卡' : '添加涂色卡'}
+            {page ? '编辑涂色卡' : '添加涂色卡' }
           </h3>
           <button
             onClick={onClose}
@@ -1357,7 +1356,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
         {/* 左右布局内容 */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
           <div className="grid grid-cols-2 gap-6 p-6">
-            {/* 左侧：图片预览和上传 - 正方形 */}
+            {/* 左侧：图片预览和上传 - 正方�?*/}
             <div className="flex flex-col">
               <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-orange-500 transition-colors flex flex-col relative">
                 {imagePreview ? (
@@ -1369,14 +1368,14 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
                         alt="预览"
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          console.error('❌ 图片加载失败:', imagePreview);
+                          console.error('预览图片加载失败:', imagePreview);
                           e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23ddd" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3E加载失败%3C/text%3E%3C/svg%3E';
                         }}
                         onLoad={() => {
                         }}
                       />
                     </div>
-                    {/* 悬停时显示的操作按钮遮罩层 */}
+                    {/* 悬停时显示的操作按钮遮罩�?*/}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="flex gap-2">
                         <label className="cursor-pointer bg-white text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors flex items-center text-sm shadow-lg">
@@ -1406,7 +1405,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
                     <label className="cursor-pointer flex-1 flex flex-col items-center justify-center text-center">
                       <ImageIcon className="h-12 w-12 text-gray-400 mb-3" />
                       <span className="text-sm text-gray-600 mb-1">点击上传图片</span>
-                      <span className="text-xs text-gray-400">支持 JPG、PNG 格式，最大 5MB</span>
+                      <span className="text-xs text-gray-400">支持 JPG、PNG 格式，最�?5MB</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -1420,9 +1419,9 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
                       <div className="flex">
                         <AlertCircle className="h-3 w-3 text-blue-600 mr-1.5 flex-shrink-0 mt-0.5" />
                         <div className="text-xs text-blue-800">
-                          <p className="font-medium mb-0.5">图片要求：</p>
+                          <p className="font-medium mb-0.5">图片要求</p>
                           <ul className="list-disc list-inside space-y-0.5 text-[10px]">
-                            <li>推荐尺寸：800x800 像素或更高</li>
+                            <li>推荐尺寸1900x800 像素或更长宽比</li>
                             <li>文件格式：JPG、PNG</li>
                             <li>文件大小：不超过 5MB</li>
                             <li>图片应清晰，适合涂色</li>
@@ -1436,14 +1435,14 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
                   <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg">
                     <div className="text-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto mb-2"></div>
-                      <p className="text-sm text-gray-600">上传中...</p>
+                      <p className="text-sm text-gray-600">上传中..</p>
                     </div>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* 右侧：属性设置 - 正方形高度 */}
+            {/* 右侧：属性设�?- 正方形高�?*/}
             <div className="aspect-square flex flex-col space-y-1">
             <div className="grid grid-cols-2 gap-1">
               <div>
@@ -1494,7 +1493,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
               />
             </div>
 
-            {/* 属性设置 - 紧凑布局 */}
+            {/* 属性设置- 紧凑布局 */}
             <div className="grid grid-cols-4 gap-1">
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-0.5">
@@ -1594,7 +1593,7 @@ function ColoringPageModal({ page, formData, setFormData, imagePreview, setImage
                 onChange={(e) => setFormData({ ...formData, prompt: e.target.value })}
                 rows={5}
                 className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                placeholder="输入AI生成图片的提示词（如果适用）"
+                placeholder="输入AI生成图片的提示词"
               />
             </div>
 
@@ -1674,7 +1673,7 @@ function ColoringPageDetailModal({ page, onClose, getDifficultyText, getDifficul
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] flex flex-col">
-        {/* 标题栏 */}
+        {/* 标题�?*/}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">
             涂色卡详情
@@ -1690,7 +1689,7 @@ function ColoringPageDetailModal({ page, onClose, getDifficultyText, getDifficul
         {/* 左右布局内容 */}
         <div className="flex-1 overflow-y-auto">
           <div className="grid grid-cols-2 gap-6 p-6">
-            {/* 左侧：图片显示 - 正方形 */}
+            {/* 左侧：图片显�?- 正方�?*/}
             <div className="flex flex-col">
               <div className="aspect-square border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-100">
                 {page.thumbnailUrl ? (
@@ -1707,7 +1706,7 @@ function ColoringPageDetailModal({ page, onClose, getDifficultyText, getDifficul
               </div>
             </div>
 
-            {/* 右侧：属性显示 - 正方形高度 */}
+            {/* 右侧：属性显�?- 正方形高�?*/}
             <div className="aspect-square flex flex-col space-y-1">
               <div className="grid grid-cols-2 gap-1">
                 <div>
@@ -1740,12 +1739,12 @@ function ColoringPageDetailModal({ page, onClose, getDifficultyText, getDifficul
                     </span>
                   </div>
                 </div>
-                <div>
+       {/*******        <div>
                   <label className="block text-xs font-medium text-gray-700 mb-0.5">年龄范围</label>
                   <div className="px-2 py-1 text-sm bg-gray-50 border border-gray-200 rounded-md text-gray-900">
-                    {cleanAgeRange(page.ageRange)}
+                    {cleanAgeRange(page.ageRange)}  
                   </div>
-                </div>
+                </div>*/}  
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-0.5">尺寸</label>
                   <div className="px-2 py-1 text-sm bg-gray-50 border border-gray-200 rounded-md text-gray-900 whitespace-nowrap">

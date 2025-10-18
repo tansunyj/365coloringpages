@@ -66,10 +66,10 @@ export default function AboutUs() {
                 <h3 className="text-xl font-semibold text-gray-900">Our Values</h3>
               </div>
               <ul className="text-gray-600 space-y-2">
-                <li>• <strong>Accessibility:</strong> Free resources for everyone</li>
-                <li>• <strong>Quality:</strong> Professional, detailed designs</li>
-                <li>• <strong>Inclusivity:</strong> Content for all ages and abilities</li>
-                <li>• <strong>Innovation:</strong> Embracing new technologies like AI</li>
+                <li><strong>Accessibility:</strong> Free resources for everyone</li>
+                <li><strong>Quality:</strong> Professional, detailed designs</li>
+                <li><strong>Inclusivity:</strong> Content for all ages and abilities</li>
+                <li><strong>Innovation:</strong> Embracing new technologies like AI</li>
               </ul>
             </div>
           </div>
@@ -117,19 +117,19 @@ export default function AboutUs() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Popular Categories</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• <strong>Animals & Nature:</strong> Wildlife, pets, landscapes</li>
-                  <li>• <strong>Fantasy & Magic:</strong> Unicorns, dragons, fairy tales</li>
-                  <li>• <strong>Educational:</strong> Numbers, letters, shapes</li>
-                  <li>• <strong>Seasonal:</strong> Holidays and celebrations</li>
+                  <li><strong>Animals & Nature:</strong> Wildlife, pets, landscapes</li>
+                  <li><strong>Fantasy & Magic:</strong> Unicorns, dragons, fairy tales</li>
+                  <li><strong>Educational:</strong> Numbers, letters, shapes</li>
+                  <li><strong>Seasonal:</strong> Holidays and celebrations</li>
                 </ul>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Special Features</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• <strong>Theme Park Adventures:</strong> Disney-inspired designs</li>
-                  <li>• <strong>Easy Coloring Book:</strong> Simple designs for beginners</li>
-                  <li>• <strong>AI Generator:</strong> Custom coloring pages on demand</li>
-                  <li>• <strong>Latest Uploads:</strong> Fresh content weekly</li>
+                  <li><strong>Theme Park Adventures:</strong> Disney-inspired designs</li>
+                  <li><strong>Easy Coloring Book:</strong> Simple designs for beginners</li>
+                  <li><strong>AI Generator:</strong> Custom coloring pages on demand</li>
+                  <li><strong>Latest Uploads:</strong> Fresh content weekly</li>
                 </ul>
               </div>
             </div>

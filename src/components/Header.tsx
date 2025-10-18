@@ -48,7 +48,7 @@ export default function Header() {
     const token = localStorage.getItem('authToken') || localStorage.getItem('token');
     const userInfoStr = localStorage.getItem('userInfo');
     
-    console.log('🔍 检查登录状态:', { 
+    console.log('🔍 检查登录状态', { 
       hasToken: !!token, 
       hasUserInfo: !!userInfoStr,
       pathname: pathname,
@@ -58,7 +58,7 @@ export default function Header() {
     if (token && userInfoStr) {
       try {
         const userInfo = JSON.parse(userInfoStr);
-        console.log('✅ 恢复用户信息:', {
+        console.log('恢复用户信息:', {
           email: userInfo.email,
           hasAvatar: !!userInfo.avatar,
           name: userInfo.name
@@ -73,8 +73,8 @@ export default function Header() {
         // 设置用户邮箱
         setUserEmail(userInfo.email || 'user@example.com');
       } catch (error) {
-        console.error('❌ 解析用户信息失败:', error);
-        // 清除损坏的数据
+        console.error('解析用户信息失败:', error);
+        // 清除损坏的数�?
         localStorage.removeItem('userInfo');
         setIsLoggedIn(false);
         setCurrentUserAvatar('');
@@ -110,7 +110,7 @@ export default function Header() {
       console.log('🔐 收到登录事件:', event.detail);
       setIsLoggedIn(event.detail.isLoggedIn);
       setCurrentUserAvatar(event.detail.userAvatar);
-      // 同时重新检查 localStorage 以确保获取最新的用户信息（包括邮箱）
+      // 同时重新检查localStorage 以确保获取最新的用户信息（包括邮箱）
       checkLoginStatus();
     };
 
@@ -130,17 +130,17 @@ export default function Header() {
       } else if (event.detail.userAvatar) {
         setCurrentUserAvatar(event.detail.userAvatar);
       }
-      // 同时重新检查 localStorage 以确保数据同步
+      // 同时重新检查localStorage 以确保数据一致
       checkLoginStatus();
     };
 
-    // 添加事件监听器
+    // 添加事件监听
     window.addEventListener('userLogin', handleUserLogin as EventListener);
     window.addEventListener('userLogout', handleUserLogout);
     window.addEventListener('userAvatarUpdate', handleAvatarUpdate as EventListener);
 
     return () => {
-      // 清理事件监听器
+      // 清理事件监听
       window.removeEventListener('userLogin', handleUserLogin as EventListener);
       window.removeEventListener('userLogout', handleUserLogout);
       window.removeEventListener('userAvatarUpdate', handleAvatarUpdate as EventListener);
@@ -173,10 +173,10 @@ export default function Header() {
             'Content-Type': 'application/json',
           },
         });
-        console.log('✅ 后端退出成功');
+        console.log('后端退出成功');
       }
     } catch (error) {
-      console.error('❌ 退出登录失败:', error);
+      console.error('退出登录失败', error);
     } finally {
       // 无论后端调用是否成功，都清除本地存储
       console.log('🧹 清除本地存储');
@@ -189,7 +189,7 @@ export default function Header() {
       localStorage.removeItem('authProvider');
       localStorage.removeItem('token');
       
-      // ⭐ 关键：跳转到首页
+      // 关键：跳转到首页
       console.log('🏠 跳转到首页');
       router.push('/');
     }
@@ -294,7 +294,7 @@ export default function Header() {
 
           {/* 右侧按钮 */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* 语言选择器 - 暂时注释，不实现国际化 */}
+            {/* 语言选择- 暂时注释，不实现国际化*/}
             {/* <div className="relative" ref={languageMenuRef}>
               <button
                 onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
@@ -333,8 +333,8 @@ export default function Header() {
                         <span className="text-xs text-gray-500">{languageNames[locale].name}</span>
                       </div>
                       {currentLocale === locale && (
-                        <span className="ml-auto text-orange-600 text-lg">✓</span>
-                      )}
+                        <span className="ml-auto text-orange-600 text-lg">/span>
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -360,14 +360,14 @@ export default function Header() {
                     />
                   </div>
                 ) : (
-                  // 未登录：显示灰色人头像
+                  // 未登录：显示灰色人头
                   <div className="w-10 h-10 rounded-full bg-gray-300 hover:bg-gray-400 flex items-center justify-center transition-colors">
                     <User className="h-5 w-5 text-gray-600" />
                   </div>
                 )}
               </button>
 
-              {/* 用户菜单下拉框 - 优化版 */}
+              {/* 用户菜单下拉- 优化*/}
               {isLoggedIn && isUserMenuOpen && (
                 <div className="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-fadeIn">
                   {/* 用户信息卡片 */}
@@ -396,7 +396,7 @@ export default function Header() {
                     </div>
                   </div>
 
-                  {/* 菜单项 */}
+                  {/* 菜单项*/}
                   <div className="py-2">
                     {/* 个人主页 */}
                     <button
@@ -414,10 +414,10 @@ export default function Header() {
                       </span>
                     </button>
 
-                    {/* 分隔线 */}
+                    {/* 分隔线*/}
                     <div className="my-2 border-t border-gray-100"></div>
 
-                    {/* 退出登录 */}
+                    {/* 退出登录*/}
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-50 transition-all duration-200 group"
@@ -437,7 +437,7 @@ export default function Header() {
             </div>
           </div>
 
-          {/* 移动端菜单按钮 */}
+          {/* 移动端菜单按钮*/}
           <div className="md:hidden">
             <button className="text-gray-700 hover:text-gray-900">
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -448,7 +448,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* 登录/注册对话框（二合一） */}
+      {/* 登录/注册对话框（二合一）*/}
       <LoginDialog
         isOpen={isLoginDialogOpen}
         onClose={() => setIsLoginDialogOpen(false)}

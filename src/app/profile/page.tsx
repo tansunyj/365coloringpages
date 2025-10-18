@@ -25,7 +25,7 @@ const formatDateTime = (dateString: string | null | undefined): string => {
   try {
     const date = new Date(dateString);
     
-    // 检查日期是否有效
+    // 检查日期是否有误
     if (isNaN(date.getTime())) {
       return 'Invalid Date';
     }
@@ -55,10 +55,10 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   });
 
   if (!token) {
-    console.error('❌ 未找到 token，请先登录');
+    console.error('未找到token，请先登录');
     // 直接跳转到首页，不需要alert
     window.location.href = '/';
-    throw new Error('未找到 token');
+    throw new Error('未找到token');
   }
 
   const headers = {
@@ -67,17 +67,17 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     ...options.headers
   };
 
-  console.log('📤 发送请求:', { url, headers: { ...headers, Authorization: headers.Authorization?.substring(0, 30) + '...' } });
+  console.log('📤 发送请求', { url, headers: { ...headers, Authorization: headers.Authorization?.substring(0, 30) + '...' } });
 
   const response = await fetch(url, {
     ...options,
     headers
   });
 
-  console.log('📥 响应状态:', response.status, response.statusText);
+  console.log('📥 响应状态', response.status, response.statusText);
 
   if (response.status === 401) {
-    console.error('❌ Token 已失效 (401)');
+    console.error('Token 已失效(401)');
     localStorage.removeItem('token');
     localStorage.removeItem('authToken');
     localStorage.removeItem('userInfo');
@@ -87,7 +87,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   }
 
   if (response.status === 500) {
-    console.error('❌ 服务器错误 (500)');
+    console.error('服务器错误(500)');
     const errorText = await response.text();
     console.error('错误详情:', errorText);
   }
@@ -95,7 +95,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   return response;
 };
 
-// 头像裁剪对话框组件
+// 头像裁剪对话框组
 const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
   isOpen: boolean;
   imageUrl: string;
@@ -241,11 +241,11 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
     tempCanvas.width = containerWidth;
     tempCanvas.height = containerHeight;
 
-    // 图片的CSS样式是: width: auto, height: auto
-    // 这意味着图片按原始像素尺寸显示，然后通过transform缩放和移动
+    // 图片的CSS样式: width: auto, height: auto
+    // 这意味着图片按原始像素尺寸显示，然后通过transform缩放和移�?
     
     // 获取图片的实际显示尺寸（在应用transform之前）
-    // 由于设置了 maxWidth: none, maxHeight: none, width: auto, height: auto
+    // 由于设置: maxWidth: none, maxHeight: none, width: auto, height: auto
     // 图片会按照其自然尺寸显示，但受容器限制
     let displayWidth = img.naturalWidth;
     let displayHeight = img.naturalHeight;
@@ -277,7 +277,7 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
     );
     tempCtx.restore();
 
-    // 裁剪区域参数（固定在容器中心的200x200圆形）
+    // 裁剪区域参数（固定在容器中心200x200圆形）
     const cropRadius = 100;
     const cropCenterX = containerWidth / 2;
     const cropCenterY = containerHeight / 2;
@@ -440,11 +440,11 @@ const AvatarCropDialog = ({ isOpen, imageUrl, onClose, onSave, onReupload }: {
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">
           <h4 className="text-sm font-medium text-blue-900 mb-2">How to use:</h4>
           <ul className="text-xs text-blue-800 space-y-1">
-            <li>• Drag the image to reposition it</li>
-            <li>• Use the scale slider or zoom buttons to resize</li>
-            <li>• The dashed circle shows the crop area</li>
-            <li>• Click &quot;New Image&quot; to upload a different photo</li>
-            <li>• Click &quot;Apply Crop&quot; to save your changes</li>
+            <li>Drag the image to reposition it</li>
+            <li>Use the scale slider or zoom buttons to resize</li>
+            <li>The dashed circle shows the crop area</li>
+            <li>Click &quot;New Image&quot; to upload a different photo</li>
+            <li>Click &quot;Apply Crop&quot; to save your changes</li>
           </ul>
         </div>
 
@@ -566,7 +566,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: {
   );
 };
 
-// 密码修改对话框组件
+// 密码修改对话框组
 const PasswordChangeDialog = ({ isOpen, onClose, onSave, showToast }: {
   isOpen: boolean;
   onClose: () => void;
@@ -712,14 +712,14 @@ export default function ProfilePage() {
   const [favoritesCurrentPage, setFavoritesCurrentPage] = useState(1);
   const itemsPerPage = 6;
   
-  // 详情Dialog状态
+  // 详情Dialog状�?
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [selectedDetailId, setSelectedDetailId] = useState<string>('');
   
-  // My Creations Tab 状态
+  // My Creations Tab 状�?
   const [creationsTab, setCreationsTab] = useState<'images' | 'coloring-pages'>('images');
   
-  // 涂色卡片状态
+  // 涂色卡片状�?
   const [userColoringPages, setUserColoringPages] = useState<any[]>([]);
   const [coloringPagesLoading, setColoringPagesLoading] = useState(false);
   const [coloringPagesPagination, setColoringPagesPagination] = useState({
@@ -744,12 +744,12 @@ export default function ProfilePage() {
     theme: '',
     style: '',
     size: 'A4',
-    seoTitle: '',
-    seoDescription: '',
+ //   seoTitle: '',
+ //   seoDescription: '',
     aiPrompt: ''
   });
 
-  // 元数据状态
+  // 元数据状�?
   const [metadata, setMetadata] = useState<{
     difficulty: any[];
     size: any[];
@@ -762,7 +762,7 @@ export default function ProfilePage() {
     theme: []
   });
   
-  // Toast状态管理
+  // Toast状态管�?
   const [toast, setToast] = useState<{
     show: boolean;
     message: string;
@@ -773,12 +773,12 @@ export default function ProfilePage() {
     type: 'info'
   });
 
-  // 显示Toast的函数
+  // 显示Toast的函�?
   const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
     setToast({ show: true, message, type });
   };
 
-  // 关闭Toast的函数
+  // 关闭Toast的函�?
   const closeToast = () => {
     setToast({ ...toast, show: false });
   };
@@ -802,13 +802,13 @@ export default function ProfilePage() {
   // 获取用户信息
   const fetchUserInfo = async () => {
     try {
-      console.log('👤 开始获取用户信息...');
+      console.log('👤 开始获取用户信�?..');
       setLoading(true);
       
       // 检查localStorage中的token
       const authToken = localStorage.getItem('authToken');
       const token = localStorage.getItem('token');
-      console.log('🔍 localStorage 检查:', {
+      console.log('🔍 localStorage 检�?', {
         hasAuthToken: !!authToken,
         hasToken: !!token,
         authTokenPrefix: authToken?.substring(0, 20),
@@ -818,10 +818,10 @@ export default function ProfilePage() {
       // 同步token：如果只有token没有authToken，或者只有authToken没有token，则同步
       if (token && !authToken) {
         localStorage.setItem('authToken', token);
-        console.log('🔄 已同步 authToken');
+        console.log('🔄 已同�?authToken');
       } else if (authToken && !token) {
         localStorage.setItem('token', authToken);
-        console.log('🔄 已同步 token');
+        console.log('🔄 已同�?token');
       }
       
       const response = await fetchWithAuth(API_ENDPOINTS.PUBLIC.USER.ME);
@@ -830,21 +830,21 @@ export default function ProfilePage() {
       console.log('📦 用户信息响应:', result);
       
       if (result.success && result.data) {
-        console.log('✅ 获取用户信息成功:', {
+        console.log('�?获取用户信息成功:', {
           id: result.data.id,
           name: result.data.name,
           email: result.data.email,
           hasAvatar: !!result.data.avatar
         });
         
-        // 如果没有头像，生成默认头像
+        // 如果没有头像，生成默认头�?
         const avatarUrl = result.data.avatar && result.data.avatar.trim() !== ''
           ? result.data.avatar
           : generateDefaultAvatar(result.data.email, result.data.name);
         
-        console.log('🖼️ 头像URL:', { original: result.data.avatar, final: avatarUrl });
+        console.log('🖼�?头像URL:', { original: result.data.avatar, final: avatarUrl });
         
-        // 更新React状态
+        // 更新React状�?
         setUserInfo({
           id: result.data.id,
           nickname: result.data.name || '',
@@ -856,7 +856,7 @@ export default function ProfilePage() {
           totalLikes: result.data.totalLikes || 0
         });
         
-        // ⭐ 关键：保存到localStorage，供Header使用
+        // �?关键：保存到localStorage，供Header使用
         const userInfoForStorage = {
           id: result.data.id,
           email: result.data.email,
@@ -867,7 +867,7 @@ export default function ProfilePage() {
         localStorage.setItem('userInfo', JSON.stringify(userInfoForStorage));
         console.log('💾 用户信息已保存到localStorage:', userInfoForStorage);
         
-        // ⭐ 立即触发事件通知Header（不依赖React状态更新）
+        // �?立即触发事件通知Header（不依赖React状态更新）
         if (userInfoForStorage.avatar) {
     const loginEvent = new CustomEvent('userLogin', {
       detail: {
@@ -881,18 +881,18 @@ export default function ProfilePage() {
         
         setError('');
       } else {
-        console.error('❌ 获取用户信息失败:', result.error);
+        console.error('�?获取用户信息失败:', result.error);
         setError(result.error || '获取用户信息失败');
       }
     } catch (err) {
-      console.error('❌ 获取用户信息异常:', err);
+      console.error('�?获取用户信息异常:', err);
       setError('获取用户信息失败，请重新登录');
     } finally {
       setLoading(false);
     }
   };
 
-  // 获取元数据
+  // 获取元数�?
   const fetchMetadata = async () => {
     try {
       console.log('🔄 开始获取元数据...');
@@ -915,11 +915,11 @@ export default function ProfilePage() {
           }
         });
         
-        console.log('✅ 元数据已设置:', metadataMap);
+        console.log('元数据已设置:', metadataMap);
         setMetadata(metadataMap);
       }
     } catch (error) {
-      console.error('❌ 获取元数据失败:', error);
+      console.error('获取元数据失败:', error);
     }
   };
 
@@ -955,7 +955,7 @@ export default function ProfilePage() {
       console.log('📥 更新接口响应:', result);
       
       if (result.success && result.data) {
-        console.log('✅ 用户资料更新成功！');
+        console.log('用户资料更新成功');
         
         // 更新本地状态
         setUserInfo(prev => ({
@@ -963,7 +963,7 @@ export default function ProfilePage() {
           nickname: result.data.name || prev.nickname,
           avatar: result.data.avatar || prev.avatar
         }));
-        console.log('   → React状态已更新');
+        console.log('   React状态已更新');
         
         // 更新 localStorage
         const storedUserInfo = localStorage.getItem('userInfo');
@@ -972,7 +972,7 @@ export default function ProfilePage() {
           userInfoObj.name = result.data.name || userInfoObj.name;
           userInfoObj.avatar = result.data.avatar || userInfoObj.avatar;
           localStorage.setItem('userInfo', JSON.stringify(userInfoObj));
-          console.log('   → localStorage已更新');
+          console.log('   localStorage已更新');
         }
         
         // 通知 Header 更新（这会触发Header的checkLoginStatus）
@@ -983,18 +983,18 @@ export default function ProfilePage() {
           }
         });
         window.dispatchEvent(avatarUpdateEvent);
-        console.log('   → Header组件已通知');
+        console.log('   Header组件已通知');
         console.log('📝 ===== 用户资料更新完成 =====\n');
         
         showToast('Profile updated successfully', 'success');
         return true;
       } else {
-        console.error('❌ 用户资料更新失败:', result.error);
+        console.error('用户资料更新失败:', result.error);
         showToast(result.error || 'Update failed', 'error');
         return false;
       }
     } catch (error) {
-      console.error('❌ 更新个人资料异常:', error);
+      console.error('更新个人资料异常:', error);
       showToast('Update failed, please try again', 'error');
       return false;
     }
@@ -1003,7 +1003,7 @@ export default function ProfilePage() {
   // 修改密码
   const changePassword = async (oldPassword: string, newPassword: string) => {
     try {
-      console.log('🔒 开始修改密码...');
+      console.log('🔒 开始修改密码..');
       const token = localStorage.getItem('authToken') || localStorage.getItem('token');
       
       if (!token) {
@@ -1021,7 +1021,7 @@ export default function ProfilePage() {
         body: JSON.stringify({ oldPassword, newPassword })
       });
 
-      console.log('📥 密码修改响应状态:', response.status);
+      console.log('📥 密码修改响应状态', response.status);
 
       const result = await response.json();
       console.log('📦 密码修改响应:', result);
@@ -1040,7 +1040,7 @@ export default function ProfilePage() {
         return false;
       }
     } catch (error) {
-      console.error('❌ 修改密码异常:', error);
+      console.error('修改密码异常:', error);
       showToast('Change failed, please try again', 'error');
       return false;
     }
@@ -1109,7 +1109,7 @@ export default function ProfilePage() {
     }
   };
 
-  // Tab 切换时加载数据
+  // Tab 切换时加载数�?
   useEffect(() => {
     if (activeTab === 'my-creations') {
       fetchCreations(creationsCurrentPage);
@@ -1124,7 +1124,7 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      console.log('💾 开始保存用户信息...');
+      console.log('💾 开始保存用户信息..');
       setIsEditing(false);
       
       // 如果昵称有变化，调用API更新
@@ -1144,7 +1144,7 @@ export default function ProfilePage() {
         }
       }
     } catch (error) {
-      console.error('❌ 保存失败:', error);
+      console.error('保存失败:', error);
       showToast('Save failed, please try again', 'error');
     }
   };
@@ -1203,7 +1203,7 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem('authToken') || localStorage.getItem('token');
       
-      console.log('📤 ===== 开始上传图片到服务器 =====');
+      console.log('📤 ===== 开始上传图片到服务器=====');
       console.log('📤 上传接口:', API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE);
       console.log('📤 文件信息:', {
         fileName: file.name,
@@ -1213,7 +1213,7 @@ export default function ProfilePage() {
       console.log('📤 Token:', token ? token.substring(0, 20) + '...' : 'null');
 
       if (!token) {
-        console.error('❌ 没有找到 token，无法上传图片');
+        console.error('没有找到 token，无法上传图片');
         showToast('Please login before uploading images', 'warning');
         return null;
       }
@@ -1221,9 +1221,9 @@ export default function ProfilePage() {
       const formData = new FormData();
       formData.append('file', file);
 
-      console.log('📤 发送 POST 请求到:', API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE);
-      console.log('📤 请求头:', { Authorization: `Bearer ${token.substring(0, 20)}...` });
-      console.log('📤 请求体: FormData { file: 图像二进制流 }');
+      console.log('📤 发送 POST 请求', API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE);
+      console.log('📤 请求', { Authorization: `Bearer ${token.substring(0, 20)}...` });
+      console.log('📤 请求 FormData { file: 图像二进制流 }');
       
       const response = await fetch(API_ENDPOINTS.PUBLIC.UPLOAD.IMAGE, {
         method: 'POST',
@@ -1233,7 +1233,7 @@ export default function ProfilePage() {
         body: formData
       });
 
-      console.log('📥 上传接口响应状态:', response.status, response.statusText);
+      console.log('📥 上传接口响应状态', response.status, response.statusText);
 
       const result = await response.json();
       console.log('📥 上传接口完整响应:', JSON.stringify(result, null, 2));
@@ -1243,27 +1243,27 @@ export default function ProfilePage() {
         const imageUrl = result.data.previewUrl || result.data.originalUrl || result.data.url;
         
         if (!imageUrl) {
-          console.error('❌ 响应中未找到图片URL');
+          console.error('响应中未找到图片URL');
           console.error('响应数据:', result.data);
           showToast('Image upload failed: URL not received', 'error');
           return null;
         }
         
-        console.log('✅ 图片上传成功！');
+        console.log('图片上传成功');
         console.log('📦 返回的URL地址:');
-        console.log('   - previewUrl:', result.data.previewUrl || '(无)');
-        console.log('   - thumbnailUrl:', result.data.thumbnailUrl || '(无)');
-        console.log('   - originalUrl:', result.data.originalUrl || '(无)');
-        console.log('✅ 使用URL:', imageUrl);
+        console.log('   - previewUrl:', result.data.previewUrl || '(未找到)');
+        console.log('   - thumbnailUrl:', result.data.thumbnailUrl || '(未找到)');
+        console.log('   - originalUrl:', result.data.originalUrl || '(未找到)');
+        console.log('�?使用URL:', imageUrl);
         console.log('📤 ===== 图片上传完成 =====\n');
         return imageUrl;
       } else {
-        console.error('❌ 图片上传失败:', result.error || '未知错误');
+        console.error('图片上传失败:', result.error || '未知错误');
         showToast(result.error || 'Image upload failed', 'error');
         return null;
       }
     } catch (error) {
-      console.error('❌ 图片上传异常:', error);
+      console.error('图片上传异常:', error);
       showToast('Image upload failed, please try again', 'error');
       return null;
     }
@@ -1272,62 +1272,62 @@ export default function ProfilePage() {
   // 处理裁剪完成
   const handleCropSave = async (croppedImage: string) => {
     try {
-      console.log('\n🖼️ ========== 开始头像更新流程 ==========');
+      console.log('\n🖼========== 开始头像更新流程==========');
       console.log('步骤1: 立即更新本地UI（用户即时看到效果）');
       
-      // 第1步：立即更新本地状态（给用户即时反馈）
+      // 第一步：立即更新本地状态（给用户即时反馈）
     setUserInfo(prev => ({
       ...prev,
       avatar: croppedImage
     }));
-      console.log('✅ 步骤1完成：本地UI已更新\n');
+      console.log('步骤1完成：本地UI已更新\n');
       
-      // 第2步：将base64转换为File对象
+      // 第二步：将base64转换为File对象
       console.log('步骤2: 将base64转换为File对象');
       const fileName = `avatar-${Date.now()}.png`;
       const file = base64ToFile(croppedImage, fileName);
-      console.log('✅ 步骤2完成：File对象已创建', {
+      console.log('步骤2完成：File对象已创建', {
         name: file.name,
         size: `${(file.size / 1024).toFixed(2)} KB`,
         type: file.type
       });
       console.log('\n');
       
-      // 第3步：调用上传接口，获取图片URL
+      // 第三步：调用上传接口，获取图片URL
       console.log('步骤3: 调用图片上传接口 POST /api/upload/image');
       const imageUrl = await uploadImage(file);
       
       if (!imageUrl) {
-        console.error('❌ 步骤3失败：未获取到图片URL');
+        console.error('步骤3失败：未获取到图片URL');
         showToast('Avatar upload failed, please try again', 'error');
         // 恢复原头像
         fetchUserInfo();
         return;
       }
       
-      console.log('✅ 步骤3完成：获取到图片URL');
+      console.log('步骤3完成：获取到图片URL');
       console.log('   图片URL:', imageUrl);
       console.log('\n');
       
-      // 第4步：调用API更新用户资料
+      // 第四步：调用API更新用户资料
       console.log('步骤4: 调用用户资料更新接口 PUT /api/user/profile');
       console.log('   参数: { avatar:', imageUrl, '}');
       const success = await updateProfile(undefined, imageUrl);
       
       if (success) {
-        console.log('✅ 步骤4完成：用户资料更新成功');
-        console.log('✅ ========== 头像更新流程完成 ==========\n');
+        console.log('步骤4完成：用户资料更新成功');
+        console.log('========== 头像更新流程完成 ==========\n');
         setIsCropDialogOpen(false);
         setTempImageUrl('');
       } else {
-        console.error('❌ 步骤4失败：用户资料更新失败');
-        console.log('❌ ========== 头像更新流程失败 ==========\n');
+        console.error('步骤4失败：用户资料更新失败');
+        console.log('========== 头像更新流程失败 ==========\n');
         // 失败时恢复原头像
         fetchUserInfo();
       }
     } catch (error) {
-      console.error('❌ 头像更新流程异常:', error);
-      console.log('❌ ========== 头像更新流程异常终止 ==========\n');
+      console.error('头像更新流程异常:', error);
+      console.log('========== 头像更新流程异常终止 ==========\n');
       showToast('Avatar update failed, please try again', 'error');
       fetchUserInfo();
     }
@@ -1341,7 +1341,7 @@ export default function ProfilePage() {
 
   const handlePasswordChange = async (currentPassword: string, newPassword: string) => {
     // 立即调用密码修改API
-    console.log('🔒 开始修改密码...');
+    console.log('🔒 开始修改密码..');
     const success = await changePassword(currentPassword, newPassword);
     
     if (success) {
@@ -1431,7 +1431,7 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {/* 头像裁剪对话框 */}
+      {/* 头像裁剪对话框*/}
       <AvatarCropDialog
         isOpen={isCropDialogOpen}
         imageUrl={tempImageUrl}
@@ -1440,7 +1440,7 @@ export default function ProfilePage() {
         onReupload={handleReuploadFromCrop}
       />
 
-      {/* 密码修改对话框 */}
+      {/* 密码修改对话框*/}
       <PasswordChangeDialog
         isOpen={isPasswordDialogOpen}
         onClose={() => setIsPasswordDialogOpen(false)}
@@ -1584,7 +1584,7 @@ export default function ProfilePage() {
       theme: '动物',
       style: 'Line Art',
       size: 'A4',
-      seoTitle: aiImage.prompt || '',
+      seoTitle:  '',
       seoDescription: '',
       aiPrompt: aiImage.prompt || ''
     });
@@ -1593,7 +1593,7 @@ export default function ProfilePage() {
 
   // 打开查看涂色卡片对话框（只读模式）
   const openViewColoringPageDialog = (page: any) => {
-    console.log('👁️ 查看涂色卡片 - 原始数据:', page);
+    console.log('👁查看涂色卡片 - 原始数据:', page);
     
     const formData = {
       title: page.title || '',
@@ -1618,7 +1618,7 @@ export default function ProfilePage() {
     setShowColoringPageDialog(true);
   };
 
-  // 打开编辑涂色卡片对话框
+  // 打开编辑涂色卡片对话�?
   const openEditColoringPageDialog = (page: any, e: React.MouseEvent) => {
     e.stopPropagation();
     
@@ -1652,7 +1652,7 @@ export default function ProfilePage() {
   // 编辑AI生成的图片（跳转到AI Generator）
   const editAIImage = (image: any, e: React.MouseEvent) => {
     e.stopPropagation();
-    // 保存到 localStorage
+    // 保存到localStorage
     localStorage.setItem('editingAIImage', JSON.stringify({
       imageUrl: image.imageUrl,
       prompt: image.prompt
@@ -1713,13 +1713,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* AI Generated Images Tab - 只在AI图片标签下显示标题 */}
-        {creationsTab === 'images' && (
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-            AI Generated Images
-          </h2>
-        )}
-        
         {/* AI Generated Images Tab */}
         {creationsTab === 'images' && (
           <>
@@ -1768,23 +1761,38 @@ export default function ProfilePage() {
                   ))}
                 </div>
 
-                {/* 分页组件 */}
-                {creationsPagination.totalPages > 1 && (
-                  <Pagination
-                    currentPage={creationsPagination.currentPage}
-                    totalPages={creationsPagination.totalPages}
-                    onPageChange={setCreationsCurrentPage}
-                  />
+                {/* 分页组件 - 始终显示，即使只有一页*/}
+                {creationsPagination.totalPages >= 1 && (
+                  <div className="mt-8">
+                    <Pagination
+                      currentPage={creationsPagination.currentPage}
+                      totalPages={creationsPagination.totalPages}
+                      onPageChange={setCreationsCurrentPage}
+                    />
+                  </div>
                 )}
               </>
             ) : (
-              <div className="text-center py-12">
-                <ImageIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">You haven't created any AI images yet.</p>
-                <a href="/ai-generator" className="mt-4 inline-block text-orange-500 hover:text-orange-600">
-                  Go to AI Generator →
-                </a>
-              </div>
+              <>
+                <div className="text-center py-12">
+                  <ImageIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">You haven't created any AI images yet.</p>
+                  <a href="/ai-generator" className="mt-4 inline-block text-orange-500 hover:text-orange-600">
+                    Go to AI Generator
+                  </a>
+                </div>
+                
+                {/* 无数据时也显示分页组件*/}
+                {creationsPagination.totalPages >= 1 && (
+                  <div className="mt-8">
+                    <Pagination
+                      currentPage={creationsPagination.currentPage}
+                      totalPages={creationsPagination.totalPages}
+                      onPageChange={setCreationsCurrentPage}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
@@ -1890,7 +1898,7 @@ export default function ProfilePage() {
                   </table>
                 </div>
 
-                {/* 分页组件 - 始终显示，即使只有一页 */}
+                {/* 分页组件 - 始终显示，即使只有一页*/}
                 {coloringPagesPagination.totalPages >= 1 && (
                   <div className="mt-8">
                     <Pagination
@@ -1902,11 +1910,24 @@ export default function ProfilePage() {
                 )}
               </>
             ) : (
-              <div className="text-center py-12">
-                <Palette className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">You haven't created any coloring pages yet.</p>
-                <p className="text-sm text-gray-400 mt-2">Create from your AI generated images!</p>
-              </div>
+              <>
+                <div className="text-center py-12">
+                  <Palette className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">You haven't created any coloring pages yet.</p>
+                  <p className="text-sm text-gray-400 mt-2">Create from your AI generated images!</p>
+                </div>
+                
+                {/* 无数据时也显示分页组件*/}
+                {coloringPagesPagination.totalPages >= 1 && (
+                  <div className="mt-8">
+                    <Pagination
+                      currentPage={coloringPagesPagination.currentPage}
+                      totalPages={coloringPagesPagination.totalPages}
+                      onPageChange={(page) => fetchUserColoringPages(page)}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
@@ -1952,7 +1973,7 @@ export default function ProfilePage() {
         showToast(result.error || 'Operation failed', 'error');
       }
     } catch (error) {
-      console.error('❌ 点赞操作失败:', error);
+      console.error('点赞操作失败:', error);
       showToast('Operation failed, please try again', 'error');
     }
   };
@@ -1968,7 +1989,7 @@ export default function ProfilePage() {
         return;
       }
 
-      console.log(`${isFavorited ? '💔 取消收藏' : '💛 添加收藏'}:`, pageId);
+      console.log(`${isFavorited ? '💔 取消收藏:' : '💛 添加收藏:'}:`, pageId);
 
       if (isFavorited) {
         // 取消收藏 - 使用新的API
@@ -1984,7 +2005,7 @@ export default function ProfilePage() {
         const result = await response.json();
         
         if (result.success) {
-          console.log('✅ 取消收藏成功');
+          console.log('💔 取消收藏成功');
           // 刷新当前列表
           if (activeTab === 'my-creations') {
             fetchCreations(creationsCurrentPage);
@@ -2007,7 +2028,7 @@ export default function ProfilePage() {
         const result = await response.json();
         
         if (result.success) {
-          console.log('✅ 添加收藏成功');
+          console.log('💛 添加收藏成功');
           // 刷新当前列表
           if (activeTab === 'my-creations') {
             fetchCreations(creationsCurrentPage);
@@ -2019,14 +2040,14 @@ export default function ProfilePage() {
         }
       }
     } catch (error) {
-      console.error('❌ 收藏操作失败:', error);
+      console.error('💔 收藏操作失败:', error);
       showToast('Operation failed, please try again', 'error');
     }
   };
 
   // 处理查看卡片详情
   const handleViewDetail = (pageId: number) => {
-    console.log('👁️ 查看详情:', pageId);
+    console.log('👁查看详情:', pageId);
     setSelectedDetailId(pageId.toString());
     setIsDetailDialogOpen(true);
   };
@@ -2054,7 +2075,7 @@ export default function ProfilePage() {
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
                   unoptimized
                 />
-                {/* 点赞和收藏按钮 - 右上角 */}
+                {/* 点赞和收藏按钮- 右上角*/}
                 <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
                   {/* 点赞按钮（上方） */}
                   <button
@@ -2120,7 +2141,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      {/* 隐藏的文件输入元素 - 放在顶层以便在所有标签页都能访问 */}
+      {/* 隐藏的文件输入元素- 放在顶层以便在所有标签页都能访问 */}
       <input
         type="file"
         ref={fileInputRef}
@@ -2146,7 +2167,7 @@ export default function ProfilePage() {
                       className="object-cover"
                       unoptimized
                     />
-                    {/* 悬停时显示的相机图标覆盖层 */}
+                    {/* 悬停时显示的相机图标覆盖*/}
                     <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                          onClick={handleAvatarUpload}>
                       <Camera className="h-6 w-6 text-white" />
@@ -2431,7 +2452,7 @@ export default function ProfilePage() {
                     />
                   </div>
 
-                  {/* SEO 字段已隐藏 - 但数据仍会在后台保存 */}
+                  {/* SEO 字段已隐�?- 但数据仍会在后台保存 */}
                   {/* SEO Title */}
                   {/* <div>
                     <label className="block text-xs font-medium text-gray-700 mb-0.5">
@@ -2532,4 +2553,4 @@ export default function ProfilePage() {
       )}
     </div>
   );
-} 
+}

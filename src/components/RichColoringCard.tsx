@@ -98,7 +98,7 @@ class LinkGenerator {
         return `/categories/${linkCategory}/${pageSlug}-${id}`;
         
       case 'popular':
-        // 使用新的URL结构：/best-coloring-pages/[category]/[slug-id]
+        // 使用新的URL结构best-coloring-pages/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
           return `/best-coloring-pages/${linkCategory}/${pageSlug}-${id}`;
@@ -107,7 +107,7 @@ class LinkGenerator {
         }
           
       case 'search':
-        // 使用新的URL结构：/search/[category]/[slug-id]
+        // 使用新的URL结构search/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
           return `/search/${linkCategory}/${pageSlug}-${id}`;
@@ -124,7 +124,7 @@ class LinkGenerator {
         }
         
       case 'theme-parks':
-        // 使用新的URL结构：/disney-characters/[category]/[slug-id]
+        // 使用新的URL结构disney-characters/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
           return `/disney-characters/${linkCategory}/${pageSlug}-${id}`;
@@ -133,7 +133,7 @@ class LinkGenerator {
         }
           
       case 'easy-coloring-book':
-        // 使用新的URL结构：/easy-coloring-pages/[category]/[slug-id]
+        // 使用新的URL结构easy-coloring-pages/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
           return `/easy-coloring-pages/${linkCategory}/${pageSlug}-${id}`;
@@ -142,7 +142,7 @@ class LinkGenerator {
         }
           
       case 'latest':
-        // 使用新的URL结构：/new-coloring-pages/[category]/[slug-id]
+        // 使用新的URL结构new-coloring-pages/[category]/[slug-id]
         if (linkCategory && linkCategory !== 'all' && linkCategory !== '') {
           const pageSlug = slug || `page-${id}`;
           return `/new-coloring-pages/${linkCategory}/${pageSlug}-${id}`;
@@ -166,7 +166,7 @@ class LinkGenerator {
  * @example
  * <RichColoringCard
  *   id={8}
- *   title="可爱小狗涂色页"
+*   title="可爱小狗涂色页面"
  *   thumbnailUrl="https://example.com/image.jpg"
  *   difficulty="easy"
  *   ageRange="3-8 years"
@@ -206,13 +206,13 @@ export default function RichColoringCard(props: RichColoringCardProps) {
   const [likeCount, setLikeCount] = useState(likes);
   const [imageError, setImageError] = useState(false);
 
-  // 标准化分类名称，如果为空则显示"其他"
+  // 标准化分类名称，如果为空则显示"Other"
   const categoryName = CategoryColorUtil.normalizeCategoryName(rawCategoryName);
 
   // 生成详情页链接
   const detailLink = LinkGenerator.generateDetailLink(props);
 
-  // 获取分类背景色
+  // 获取分类背景颜色
   const categoryBgColor = CategoryColorUtil.getBackgroundColor(categoryName);
 
   // 获取难度显示
@@ -252,7 +252,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
       }
     } catch (error) {
       // 如果API调用失败，回滚状态
-      console.error('❌ 点赞操作失败:', error);
+      console.error('�?点赞操作失败:', error);
       setLiked(wasLiked);
       setLikeCount(previousCount);
       
@@ -280,7 +280,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
         await api.coloring.favorite(id);
       }
     } catch (error) {
-      console.error('❌ 收藏操作失败:', error);
+      console.error('收藏操作失败:', error);
       setFavorited(wasFavorited);
     }
   };
@@ -292,9 +292,9 @@ export default function RichColoringCard(props: RichColoringCardProps) {
 
   // 处理卡片点击
   const handleCardClick = () => {
-    // 存储完整的列表数据到sessionStorage（不筛选，详情页会处理）
+    // 存储完整的列表数据到sessionStorage（不筛选，详情页会处理�?
     if (allPages && allPages.length > 0) {
-      console.log('💾 RichColoringCard 存储完整数据池:', allPages.length, '条');
+      console.log('💾 RichColoringCard 存储完整数据?', allPages.length, '条');
       sessionStorage.setItem('listPageAllData', JSON.stringify(allPages));
     }
   };
@@ -318,21 +318,21 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
               <div className="text-center text-gray-500">
                 <div className="text-4xl mb-2">🎨</div>
-                <div className="text-xs font-medium">涂色页</div>
+                <div className="text-xs font-medium">涂色页面</div>
                 <div className="text-xs text-gray-400 mt-1">{categoryName}</div>
               </div>
             </div>
           )}
 
-          {/* 分类/涂色书/主题公园标题标签 - 左上角 */}
+          {/* 分类/涂色页面主题公园标题标签 - 左上角*/}
           <div className="absolute top-3 left-3 z-10">
             {linkType === 'theme-parks' && themeParkName ? (
-              // 主题公园页面：显示主题公园名称
+              // 主题公园页面：显示主题公园名�?
               <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md">
                 {themeParkName}
               </span>
             ) : linkType === 'easy-coloring-book' ? (
-              // 涂色书页面：优先显示涂色书名称，如果没有则显示"涂色书"
+              // 涂色书页面：优先显示涂色书名称，如果没有则显示"Easy Coloring Book"
               <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 text-xs font-bold rounded-full shadow-md">
                 {bookTitle || 'Easy Coloring Book'}
               </span>
@@ -344,7 +344,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             )}
           </div>
 
-          {/* 点赞和收藏按钮 - 右上角 */}
+          {/* 点赞和收藏按钮- 右上角*/}
           <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
             {/* 点赞按钮（上方） */}
             <button
@@ -393,7 +393,7 @@ export default function RichColoringCard(props: RichColoringCardProps) {
             </p>
           )}
 
-          {/* 年龄范围和难度 */}
+          {/* 年龄范围和难度*/}
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
               Age: {ageRange}

@@ -101,7 +101,7 @@ export default function SignupPage() {
                     <span className="text-gray-700 font-medium">Continue with GitHub</span>
                   </button>
 
-                  {/* 分隔线 */}
+                  {/* 分隔�?*/}
                   <div className="relative my-6">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-300" />
@@ -148,7 +148,7 @@ export default function SignupPage() {
                 </div>
 
                 <form onSubmit={handleEmailSignup} className="space-y-6">
-                  {/* 邮箱输入框 */}
+                  {/* 邮箱输入�?*/}
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address
@@ -164,7 +164,7 @@ export default function SignupPage() {
                     />
                   </div>
 
-                  {/* 密码输入框 */}
+                  {/* 密码输入�?*/}
                   <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                       Password

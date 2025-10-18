@@ -41,7 +41,7 @@ export default function SimpleThemeParkCard({
           unoptimized
         />
         
-        {/* 在图片上方添加主题公园标签 */}
+        {/* 在图片上方添加主题公园标题*/}
         <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full opacity-90">
           {park}
         </div>

@@ -42,7 +42,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
   const [likeCount, setLikeCount] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
   
-  // Toast状态
+  // Toast状�?
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
   
   // 显示Toast提示
@@ -50,7 +50,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
     setToast({ message, type });
   };
   
-  // 防止重复加载 - 记录上一次加载的ID和打开状态
+  // 防止重复加载 - 记录上一次加载的ID和打开状�?
   const lastLoadedId = useRef<number>(0);
   const lastOpenState = useRef<boolean>(false);
 
@@ -109,7 +109,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
   }, [isOpen, coloringPageId]);
 
   const handleLike = async () => {
-    // 检查是否登录
+    // 检查是否登�?
     const token = localStorage.getItem('authToken');
     if (!token) {
       showToast('Please login to like', 'warning');
@@ -168,7 +168,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
       });
       
       if (response.ok) {
-        console.log('✅ 下载次数统计成功');
+        console.log('�?下载次数统计成功');
       }
     } catch (error) {
       console.warn('⚠️ 下载次数统计失败:', error);
@@ -411,7 +411,7 @@ export default function ColoringDetailModal({ isOpen, onClose, coloringPageId }:
             </div>
           ) : (
             <div className="text-center py-20 text-gray-500">
-              未找到涂色卡片详情
+              未找到涂色卡片详�?
             </div>
           )}
         </div>

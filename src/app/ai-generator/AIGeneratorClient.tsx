@@ -29,12 +29,12 @@ interface GeneratedImageWithError extends GeneratedImage {
 
 /**
  * 格式化时间为 yyyy-MM-dd HH:mm:ss
- * 支持 Date 对象或 ISO 字符串
+ * 支持 Date 对象和ISO 字符串
  */
 function formatDateTime(timestamp: Date | string): string {
   const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
   
-  // 检查日期是否有效
+  // 检查日期是否有误
   if (isNaN(date.getTime())) {
     return 'Invalid time';
   }
@@ -68,7 +68,7 @@ export default function AIGeneratorClient() {
   // 生成模式：文生图 or 图生图
   const [generationMode, setGenerationMode] = useState<'text-to-image' | 'image-to-image'>('text-to-image');
   
-  // 防止重复调用的标志位（解决 React Strict Mode 导致的重复挂载问题）
+  // 防止重复调用的标志位（解决React Strict Mode 导致的重复挂载问题）
   const isInitializedRef = useRef(false);
   const historyScrollRef = useRef<HTMLDivElement>(null);
   const leftContentRef = useRef<HTMLDivElement>(null);
@@ -101,7 +101,7 @@ export default function AIGeneratorClient() {
       ]);
 
       setGenerationsRemaining(remainingData.remaining);
-      // 确保按ID倒序排列（最新的在前）- ID为字符串类型，需要转换为数字比较
+      // 确保按ID倒序排列（最新的在前） ID为字符串类型，需要转换为数字比较
       const sortedImages = historyData.images.sort((a, b) => {
         const idA = parseInt(a.id, 10);
         const idB = parseInt(b.id, 10);
@@ -137,7 +137,7 @@ export default function AIGeneratorClient() {
   const sentinelRef = useRef<HTMLDivElement>(null); // 底部观察哨兵
   const pendingTriggerRef = useRef(false); // 有待处理的下一次触发
   
-  // 同步 state 到 ref
+  // 同步 state 和 ref
   useEffect(() => {
     historyPageRef.current = historyPage;
   }, [historyPage]);
@@ -197,11 +197,11 @@ export default function AIGeneratorClient() {
         setHasMoreHistory(false);
       }
     } catch (err) {
-      console.error('❌ 加载失败:', err);
+      console.error('加载更多历史记录失败:', err);
     } finally {
       loadingMoreRef.current = false;
       setIsLoadingMore(false);
-      // 若期间有挂起触发，顺序执行下一次
+      // 若期间有挂起触发，顺序执行下一次触发
       if (pendingTriggerRef.current && hasMoreHistoryRef.current) {
         pendingTriggerRef.current = false;
         // 微任务队列中触发，避免和渲染竞争
@@ -231,12 +231,12 @@ export default function AIGeneratorClient() {
       return;
     }
     
-    // 等待 isLoadingHistory 变为 false，说明数据已加载且 DOM 已渲染
+    // 等待 isLoadingHistory 变为 false，说明数据已加载，DOM 已渲染完成
     if (isLoadingHistory) {
       return;
     }
 
-    // 使用更长的延迟确保 DOM 完全渲染
+    // 使用更长的延迟确保DOM 完全渲染
     const bindScrollTimer = setTimeout(() => {
       const scrollElement = historyScrollRef.current;
       if (!scrollElement) {
@@ -394,7 +394,7 @@ export default function AIGeneratorClient() {
     }
 
     setIsGenerating(true);
-    // 立即关闭展开的输入框，变回单行形态
+    // 立即关闭展开的输入框，变回单行形式
     setIsPromptExpanded(false);
     
     // 生成临时ID（使用时间戳）
@@ -488,7 +488,7 @@ export default function AIGeneratorClient() {
     // 保存当前目标元素
     const target = event.currentTarget;
     
-    // 2秒后显示提示词
+    // 2秒后显示提示框
     hoverTimerRef.current = setTimeout(() => {
       // 检查元素是否还存在
       if (target && document.contains(target)) {
@@ -623,7 +623,7 @@ export default function AIGeneratorClient() {
       `);
       printWindow.document.close();
       
-      // 打印完成后清理 blob URL
+      // 打印完成后清理blob URL
       printWindow.onafterprint = () => {
         window.URL.revokeObjectURL(blobUrl);
       };
@@ -643,14 +643,14 @@ export default function AIGeneratorClient() {
       <Header />
 
       <main className="py-4">
-        {/* 整体布局容器 - 紧凑布局，减少空白 */}
+        {/* 整体布局容器 - 紧凑布局，减少空白区域*/}
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="flex gap-4">
             
-            {/* 左侧：主要内容区域 */}
+            {/* 左侧：主要内容区*/}
             <div ref={leftContentRef} className="flex-1 flex flex-col gap-6">
               
-              {/* 正方形容器 - 顶部对齐，充分利用空间 */}
+              {/* 正方形容器 - 顶部对齐，充分利用空白区域*/}
               <div className="flex-shrink-0">
                 <div className="w-full max-w-[1000px] aspect-square">
                   <div className="bg-white rounded-3xl p-6 shadow-lg border border-gray-100 h-full w-full flex items-center justify-center hover:shadow-xl transition-all duration-300">
@@ -666,7 +666,7 @@ export default function AIGeneratorClient() {
                                 unoptimized
                               />
                               
-                              {/* 图片操作按钮 - 右上角 */}
+                              {/* 图片操作按钮 - 右上角*/}
                               <div className="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 {/* 下载按钮 */}
                                 <button
@@ -714,7 +714,7 @@ export default function AIGeneratorClient() {
                 </div>
               </div>
 
-              {/* 遮罩层 - 展开时显示 */}
+              {/* 遮罩层 - 展开时显示*/}
               {isPromptExpanded && (
                 <div 
                   className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity duration-300"
@@ -722,13 +722,13 @@ export default function AIGeneratorClient() {
                 />
               )}
 
-              {/* 提示词输入区域 - 可折叠，向上浮动展开 */}
+              {/* 提示词输入区 - 可折叠，向上浮动展开 */}
               <div className={`bg-white rounded-3xl border border-gray-100 overflow-hidden max-w-[1000px] ${
                 isPromptExpanded 
                   ? 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 max-w-[1000px] w-[calc(100%-2rem)] shadow-2xl animate-in slide-in-from-bottom-4 duration-300' 
                   : 'relative shadow-lg'
               }`}>
-                {/* 折叠头部 - 始终显示的一行 */}
+                {/* 折叠头部 - 始终显示的一部分*/}
                 <div 
                   className="p-5 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
                   onClick={() => setIsPromptExpanded(!isPromptExpanded)}
@@ -919,7 +919,7 @@ export default function AIGeneratorClient() {
               </div>
             </div>
 
-            {/* 右侧：历史记录 - 独占细长列，与左侧内容对齐 */}
+            {/* 右侧：历史记录区域 - 独占细长列，与左侧内容对齐*/}
             <div className="w-48 flex-shrink-0 hidden lg:block">
               <div 
                 className="bg-white rounded-3xl p-4 shadow-lg border border-gray-100 flex flex-col overflow-visible" 
@@ -1002,7 +1002,7 @@ export default function AIGeneratorClient() {
                               </div>
                             </div>
                             
-                            {/* 时间悬浮显示在图片底部 */}
+                            {/* 时间悬浮显示在图片底部*/}
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5 rounded-b-lg">
                               <p className="text-[9px] text-white/90 text-center font-medium">
                                 {formatDateTime(image.timestamp)}
@@ -1037,7 +1037,7 @@ export default function AIGeneratorClient() {
                         </div>
                       ))}
                       
-                      {/* 加载更多指示器 */}
+                      {/* 加载更多指示器*/}
                       {isLoadingMore && (
                         <div className="flex justify-center py-2">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
@@ -1086,14 +1086,14 @@ export default function AIGeneratorClient() {
         />
       )}
       
-      {/* 登录对话框 */}
+      {/* 登录对话框*/}
       <LoginDialog
         isOpen={isLoginDialogOpen}
         onClose={() => setIsLoginDialogOpen(false)}
         onLoginSuccess={handleLoginSuccess}
       />
       
-      {/* 提示词悬浮提示 - Fixed定位，显示在图片左侧，点击空白处关闭 */}
+      {/* 提示词悬浮提示框 - Fixed定位，显示在图片左侧，点击空白处关闭 */}
       {showPromptTooltip && tooltipPosition && (
         <>
           {/* 透明背景遮罩 - 点击关闭 */}
@@ -1130,14 +1130,14 @@ export default function AIGeneratorClient() {
                     className="text-gray-400 hover:text-white text-xs px-2 py-1 rounded hover:bg-gray-700 transition-colors"
                     title="Close"
                   >
-                    ✕
+                    ❌
                   </button>
                 </div>
               </div>
               <div className="text-white text-sm leading-relaxed break-words max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-800 pr-2 select-text">
                 {history.find(img => img.id === showPromptTooltip)?.prompt}
               </div>
-              {/* 右侧箭头指示器 */}
+              {/* 右侧箭头指示器*/}
               <div className="absolute left-full top-6 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[10px] border-l-gray-900/97"></div>
             </div>
           </div>

@@ -16,7 +16,7 @@ interface UnifiedColoringDetailProps {
   category?: string;
   park?: string;
   isDialog?: boolean; // 是否在Dialog中显示
-  allPages?: any[]; // 列表页传递的所有数据（通常是40条）
+  allPages?: any[]; // 列表页传递的所有数据（通常20条）
   searchParams?: {
     q?: string;
     page?: string;
@@ -114,8 +114,8 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
   // 防止重复获取相关推荐
   const hasLoadedRelated = useRef<boolean>(false);
   
-  // 从 sessionStorage 读取列表数据（如果组件没有直接传递 allPages）
-  // 使用 useMemo 同步初始化，避免 useEffect 的异步问题
+  // sessionStorage 读取列表数据（如果组件没有直接传allPages）
+  // 使用 useMemo 同步初始化，避免 useEffect 的异步问�?
   const listPageData = useMemo(() => {
     // 优先使用传递的 allPages
     if (allPages && Array.isArray(allPages) && allPages.length > 0) {
@@ -123,19 +123,19 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       return allPages;
     }
     
-    // 尝试从 sessionStorage 读取（仅在客户端）
+    // 尝试sessionStorage 读取（仅在客户端）
     if (typeof window !== 'undefined') {
       try {
         const storedData = sessionStorage.getItem('listPageAllData');
         if (storedData) {
           const parsed = JSON.parse(storedData);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            console.log('📦 从 sessionStorage 读取列表数据:', parsed.length, '条');
+            console.log('📦 sessionStorage 读取列表数据:', parsed.length, '条');
             return parsed;
           }
         }
       } catch (error) {
-        console.error('❌ 读取 sessionStorage 失败:', error);
+        console.error('读取 sessionStorage 失败:', error);
       }
     }
     
@@ -211,9 +211,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             size: pageData.size || 'N/A',
             difficulty: pageData.difficulty || 'medium',
             ageRange: pageData.ageRange || '3-12 years',
-            views: pageData.views || 0, // 从API读取views，如果没有则为0
-            likes: pageData.likes || 0, // 从API读取likes，如果没有则为0
-            downloads: pageData.downloads || 0, // 从API读取downloads，如果没有则为0
+            views: pageData.views || 0, // 从API读取views，如果没有则0
+            likes: pageData.likes || 0, // 从API读取likes，如果没有则0
+            downloads: pageData.downloads || 0, // 从API读取downloads，如果没有则0
             isLiked: pageData.isLiked || false,
             createdAt: pageData.createdAt || pageData.publishedAt,
             tags: pageData.tags || [],
@@ -224,7 +224,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           setIsFavorited(pageData.isFavorited || false);
           setLikeCount(pageData.likes || 0); // 从API读取点赞数量
           
-          console.log('✅ 详情数据加载成功，点赞数:', pageData.likes);
+          console.log('详情数据加载成功，点赞数:', pageData.likes);
         } else {
           // 如果API返回失败，使用fallback数据
           setColoringPageData(generateFallbackData());
@@ -249,9 +249,9 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       try {
         let dataPool: any[] = [];
         
-        // 优先使用列表页传递的数据（通常是40条）
+        // 优先使用列表页传递的数据（通常20条）
         if (listPageData && Array.isArray(listPageData) && listPageData.length > 0) {
-          console.log('📦 使用列表页传递的数据池:', listPageData.length, '条');
+          console.log('📦 使用列表页传递的数据?', listPageData.length, '条');
           dataPool = listPageData;
         } else {
           // 如果没有传递数据，从API获取
@@ -270,7 +270,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           const sortOptions = ['latest', 'popular', 'views', 'downloads'];
           const randomSort = sortOptions[Math.floor(Math.random() * sortOptions.length)];
           
-          // 获取数据（20条）
+          // 获取数据20条）
           const response = await api.popular.list({
             page: 1,
             limit: 20,
@@ -288,7 +288,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             } else if (Array.isArray(response.data.pages)) {
               dataPool = response.data.pages;
             } else {
-              console.warn('⚠️ API返回的数据不是数组格式:', response.data);
+              console.warn('⚠️ API返回的数据不是数组格式?', response.data);
               setRelatedPages([]);
               return;
             }
@@ -299,12 +299,12 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           }
         }
         
-        console.log('📊 数据池大小:', dataPool.length, '条');
+        console.log('📊 数据池大小?', dataPool.length, '条');
         
         // 过滤掉当前页面
         const filteredPages = dataPool.filter((page: any) => page.id.toString() !== id);
         
-        console.log('🔍 过滤后剩余:', filteredPages.length, '条（已排除当前ID:', id, ')');
+        console.log('🔍 过滤后剩?', filteredPages.length, '条（已排除当前ID:', id, ')');
         
         // 使用 Fisher-Yates 洗牌算法，确保真正的随机
         const shuffled = [...filteredPages];
@@ -313,14 +313,14 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         
-        // 选择前4个
+        // 选择�?�?
         const selected = shuffled.slice(0, 4);
         setRelatedPages(selected);
         
-        console.log('✅ 加载相关推荐:', selected.length, '条');
+        console.log('加载相关推荐:', selected.length, '条');
         console.log('🎲 推荐卡片IDs:', selected.map((p: any) => p.id).join(', '), '(当前页面ID:', id, ')');
       } catch (error) {
-        console.error('❌ 获取相关推荐失败:', error);
+        console.error('获取相关推荐失败:', error);
         // 如果失败，设置空数组
         setRelatedPages([]);
       }
@@ -375,7 +375,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
 
   const router = useRouter();
 
-  // 生成面包屑导航
+  // 生成面包屑导航路径
   const getBreadcrumbPath = () => {
     if (!coloringPageData) return [];
 
@@ -522,7 +522,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         await api.coloring.like(id);
       }
     } catch (error) {
-      console.error('❌ 点赞操作失败:', error);
+      console.error('点赞操作失败:', error);
       setIsLiked(wasLiked);
       setLikeCount(prev => wasLiked ? prev + 1 : prev - 1);
     }
@@ -540,7 +540,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         await api.coloring.favorite(id);
       }
     } catch (error) {
-      console.error('❌ 收藏操作失败:', error);
+      console.error('收藏操作失败:', error);
       setIsFavorited(wasFavorited);
     }
   };
@@ -556,14 +556,14 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       const response = await api.coloring.getOriginalImage(parseInt(id));
       
       if (response.success && response.data && response.data.imageUrl) {
-        console.log('✅ 成功获取原始图片URL:', response.data.imageUrl);
+        console.log('成功获取原始图片URL:', response.data.imageUrl);
         return response.data.imageUrl;
       } else {
         console.warn('⚠️ API响应成功但未返回图片URL:', response);
         return null;
       }
     } catch (error) {
-      console.error('❌ 获取原始图片URL失败:', error);
+      console.error('获取原始图片URL失败:', error);
       return null;
     }
   };
@@ -580,8 +580,8 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         });
         
         if (statsResponse.ok) {
-          console.log('✅ 下载次数统计成功');
-          // 更新本地显示的下载次数
+          console.log('�?下载次数统计成功');
+          // 更新本地显示的下载次�?
           if (coloringPageData) {
             setColoringPageData({
               ...coloringPageData,
@@ -603,7 +603,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         return;
       }
       
-      console.log('✅ 获取到原始图片URL:', originalImageUrl);
+      console.log('�?获取到原始图片URL:', originalImageUrl);
       
       // 2. 使用 fetch 下载图片数据（R1存储桶已配置CORS）
       console.log('🔄 开始获取图片数据...');
@@ -615,7 +615,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       
       // 3. 将响应转换为 Blob
       const blob = await response.blob();
-      console.log('✅ 图片数据获取成功，大小:', (blob.size / 1024 / 1024).toFixed(2), 'MB');
+      console.log('图片数据获取成功，大小?', (blob.size / 1024 / 1024).toFixed(2), 'MB');
       
       // 4. 创建 Blob URL
       const blobUrl = URL.createObjectURL(blob);
@@ -634,19 +634,19 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         console.log('🧹 已清理临时资源');
       }, 100);
       
-      console.log('✅ 下载完成');
+      console.log('下载完成');
       showToast('Download started successfully!', 'success');
     } catch (error) {
-      console.error('❌ 下载失败:', error);
+      console.error('下载失败:', error);
       showToast('Download failed. Please try again later.', 'error');
     }
   };
 
   const handlePrint = async () => {
     try {
-      console.log('🖨️ 准备打印...');
+      console.log('🖨准备打印...');
       
-      // 调用 API 获取真实的高清原图 URL
+      // 调用 API 获取真实的高清原图URL
       const originalImageUrl = await getOriginalImageUrl();
       
       if (!originalImageUrl) {
@@ -654,7 +654,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         return;
       }
       
-      console.log('✅ 获取到打印图片URL:', originalImageUrl);
+      console.log('获取到打印图片URL:', originalImageUrl);
       
       // 获取当前日期时间（用于版权信息）
       const now = new Date();
@@ -799,7 +799,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
         </html>
       `;
       
-      // 在当前页面创建打印内容
+      // 在当前页面创建打印iframe
       const printFrame = document.createElement('iframe');
       printFrame.style.position = 'absolute';
       printFrame.style.top = '-9999px';
@@ -842,14 +842,14 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           }, 1000);
         }
         
-        console.log('✅ 打印对话框已打开');
+        console.log('打印对话框已打开');
       } else {
         console.warn('⚠️ 无法创建打印iframe');
         showToast('Print failed. Please try again.', 'error');
         document.body.removeChild(printFrame);
       }
     } catch (error) {
-      console.error('❌ 打印失败:', error);
+      console.error('打印失败:', error);
       showToast('Print failed. Please try again.', 'error');
     }
   };
@@ -899,7 +899,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
       {!isDialog && <Header />}
       
       <main className={isDialog ? 'py-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}>
-        {/* 面包屑导航 */}
+        {/* 面包屑导航路径*/}
         {!isDialog && (
           <UnifiedBreadcrumb
             type={type}
@@ -935,7 +935,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
             <div>
               <div className="flex items-start justify-between mb-2">
                 <h1 className="text-2xl font-bold text-gray-900 flex-1">{coloringPageData.title}</h1>
-                {/* 点赞、收藏、分享按钮 - 标题右上角 */}
+                {/* 点赞、收藏、分享按钮 - 标题右上角*/}
                 <div className="flex space-x-1.5 ml-4">
                   <button
                     onClick={handleLike}
@@ -1029,7 +1029,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
               </div>
             </div>
 
-            {/* AI提示词 */}
+            {/* AI提示*/}
             {coloringPageData.aiPrompt && (
               <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
                 <h3 className="text-base font-semibold text-gray-900 mb-2">Prompt</h3>
@@ -1097,7 +1097,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
           </div>
         </div>
 
-        {/* 相关推荐 - 仅在非Dialog模式下显示 */}
+        {/* 相关推荐 - 仅在非Dialog模式下显示*/}
         {!isDialog && relatedPages.length > 0 && (
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Coloring Pages</h2>
@@ -1117,7 +1117,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                   // 找到第一个非空的URL
                   const url = possibleUrls.find(u => u && typeof u === 'string' && u.length > 0);
                   
-                  console.log('🖼️ 处理图片URL:', {
+                  console.log('🖼处理图片URL:', {
                     pageId: page.id,
                     pageTitle: page.title,
                     thumbnailUrl: page.thumbnailUrl,
@@ -1143,7 +1143,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                   
                   // 如果已经是完整URL，直接返回
                   if (url.startsWith('http://') || url.startsWith('https://')) {
-                    console.log('✅ 使用完整URL:', url);
+                    console.log('使用完整URL:', url);
                     return url;
                   }
                   
@@ -1161,7 +1161,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                       let targetUrl = '';
                       switch (type) {
                         case 'popular':
-                          // 使用新的URL结构：/best-coloring-pages/[category]/[slug-id]
+                          // 使用新的URL结构best-coloring-pages/[category]/[slug-id]
                           if (category && category !== 'all') {
                             const pageSlug = page.slug || `page-${page.id}`;
                             targetUrl = `/best-coloring-pages/${category}/${pageSlug}-${page.id}`;
@@ -1170,7 +1170,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                           }
                           break;
                         case 'latest':
-                          // 使用新的URL结构：/new-coloring-pages/[category]/[slug-id]
+                          // 使用新的URL结构new-coloring-pages/[category]/[slug-id]
                           if (category && category !== 'all' && category !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
                             targetUrl = `/new-coloring-pages/${category}/${pageSlug}-${page.id}`;
@@ -1179,7 +1179,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                           }
                           break;
                         case 'easy-coloring-book':
-                          // 使用新的URL结构：/easy-coloring-pages/[category]/[slug-id]
+                          // 使用新的URL结构easy-coloring-pages/[category]/[slug-id]
                           if (category && category !== 'all' && category !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
                             targetUrl = `/easy-coloring-pages/${category}/${pageSlug}-${page.id}`;
@@ -1188,7 +1188,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                           }
                           break;
                         case 'theme-parks':
-                          // 使用新的URL结构：/disney-characters/[category]/[slug-id]
+                          // 使用新的URL结构disney-characters/[category]/[slug-id]
                           if (park && park !== 'all' && park !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
                             targetUrl = `/disney-characters/${park}/${pageSlug}-${page.id}`;
@@ -1207,7 +1207,7 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                           }
                           break;
                         case 'search':
-                          // 使用新的URL结构：/search/[category]/[slug-id]
+                          // 使用新的URL结构search/[category]/[slug-id]
                           if (category && category !== 'all' && category !== '') {
                             const pageSlug = page.slug || `page-${page.id}`;
                             targetUrl = `/search/${category}/${pageSlug}-${page.id}`;
@@ -1250,12 +1250,12 @@ export default function UnifiedColoringDetail({ id, type, category, park, isDial
                         unoptimized
                         sizes="(max-width: 768px) 50vw, 25vw"
                         onError={(e) => {
-                          console.error('❌ 图片加载失败:', imageUrl);
-                          console.error('❌ 完整的page数据:', JSON.stringify(page, null, 2));
+                          console.error('图片加载失败:', imageUrl);
+                          console.error('完整的page数据:', JSON.stringify(page, null, 2));
                           e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Image+Not+Found';
                         }}
                         onLoad={() => {
-                          console.log('✅ 图片加载成功:', imageUrl);
+                          console.log('图片加载成功:', imageUrl);
                         }}
                       />
                     </div>

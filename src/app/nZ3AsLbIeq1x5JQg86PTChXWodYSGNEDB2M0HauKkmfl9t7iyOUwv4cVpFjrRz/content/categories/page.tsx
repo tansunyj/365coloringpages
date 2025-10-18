@@ -73,7 +73,7 @@ export default function AdminCategories() {
   const [showManageColoringPages, setShowManageColoringPages] = useState(false);
   const [managingCategory, setManagingCategory] = useState<Category | null>(null);
   
-  // Metadata 状态
+  // Metadata 状�?
   const [metadata, setMetadata] = useState<{
     themes: Array<{ value: string; label: string }>;
     styles: Array<{ value: string; label: string }>;
@@ -100,12 +100,12 @@ export default function AdminCategories() {
     if (response.status === 401) {
       showToast('error', '登录已过期，请重新登录');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
 
-    // 根据HTTP状态码显示不同的错误消息
+    // 根据HTTP状态码显示不同的错误消�?
     let errorMessage = defaultMessage;
     let toastType: 'warning' | 'error' = 'warning';
     
@@ -145,7 +145,7 @@ export default function AdminCategories() {
         });
       }
     } catch (error) {
-      console.error('加载元数据失败:', error);
+      console.error('加载元数据失败', error);
     }
   };
 
@@ -158,7 +158,7 @@ export default function AdminCategories() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -202,7 +202,7 @@ export default function AdminCategories() {
         handleApiError(response, data, '加载分类列表失败');
       }
     } catch (error) {
-      console.error('❌ 加载分类列表失败:', error);
+      console.error('加载分类列表失败:', error);
       showToast('error', '网络错误，加载失败');
     } finally {
       setIsLoading(false);
@@ -229,14 +229,14 @@ export default function AdminCategories() {
     setSearchTerm(e.target.value);
   };
 
-  // 清空搜索框
+  // 清空搜索�?
   const handleClearSearch = () => {
     setSearchTerm('');
     setCurrentPage(1);
     loadCategories(1, '', statusFilter);
   };
 
-  // 处理状态筛选
+  // 处理状态筛�?
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
     setCurrentPage(1);
@@ -271,7 +271,7 @@ export default function AdminCategories() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '分类添加成功！');
+        showToast('success', '分类添加成功');
         setEditingCategory(null);
         setIsModalOpen(false);
         // 重新加载列表
@@ -307,7 +307,7 @@ export default function AdminCategories() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '分类更新成功！');
+        showToast('success', '分类更新成功');
         setEditingCategory(null);
         setIsModalOpen(false);
         // 重新加载列表
@@ -348,7 +348,7 @@ export default function AdminCategories() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showToast('success', '分类删除成功！');
+        showToast('success', '分类删除成功');
         // 重新加载列表
         loadCategories(currentPage, searchTerm, statusFilter);
       } else {
@@ -368,7 +368,7 @@ export default function AdminCategories() {
     setDeleteCategoryId(null);
   };
 
-  // 切换激活状态
+  // 切换激活状�?
   const handleToggleActive = async (categoryId: number) => {
     try {
       const token = localStorage.getItem('adminToken');
@@ -376,7 +376,7 @@ export default function AdminCategories() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -389,7 +389,7 @@ export default function AdminCategories() {
       const action = category.isActive === 1 ? 'deactivate' : 'activate';
 
 
-      // 乐观更新：立即更新本地状态
+      // 乐观更新：立即更新本地状�?
       setCategories(prevCategories => 
         prevCategories.map(cat => 
           cat.id === categoryId 
@@ -413,7 +413,7 @@ export default function AdminCategories() {
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -422,22 +422,22 @@ export default function AdminCategories() {
 
       if (response.ok && data.success) {
         showToast('success', action === 'activate' ? '已激活分类' : '已停用分类');
-        // 重新加载数据以确保状态同步
+        // 重新加载数据以确保状态同�?
         loadCategories(currentPage, searchTerm, statusFilter);
       } else {
-        // 如果API调用失败，回滚本地状态
+        // 如果API调用失败，回滚本地状�?
         setCategories(prevCategories => 
           prevCategories.map(cat => 
             cat.id === categoryId 
-              ? { ...cat, isActive: category.isActive } // 恢复到原始状态
+              ? { ...cat, isActive: category.isActive } // 恢复到原始状�?
               : cat
           )
         );
         handleApiError(response, data, '状态更新失败');
       }
     } catch (error) {
-      console.error('❌ 切换状态失败:', error);
-      // 如果网络错误，回滚本地状态
+      console.error('切换状态失败', error);
+      // 如果网络错误，回滚本地状�?
       setCategories(prevCategories => 
         prevCategories.map(cat => 
           cat.id === categoryId 
@@ -454,7 +454,7 @@ export default function AdminCategories() {
   };
 
   const getStatusText = (isActive: number) => {
-    return isActive === 1 ? '激活' : '停用';
+    return isActive === 1 ? '已激活' : '已停用';
   };
 
   return (
@@ -465,7 +465,7 @@ export default function AdminCategories() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">分类管理</h1>
-                <p className="mt-1 text-sm text-gray-600">管理分类列表,包括各种分类的涂色页面</p>
+                <p className="mt-1 text-sm text-gray-600">管理分类列表,包括各种分类的涂色页</p>
               </div>
               <div className="flex gap-3">
                 <button
@@ -482,7 +482,7 @@ export default function AdminCategories() {
             </div>
           </div>
 
-          {/* 搜索和统计 */}
+          {/* 搜索和统计*/}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex flex-col gap-4">
               {/* 搜索和筛选行 */}
@@ -513,7 +513,7 @@ export default function AdminCategories() {
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
                 >
                   <option value="">全部状态</option>
-                  <option value="active">激活</option>
+                  <option value="active">已激活</option>
                   <option value="inactive">停用</option>
                 </select>
                 <button
@@ -531,11 +531,11 @@ export default function AdminCategories() {
                   <span className="font-semibold text-gray-900">{pagination.totalCount}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500">当前页:</span>
+                  <span className="text-gray-500">当前页</span>
                   <span className="font-semibold text-gray-900">{pagination.currentPage}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500">激活:</span>
+                  <span className="text-gray-500">已激活</span>
                   <span className="font-semibold text-green-600">{categories.filter(c => c.isActive === 1).length}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -621,7 +621,7 @@ export default function AdminCategories() {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-gray-600 max-w-xs truncate" title={category.seoDescription || '未设置'}>
+                            <div className="text-sm text-gray-600 max-w-xs truncate" title={category.seoDescription || '未设置'}>
                             {category.seoDescription || '未设置'}
                           </div>
                         </td>
@@ -646,12 +646,12 @@ export default function AdminCategories() {
                                 ? 'bg-green-100 text-green-800 hover:bg-green-200' 
                                 : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                             }`}
-                            title={category.isActive === 1 ? '点击停用' : '点击激活'}
+                            title={category.isActive === 1 ? '点击停用' : '点击已激活'}
                           >
                             {category.isActive === 1 ? (
                               <>
                                 <Eye className="h-3 w-3 mr-1" />
-                                激活
+                                已激活
                               </>
                             ) : (
                               <>
@@ -728,7 +728,7 @@ export default function AdminCategories() {
                   <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm text-gray-700">
-                        显示{pagination.currentPage}页,共{pagination.totalCount}条
+                        显示{pagination.currentPage}页，共{pagination.totalCount}条
                       </p>
                     </div>
                     <div>
@@ -811,7 +811,7 @@ export default function AdminCategories() {
                 </div>
                 <div className="mb-6">
                   <p className="text-sm text-gray-500">
-                    确定要删除这个分类吗？此操作不可撤销。
+                    确定要删除这个分类吗？此操作不可撤销
                   </p>
                 </div>
                 <div className="flex justify-end space-x-3">
@@ -922,11 +922,11 @@ function CategoryModal({ category, onClose, onSave, showToast }: CategoryModalPr
     e.preventDefault();
     
     if (!formData.name.trim() || !formData.slug.trim()) {
-      showToast('warning', '请填写分类名称和标识符');
+      showToast('warning', '请填写分类名称和标识(slug)');
       return;
     }
 
-    // 如果是编辑模式，需要包含 ID
+    // 如果是编辑模式，需要包含ID
     if (category) {
       onSave({
         ...formData,
@@ -971,7 +971,7 @@ function CategoryModal({ category, onClose, onSave, showToast }: CategoryModalPr
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  标识符 (slug) *
+                  标识(slug) *
                 </label>
                 <input
                   type="text"
@@ -1104,7 +1104,7 @@ function CategoryDetailModal({ category, onClose }: CategoryDetailModalProps) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  标识符 (slug)
+                  标识(slug)
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {category.slug}
@@ -1169,7 +1169,7 @@ function CategoryDetailModal({ category, onClose }: CategoryDetailModalProps) {
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     category.isActive === 1 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                   }`}>
-                    {category.isActive === 1 ? '激活' : '停用'}
+                    {category.isActive === 1 ? '已激活' : '已停用'}
                   </span>
                 </div>
               </div>

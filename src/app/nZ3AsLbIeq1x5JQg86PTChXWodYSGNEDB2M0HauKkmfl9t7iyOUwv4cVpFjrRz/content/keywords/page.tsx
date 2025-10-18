@@ -143,12 +143,12 @@ export default function AdminKeywords() {
     if (response.status === 401) {
       showToast('error', '登录已过期，请重新登录');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
 
-    // 根据HTTP状态码显示不同的错误消息
+    // 根据HTTP状态码显示不同的错误信息
     let errorMessage = defaultMessage;
     let toastType: 'warning' | 'error' = 'warning';
     
@@ -164,7 +164,7 @@ export default function AdminKeywords() {
         break;
       case 500:
         errorMessage = data.message || '服务器内部错误';
-        toastType = 'error'; // 500错误显示为红色
+        toastType = 'error'; // 500错误显示为红�?
         break;
       default:
         errorMessage = data.message || defaultMessage;
@@ -173,7 +173,7 @@ export default function AdminKeywords() {
     showToast(toastType, errorMessage);
   };
 
-  // 从API加载关键词数据
+  // 从API加载关键词列表
   const loadKeywords = async (page = 1, search = '', status = '', startDate = '', endDate = '') => {
     setIsLoading(true);
     try {
@@ -209,7 +209,7 @@ export default function AdminKeywords() {
         showToast('error', data.message || '加载关键词列表失败');
       }
     } catch (error) {
-      console.error('加载关键词失败:', error);
+      console.error('加载关键词失败', error);
     } finally {
       setIsLoading(false);
     }
@@ -384,7 +384,7 @@ export default function AdminKeywords() {
         showToast('error', data.message || '关键词添加失败');
       }
     } catch (error) {
-      console.error('添加关键词失败:', error);
+      console.error('添加关键词失败', error);
       showToast('error', '网络错误，请重试');
       setFormErrors({ keyword: '网络错误，请重试' });
     }
@@ -462,11 +462,11 @@ export default function AdminKeywords() {
     const errors: string[] = [];
     keywordList.forEach((keyword, index) => {
       if (keyword.length < 2 || keyword.length > 20) {
-        errors.push(`第${index + 1}个关键词：长度必须在2-20字符之间`);
+        errors.push(`第{index + 1}个关键词：长度必须在2-20字符之间`);
       }
       const existing = keywords.find(k => k.keyword.toLowerCase() === keyword.toLowerCase());
       if (existing) {
-        errors.push(`第${index + 1}个关键词："${keyword}"已存在`);
+        errors.push(`第{index + 1}个关键词"{keyword}"已存在`);
       }
     });
 
@@ -478,7 +478,7 @@ export default function AdminKeywords() {
     try {
       const token = localStorage.getItem('adminToken');
       const promises = keywordList.map((keyword, index) => 
-        fetch('http://localhost:3001/api/admin/keywords', {
+        fetch('http://localhost:3001/api/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/keywords', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -516,7 +516,7 @@ export default function AdminKeywords() {
         setFormErrors({ batch: `${failedCount}个关键词添加失败` });
       }
     } catch (error) {
-      console.error('批量添加关键词失败:', error);
+      console.error('批量添加关键词失败', error);
       setFormErrors({ batch: '网络错误，请重试' });
     }
   };
@@ -566,7 +566,7 @@ export default function AdminKeywords() {
         handleApiError(response, data, '关键词更新失败');
       }
     } catch (error) {
-      console.error('更新关键词失败:', error);
+      console.error('更新关键词失败', error);
       setFormErrors({ keyword: '网络错误，请重试' });
     }
   };
@@ -598,7 +598,7 @@ export default function AdminKeywords() {
         handleApiError(response, data, '关键词删除失败');
       }
     } catch (error) {
-      console.error('删除关键词失败:', error);
+      console.error('删除关键词失败', error);
       showToast('error', '网络错误，删除失败');
     } finally {
       setShowDeleteConfirm(false);
@@ -647,7 +647,7 @@ export default function AdminKeywords() {
         handleApiError(response, data, '状态切换失败');
       }
     } catch (error) {
-      console.error('切换状态失败:', error);
+      console.error('切换状态失败', error);
       showToast('error', '网络错误，状态切换失败');
     }
   };
@@ -686,12 +686,12 @@ export default function AdminKeywords() {
           </div>
         </div>
 
-        {/* 搜索和筛选 */}
+        {/* 搜索和筛选器*/}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex flex-col gap-4">
             {/* 第一行：搜索框和筛选器 */}
             <div className="flex flex-col lg:flex-row gap-3">
-              {/* 搜索框 - 带清空图标 */}
+              {/* 搜索框- 带清空图标*/}
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
@@ -717,9 +717,9 @@ export default function AdminKeywords() {
                 )}
               </div>
               
-              {/* 筛选条件容器 */}
+              {/* 筛选条件容器*/}
               <div className="flex flex-col sm:flex-row gap-3 items-stretch">
-                {/* 状态筛选 */}
+                {/* 状态筛选器*/}
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
@@ -730,9 +730,9 @@ export default function AdminKeywords() {
                   <option value="inactive">停用</option>
                 </select>
 
-                {/* 开始日期筛选 */}
+                {/* 开始日期筛选器*/}
                 <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg bg-white">
-                  <label className="text-sm text-gray-600 whitespace-nowrap">开始:</label>
+                  <label className="text-sm text-gray-600 whitespace-nowrap">开始日期:</label>
                   <input
                     type="date"
                     value={startDateFilter}
@@ -741,7 +741,7 @@ export default function AdminKeywords() {
                   />
                 </div>
 
-                {/* 结束日期筛选 */}
+                {/* 结束日期筛选器*/}
                 <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg bg-white">
                   <label className="text-sm text-gray-600 whitespace-nowrap">结束:</label>
                   <input
@@ -752,7 +752,7 @@ export default function AdminKeywords() {
                   />
                 </div>
 
-                {/* 查询和重置按钮 */}
+                {/* 查询和重置按钮*/}
                 <div className="flex gap-2">
                   <button
                     onClick={handleQueryClick}
@@ -784,7 +784,7 @@ export default function AdminKeywords() {
           </div>
         </div>
 
-        {/* 关键词列表 */}
+        {/* 关键词列表*/}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           {isLoading ? (
             <div className="p-8 text-center">
@@ -870,7 +870,7 @@ export default function AdminKeywords() {
                                 ? 'bg-green-100 text-green-800 hover:bg-green-200' 
                                 : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                             }`}
-                            title={keyword.isActive ? '点击停用' : '点击激活'}
+                              title={keyword.isActive ? '点击停用' : '点击激活'}
                           >
                             {keyword.isActive ? (
                               <>
@@ -930,7 +930,7 @@ export default function AdminKeywords() {
                   <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
                     {/* 统计信息 */}
                     <div className="text-sm text-gray-700">
-                      显示 {pagination.startRecord || 1} - {pagination.endRecord || keywords.length} 条，共 {pagination.totalCount || keywords.length} 条
+                      显示 {pagination.startRecord || 1} - {pagination.endRecord || keywords.length} 条，{pagination.totalCount || keywords.length} 条
                     </div>
                     
                     {/* 分页按钮 - 始终显示完整翻页组件 */}
@@ -1002,7 +1002,7 @@ export default function AdminKeywords() {
           />
         )}
 
-        {/* 删除确认对话框 */}
+        {/* 删除确认对话框*/}
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
@@ -1015,7 +1015,7 @@ export default function AdminKeywords() {
                     确认删除
                   </h3>
                   <p className="text-sm text-gray-500 mb-6">
-                    确定要删除这个关键词吗？此操作无法撤销。
+                    确定要删除这个关键词吗？此操作无法撤销
                   </p>
                   <div className="flex justify-center space-x-3">
                     <button
@@ -1057,10 +1057,10 @@ export default function AdminKeywords() {
               </div>
 
               <div className="space-y-4">
-                {/* 关键词输入 */}
+                {/* 关键词输入框*/}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    关键词 *
+                    关键词*
                   </label>
                   <input
                     type="text"
@@ -1101,11 +1101,11 @@ export default function AdminKeywords() {
                     </p>
                   )}
                   <p className="mt-1 text-xs text-gray-500">
-                    数字越小，显示顺序越靠前。留空则自动排在最后。
+                    数字越小，显示顺序越靠前。留空则自动排在最后
                   </p>
                 </div>
 
-                {/* 显示时间段 */}
+                {/* 显示时间筛选器*/}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1137,7 +1137,7 @@ export default function AdminKeywords() {
                   </div>
                 </div>
 
-                {/* 是否激活 */}
+                {/* 是否激活*/}
                 <div>
                   <label className="flex items-center">
                     <input
@@ -1209,7 +1209,7 @@ export default function AdminKeywords() {
                     className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent h-32 ${
                       formErrors.batch ? 'border-red-300' : 'border-gray-300'
                     }`}
-                    placeholder="支持多种输入方式：&#10;方式1（每行一个）：&#10;小猫&#10;小狗&#10;独角兽&#10;&#10;方式2（空格分割）：&#10;小猫 小狗 独角兽 公主&#10;&#10;方式3（双引号处理空格）：&#10;小猫咪 小狗 独角兽公主"
+                    placeholder="支持多种输入方式&#10;方式1（每行一个）&#10;小猫&#10;小狗&#10;独角兽公主&#10;&#10;方式2（空格分割）&#10;小猫 小狗 独角兽公主&#10;&#10;方式3（双引号处理空格）：&#10;小猫 小狗 独角兽公主"
                   />
                   {formErrors.batch && (
                     <p className="mt-1 text-sm text-red-600 flex items-start">
@@ -1218,23 +1218,23 @@ export default function AdminKeywords() {
                     </p>
                   )}
                   <div className="mt-2 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800 font-medium mb-2">📝 输入方式说明：</p>
+                    <p className="text-sm text-blue-800 font-medium mb-2">📝 输入方式说明</p>
                     <div className="text-xs text-blue-700 space-y-1">
-                      <p>• <strong>每行一个关键词：</strong>每行输入一个关键词</p>
-                      <p>• <strong>空格分割：</strong>同一行用空格分割多个关键词</p>
-                      <p>• <strong>双引号处理空格：</strong>关键词包含空格时用双引号括起来</p>
-                      <p>• <strong>混合使用：</strong>可以同时使用多种方式</p>
+                      <p><strong>每行一个关键词</strong>每行输入一个关键词</p>
+                      <p><strong>空格分割</strong>同一行用空格分割多个关键词</p>
+                      <p><strong>双引号处理空格：</strong>关键词包含空格时用双引号括起</p>
+                      <p><strong>混合使用</strong>可以同时使用多种方式</p>
                     </div>
                     <div className="mt-2 text-xs text-blue-600">
-                      <p><strong>示例：</strong></p>
+                      <p><strong>示例</strong></p>
                       <p>小猫 小狗 "独角兽公主"</p>
-                      <p>"小猫咪" 恐龙</p>
+                      <p>"小猫 恐龙</p>
                       <p>花朵</p>
                     </div>
                   </div>
                   <p className="mt-2 text-xs text-gray-500">
-                    • 每个关键词2-20个字符，系统会自动检查重复并设置显示顺序<br/>
-                    • 批量添加的关键词默认为激活状态
+                    每个关键词-20个字符，系统会自动检查重复并设置显示顺序<br/>
+                    批量添加的关键词默认为激活状态
                   </p>
                 </div>
 
@@ -1264,7 +1264,7 @@ export default function AdminKeywords() {
                       </p>
                     </div>
 
-                    {/* 开始时间 */}
+                    {/* 开始时间*/}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         开始时间
@@ -1330,7 +1330,7 @@ export default function AdminKeywords() {
                 </button>
               </div>
             </div>
-          </div>
+            </div>
         )}
       </div>
 
@@ -1419,7 +1419,7 @@ function KeywordDetailModal({ keyword, onClose }: KeywordDetailModalProps) {
                 描述
               </label>
               <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900 min-h-[80px]">
-                {keyword.description || '暂无描述'}
+                {keyword.description || '无描述'}
               </div>
             </div>
 
@@ -1429,7 +1429,7 @@ function KeywordDetailModal({ keyword, onClose }: KeywordDetailModalProps) {
                   搜索次数
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
-                  {keyword.searchCount}
+                  {keyword.clickCount}
                 </div>
               </div>
               <div>

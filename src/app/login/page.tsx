@@ -61,7 +61,7 @@ export default function LoginPage() {
                 />
               </div>
 
-              {/* 密码输入框 */}
+              {/* 密码输入�?*/}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                   Password

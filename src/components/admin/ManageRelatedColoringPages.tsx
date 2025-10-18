@@ -17,8 +17,8 @@ import {
 } from 'lucide-react';
 
 /**
- * 涂色卡关联管理公共组件
- * 用于管理分类、主题公园、涂色书与涂色卡之间的关联关系
+ * 涂色卡关联管理公共组�?
+ * 用于管理分类、主题公园、涂色书与涂色卡之间的关联关�?
  */
 
 interface ColoringPage {
@@ -106,7 +106,7 @@ export default function ManageRelatedColoringPages({
     ageRanges: []
   });
   
-  // 分页状态
+  // 分页状�? 
   const [relatedPage, setRelatedPage] = useState(1);
   const [availablePage, setAvailablePage] = useState(1);
   const [relatedPagination, setRelatedPagination] = useState<PaginationInfo>({
@@ -143,7 +143,7 @@ export default function ManageRelatedColoringPages({
       case 'theme-park':
         return '主题公园';
       case 'coloring-book':
-        return '涂色书';
+        return '涂色卡';
       default:
         return '';
     }
@@ -151,7 +151,7 @@ export default function ManageRelatedColoringPages({
 
   // 加载 Metadata - 仅在未从父组件传入时调用
   const loadMetadata = async () => {
-    // 如果父组件已经传入了 metadata，则不需要重新加载
+    // 如果父组件已经传入了 metadata，则不需要重新加�?
     if (propMetadata) {
       return;
     }
@@ -169,7 +169,7 @@ export default function ManageRelatedColoringPages({
         });
       }
     } catch (error) {
-      console.error('加载元数据失败:', error);
+      console.error('加载元数据失败', error);
     }
   };
 
@@ -273,7 +273,7 @@ export default function ManageRelatedColoringPages({
         showToast('error', '加载涂色卡列表失败');
       }
     } catch (error) {
-      console.error('加载涂色卡列表失败:', error);
+      console.error('加载涂色卡列表失败', error);
       showToast('error', '网络错误');
     } finally {
       setIsLoadingAvailable(false);
@@ -304,7 +304,7 @@ export default function ManageRelatedColoringPages({
     loadAvailablePages(1, availableSearch);
   };
 
-  // 判断某个ID是否已在左侧关联列表中
+  // 判断某个ID是否已在左侧关联列表
   const isRelated = (id: number) => {
     return relatedPages.some(page => page.id === id);
   };
@@ -316,7 +316,7 @@ export default function ManageRelatedColoringPages({
       return;
     }
 
-    // 找到选中的且未关联的涂色卡对象
+    // 找到选中的且未关联的涂色卡对
     const itemsToAdd = availablePages.filter(page => 
       selectedAvailable.has(page.id) && !isRelated(page.id)
     );
@@ -346,7 +346,7 @@ export default function ManageRelatedColoringPages({
     // 清空选择
     setSelectedAvailable(new Set());
     
-    showToast('success', `已添加 ${itemsToAdd.length} 项到左侧列表`);
+    showToast('success', `已添加${itemsToAdd.length} 项到左侧列表`);
   };
 
   // 移除关联（前端操作，不立即保存）
@@ -440,7 +440,7 @@ export default function ManageRelatedColoringPages({
       }
 
       // 成功保存
-      showToast('success', '保存成功！');
+      showToast('success', '保存成功');
       
       // 清空待操作列表
       setToAddIds(new Set());
@@ -450,7 +450,7 @@ export default function ManageRelatedColoringPages({
       await loadRelatedPages(1, '');
       await loadAvailablePages(1, '');
       
-      // 通知父组件更新
+      // 通知父组件更
       onUpdate?.();
       
       // 关闭对话框
@@ -509,7 +509,7 @@ export default function ManageRelatedColoringPages({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-2 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[95vw] h-[95vh] flex flex-col overflow-hidden">
-        {/* 标题栏 - 渐变背景 */}
+        {/* 标题 - 渐变背景 */}
         <div className="relative bg-gradient-to-r from-orange-500 to-pink-500 p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -517,7 +517,7 @@ export default function ManageRelatedColoringPages({
                 管理涂色卡关联
               </h2>
               <p className="text-orange-100 mt-1 text-sm">
-                {getEntityTypeName()}：<span className="font-medium">{entityName}</span>
+                {getEntityTypeName()}<span className="font-medium">{entityName}</span>
               </p>
             </div>
             <button
@@ -547,7 +547,7 @@ export default function ManageRelatedColoringPages({
                         已关联
                       </h3>
                       <p className="text-green-100 text-xs">
-                        共 {relatedPagination.totalCount} 个涂色卡
+                        共{relatedPagination.totalCount} 个涂色卡
                       </p>
                     </div>
                   </div>
@@ -566,7 +566,7 @@ export default function ManageRelatedColoringPages({
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="搜索已关联的涂色卡..."
+                    placeholder="搜索已关联的涂色卡.."
                     value={relatedSearch}
                     onChange={(e) => setRelatedSearch(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleRelatedSearch()}
@@ -597,7 +597,7 @@ export default function ManageRelatedColoringPages({
                         <Loader2 className="h-12 w-12" />
                       </div>
                     </div>
-                    <p className="mt-4 text-gray-600 text-sm">加载中...</p>
+                    <p className="mt-4 text-gray-600 text-sm">加载中..</p>
                   </div>
                 ) : relatedPages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-500 px-4">
@@ -690,13 +690,13 @@ export default function ManageRelatedColoringPages({
                 )}
               </div>
 
-              {/* 底部操作栏 */}
+              {/* 底部操作*/}
               <div className="border-t-2 border-green-200 p-4 bg-gradient-to-r from-green-50 to-emerald-50">
                 {/* 分页 */}
                 {relatedPages.length > 0 && (
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-700 font-medium">
-                      第 {relatedPagination.currentPage}/{relatedPagination.totalPages} 页，共 {relatedPagination.totalCount} 条
+                      {relatedPagination.currentPage}/{relatedPagination.totalPages} 页，{relatedPagination.totalCount} 条
                     </span>
                     <div className="flex gap-2">
                       <button
@@ -793,7 +793,7 @@ export default function ManageRelatedColoringPages({
                         未关联
                       </h3>
                       <p className="text-blue-100 text-xs">
-                        共 {availablePagination.totalCount} 个涂色卡
+                        共{availablePagination.totalCount} 个涂色卡
                       </p>
                     </div>
                   </div>
@@ -843,7 +843,7 @@ export default function ManageRelatedColoringPages({
                         <Loader2 className="h-12 w-12" />
                       </div>
                     </div>
-                    <p className="mt-4 text-gray-600 text-sm">加载中...</p>
+                    <p className="mt-4 text-gray-600 text-sm">加载中..</p>
                   </div>
                 ) : availablePages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-500 px-4">
@@ -950,7 +950,7 @@ export default function ManageRelatedColoringPages({
                 )}
               </div>
 
-              {/* 底部操作栏 */}
+              {/* 底部操作�?*/}
               <div className="border-t-2 border-blue-200 p-4 bg-gradient-to-r from-blue-50 to-indigo-50">
                 {/* 分页 */}
                 {availablePages.length > 0 && (
@@ -989,7 +989,7 @@ export default function ManageRelatedColoringPages({
           </div>
         </div>
 
-        {/* 底部按钮栏 */}
+        {/* 底部按钮*/}
         <div className="p-6 border-t-2 border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
           <div className="flex justify-center">
             {/* 保存按钮 - 居中 */}
@@ -1001,7 +1001,7 @@ export default function ManageRelatedColoringPages({
               {isSaving ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  保存中...
+                  保存中..
                 </>
               ) : (
                 <>

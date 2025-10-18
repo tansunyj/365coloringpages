@@ -62,11 +62,11 @@ export default function TermsOfService() {
               </div>
               <p className="text-gray-600 mb-3">You may use our Service for the following purposes:</p>
               <ul className="text-gray-600 space-y-2 ml-4">
-                <li>• Download and print coloring pages for personal, educational, or non-commercial use</li>
-                <li>• Create user accounts to save favorites and track downloads</li>
-                <li>• Use our AI generator to create custom coloring pages</li>
-                <li>• Share completed colored artwork on social media with proper attribution</li>
-                <li>• Use our content in educational settings (schools, libraries, community centers)</li>
+                <li>Download and print coloring pages for personal, educational, or non-commercial use</li>
+                <li>Create user accounts to save favorites and track downloads</li>
+                <li>Use our AI generator to create custom coloring pages</li>
+                <li>Share completed colored artwork on social media with proper attribution</li>
+                <li>Use our content in educational settings (schools, libraries, community centers)</li>
               </ul>
             </div>
 
@@ -77,14 +77,14 @@ export default function TermsOfService() {
               </div>
               <p className="text-gray-600 mb-3">You may NOT use our Service:</p>
               <ul className="text-gray-600 space-y-2 ml-4">
-                <li>• To sell, redistribute, or commercially exploit our coloring pages</li>
-                <li>• To remove watermarks, copyright notices, or attribution</li>
-                <li>• To create competing coloring page websites or apps</li>
-                <li>• To upload malicious content, viruses, or harmful code</li>
-                <li>• To harass, abuse, or harm other users</li>
-                <li>• To violate any applicable laws or regulations</li>
-                <li>• To impersonate others or provide false information</li>
-                <li>• To attempt unauthorized access to our systems</li>
+                <li>To sell, redistribute, or commercially exploit our coloring pages</li>
+                <li>To remove watermarks, copyright notices, or attribution</li>
+                <li>To create competing coloring page websites or apps</li>
+                <li>To upload malicious content, viruses, or harmful code</li>
+                <li>To harass, abuse, or harm other users</li>
+                <li>To violate any applicable laws or regulations</li>
+                <li>To impersonate others or provide false information</li>
+                <li>To attempt unauthorized access to our systems</li>
               </ul>
             </div>
           </div>
@@ -99,20 +99,20 @@ export default function TermsOfService() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Creation</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• You must provide accurate and complete information</li>
-                  <li>• You are responsible for maintaining account security</li>
-                  <li>• You must notify us of any unauthorized access</li>
-                  <li>• One account per person or organization</li>
+                  <li>You must provide accurate and complete information</li>
+                  <li>You are responsible for maintaining account security</li>
+                  <li>You must notify us of any unauthorized access</li>
+                  <li>One account per person or organization</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Responsibilities</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• Keep your login credentials confidential</li>
-                  <li>• Update your information when necessary</li>
-                  <li>• Comply with all terms and policies</li>
-                  <li>• Report any suspicious activity</li>
+                  <li>Keep your login credentials confidential</li>
+                  <li>Update your information when necessary</li>
+                  <li>Comply with all terms and policies</li>
+                  <li>Report any suspicious activity</li>
                 </ul>
               </div>
             </div>
@@ -142,22 +142,22 @@ export default function TermsOfService() {
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-3">Protected Elements</h4>
                   <ul className="text-gray-600 space-y-2">
-                    <li>• Original coloring page designs</li>
-                    <li>• Website design and layout</li>
-                    <li>• Software and algorithms</li>
-                    <li>• Trademarks and logos</li>
-                    <li>• Text and descriptions</li>
+                    <li>Original coloring page designs</li>
+                    <li>Website design and layout</li>
+                    <li>Software and algorithms</li>
+                    <li>Trademarks and logos</li>
+                    <li>Text and descriptions</li>
                   </ul>
                 </div>
                 
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-3">Your Rights</h4>
                   <ul className="text-gray-600 space-y-2">
-                    <li>• Personal use of coloring pages</li>
-                    <li>• Educational use in classrooms</li>
-                    <li>• Non-commercial sharing with attribution</li>
-                    <li>• Coloring and displaying finished artwork</li>
-                    <li>• Printing for personal enjoyment</li>
+                    <li>Personal use of coloring pages</li>
+                    <li>Educational use in classrooms</li>
+                    <li>Non-commercial sharing with attribution</li>
+                    <li>Coloring and displaying finished artwork</li>
+                    <li>Printing for personal enjoyment</li>
                   </ul>
                 </div>
               </div>
@@ -203,20 +203,20 @@ export default function TermsOfService() {
               <div>
                 <h4 className="font-semibold text-gray-900 mb-3">Data Collection</h4>
                 <ul className="text-gray-600 space-y-2 text-sm">
-                  <li>• Account information (email, username)</li>
-                  <li>• Usage data and preferences</li>
-                  <li>• Device and browser information</li>
-                  <li>• Cookies and tracking technologies</li>
+                  <li>Account information (email, username)</li>
+                  <li>Usage data and preferences</li>
+                  <li>Device and browser information</li>
+                  <li>Cookies and tracking technologies</li>
                 </ul>
               </div>
               
               <div>
                 <h4 className="font-semibold text-gray-900 mb-3">Your Rights</h4>
                 <ul className="text-gray-600 space-y-2 text-sm">
-                  <li>• Access and update your data</li>
-                  <li>• Request data deletion</li>
-                  <li>• Opt-out of communications</li>
-                  <li>• Data portability</li>
+                  <li>Access and update your data</li>
+                  <li>Request data deletion</li>
+                  <li>Opt-out of communications</li>
+                  <li>Data portability</li>
                 </ul>
               </div>
             </div>
@@ -287,20 +287,20 @@ export default function TermsOfService() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">By You</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• You may terminate your account at any time</li>
-                  <li>• Simply stop using the Service</li>
-                  <li>• Contact us to delete your account</li>
-                  <li>• Downloaded content may be retained for personal use</li>
+                  <li>You may terminate your account at any time</li>
+                  <li>Simply stop using the Service</li>
+                  <li>Contact us to delete your account</li>
+                  <li>Downloaded content may be retained for personal use</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">By Us</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• We may suspend or terminate accounts for violations</li>
-                  <li>• We may discontinue the Service with notice</li>
-                  <li>• We may modify or restrict access</li>
-                  <li>• Termination may be immediate for serious violations</li>
+                  <li>We may suspend or terminate accounts for violations</li>
+                  <li>We may discontinue the Service with notice</li>
+                  <li>We may modify or restrict access</li>
+                  <li>Termination may be immediate for serious violations</li>
                 </ul>
               </div>
             </div>

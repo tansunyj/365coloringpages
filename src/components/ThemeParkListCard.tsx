@@ -60,7 +60,7 @@ export default function ThemeParkListCard({
       onClick={handleCardClick}
       className="bg-white rounded-xl shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-gray-300 relative cursor-pointer"
     >
-      {/* 图片区域 - 1:1 比例 (正方形) */}
+      {/* 图片区域 - 1:1 比例 (正方�? */}
       <div className="relative w-full" style={{ aspectRatio: '1/1' }}>
         <Image
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1jT5zi9-qlvUaFP7QTRlAn8e0f-lZWeSi9zOtDe0_YQGrzjNgnRGCHoW0os_5NSIj6IALj7QbffWUCNF3zKbC1tjp42x0amRC4NelIg156aOh-OGUUTh1WwYMpEKFQ6p9w1VxzEdX0JIz7ArdQjEk9BlmrjVoH5UKe6rHmpbd1pBWzYY-Q2XGecxjCZT62vRpQlfbSCoyYQziETRsP2PxcawUNjAeUc7uZlR3zQfQsQXi3DuTd9RnzIb_bE-FqpVzP-dXVPPSbQo"
@@ -70,12 +70,12 @@ export default function ThemeParkListCard({
           unoptimized
         />
         
-        {/* 在图片上方添加主题公园标签 */}
+        {/* 在图片上方添加主题公园标�?*/}
         <div className="absolute top-2 left-2 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full opacity-90">
           {park}
         </div>
         
-        {/* 右上角快速操作按钮 */}
+        {/* 右上角快速操作按�?*/}
         <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleLike}
@@ -95,7 +95,7 @@ export default function ThemeParkListCard({
           </button>
         </div>
         
-        {/* 增强的悬浮叠加层 - 显示标题和统计信息 */}
+        {/* 增强的悬浮叠加层 - 显示标题和统计信�?*/}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end">
           <div className="w-full p-4 text-white">
             <h3 className="text-sm font-bold truncate mb-2">{title}</h3>

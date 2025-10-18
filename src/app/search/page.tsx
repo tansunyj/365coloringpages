@@ -3,7 +3,7 @@ import SearchPageClient from './SearchPageClient';
 
 /**
  * Generate SEO metadata for search home page
- * 使用统一的 SEO 系统
+ * 使用统一SEO 系统
  */
 export async function generateMetadata() {
   return await generateSearchSEO('home');

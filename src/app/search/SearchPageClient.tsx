@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '@/components/UnifiedListPage';
+import UnifiedListPageWrapper from '@/components/UnifiedListPageWrapper';
 
 /**
  * 搜索页面客户端组件
@@ -9,7 +9,7 @@ import UnifiedListPage from '@/components/UnifiedListPage';
  */
 export default function SearchPageClient() {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="search"
       title="Search Results"
       subtitle="Find the Coloring Pages You Need"

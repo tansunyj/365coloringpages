@@ -104,14 +104,14 @@ export default function TestHeroAPIPage() {
       
       setResults([bannersResult, keywordsResult]);
     } catch (error) {
-      console.error('测试过程中出错:', error);
+      console.error('测试过程中出�?', error);
     } finally {
       setTesting(false);
     }
   };
 
   useEffect(() => {
-    // 页面加载时自动测试
+    // 页面加载时自动测�?
     testAllAPIs();
   }, []);
 
@@ -123,7 +123,7 @@ export default function TestHeroAPIPage() {
       
       <div className="bg-gray-100 p-6 rounded-lg mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">API连接状态</h2>
+          <h2 className="text-lg font-semibold">API连接状�?/h2>
           <button
             onClick={testAllAPIs}
             disabled={testing}
@@ -133,11 +133,11 @@ export default function TestHeroAPIPage() {
                 : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
-            {testing ? '测试中...' : '重新测试'}
+            {testing ? '测试�?..' : '重新测试'}
           </button>
         </div>
 
-        {/* 总体状态 */}
+        {/* 总体状�?*/}
         {results.length > 0 && (
           <div className="mb-6 p-4 rounded-lg border-2" style={{
             backgroundColor: allSuccess ? '#f0fdf4' : '#fef2f2',
@@ -145,16 +145,16 @@ export default function TestHeroAPIPage() {
           }}>
             <div className="flex items-center">
               <span className="text-2xl mr-3">
-                {allSuccess ? '✅' : '❌'}
+                {allSuccess ? '�? : '�?}
               </span>
               <div>
                 <h3 className={`font-bold text-lg ${allSuccess ? 'text-green-800' : 'text-red-800'}`}>
-                  {allSuccess ? 'Hero组件API就绪！' : 'API连接存在问题'}
+                  {allSuccess ? 'Hero组件API就绪�? : 'API连接存在问题'}
                 </h3>
                 <p className={`text-sm ${allSuccess ? 'text-green-700' : 'text-red-700'}`}>
                   {allSuccess 
-                    ? '所有API都正常工作，首页Hero部分会正确显示后端数据'
-                    : '部分API调用失败，首页可能使用默认数据'
+                    ? '所有API都正常工作，首页Hero部分会正确显示后端数�?
+                    : '部分API调用失败，首页可能使用默认数�?
                   }
                 </p>
               </div>
@@ -173,7 +173,7 @@ export default function TestHeroAPIPage() {
                     ? 'bg-green-200 text-green-800' 
                     : 'bg-red-200 text-red-800'
                 }`}>
-                  {result.success ? '✅ 成功' : '❌ 失败'}
+                  {result.success ? '�?成功' : '�?失败'}
                 </span>
               </div>
               
@@ -218,7 +218,7 @@ export default function TestHeroAPIPage() {
                       </div>
                     ) : result.name === 'Banners API' && result.data.images ? (
                       <div>
-                        轮播组: {result.data.name || 'Unknown'}
+                        轮播�? {result.data.name || 'Unknown'}
                         <br />图片数量: {result.data.images.length}
                         {result.data.images.slice(0, 2).map((img: any, i: number) => (
                           <div key={i}>- {img.title || `图片${i+1}`}</div>
@@ -239,15 +239,15 @@ export default function TestHeroAPIPage() {
         <h3 className="font-semibold text-blue-800 mb-2">💡 使用说明:</h3>
         <ul className="text-blue-700 space-y-1 list-disc list-inside">
           <li><strong>Banners API</strong>: 为Hero部分提供轮播背景图片</li>
-          <li><strong>Keywords API</strong>: 为搜索框上方提供热门关键词标签</li>
-          <li>如果所有API都成功，访问首页就能看到完整的后端数据集成效果</li>
+          <li><strong>Keywords API</strong>: 为搜索框上方提供热门关键词标�?/li>
+          <li>如果所有API都成功，访问首页就能看到完整的后端数据集成效�?/li>
           <li>API失败时会自动使用默认数据，不影响页面正常显示</li>
         </ul>
         
         <div className="mt-4 p-3 bg-white rounded">
           <strong>环境变量配置:</strong>
           <div className="font-mono text-sm mt-1">
-            NEXT_PUBLIC_API_BASE_URL = {process.env.NEXT_PUBLIC_API_BASE_URL || '未设置'}
+            NEXT_PUBLIC_API_BASE_URL = {process.env.NEXT_PUBLIC_API_BASE_URL || '未设�?}
           </div>
         </div>
       </div>

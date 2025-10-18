@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import UnifiedListPage from '../../components/UnifiedListPage';
+import UnifiedListPageWrapper from '../../components/UnifiedListPageWrapper';
 
 /**
  * Best Coloring Pages页面客户端组件
@@ -9,7 +9,7 @@ import UnifiedListPage from '../../components/UnifiedListPage';
  */
 export default function PopularPageClient() {
   return (
-    <UnifiedListPage
+    <UnifiedListPageWrapper
       type="popular"
       title="Best Coloring Pages"
       subtitle="Explore the Best Coloring Content"

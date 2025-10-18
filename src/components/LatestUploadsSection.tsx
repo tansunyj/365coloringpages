@@ -131,7 +131,7 @@ export default function LatestUploadsSection() {
         {/* 白色卡片容器 */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           {isLoading ? (
-            /* 加载状态 */
+            /* 加载状态*/
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {Array.from({ length: 10 }).map((_, index) => (
                 <div key={index} className="bg-gray-200 rounded-xl animate-pulse" style={{ aspectRatio: '1/1' }}>
@@ -140,7 +140,7 @@ export default function LatestUploadsSection() {
               ))}
             </div>
           ) : (
-            /* 卡片网格 - 2行5列 */
+            /* 卡片网格 - 2行3列*/
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {coloringPages.map((page) => (
                 <LatestColoringCard

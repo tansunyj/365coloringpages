@@ -98,7 +98,7 @@ export default function AdminFirstColoring() {
     if (response.status === 401) {
       showToast('error', '登录已过期，请重新登录');
       setTimeout(() => {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
       }, 1500);
       return;
     }
@@ -128,15 +128,15 @@ export default function AdminFirstColoring() {
     showToast(toastType, errorMessage);
   };
 
-  // 从API加载涂色书数据
+  // 从API加载涂色书列表
   const loadBooks = async (page = 1, search = '', status = '') => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
       
-      // 检查 token 是否存在
+      // 检查token是否存在
       if (!token) {
-        window.location.href = '/admin/login';
+        window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         return;
       }
 
@@ -149,13 +149,13 @@ export default function AdminFirstColoring() {
       });
 
 
-      // 如果是401未授权，跳转到登录页
+      // 如果401未授权，跳转到登录页
       if (response.status === 401) {
         showToast('error', '登录已过期，请重新登录');
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -170,7 +170,7 @@ export default function AdminFirstColoring() {
         handleApiError(response, data, '加载涂色书列表失败');
       }
     } catch (error) {
-      console.error('❌ 加载涂色书失败:', error);
+      console.error('加载涂色书列表失败', error);
     } finally {
       setIsLoading(false);
     }
@@ -199,7 +199,7 @@ export default function AdminFirstColoring() {
     loadBooks(1, searchTerm, status);
   };
 
-  // 清空搜索框
+  // 清空搜索
   const handleClearSearch = () => {
     setSearchTerm('');
     setCurrentPage(1);
@@ -220,7 +220,7 @@ export default function AdminFirstColoring() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -241,7 +241,7 @@ export default function AdminFirstColoring() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -257,7 +257,7 @@ export default function AdminFirstColoring() {
         handleApiError(response, data, '涂色书添加失败');
       }
     } catch (error) {
-      console.error('❌ 添加涂色书失败:', error);
+      console.error('添加涂色书失败', error);
       showToast('error', '添加失败，请重试');
     }
   };
@@ -269,7 +269,7 @@ export default function AdminFirstColoring() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -290,7 +290,7 @@ export default function AdminFirstColoring() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -306,7 +306,7 @@ export default function AdminFirstColoring() {
         handleApiError(response, data, '涂色书更新失败');
       }
     } catch (error) {
-      console.error('❌ 更新涂色书失败:', error);
+      console.error('更新涂色书失败', error);
       showToast('error', '更新失败，请重试');
     }
   };
@@ -325,7 +325,7 @@ export default function AdminFirstColoring() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -345,7 +345,7 @@ export default function AdminFirstColoring() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -360,7 +360,7 @@ export default function AdminFirstColoring() {
         handleApiError(response, data, '涂色书删除失败');
       }
     } catch (error) {
-      console.error('❌ 删除涂色书失败:', error);
+      console.error('删除涂色书失败', error);
       showToast('error', '删除失败，请重试');
     } finally {
       // 关闭确认 dialog
@@ -387,7 +387,7 @@ export default function AdminFirstColoring() {
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -414,7 +414,7 @@ export default function AdminFirstColoring() {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -428,21 +428,12 @@ export default function AdminFirstColoring() {
           b.id === bookId ? { ...b, isActive: !b.isActive } : b
         ));
       } else {
-        handleApiError(response, data, '状态更新失败');
+        handleApiError(response, data, '状态更新失败')  || '状态更新失败';
+        showToast('error', errorMessage);
       }
     } catch (error) {
-      console.error('❌ 切换状态失败:', error);
-      showToast('error', '状态更新失败，请重试');
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'first-coloring': return 'bg-blue-100 text-blue-800';
-      case 'latest': return 'bg-green-100 text-green-800';
-      case 'popular': return 'bg-orange-100 text-orange-800';
-      case 'custom': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      console.error('切换状态失败', error);
+      showToast('error', '状态更新失败，请重试') || '状态更新失败，请重试';
     }
   };
 
@@ -478,7 +469,7 @@ export default function AdminFirstColoring() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
                 <BookOpen className="h-7 w-7 mr-3 text-orange-600" />
-                Easy Coloring Pages管理
+                简易涂色页管理
               </h1>
               <p className="mt-1 text-sm text-gray-600">
                 管理简易涂色页列表，包括第一本涂色书、最新页面、热门页面等
@@ -543,10 +534,10 @@ export default function AdminFirstColoring() {
                 搜索
               </button>
             </div>
-            {/* 统计信息行 */}
+            {/* 统计信息 */}
             <div className="flex gap-4 text-sm text-gray-600">
               <span>总计: <strong>{pagination.totalCount}</strong></span>
-              <span>当前页: <strong>{books.length}</strong></span>
+              <span>当前: <strong>{books.length}</strong></span>
               <span>激活: <strong>{books.filter(b => b.isActive).length}</strong></span>
               <span>停用: <strong>{books.filter(b => !b.isActive).length}</strong></span>
             </div>
@@ -582,9 +573,9 @@ export default function AdminFirstColoring() {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         SEO描述
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {/***   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         类型
-                      </th>
+                      </th>*/}
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         涂色卡数量
                       </th>
@@ -645,15 +636,15 @@ export default function AdminFirstColoring() {
                             {book.seoDescription || '未设置'}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                    {/******    <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(book.type)}`}>
                             {getTypeText(book.type)}
                           </span>
-                        </td>
+                        </td> */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              {book.coloringPageCount !== undefined ? book.coloringPageCount : (book.pageCount || 0)} 个
+                              {book.coloringPageCount !== undefined ? book.coloringPageCount : (book.pageCount || 0)} 
                             </span>
                           </div>
                         </td>
@@ -698,7 +689,7 @@ export default function AdminFirstColoring() {
                                 setShowManageColoringPages(true);
                               }}
                               className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                              title="关联涂色卡"
+                              title="关联涂色书"
                             >
                               <Link className="h-5 w-5" />
                             </button>
@@ -745,7 +736,7 @@ export default function AdminFirstColoring() {
                   <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
                     {/* 统计信息 */}
                     <div className="text-sm text-gray-700">
-                      显示 {pagination.currentPage} 页，共 {pagination.totalCount} 条
+                      显示 {pagination.currentPage} 页，{pagination.totalCount} 条
                     </div>
                     
                     {/* 分页按钮 - 始终显示完整翻页组件 */}
@@ -901,7 +892,7 @@ export default function AdminFirstColoring() {
               </div>
               <div className="mb-6">
                 <p className="text-sm text-gray-500">
-                  确定要删除这个涂色书吗？此操作不可撤销。
+                  确定要删除这个涂色书吗？此操作不可撤销
                 </p>
               </div>
               <div className="flex justify-end space-x-3">
@@ -972,11 +963,11 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
     try {
       const token = localStorage.getItem('adminToken');
       
-      // 检查 token 是否存在
+      // 检查token 是否存在
       if (!token) {
         showToast('error', '未登录或登录已过期，请重新登录');
         setTimeout(() => {
-          window.location.href = '/admin/login';
+          window.location.href = '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login';
         }, 1500);
         return;
       }
@@ -998,13 +989,13 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
 
       if (result.success && result.data?.thumbnailUrl) {
         onImageChange(result.data.thumbnailUrl);
-        // 确保使用 toast 而不是 alert
-        showToast('success', '图片上传成功！');
+        // 确保使用 toast 而不�?alert
+        showToast('success', '图片上传成功');
       } else {
         showToast('error', result.message || '上传失败');
       }
     } catch (error) {
-      console.error('❌ 上传失败:', error);
+      console.error('上传失败:', error);
       showToast('error', '上传失败，请重试');
     } finally {
       setIsUploading(false);
@@ -1055,7 +1046,7 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
                 e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik00MCA1Nkg4OFY4OEg0MFY1NloiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTQwIDMySDg4VjQ4SDQwVjMyWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K';
               }}
             />
-            {/* 悬停覆盖层 - 替换图片 */}
+            {/* 悬停覆盖- 替换图片 */}
             {isHovering && !isUploading && (
               <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center transition-opacity">
                 <div className="text-center text-white">
@@ -1074,7 +1065,7 @@ function CoverImageUpload({ imageUrl, onImageChange, showToast }: CoverImageUplo
                 <p className="text-xs text-gray-400">暂无图片</p>
               </div>
             </div>
-            {/* 悬停覆盖层 - 上传图片 */}
+            {/* 悬停覆盖- 上传图片 */}
             {isHovering && !isUploading && (
               <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center transition-opacity">
                 <div className="text-center text-white">
@@ -1130,7 +1121,7 @@ function ColoringBookModal({ book, onClose, onSave, showToast }: ColoringBookMod
     e.preventDefault();
     
     if (!formData.title.trim() || !formData.slug.trim()) {
-      showToast('warning', '请填写涂色书标题和标识符');
+      showToast('warning', '请填写涂色书标题和标识(slug)');
       return;
     }
 
@@ -1193,14 +1184,14 @@ function ColoringBookModal({ book, onClose, onSave, showToast }: ColoringBookMod
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              标识符 (slug) *
+              标识(slug) *
             </label>
             <input
               type="text"
               value={formData.slug}
               onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-              placeholder="book-slug"
+              placeholder="涂色书标识(slug)"
               required
             />
           </div>
@@ -1281,7 +1272,7 @@ function ColoringBookModal({ book, onClose, onSave, showToast }: ColoringBookMod
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                显示顺序
+                排序
               </label>
               <input
                 type="number"
@@ -1386,7 +1377,7 @@ function ColoringBookDetailModal({ book, onClose }: ColoringBookDetailModalProps
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  涂色书名称
+                  涂色书标题
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {book.title}
@@ -1394,7 +1385,7 @@ function ColoringBookDetailModal({ book, onClose }: ColoringBookDetailModalProps
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  标识符 (slug)
+                  标识(slug)
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {book.slug}
@@ -1459,8 +1450,8 @@ function ColoringBookDetailModal({ book, onClose }: ColoringBookDetailModalProps
                   </span>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div>
+               <label className="block text-sm font-medium text-gray-700 mb-1">
                   涂色卡数量
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md">
@@ -1474,7 +1465,7 @@ function ColoringBookDetailModal({ book, onClose }: ColoringBookDetailModalProps
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  显示顺序
+                  排序
                 </label>
                 <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-gray-900">
                   {book.displayOrder}

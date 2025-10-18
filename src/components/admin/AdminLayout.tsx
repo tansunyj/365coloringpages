@@ -37,40 +37,40 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // 检查管理员登录状态
+  // 检查管理员登录状�?
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     const user = localStorage.getItem('adminUser');
     
     if (!token || !user) {
-      router.push('/admin/login');
+      router.push('/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login');
       return;
     }
 
     try {
       setAdminUser(JSON.parse(user));
     } catch {
-      router.push('/admin/login');
+      router.push('/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login');
     }
   }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
-    router.push('/admin/login');
+    router.push('/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/login');
   };
 
   const navigation = [
-    { name: '仪表板', href: '/admin/dashboard', icon: LayoutDashboard },
-    { name: '内容管理', href: '/admin/content', icon: FolderOpen, children: [
-      { name: '涂色卡管理', href: '/admin/content/coloring-page', icon: ImageIcon },
-      { name: '分类管理', href: '/admin/content/categories', icon: FolderOpen },
-      { name: 'Disney & Characters管理', href: '/admin/content/theme-parks', icon: Palette },
-      { name: 'Easy Coloring Pages管理', href: '/admin/content/first-coloring', icon: BookOpen },
-      { name: 'banner管理', href: '/admin/content/banners', icon: ImageIcon },
-      { name: '关键词管理', href: '/admin/content/keywords', icon: Flag },
+    { name: '看板', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/dashboard', icon: LayoutDashboard },
+    { name: '内容管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content', icon: FolderOpen, children: [
+      { name: '涂色卡管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content/coloring-page', icon: ImageIcon },
+      { name: '分类管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content/categories', icon: FolderOpen },
+      { name: 'Disney & Characters管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content/theme-parks', icon: Palette },
+      { name: 'Easy Coloring Pages管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content/first-coloring', icon: BookOpen },
+      { name: 'banner管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content/banners', icon: ImageIcon },
+      { name: '关键词管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/content/keywords', icon: Flag },
     ]},
-    { name: '用户管理', href: '/admin/users', icon: Users },
+    { name: '用户管理', href: '/nZ3AsLbIeq1x5JQg86PTChXWodYSGNEDB2M0HauKkmfl9t7iyOUwv4cVpFjrRz/users', icon: Users },
   ];
 
   if (!adminUser) {
@@ -78,7 +78,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
           <Shield className="h-12 w-12 text-orange-600 mx-auto mb-4" />
-          <p className="text-gray-600">验证管理员权限...</p>
+          <p className="text-gray-600">验证管理员权限</p>
         </div>
       </div>
     );

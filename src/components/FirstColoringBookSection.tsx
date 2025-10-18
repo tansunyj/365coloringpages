@@ -62,7 +62,7 @@ export default function FirstColoringBookSection() {
         const response = await api.coloringBooks.list({ limit: 10 }) as ColoringBooksResponse;
         
         if (response.success && response.data && response.data.books && Array.isArray(response.data.books)) {
-          // 过滤出激活的涂色书，按显示顺序排序，只显示前10个
+          // 过滤出激活的涂色书，按显示顺序排序，只显示前10条
           const activeBooks = response.data.books
             .filter(book => book.isActive)
             .sort((a, b) => a.displayOrder - b.displayOrder)
@@ -115,7 +115,7 @@ export default function FirstColoringBookSection() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {coloringBooks.map((book) => {
-                // 根据类型显示友好的分类文本
+                // 根据类型显示友好的分类文字
                 const getCategoryLabel = (type: string) => {
                   switch (type) {
                     case 'first-coloring': return 'First Coloring';

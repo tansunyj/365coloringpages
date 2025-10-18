@@ -22,7 +22,7 @@ export default function ColoringCard({
     <div className="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       {/* 图片区域 */}
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        {/* 占位符内容 */}
+        {/* 占位符内�?*/}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
           <div className="text-center text-gray-500">
             <div className="w-16 h-16 bg-gray-400 rounded-lg mx-auto mb-2 opacity-50 flex items-center justify-center">
